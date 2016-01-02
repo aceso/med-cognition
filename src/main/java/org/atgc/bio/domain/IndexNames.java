@@ -1151,7 +1151,10 @@ public enum IndexNames {
     COMMENT_ID("commentId"),
     COMMENT_STATUS("commentStatus"),
     COMMENT_TYPE("commentType"),
-    EVIDENCE_ID("evidenceId");
+    EVIDENCE_ID("evidenceId"),
+
+    /* drug price */
+    UNIT("unit");
     
     private final String value;
     private static final Map<String, IndexNames> stringToEnum = new HashMap<String, IndexNames>();

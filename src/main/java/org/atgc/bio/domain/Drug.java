@@ -2240,9 +2240,29 @@ public class Drug {
      *
      * @param categories
      */
-    public void setCategories(List<String> categories) {
+    /* public void setCategories(List<String> categories) {
         this.categories = categories;
+    } */
+
+    /**
+     * Set the categories for a drug.
+     *
+     * <pre>
+     * "categories" : [
+     "Enzyme Inhibitors",
+     "Insecticides"
+     ],
+     * </pre>
+     *
+     * @param category
+     */
+    public void addCategory(String category) {
+        if (categories == null) {
+            categories = new ArrayList<String>();
+        }
+        categories.add(category);
     }
+
 
     @SubList (indexName=IndexNames.DRUG_AFFECTED_ORGANISMS)
     private List<String> affectedOrganisms;
