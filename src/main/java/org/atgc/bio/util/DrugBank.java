@@ -262,10 +262,41 @@ public class DrugBank {
                 drug.setDrugManufacturers(dmSet);
             }
         }
-
-
     }
 
+    private static List setDrugPrices(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
+        if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.PRICES)) {
+            BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.PRICES);
+            if (dbList != null) {
+                HashSet<DrugPrice> dmSet = new HashSet<DrugPrice>();
+                for (Object obj : dbList) {
+                    String description = getValue((BasicDBObject)obj, DrugBankFields.DESCRIPTION);
+                    String unit = getValue((BasicDBObject)obj, DrugBankFields.UNIT);
+                    String currency = getValue((BasicDBObject)obj, DrugBankFields.CURRENCY);
+                    String cost = getValue((BasicDBObject)obj, DrugBankFields.TEXT);
+                    DrugPrice drugPrice = new DrugPrice();
+                    drugPrice.setDrugName((drug.getDrugName()));
+                    drugPrice.setDescription(description);
+                    drugPrice.setCost(cost);
+                    subGraph.add(drugPrice);
+                    dmSet.add(drugPrice);
+                }
+                drug.setDrugPrices(dmSet);
+            }
+        }
+        return null;
+    }
+
+    private static void addCategories(BasicDBObject dbObj, Drug drug) {
+        if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.CATEGORIES)) {
+            BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.CATEGORIES);
+            for (Object obj : dbList) {
+                drug.addCategory(obj.toString());
+            }
+        }
+    }
+
+}
 
 
 
