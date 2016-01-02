@@ -1,0 +1,34 @@
+
+Survival of the fittest
+evolution of agents in the complex system
+agent fitness is dependent upon many of it's properties
+ability to live long, how many connections
+availability of resources in the environment
+
+
+They don't have to be the best innovators, but
+just good listeners of innovation. Eg. Microsoft
+
+Duplication divergence
+car models
+Different search engines, browser wars
+
+Modeling of protein interaction networks
+Network growth model
+Protein protein interaction
+
+Two prob. params
+p and q
+
+p - how many copied links to remove?
+q - whether to connect to the parent node?
+
+Network Motifs - Recurring patterns of connectivity
+Motifs are small circuits that are statistically more
+prevalent in real networks. Recurring network motifs.
+
+Smaller circuits are much higher in count than the network
+motifs in random networks.
+
+Graphlets - motifs of undirected networks
+

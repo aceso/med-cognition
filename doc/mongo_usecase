@@ -1,0 +1,23 @@
+
+Mongo use case
+
+Global searches are not recommened in neo4j
+Can search on non-indexed fields 
+searching on array in mongo
+
+Each instance of the protein document in protein collection, may have varying number of fields.
+Mysql does not work well for this use case. 
+
+Redis enforces unique key-value pairs which is a two column database. Our data is "n" column.
+eg: uniprotid, interactorid, moleculeidref, intactid are all different variables representing
+the same protein. Each variable becomes a column to implement this in Redis we need to create many different hashes and do multiple lookups in order to recreate a protein object.
+Redis is good for autocompletion of one dimensional terms entered in the GUI.
+
+Mongo supports sharding and master/slave for free.
+Neo4j is not free.
+
+Mongo however is not good for if we want to relate protein->gene->disease as mongo does not support joins unlike mysql. If we were to use Mongo to persist the subgraphs or use it like a graph db, we will have to work harder. It is easier to use Java serialized objects directly to
+restart an abnormally terminated JVM. However, saving Java serialized objects to JVM does not support sharding. If we have terabytes of Java serialized objects, not only is it difficult to save it to a file system, but also on-demand loading of subset of Java serialized objects into the JVM is difficult and implement. This is because JVM is memory constraint. 
+So at a time a subset of serialized objects can be de-serialized in JVM. 
+
+

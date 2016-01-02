@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  dir="ltr">
+<head>	<title>JavaScript Canvas Image Conversion Example</title>
+<meta name="description" content="" />
+	
+<script>
+wo = window.onload;
+window.onload = function() {
+wo && wo.call(null);
+	
+	// Get the image
+	var sampleImage = document.getElementById("biologyImage"),
+	canvas = convertImageToCanvas(sampleImage);
+			
+	// Actions
+	document.getElementById("canvasHolder").appendChild(canvas);
+document.getElementById("pngHolder").appendChild(convertCanvasToImage(canvas));
+			
+// Converts image to canvas; returns new canvas element
+function convertImageToCanvas(image) {
+	var canvas = document.createElement("canvas");
+	canvas.width = image.width;
+	canvas.height = image.height;
+	canvas.getContext("2d").drawImage(image, 0, 0);
+	return canvas;
+}
+
+// Converts canvas to an image
+function convertCanvasToImage(canvas) {
+	var image = new Image();
+	image.src = canvas.toDataURL("image/png");
+	return image;
+}
+};
+</script>
+</head>
+<body>
+
+<h1>JavaScript Canvas Image Conversion</h1>
+<p>The images below include the original image (jpg), the canvas version, and a conversion from canvas to PNG.</p>
+	
+<h2>Original Image</h2>
+<p>
+<img src="biology.jpg" id="biologyImage" />
+</p>
+	
+<h2>Canvas Image</h2>
+<p id="canvasHolder">
+	
+</p>
+
+<h2>Canvas -&gt; PNG Image</h2>
+<p id="pngHolder">
+		
+</p>
+	
+</body>
+</html>

@@ -1,0 +1,84 @@
+ATGC Lucene Design Document
+
+1. Introduction
+
+1.1 Background
+
+Many of the objects such as in Uniprot are heavily nested. The Neo4J graph 
+database is not very suited for stored nested data without introducing a 
+lot of nodes. The downside of introducing too many nodes is that it 
+decreases the ability to traverse them unless complex traversal queries 
+are used. The Neo4J graph database will work better as an alternative to 
+reducing the number of joins when common data across multiple bio-entities 
+needs to be identified for similarity analysis. This is more efficient as 
+opposed to using Mysql to do that. Using graph database to stored nested 
+data is easy, but traversing it is not easy.
+
+1.2 Overview
+
+In Redbasin Oncology we sometimes need the ability to do similarity 
+analysis using a bio-entity agnostic approach. Whereas, sometimes we need to 
+do similarity analysis only constraining to specific bio-entity. Lucene 
+allows us to store normalized documents with fields in them. The field 
+could be "uniprotId", "functionComment" or "coiledFeature" etc. These 
+fields can be indexed, which allows us to search on them using any 
+search patterns or tokens. All searches are case insensitive. Lucene also 
+allows us to get similar documents using the MoreLikethis feature, that 
+it has. It's not possible to get similar nodes using Neo4J, even though 
+Neo4J uses Lucene underneath. 
+ 
+2.0 Lucene Indexing
+
+2.1 Indexing Documents
+
+The @BioEntity objects in Redbasin Oncology will support a new @Lucene 
+annotation that allows designers to choose a number of different attributes 
+including Indexing, type of Indexing that includes Term, Date, Range etc. 
+Each field in the @BioEntity object can be chosen to be included in the 
+Lucene document using the @Lucene annotation. The @BioEntity objects can 
+be indexed into Lucene using the RedbasinTemplate system.
+
+2.2 Lookup Documents in Lucene
+
+Once you add documents to the index, you can lookup these documents by 
+fields that have been marked as index in the document, and a value string. 
+So you can lookup using (key, value). But you don't need to provide the 
+exact value. You can enter a token pattern, which matches the value. Make 
+sure when you provide this token, you provide this as a lower case. This 
+is because the Analyzer in lucene always converts all documents to lower 
+case before adding to index. All comparisons are semantic comparisons, and 
+not lexicographic comparisons. So the upper and lower case are 
+insignificant and ignored.
+
+3. Lucene as a Data Storage System?
+
+3.1 Using as Data Storage?
+
+Also Lucene cannot be used as a data source. Especially because it 
+normalizes all content you add to index. The content is already changed. 
+And this is not just about upper case and lower case. It also removes and 
+cleans the content of any characters that do not add semantic value. Lucene 
+also ignores numbers by default. I think it supports some limited features 
+such as date comparisons, as it has a date field. It also has a Range 
+field, which needs to be used if numbers are not to be ignored.
+
+3.2 Only as a Text Search
+
+This means, when we add the Protein and other objects as documents to 
+Lucene, we cannot expect these documents to be intact in Lucene. So there 
+is no data integrity. We will need to use Lucene only to do full text 
+search and similarity (MoreLikeThis - mlt) analysis. Typically we can 
+fetch a document (which may be a protein document) by a key like comment 
+and some pattern that we are looking for. When we get a document returned, 
+we can check if this is a protein document. We may need to use a bioType 
+in the document to tell us it's a protein document. As Lucene does not 
+know anything about bioType. So if the bioType tells us it's a protein, 
+then we can fetch the uniprotId from this document, to know which 
+protein matches the comment pattern (or some other pattern).
+
+Once we have the uniprotId, we use another database like Mongo to fetch 
+the full details of the object. So both Neo4J and Lucene cannot be used 
+as databases, which is clear. We can continue using Mongo, as Mongo is 
+scalable, and Mysql is not scalable.
+
+Hypercube slicing based on functional semantics and information density, as opposed to topological continuity.

@@ -1,0 +1,400 @@
+http://deposit.rcsb.org/format-faq-v1.html
+
+
+File Format FAQ
+October 2001
+
+This document addresses some questions about the Protein Data Bank (PDB) format that have been frequently posed by depositors and users over the past year. The information in this document has been gathered from the PDB Contents Guide document originally created at Brookhaven National Laboratory, a careful study of existing files, an RCSB Workshop held in October 1998, and discussion with many users of the data. The guidelines presented here are those used by the annotation staff at the RCSB-PDB.
+
+This will be an evolving document. Questions, comments or suggestions about this document should be sent to deposit@deposit.rcsb.org.
+SEQUENCE, COORDINATE, AND SEQUENCE DATABASE ISSUES
+
+Q: What sequence is reported in PDB SEQRES records?
+
+A: All residues in the crystal or in solution, including residues not present in the model (i.e., disordered, lacking electron density, cloning artifacts, HIS tags) are included in the SEQRES records.
+
+Q: How are sequence differences between coordinate and SEQRES records handled (i.e., residues modeled as ALA, mutations, unknown residues)?
+
+A: The residue names in the coordinate section should match the residue names in the SEQRES records, even if this involves having missing atoms. Residues modeled as ALA due to lack of side chain density are relabeled to match the SEQRES. The missing side chain atoms are listed in REMARK 470 of the PDB file.
+
+Example:
+
+SEQRES: MET GLU ASN SER ALA GLU PRO GLU GLN SER LEU VAL CYS GLN 
+COORDS: MET GLU ASN SER ALA GLU PRO GLU GLN SER LEU ala CYS GLN 
+                                                    ^^^         
+
+In the example above, residue VAL in the SEQRES is modeled as ALA in the coordinates. The residue name in the coordinates is changed from ALA to VAL to remove the conflict as shown below.
+
+SEQRES: MET GLU ASN SER ALA GLU PRO GLU GLN SER LEU VAL CYS GLN 
+COORDS: MET GLU ASN SER ALA GLU PRO GLU GLN SER LEU VAL CYS GLN 
+                                                    ^^^         
+
+If there is a mutation from a natural sequence, the sequence including the mutation appears in the SEQRES records. It is irrelevant here what the wildtype sequence is. In the previous example, if the residue ALA was a point mutation, the sequence in the SEQRES records and the coordinates must match and are both labeled ALA.
+
+If the identity of a residue is truly unknown, it is labeled UNK in both the coordinates and the SEQRES.
+
+Q. What do the DBREF and SEQADV records represent?
+
+A. The DBREF provides a cross-reference between the sequence listed in the SEQRES record and an entry in a sequence database (e.g., GenBank, or SWISS-PROT).
+
+The SEQADV record identifies conflicts between sequence information given in the SEQRES and the sequence database entry given in the DBREF (for example, an engineered mutation). Residues missing in the coordinates are listed in remark 465, and are not listed in the SEQADV record.
+
+Q. How is polymorphism/microheterogeneity described?
+
+A.	It is well recognized that this is not well represented by PDB format. The current practice is described here.
+
+Although microheterogeneity does not present a problem within the coordinate records, it does introduce a difficulty in the specification of the sequence in the SEQRES records where only a single residue may be specified for each sequence position.
+
+In cases where a single sequence position is modeled as different residues and these residues differ with respect to occupancy, then the residue with the higher occupancy is used to the define the SEQRES sequence.
+
+If the different residue models cannot be distinguished by occupancy, then the SEQRES sequence is defined using the residue which matches the sequence obtained from the sequence database reference.
+
+For example, residue 60 has two isoforms (SER and VAL) modeled with equal occupancies; however, residue SER matches the sequence database reference. Residue SER is listed in the SEQRES, since it matches the sequence database reference. Residue SER is listed in the coordinates as residue 60, conformation A. Residue VAL is listed next also as residue 60, conformation B.
+
+REMARK 999 is also added to the entry to explain the presence of the isoforms. The combined occupancies of the two isoforms should be less than or equal to 1.00; however, the interpretation of occupancies can be more complicated if each of the isoforms is individually disordered (as in PDB 1EJG).
+LIGANDS AND MODIFIED RESIDUES
+
+Q. How are three-letter residue names and chain identifiers for residue modifications and ligands assigned?
+
+A.	There are four common cases: covalently bound ligands, protein residue modifications, nucleotide modifications, metal coordination interactions (for example the interaction between iron and histidine in hemoglobin), and non-covalently bound ligands.
+
+Covalently bound ligands:
+
+A traditional distinction has been made between covalently bound ligands and small residue modifications. A bound ligand is defined as a modification with greater than 10 atoms including hydrogens.
+
+Covalently bound ligands are assigned the chain identifier of the polymer chain to which the ligand is bound. The bonding between the ligand and the residue is specified in PDB LINK records. The ligand coordinates appear as HETATM records following either the TER record for the bound chain or after the TER record for the last polymer chain. The ligand is assigned a unique residue number within chain to which it is bound. The residue that binds the ligand retains its standard name in both coordinate and SEQRES records. Additional PDB records MODRES/HET/HETNAM/FORMUL and CONECT are provided to describe the ligand.
+
+Protein residue modifications:
+
+The residue including the modification is assigned a unique 3-letter code. This code is used to identify the modified residue in both the coordinate and SEQRES records. The coordinate records of the modified residue are labeled as HETATM records. These records are inserted in the correct sequence position in the atom list for the polymer chain in which the modification resides. Additional PDB records MODRES/HET/HETNAM/FORMUL and CONECT are provided to define the modification.
+
+A distinction has been made between small residue modifications and covalently bound ligands. A residue modification is defined as a modification of 10 or less atoms including hydrogens.
+
+Noteworthy exceptions to the above treatment of modified residues are the cases of acetylation of the N-terminus (residue ACE) and amidation of the C-terminus (residue NH2). Although these cases could be treated as residue modifications which would be assigned new 3-letter codes, these modifications have traditionally been treated as independent residues which appear in both the coordinates and SEQRES records.
+
+Nucleotide modifications:
+
+DNA and RNA
+
+Modified DNA nucleotide names are prefixed with a "+" character. The coordinate records for the modified nucleotide are identified as HETATM records. The coordinate records for the modified portion of the nucleotide are inserted at the end of the DNA polymer chain after the TER record. These coordinates carry the residue number and chain id of the nucleotide they modify; however, they carry residue name corresponding to the particular modification (e.g. a methyl modification may be identified by the name CH3). The one-letter code is preceded by "+" character in SEQRES record. Additional PDB records MODRES/HET/HETNAM/FORMUL and CONECT are provided to define the modification.
+
+tRNA
+
+Nucleotide modifications in tRNA are handled in a manner analogous the protein residue modifications. Nucleotides in tRNA structures are specified using 3-letter codes.
+
+Metal coordination:
+
+Ligands interacting with a single chain of a macromolecule through metal coordination are assigned the chain identifier of the residue in the polymer chain to which the ligand is bound. Ligands interacting through metal coordination are assigned a unique residue number within the chain to which they bind.
+
+Non-covalently bound ligands:
+
+Ligands which are not covalently bound or metals which coordinate with multiple chains are not assigned PDB chain identifiers. Non-covalently bound polymer-like ligands which are composed of discrete units broken down in a chemically sensible manner, may be left as a grouping of multiple three-letter codes. The connections within the ligand are provided in LINK records.
+
+Ligands covalently binding multiple polymer chains:
+
+In the case of a ligand binding multiple chains through covalent bonds to each, the connecting group (regardless of size) is assigned a its own three letter code, but no chain ID. Polymer residues which bind the connecting ligand retain their standard names and these will appear in both coordinate and SEQRES records. MODRES/HET/HETNAM/FORMUL and CONECT records are provided to further define the modification.
+
+Some Examples:
+
+Example - Covalently bound ligand from PDB 1D2F:
+
+In this example Vitamin B6 complex, three-letter code PLP, is covalently bound to LYS A NZ. Since the complex has more than 10 atoms, it retains its original three letter code, as does the LYS to which it is bound. MODRES/HET/HETNAM/FORMUL and CONECT records define the modification. The coordinates for the inhibitor appear in HETATM records following the TER card for that chain. The complex is given a unique residue number 400, but the same chain ID as the residue to which it is bound.
+
+PDB file snippet from 1D2F:
+
+HETNAM     PLP PYRIDOXAL-5'-PHOSPHATE                                           
+HETSYN     PLP VITAMIN B6 COMPLEX                                               
+FORMUL   3  PLP    2(C8 H10 N1 O6 P1)                                           
+
+LINK         NZ  LYS A 233                 C4A PLP A 400                        
+
+ATOM   1607  N   LYS A 233     -26.180   4.759 -18.385  1.00 41.53           N  
+ATOM   1608  CA  LYS A 233     -25.155   5.537 -17.709  1.00 43.81           C  
+ATOM   1609  C   LYS A 233     -24.504   4.737 -16.581  1.00 45.17           C  
+ATOM   1610  O   LYS A 233     -23.286   4.808 -16.389  1.00 46.70           O  
+ATOM   1611  CB  LYS A 233     -25.757   6.839 -17.173  1.00 43.94           C  
+ATOM   1612  CG  LYS A 233     -24.979   8.090 -17.576  1.00 42.51           C  
+ATOM   1613  CD  LYS A 233     -24.573   8.053 -19.047  1.00 41.96           C  
+ATOM   1614  CE  LYS A 233     -24.260   9.440 -19.598  1.00 44.08           C  
+ATOM   1615  NZ  LYS A 233     -25.512  10.211 -19.569  1.00 47.48           N  
+
+
+ATOM   5715  CZ  ARG B 390     -64.060 -24.212 -55.642  1.00 62.13           C  
+ATOM   5716  NH1 ARG B 390     -63.244 -25.248 -55.485  1.00 61.76           N  
+ATOM   5717  NH2 ARG B 390     -64.491 -23.898 -56.854  1.00 60.32           N  
+ATOM   5718  OXT ARG B 390     -68.512 -25.126 -51.002  1.00 56.62           O  
+TER    5719      ARG B 390                                                      
+HETATM 5720  N1  PLP A 400     -29.825  12.803 -19.612  1.00 54.54           N  
+HETATM 5721  C2  PLP A 400     -28.671  13.193 -18.934  1.00 54.96           C  
+HETATM 5722  C2A PLP A 400     -28.901  14.286 -17.914  1.00 49.22           C  
+HETATM 5723  C3  PLP A 400     -27.414  12.482 -19.296  1.00 53.32           C  
+HETATM 5724  O3  PLP A 400     -26.339  12.929 -18.643  1.00 56.64           O  
+HETATM 5725  C4  PLP A 400     -27.430  11.476 -20.261  1.00 53.62           C  
+HETATM 5726  C4A PLP A 400     -26.181  10.773 -20.595  1.00 50.98           C  
+HETATM 5727  C5  PLP A 400     -28.753  11.154 -20.908  1.00 53.86           C  
+HETATM 5728  C6  PLP A 400     -29.903  11.836 -20.560  1.00 55.27           C  
+
+Example - Residue modification from PDB 1CLV:
+
+In this example, a glutamine residue is modified to make pyroglutamate (5HP). Since this modification has fewer than 10 atoms, the entire residue including the modification is renamed with a new three-letter code. This code appears in the SEQRES records. The modification carries the same chain ID and residue number as the glutamine which it is modifying. The coordinate records for the entire residue and modification are inserted in the correct sequence position in the atom list for the polymer chain in which the modification resides.
+
+PDB file snippet from 1CLV:
+
+
+SEQRES   1 A  471  5HP LYS ASP ALA ASN PHE ALA SER GLY ARG ASN SER ILE
+
+MODRES 1CLV 5HP A    1  GLU  PYROGLUTAMIC ACID
+HET    5HP  A   1       8
+
+ HETNAM     5HP PYROGLUTAMIC ACID
+
+FORMUL   1  5HP    C5 H7 N1 O3
+
+HETATM    1  N   5HP A   1      29.020   7.713   8.323  1.00 17.69           N
+HETATM    2  CA  5HP A   1      30.380   8.263   8.128  1.00 16.55           C
+HETATM    3  C   5HP A   1      30.667   8.643   6.676  1.00 13.70           C
+HETATM    4  O   5HP A   1      31.514   9.493   6.417  1.00 14.12           O
+HETATM    5  CB  5HP A   1      31.390   7.193   8.612  1.00 16.19           C
+HETATM    6  CG  5HP A   1      30.495   5.943   8.987  1.00 16.93           C
+HETATM    7  CD  5HP A   1      29.101   6.476   8.787  1.00 19.39           C
+HETATM    8  OD  5HP A   1      28.089   5.796   9.037  1.00 22.92           O
+ATOM      9  N   LYS A   2      29.983   7.994   5.735  1.00 14.51           N
+ATOM     10  CA  LYS A   2      30.178   8.269   4.313  1.00 13.28           C
+ATOM     11  C   LYS A   2      28.999   8.963   3.640  1.00 16.12           C
+ATOM     12  O   LYS A   2      29.027   9.224   2.435  1.00 17.54           O
+ATOM     13  CB  LYS A   2      30.534   6.982   3.574  1.00 13.33           C
+ATOM     14  CG  LYS A   2      31.829   6.365   4.059  1.00 14.70           C
+ATOM     15  CD  LYS A   2      32.140   5.082   3.331  1.00 17.22           C
+ATOM     16  CE  LYS A   2      33.340   4.422   3.957  1.00 17.71           C
+ATOM     17  NZ  LYS A   2      33.629   3.104   3.340  1.00 20.50           N
+
+Example - Metal coordination from PDB 6HBW
+
+In this example, the iron of a hemoglobin (residue number 153) is coordinated to a single chain (chain A) and as a result the heme is given chain ID A. The coordinate records for the HEM group are listed following the TER card ending the last polymer chain. The hemoglobin molecule is assigned a unique residue number within the chain.
+
+PDB file snippet from 6HBW:
+
+
+ATOM   4387  N   HIS D 146      29.948  11.544  57.310  1.00 15.88           N  
+ATOM   4388  CA  HIS D 146      31.400  11.604  57.355  1.00 12.40           C  
+ATOM   4389  C   HIS D 146      31.887  10.389  58.126  1.00 12.15           C  
+ATOM   4390  O   HIS D 146      31.027   9.700  58.721  1.00 12.36           O  
+ATOM   4391  CB  HIS D 146      31.831  12.883  58.089  1.00 11.82           C  
+ATOM   4392  CG  HIS D 146      31.346  12.951  59.508  1.00 12.27           C  
+ATOM   4393  ND1 HIS D 146      32.108  12.536  60.579  1.00 13.29           N  
+ATOM   4394  CD2 HIS D 146      30.158  13.356  60.024  1.00 10.91           C  
+ATOM   4395  CE1 HIS D 146      31.416  12.684  61.698  1.00 10.62           C  
+ATOM   4396  NE2 HIS D 146      30.232  13.180  61.387  1.00 13.85           N  
+ATOM   4397  OXT HIS D 146      33.113  10.165  58.158  1.00 10.96           O  
+TER    4398      HIS D 146                                                      
+HETATM 4399 FE   HEM A 153      29.582  -8.922  58.222  1.00 10.43          FE  
+HETATM 4400  CHA HEM A 153      29.810  -9.479  61.617  1.00  9.96           C  
+HETATM 4401  CHB HEM A 153      31.525 -11.751  57.700  1.00 10.61           C  
+HETATM 4402  CHC HEM A 153      29.970  -8.108  54.946  1.00  4.45           C  
+HETATM 4403  CHD HEM A 153      28.773  -5.622  58.888  1.00  2.72           C  
+HETATM 4404  N A HEM A 153      30.321 -10.363  59.385  1.00  9.59           N  
+
+Example - Coordination to multiple chains from PDB 1BV7
+
+In this example, the drug (residue name XV6) has non-covalent interactions with both chains A and B. As a result, it is assigned a residue number but no chain ID.
+
+PDB file snippet from 1BV7:
+
+
+ATOM   1516  CG  PHE B  99     -12.923  35.142  33.334  1.00 27.60           C  
+ATOM   1517  CD1 PHE B  99     -12.552  34.725  32.037  1.00 28.26           C  
+ATOM   1518  CD2 PHE B  99     -11.933  35.632  34.219  1.00 30.81           C  
+ATOM   1519  CE1 PHE B  99     -11.200  34.802  31.628  1.00 30.04           C  
+ATOM   1520  CE2 PHE B  99     -10.575  35.711  33.815  1.00 28.55           C  
+ATOM   1521  CZ  PHE B  99     -10.216  35.292  32.517  1.00 30.04           C  
+TER    1522      PHE B  99                                                      
+HETATM 1523  O1  XV6   638      -8.243  14.227  27.865  1.00 16.36           O  
+HETATM 1524  O4  XV6   638     -11.697  18.691  28.877  1.00 13.52           O  
+HETATM 1525  O5  XV6   638     -10.104  19.492  26.750  1.00 21.59           O  
+HETATM 1526  N2  XV6   638      -9.653  15.574  28.900  1.00 14.71           N  
+HETATM 1527  N7  XV6   638      -8.686  16.093  26.792  1.00 16.77           N  
+HETATM 1528  C1  XV6   638      -8.859  15.282  27.852  1.00 16.75           C  
+HETATM 1529  C2  XV6   638      -9.421  14.815  30.135  1.00 16.59           C  
+
+Q. How are coordinated solvent molecules distinguished from the other solvent molecules in the coordinate list, for example (Mg+6H2O)?
+
+A.	A magnesium ion coordinated with waters is treated differently from a non-coordinated magnesium ion. For example, the residue name for a magnesium ion coordinated with six waters is MO6. These waters are not further included in the list of solvent coordinates.
+
+Example: From PDB 1D57:
+
+In this example, the metal hydrate ligand interacts with two strands of DNA (chains A and B) and it is not assigned a chain ID.
+
+PDB file snippet from 1D57:
+
+
+ATOM    400  O6    G B  20      11.533   8.948  -9.338  1.00 10.00
+ATOM    401  N1    G B  20       9.320   8.794  -9.059  1.00 13.14
+ATOM    402  C2    G B  20       8.202   8.050  -8.814  1.00 19.82
+ATOM    403  N2    G B  20       7.076   8.770  -8.777  1.00 20.67
+ATOM    404  N3    G B  20       8.156   6.721  -8.622  1.00 14.41
+ATOM    405  C4    G B  20       9.378   6.163  -8.693  1.00 14.13
+TER     406        G B  20 
+HETATM  407 MG   MO6     1      15.457   6.749   3.418  1.00 35.37      
+HETATM  408  OA  MO6     1      14.443   7.465   1.820  1.00 15.39      
+HETATM  409  OB  MO6     1      16.470   6.005   4.945  1.00 21.41      
+HETATM  410  OC  MO6     1      15.236   4.898   2.627  1.00 10.50      
+HETATM  411  OD  MO6     1      15.642   8.604   4.107  1.00 23.92      
+HETATM  412  OE  MO6     1      13.754   6.563   4.444  1.00 18.05      
+HETATM  413  OF  MO6     1      17.174   6.967   2.392  1.00 32.95      
+
+Q. What are the minimum requirements for polymers in PDB entries?
+
+A. Polypeptide systems with a chain length of 3 or greater are treated as polymers in PDB entries. Smaller systems are treated as independent ligands if they contain more than 10 atoms or as modifications if they have fewer than 10 atoms. Polynucleotide or polysaccharide systems with chain lengths of 2 or greater are treated as polymers.
+
+Each polymer chain is assigned a unique identifier (chain ID). For proteins and nucleic acids, SEQRES records for each chain are provided. Polysaccharides are not assigned SEQRES records or TER records.
+
+Covalently bound polymeric ligands are assigned chain IDs. Connections between polymeric groups are identified in LINK records.
+
+Example: Non-covalently bound polymeric ligands from PDB 1A1M:
+
+In this example, a MHC class I molecule is complexed (not covalently bound) with a peptide from the gag protein of HIV2. Since the peptide has more than 3 amino acids it is assigned its own chain ID (chain C) as well as SEQRES records.
+
+PDB file snippet from 1A1M:
+
+
+SEQRES  21 A  278  VAL GLN HIS GLU GLY LEU PRO LYS PRO LEU THR LEU 
+SEQRES  22 A  278  TRP GLU PRO HIS HIS
+SEQRES   1 B   99  ILE GLN ARG THR PRO LYS ILE GLN VAL TYR SER ARG 
+SEQRES   2 B   99  PRO ALA GLU ASN GLY LYS SER ASN PHE LEU ASN CYS 
+
+SEQRES   7 B   99  ALA CYS ARG VAL ASN HIS VAL THR LEU SER GLN PRO 
+SEQRES   8 B   99  ILE VAL LYS TRP ASP ARG ASP MET
+SEQRES   1 C    9  THR PRO TYR ASP ILE ASN GLN MET LEU
+
+ATOM   3174  CB  MET C   8      -8.690  29.342  19.095  1.00 38.72
+ATOM   3175  CG  MET C   8      -9.946  30.151  19.281  1.00 46.68
+ATOM   3176  SD  MET C   8     -10.527  30.652  17.646  1.00 62.25
+ATOM   3177  CE  MET C   8     -10.750  28.993  16.801  1.00 58.81
+ATOM   3178  N   LEU C   9      -8.919  29.066  22.526  1.00 18.36
+ATOM   3179  CA  LEU C   9      -9.595  28.398  23.619  1.00 15.34
+ATOM   3180  C   LEU C   9     -11.026  28.004  23.281  1.00 17.65
+ATOM   3181  O   LEU C   9     -11.535  28.452  22.235  1.00 19.30
+ATOM   3182  CB  LEU C   9      -9.529  29.270  24.883  1.00  8.08
+ATOM   3183  CG  LEU C   9      -8.416  28.899  25.866  1.00 12.64
+ATOM   3184  CD1 LEU C   9      -7.078  28.818  25.136  1.00  9.87
+ATOM   3185  CD2 LEU C   9      -8.350  29.852  27.061  1.00 12.13
+ATOM   3186  OXT LEU C   9     -11.635  27.245  24.060  1.00 22.69
+TER    3187      LEU C   9
+
+Q. How are glycoproteins described?
+
+A.	Covalently bound sugars are to be handled as HET groups with LINK records to define the points of attachment. Individual sugars will have individual residue numbers. A polysaccharide with a chain length of 2 or greater is treated as a polymer, otherwise it is treated as a ligand or a modification. For covalently bound polysaccharide polymers, the entire attached polysaccharide will have a unique chain ID but will have no SEQRES records. The residue(s) to which the polysaccharide is attached are assigned standard residue names. The modification is further described in MODRES/HET/HETNAM/FORMUL and CONNECT records.
+
+Example: Covalently bound polymeric sugar from PDB 1EBV:
+
+In this example the protein is glycosylated at ASN 144. Since this polysaccharide in this example has two or more sugars, it is considered a polymer chain. The ASN retains its original name and the modification is described with MODRES/HET/HETNAM/FORMUL/CONNECT records. The point of attachment is defined in LINK records. The attached sugar chain is assigned its own residue numbers and chain ID B, but is not assigned SEQRES records. The individual NAG groups retain their original names.
+
+PDB file snippet from 1EBV:
+
+
+MODRES 1EBV ASN A  144  ASN  GLYCOSYLATION SITE                                 
+
+HET    NAG  B 671      14                                                       
+HET    NAG  B 672      14                                                       
+
+HETNAM     NAG N-ACETYL-D-GLUCOSAMINE                                           
+HETSYN     NAG NAG                                                              
+
+FORMUL   2  NAG    4(C8 H15 N1 O6)                                              
+
+LINK         C1  NAG B 672                 O4  NAG B 671                        
+LINK         C1  NAG B 671                 ND2 ASN A 144                        
+
+ATOM    920  N   ASN A 144      43.703  33.213 177.254  1.00  4.54           N  
+ATOM    921  CA  ASN A 144      42.866  34.312 176.796  1.00  3.72           C  
+ATOM    922  C   ASN A 144      41.849  34.690 177.853  1.00  2.92           C  
+ATOM    923  O   ASN A 144      40.825  34.032 177.991  1.00  3.13           O  
+ATOM    924  CB  ASN A 144      42.144  33.903 175.522  1.00  3.53           C  
+ATOM    925  CG  ASN A 144      41.582  35.079 174.778  1.00  3.32           C  
+ATOM    926  OD1 ASN A 144      41.113  36.032 175.383  1.00  2.96           O  
+ATOM    927  ND2 ASN A 144      41.627  34.998 173.456  1.00  4.30           N  
+
+TER    4482      PRO A 583                                                      
+
+HETATM 4497  C1  NAG B 671      40.875  35.906 172.616  1.00  5.71           C  
+HETATM 4498  C2  NAG B 671      41.877  36.712 171.783  1.00  6.56           C  
+HETATM 4499  C3  NAG B 671      41.200  37.516 170.670  1.00  8.16           C  
+HETATM 4500  C4  NAG B 671      40.242  36.632 169.860  1.00  9.68           C  
+HETATM 4501  C5  NAG B 671      39.276  35.931 170.821  1.00  8.33           C  
+HETATM 4502  C6  NAG B 671      38.372  34.966 170.106  1.00  9.02           C  
+HETATM 4503  C7  NAG B 671      43.910  37.420 172.859  1.00  6.57           C  
+HETATM 4504  C8  NAG B 671      44.748  38.672 173.041  1.00  6.37           C  
+HETATM 4505  N2  NAG B 671      42.608  37.603 172.659  1.00  6.16           N  
+HETATM 4506  O3  NAG B 671      42.193  38.056 169.806  1.00  6.72           O  
+HETATM 4507  O4  NAG B 671      39.505  37.448 168.923  1.00 13.39           O  
+HETATM 4508  O5  NAG B 671      40.013  35.139 171.768  1.00  7.61           O  
+HETATM 4509  O6  NAG B 671      38.959  33.674 170.094  1.00 10.91           O  
+HETATM 4510  O7  NAG B 671      44.448  36.305 172.890  1.00  6.40           O  
+HETATM 4511  C1  NAG B 672      39.400  37.017 167.608  1.00 16.40           C  
+HETATM 4512  C2  NAG B 672      38.396  37.902 166.873  1.00 18.68           C  
+HETATM 4513  C3  NAG B 672      38.341  37.541 165.382  1.00 19.71           C  
+HETATM 4514  C4  NAG B 672      39.728  37.444 164.747  1.00 19.18           C  
+HETATM 4515  C5  NAG B 672      40.705  36.655 165.636  1.00 18.59           C  
+HETATM 4516  C6  NAG B 672      42.132  36.811 165.158  1.00 19.23           C  
+HETATM 4517  C7  NAG B 672      36.708  38.503 168.493  1.00 19.91           C  
+HETATM 4518  C8  NAG B 672      35.590  37.969 169.374  1.00 18.85           C  
+HETATM 4519  N2  NAG B 672      37.078  37.747 167.462  1.00 19.61           N  
+HETATM 4520  O3  NAG B 672      37.598  38.531 164.688  1.00 21.61           O  
+HETATM 4521  O4  NAG B 672      39.610  36.811 163.473  1.00 18.40           O  
+HETATM 4522  O5  NAG B 672      40.682  37.149 166.993  1.00 17.38           O  
+HETATM 4523  O6  NAG B 672      42.788  37.864 165.851  1.00 18.94           O  
+HETATM 4524  O7  NAG B 672      37.230  39.591 168.751  1.00 20.57           O  
+
+Q. What is done if only a portion of a bound ligand is included in the coordinates because of crystallographic disorder?
+
+A.	If the chemistry of the ligand is known, the ligand is treated normally even if there are missing atoms.
+
+ISSUES RELATED TO MULTIPLE POLYMER CHAINS
+
+Q. How are chimeras described?
+
+A.
+
+Example from 1TOL: A chimera can be described as a single chain with a continuous sequence. Residue numbering proceeds throughout the entire chimera.
+
+Example from 1TOL:
+
+In this example the fusion protein comprises residues 1-86 of mature minor coat protein from gene III, including glycine-rich linker (GGGSEGGGSEGGGSEGGG), residues 295-421 of protein-TOLA, and the C-terminal tail with sequence (AAAHHHHHH).
+
+PDB file snippet from 1TOL:
+
+SEQRES   1 A  222  ALA GLU THR VAL GLU SER CYS LEU ALA LYS SER HIS THR
+SEQRES   2 A  222  GLU ASN SER PHE THR ASN VAL TRP LYS ASP ASP LYS THR
+SEQRES   3 A  222  LEU ASP ARG TYR ALA ASN TYR GLU GLY CYS LEU TRP ASN
+SEQRES   4 A  222  ALA THR GLY VAL VAL VAL CYS THR GLY ASP GLU THR GLN
+SEQRES   5 A  222  CYS TYR GLY THR TRP VAL PRO ILE GLY LEU ALA ILE PRO
+SEQRES   6 A  222  GLU ASN GLU GLY GLY GLY SER GLU GLY GLY GLY SER GLU
+SEQRES   7 A  222  GLY GLY GLY SER GLU GLY GLY GLY ASP ASP ILE PHE GLY
+SEQRES   8 A  222  GLU LEU SER SER GLY LYS ASN ALA PRO LYS THR GLY GLY
+SEQRES   9 A  222  GLY ALA LYS GLY ASN ASN ALA SER PRO ALA GLY SER GLY
+SEQRES  10 A  222  ASN THR LYS ASN ASN GLY ALA SER GLY ALA ASP ILE ASN
+SEQRES  11 A  222  ASN TYR ALA GLY GLN ILE LYS SER ALA ILE GLU SER LYS
+SEQRES  12 A  222  PHE TYR ASP ALA SER SER TYR ALA GLY LYS THR CYS THR
+SEQRES  13 A  222  LEU ARG ILE LYS LEU ALA PRO ASP GLY MET LEU LEU ASP
+SEQRES  14 A  222  ILE LYS PRO GLU GLY GLY ASP PRO ALA LEU CYS GLN ALA
+SEQRES  15 A  222  ALA LEU ALA ALA ALA LYS LEU ALA LYS ILE PRO LYS PRO
+SEQRES  16 A  222  PRO SER GLN ALA VAL TYR GLU VAL PHE LYS ASN ALA PRO
+SEQRES  17 A  222  LEU ASP PHE LYS PRO ALA ALA ALA HIS HIS HIS HIS HIS
+SEQRES  18 A  222  HIS
+
+Alternatively, chimeras can be described as multiple molecules, each assigned a different chain ID. For example, a chimeric molecule consisting of sequences from two different sources with a synthetic sequence linking the two biological sequences could be described as three molecules, each with its own chain ID (for example, A, B, and C). The residue numbering could start with 1 for each chain. LINK records would be listed to link the three chains.
+
+Q. How are TER records used?
+
+A. TER cards are used to unambiguously mark the ends of polymer chains, except for polysaccharides.
+
+NMR ISSUES
+
+Q. How are models in NMR ensembles organized in PDB entries?
+
+A.	In older NMR files the atom serial numbers were consecutive across all models in the entry. Owing to limitations in the field width for the atom serial number, this practice resulted in some ensembles being divided among multiple PDB entries.
+
+With entries processed since February 1999, the atom serial number is reset to 1 at the beginning of each model thereby allowing the full ensemble to be included within a single PDB entry.
+
+ 
+

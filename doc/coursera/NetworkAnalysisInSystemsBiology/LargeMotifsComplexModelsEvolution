@@ -1,0 +1,64 @@
+
+Possibilities for a specific number of nodes in directed and
+undirected networks
+
+How many possibilities for graphlets of size 5 nodes
+
+What is the sequence for the number of types of motifs in
+directed networks for various sizes?
+
+What is the sequene of motifs for mixed networks 
+networks that have both directed and undirected links?
+
+Ordered cyclic motifs contribute to dynamic stability in
+biological and engineered networks
+
+Biological networks
+ - lot more sources and sinks compared to pass through nodes
+
+Cell signaling networks are more stable, many sources and
+sinks found in cycles
+
+Magnetization Model
+
+Microdynamics and Criticality of Adaptive Regulatory Networks
+We present a model of adaptive regulatory networks consisting
+of a simple biologically motivated rewiring procedure coupled
+to an elementary stability criterion. The resulting networks
+exhibit a characteristic stationery heavy tailed degree distribution
+show complex structural microdynamics and self organize to
+a dynamically critical state. We show analytically that the
+observed criticality results from the formation of transient
+feedback loops during the adaptive process.
+
+Prior models mostly generate undirected networks
+
+None of the prior models were able to create a system that
+display the rise and fall of hubs and match the distribution
+of network motifs.
+
+1. Start with a random directed network.
+2. Pick randomly an arrow
+3. Compute the magnetization of the arrow
+4. Place the arrow somewhere else on the network, make it
+connect two other nodes.
+5. Compute the magnetization for the arrow at it's new location.
+We want to see if the new location contributes to an increase
+in the sources and sinks. If yes, we accept teh swap.
+6. Decide if to accept the swap: if there is more magnetization
+at the new location and the network is unstable accept the swap.
+Also, if the network is stable (this can be determined by computing
+the adjacency matrix eigenvalues) accept the link regardless if it
+is contributing or not to the global magnetization. Otherwise,
+reject the swap and try a different arrow.
+
+If we repeat the above process, we eventually get a scale free
+network.
+
+Hierarchical Organization of Pathways from LIgands
+
+Power-law distribution of branched pathways
+
+
+
+

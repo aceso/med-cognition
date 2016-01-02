@@ -1,0 +1,69 @@
+Goal
+To create a drug analysis study that will work with cancer drugs.
+
+Timeline
+August 31st, 2012
+
+Tasks
+
+Manoj
+complete intact
+complete clinicaltrails.gov
+fix ncipathway for bioentities and indexing
+complete cypher queries and coresponding java code
+design necessary entity objects and template code 
+update patent document with designs
+create cumulative object model to process cipher results
+write analytics code related to drug molecule
+create study presentation software
+investigate pubmed UIMA for NLP
+
+Smitha
+complete biocarta
+covert all the existing code to object models
+add ncidrug and disease concept code
+add uniprot
+add GO
+design necessary objects for bioentities
+update patent document with designs
+complete cypher queries 
+investigate GUI pathway display
+
+Tasks to be completed post sept, 2012
+
+start demoing prototype to customers
+get purchase orders based on prototype
+attend conferences
+pathway generation and visualization algorithm 
+drug comparison study algorithm
+amazon/cloud/hosting strategy to be finalized
+implement persisted analytics (investigate mongo/jvm serialization)
+integrate pubmed software into atgc
+pubmed similarity engine
+pubmed imports into graphdb
+Develop GUI 
+Implement auto suggestions using Redis
+key = expressions, value = categorization/bioentity
+
+
+
+DropDead: Dec 31st
+
+Drug analysis
+
+input analysis
+  drugname, types of cancers, stage of cancer, gene expressions, gene, 
+  interacting compounds, protein, enzyme, pathway, species
+
+
+which proteins directly interact with this drug
+which proteins indirectly interact with this drug
+drug epiproteomic interactions, direct and indirect
+drug epigenetic interactions, direct and indirect
+which proteins are required for this drug to be effective
+which proteins will prevent this drug from being effective
+which genes intracting with this drug
+identify pathways leading into drug and out of the drug that are most connected
+identify pathway components with the distribution of literature citations
+compute biological distance between drugs and other entities
+identify disease interaction with this drug

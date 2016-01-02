@@ -1,0 +1,2552 @@
+cd /Users/atgc/cvsroot/misc/biojava-master; JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home "/Applications/NetBeans/NetBeans 7.4.app/Contents/Resources/NetBeans/java/maven/bin/mvn" clean install
+Scanning for projects...
+Downloading: http://download.java.net/maven/2/org/apache/maven/wagon/wagon-ssh/2.4/wagon-ssh-2.4.pom
+
+Downloading: http://download.java.net/maven/1/org/apache/maven/wagon/wagon-ssh/2.4/wagon-ssh-2.4.pom
+
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-ssh/2.4/wagon-ssh-2.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-ssh/2.4/wagon-ssh-2.4.pom (6 KB at 10.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/wagon/wagon-providers/2.4/wagon-providers-2.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/wagon/wagon-providers/2.4/wagon-providers-2.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-providers/2.4/wagon-providers-2.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-providers/2.4/wagon-providers-2.4.pom (3 KB at 52.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/wagon/wagon/2.4/wagon-2.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/wagon/wagon/2.4/wagon-2.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon/2.4/wagon-2.4.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon/2.4/wagon-2.4.pom (20 KB at 264.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-parent/23/maven-parent-23.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-parent/23/maven-parent-23.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-parent/23/maven-parent-23.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-parent/23/maven-parent-23.pom (32 KB at 468.0 KB/sec)
+Downloading: http://download.java.net/maven/2/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.pom
+           
+Downloading: http://download.java.net/maven/1/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.pom (4 KB at 62.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/sonatype/oss/oss-parent/6/oss-parent-6.pom
+         
+Downloading: http://download.java.net/maven/1/org/sonatype/oss/oss-parent/6/oss-parent-6.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/sonatype/oss/oss-parent/6/oss-parent-6.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/sonatype/oss/oss-parent/6/oss-parent-6.pom (5 KB at 72.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.pom (4 KB at 65.3 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus/3.2/plexus-3.2.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus/3.2/plexus-3.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus/3.2/plexus-3.2.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus/3.2/plexus-3.2.pom (19 KB at 359.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/wagon/wagon-ssh-common/2.4/wagon-ssh-common-2.4.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/wagon/wagon-ssh-common/2.4/wagon-ssh-common-2.4.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-ssh-common/2.4/wagon-ssh-common-2.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-ssh-common/2.4/wagon-ssh-common-2.4.pom (2 KB at 22.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-6/plexus-interactivity-api-1.0-alpha-6.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-6/plexus-interactivity-api-1.0-alpha-6.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-6/plexus-interactivity-api-1.0-alpha-6.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-6/plexus-interactivity-api-1.0-alpha-6.pom (726 B at 10.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-interactivity/1.0-alpha-6/plexus-interactivity-1.0-alpha-6.pom
+            
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-interactivity/1.0-alpha-6/plexus-interactivity-1.0-alpha-6.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity/1.0-alpha-6/plexus-interactivity-1.0-alpha-6.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity/1.0-alpha-6/plexus-interactivity-1.0-alpha-6.pom (2 KB at 21.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-provider-api/2.4/wagon-provider-api-2.4.pom (2 KB at 24.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/wagon/wagon-ssh/2.4/wagon-ssh-2.4.jar
+Downloading: http://download.java.net/maven/2/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar
+Downloading: http://download.java.net/maven/2/org/apache/maven/wagon/wagon-ssh-common/2.4/wagon-ssh-common-2.4.jar
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-6/plexus-interactivity-api-1.0-alpha-6.jar
+         
+         
+         
+         
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/wagon/wagon-ssh/2.4/wagon-ssh-2.4.jar
+Downloading: http://download.java.net/maven/1/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar
+Downloading: http://download.java.net/maven/1/org/apache/maven/wagon/wagon-ssh-common/2.4/wagon-ssh-common-2.4.jar
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-6/plexus-interactivity-api-1.0-alpha-6.jar
+         
+         
+         
+         
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-ssh/2.4/wagon-ssh-2.4.jar
+Downloading: http://repo.maven.apache.org/maven2/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-ssh-common/2.4/wagon-ssh-common-2.4.jar
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-6/plexus-interactivity-api-1.0-alpha-6.jar
+                                                        
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-ssh/2.4/wagon-ssh-2.4.jar (29 KB at 358.1 KB/sec)
+                                              
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interactivity-api/1.0-alpha-6/plexus-interactivity-api-1.0-alpha-6.jar (12 KB at 130.8 KB/sec)
+                                   
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-ssh-common/2.4/wagon-ssh-common-2.4.jar (25 KB at 238.6 KB/sec)
+                         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0.8/plexus-utils-3.0.8.jar (227 KB at 1093.7 KB/sec)
+             
+Downloaded: http://repo.maven.apache.org/maven2/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar (209 KB at 462.9 KB/sec)
+------------------------------------------------------------------------
+Reactor Build Order:
+
+biojava
+biojava3-core
+biojava3-phylo
+biojava3-sequencing
+biojava3-alignment
+biojava3-structure
+biojava3-structure-gui
+biojava3-genome
+biojava3-modfinder
+biojava3-ws
+biojava3-protein-disorder
+biojava3-aa-prop
+integrationtest
+protein-comparison-tool
+                                                                        
+------------------------------------------------------------------------
+Building biojava 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.pom
+             
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.pom
+             
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-clean-plugin/2.5/maven-clean-plugin-2.5.pom (4 KB at 72.2 KB/sec)
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava ---
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava/3.0.8-SNAPSHOT/biojava-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-core 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-compiler-plugin/3.1/maven-compiler-plugin-3.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-compiler-plugin/3.1/maven-compiler-plugin-3.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-compiler-plugin/3.1/maven-compiler-plugin-3.1.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-compiler-plugin/3.1/maven-compiler-plugin-3.1.pom (10 KB at 212.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-plugins/24/maven-plugins-24.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-plugins/24/maven-plugins-24.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/24/maven-plugins-24.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/24/maven-plugins-24.pom (11 KB at 206.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-compiler-plugin/3.1/maven-compiler-plugin-3.1.jar
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-compiler-plugin/3.1/maven-compiler-plugin-3.1.jar
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-compiler-plugin/3.1/maven-compiler-plugin-3.1.jar
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-compiler-plugin/3.1/maven-compiler-plugin-3.1.jar (42 KB at 274.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-surefire-plugin/2.14.1/maven-surefire-plugin-2.14.1.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-surefire-plugin/2.14.1/maven-surefire-plugin-2.14.1.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-surefire-plugin/2.14.1/maven-surefire-plugin-2.14.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-surefire-plugin/2.14.1/maven-surefire-plugin-2.14.1.pom (6 KB at 45.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/surefire/surefire/2.14.1/surefire-2.14.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/surefire/surefire/2.14.1/surefire-2.14.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire/2.14.1/surefire-2.14.1.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire/2.14.1/surefire-2.14.1.pom (18 KB at 201.3 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-parent/22/maven-parent-22.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-parent/22/maven-parent-22.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-parent/22/maven-parent-22.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-parent/22/maven-parent-22.pom (30 KB at 363.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/apache/11/apache-11.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/apache/11/apache-11.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/apache/11/apache-11.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/apache/11/apache-11.pom (15 KB at 146.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-surefire-plugin/2.14.1/maven-surefire-plugin-2.14.1.jar
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-surefire-plugin/2.14.1/maven-surefire-plugin-2.14.1.jar
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-surefire-plugin/2.14.1/maven-surefire-plugin-2.14.1.jar
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-surefire-plugin/2.14.1/maven-surefire-plugin-2.14.1.jar (32 KB at 341.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-jar-plugin/2.4/maven-jar-plugin-2.4.pom (6 KB at 123.9 KB/sec)
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-core ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-core ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 1 resource
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-core ---
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-utils/0.1/maven-shared-utils-0.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-utils/0.1/maven-shared-utils-0.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-utils/0.1/maven-shared-utils-0.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-utils/0.1/maven-shared-utils-0.1.pom (4 KB at 57.3 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-components/18/maven-shared-components-18.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-components/18/maven-shared-components-18.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/18/maven-shared-components-18.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/18/maven-shared-components-18.pom (5 KB at 81.7 KB/sec)
+Downloading: http://download.java.net/maven/2/com/google/code/findbugs/jsr305/2.0.1/jsr305-2.0.1.pom
+         
+Downloading: http://download.java.net/maven/1/com/google/code/findbugs/jsr305/2.0.1/jsr305-2.0.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/2.0.1/jsr305-2.0.1.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/2.0.1/jsr305-2.0.1.pom (965 B at 19.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1.pom
+            
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1.pom (5 KB at 45.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-components/19/maven-shared-components-19.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-components/19/maven-shared-components-19.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/19/maven-shared-components-19.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/19/maven-shared-components-19.pom (7 KB at 73.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-plugin-api/2.2.1/maven-plugin-api-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-plugin-api/2.2.1/maven-plugin-api-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-api/2.2.1/maven-plugin-api-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-api/2.2.1/maven-plugin-api-2.2.1.pom (2 KB at 14.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven/2.2.1/maven-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven/2.2.1/maven-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven/2.2.1/maven-2.2.1.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven/2.2.1/maven-2.2.1.pom (22 KB at 317.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-core/2.2.1/maven-core-2.2.1.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-core/2.2.1/maven-core-2.2.1.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-core/2.2.1/maven-core-2.2.1.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-core/2.2.1/maven-core-2.2.1.pom (12 KB at 177.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-settings/2.2.1/maven-settings-2.2.1.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-settings/2.2.1/maven-settings-2.2.1.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-settings/2.2.1/maven-settings-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-settings/2.2.1/maven-settings-2.2.1.pom (3 KB at 46.3 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-model/2.2.1/maven-model-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-model/2.2.1/maven-model-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-model/2.2.1/maven-model-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-model/2.2.1/maven-model-2.2.1.pom (4 KB at 60.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-interpolation/1.11/plexus-interpolation-1.11.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-interpolation/1.11/plexus-interpolation-1.11.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.11/plexus-interpolation-1.11.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.11/plexus-interpolation-1.11.pom (889 B at 16.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-plugin-parameter-documenter/2.2.1/maven-plugin-parameter-documenter-2.2.1.pom
+            
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-plugin-parameter-documenter/2.2.1/maven-plugin-parameter-documenter-2.2.1.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-parameter-documenter/2.2.1/maven-plugin-parameter-documenter-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-parameter-documenter/2.2.1/maven-plugin-parameter-documenter-2.2.1.pom (2 KB at 17.7 KB/sec)
+Downloading: http://download.java.net/maven/2/org/slf4j/slf4j-jdk14/1.5.6/slf4j-jdk14-1.5.6.pom
+         
+Downloading: http://download.java.net/maven/1/org/slf4j/slf4j-jdk14/1.5.6/slf4j-jdk14-1.5.6.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/slf4j/slf4j-jdk14/1.5.6/slf4j-jdk14-1.5.6.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/slf4j/slf4j-jdk14/1.5.6/slf4j-jdk14-1.5.6.pom (2 KB at 22.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/slf4j/slf4j-parent/1.5.6/slf4j-parent-1.5.6.pom
+         
+Downloading: http://download.java.net/maven/1/org/slf4j/slf4j-parent/1.5.6/slf4j-parent-1.5.6.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/slf4j/slf4j-parent/1.5.6/slf4j-parent-1.5.6.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/slf4j/slf4j-parent/1.5.6/slf4j-parent-1.5.6.pom (8 KB at 84.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/slf4j/slf4j-api/1.5.6/slf4j-api-1.5.6.pom
+         
+Downloading: http://download.java.net/maven/1/org/slf4j/slf4j-api/1.5.6/slf4j-api-1.5.6.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.5.6/slf4j-api-1.5.6.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.5.6/slf4j-api-1.5.6.pom (3 KB at 58.3 KB/sec)
+Downloading: http://download.java.net/maven/2/org/slf4j/jcl-over-slf4j/1.5.6/jcl-over-slf4j-1.5.6.pom
+         
+Downloading: http://download.java.net/maven/1/org/slf4j/jcl-over-slf4j/1.5.6/jcl-over-slf4j-1.5.6.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/slf4j/jcl-over-slf4j/1.5.6/jcl-over-slf4j-1.5.6.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/slf4j/jcl-over-slf4j/1.5.6/jcl-over-slf4j-1.5.6.pom (3 KB at 47.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-profile/2.2.1/maven-profile-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-profile/2.2.1/maven-profile-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-profile/2.2.1/maven-profile-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-profile/2.2.1/maven-profile-2.2.1.pom (3 KB at 41.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-artifact/2.2.1/maven-artifact-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-artifact/2.2.1/maven-artifact-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact/2.2.1/maven-artifact-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact/2.2.1/maven-artifact-2.2.1.pom (2 KB at 31.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-repository-metadata/2.2.1/maven-repository-metadata-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-repository-metadata/2.2.1/maven-repository-metadata-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-repository-metadata/2.2.1/maven-repository-metadata-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-repository-metadata/2.2.1/maven-repository-metadata-2.2.1.pom (2 KB at 19.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-error-diagnostics/2.2.1/maven-error-diagnostics-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-error-diagnostics/2.2.1/maven-error-diagnostics-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-error-diagnostics/2.2.1/maven-error-diagnostics-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-error-diagnostics/2.2.1/maven-error-diagnostics-2.2.1.pom (2 KB at 34.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-project/2.2.1/maven-project-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-project/2.2.1/maven-project-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-project/2.2.1/maven-project-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-project/2.2.1/maven-project-2.2.1.pom (3 KB at 54.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-artifact-manager/2.2.1/maven-artifact-manager-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-artifact-manager/2.2.1/maven-artifact-manager-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact-manager/2.2.1/maven-artifact-manager-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact-manager/2.2.1/maven-artifact-manager-2.2.1.pom (4 KB at 38.8 KB/sec)
+Downloading: http://download.java.net/maven/2/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.pom
+         
+Downloading: http://download.java.net/maven/1/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.pom (880 B at 17.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-plugin-registry/2.2.1/maven-plugin-registry-2.2.1.pom
+            
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-plugin-registry/2.2.1/maven-plugin-registry-2.2.1.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-registry/2.2.1/maven-plugin-registry-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-registry/2.2.1/maven-plugin-registry-2.2.1.pom (2 KB at 39.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-plugin-descriptor/2.2.1/maven-plugin-descriptor-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-plugin-descriptor/2.2.1/maven-plugin-descriptor-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-descriptor/2.2.1/maven-plugin-descriptor-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-descriptor/2.2.1/maven-plugin-descriptor-2.2.1.pom (3 KB at 33.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-monitor/2.2.1/maven-monitor-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-monitor/2.2.1/maven-monitor-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-monitor/2.2.1/maven-monitor-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-monitor/2.2.1/maven-monitor-2.2.1.pom (2 KB at 19.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom
+         
+Downloading: http://download.java.net/maven/1/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.pom (3 KB at 34.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/sonatype/spice/spice-parent/12/spice-parent-12.pom
+         
+Downloading: http://download.java.net/maven/1/org/sonatype/spice/spice-parent/12/spice-parent-12.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/sonatype/spice/spice-parent/12/spice-parent-12.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/sonatype/spice/spice-parent/12/spice-parent-12.pom (7 KB at 147.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/sonatype/forge/forge-parent/4/forge-parent-4.pom
+         
+Downloading: http://download.java.net/maven/1/org/sonatype/forge/forge-parent/4/forge-parent-4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/sonatype/forge/forge-parent/4/forge-parent-4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/sonatype/forge/forge-parent/4/forge-parent-4.pom (9 KB at 103.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.pom (3 KB at 30.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.pom (815 B at 17.3 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom
+            
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-containers/1.5.5/plexus-containers-1.5.5.pom (5 KB at 84.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-compiler-api/2.2/plexus-compiler-api-2.2.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-compiler-api/2.2/plexus-compiler-api-2.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-api/2.2/plexus-compiler-api-2.2.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-api/2.2/plexus-compiler-api-2.2.pom (865 B at 10.7 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-compiler/2.2/plexus-compiler-2.2.pom
+            
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-compiler/2.2/plexus-compiler-2.2.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler/2.2/plexus-compiler-2.2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler/2.2/plexus-compiler-2.2.pom (4 KB at 72.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-components/1.3.1/plexus-components-1.3.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-components/1.3.1/plexus-components-1.3.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-components/1.3.1/plexus-components-1.3.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-components/1.3.1/plexus-components-1.3.1.pom (3 KB at 59.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus/3.3.1/plexus-3.3.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus/3.3.1/plexus-3.3.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus/3.3.1/plexus-3.3.1.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus/3.3.1/plexus-3.3.1.pom (20 KB at 281.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-compiler-manager/2.2/plexus-compiler-manager-2.2.pom
+           
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-compiler-manager/2.2/plexus-compiler-manager-2.2.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-manager/2.2/plexus-compiler-manager-2.2.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-manager/2.2/plexus-compiler-manager-2.2.pom (690 B at 10.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-compiler-javac/2.2/plexus-compiler-javac-2.2.pom
+            
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-compiler-javac/2.2/plexus-compiler-javac-2.2.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-javac/2.2/plexus-compiler-javac-2.2.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-javac/2.2/plexus-compiler-javac-2.2.pom (769 B at 7.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-compilers/2.2/plexus-compilers-2.2.pom
+            
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-compilers/2.2/plexus-compilers-2.2.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compilers/2.2/plexus-compilers-2.2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compilers/2.2/plexus-compilers-2.2.pom (2 KB at 24.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-container-default/1.5.5/plexus-container-default-1.5.5.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-container-default/1.5.5/plexus-container-default-1.5.5.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-container-default/1.5.5/plexus-container-default-1.5.5.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-container-default/1.5.5/plexus-container-default-1.5.5.pom (3 KB at 20.7 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-classworlds/2.2.2/plexus-classworlds-2.2.2.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-classworlds/2.2.2/plexus-classworlds-2.2.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-classworlds/2.2.2/plexus-classworlds-2.2.2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-classworlds/2.2.2/plexus-classworlds-2.2.2.pom (4 KB at 80.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/xbean/xbean-reflect/3.4/xbean-reflect-3.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/xbean/xbean-reflect/3.4/xbean-reflect-3.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/xbean/xbean-reflect/3.4/xbean-reflect-3.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/xbean/xbean-reflect/3.4/xbean-reflect-3.4.pom (3 KB at 16.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/xbean/xbean/3.4/xbean-3.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/xbean/xbean/3.4/xbean-3.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/xbean/xbean/3.4/xbean-3.4.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/xbean/xbean/3.4/xbean-3.4.pom (19 KB at 198.9 KB/sec)
+Downloading: http://download.java.net/maven/2/log4j/log4j/1.2.12/log4j-1.2.12.pom
+           
+Downloading: http://download.java.net/maven/1/log4j/log4j/1.2.12/log4j-1.2.12.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/log4j/log4j/1.2.12/log4j-1.2.12.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/log4j/log4j/1.2.12/log4j-1.2.12.pom (145 B at 2.9 KB/sec)
+Downloading: http://download.java.net/maven/2/commons-logging/commons-logging-api/1.1/commons-logging-api-1.1.pom
+            
+Downloading: http://download.java.net/maven/1/commons-logging/commons-logging-api/1.1/commons-logging-api-1.1.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/commons-logging/commons-logging-api/1.1/commons-logging-api-1.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/commons-logging/commons-logging-api/1.1/commons-logging-api-1.1.pom (6 KB at 100.4 KB/sec)
+Downloading: http://download.java.net/maven/2/com/google/collections/google-collections/1.0/google-collections-1.0.pom
+         
+Downloading: http://download.java.net/maven/1/com/google/collections/google-collections/1.0/google-collections-1.0.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/com/google/collections/google-collections/1.0/google-collections-1.0.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/com/google/collections/google-collections/1.0/google-collections-1.0.pom (3 KB at 49.4 KB/sec)
+Downloading: http://download.java.net/maven/2/com/google/google/1/google-1.pom
+         
+Downloading: http://download.java.net/maven/1/com/google/google/1/google-1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/com/google/google/1/google-1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/com/google/google/1/google-1.pom (2 KB at 17.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-utils/1.5.1/plexus-utils-1.5.1.jar
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-utils/0.1/maven-shared-utils-0.1.jar
+Downloading: http://download.java.net/maven/2/com/google/code/findbugs/jsr305/2.0.1/jsr305-2.0.1.jar
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1.jar
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar
+         
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-compiler-api/2.2/plexus-compiler-api-2.2.jar
+         
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-compiler-manager/2.2/plexus-compiler-manager-2.2.jar
+         
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-compiler-javac/2.2/plexus-compiler-javac-2.2.jar
+         
+Downloading: http://download.java.net/maven/2/org/apache/xbean/xbean-reflect/3.4/xbean-reflect-3.4.jar
+         
+Downloading: http://download.java.net/maven/2/log4j/log4j/1.2.12/log4j-1.2.12.jar
+         
+Downloading: http://download.java.net/maven/2/commons-logging/commons-logging-api/1.1/commons-logging-api-1.1.jar
+         
+Downloading: http://download.java.net/maven/2/com/google/collections/google-collections/1.0/google-collections-1.0.jar
+         
+Downloading: http://download.java.net/maven/2/junit/junit/3.8.2/junit-3.8.2.jar
+         
+         
+         
+         
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-utils/1.5.1/plexus-utils-1.5.1.jar
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-utils/0.1/maven-shared-utils-0.1.jar
+Downloading: http://download.java.net/maven/1/com/google/code/findbugs/jsr305/2.0.1/jsr305-2.0.1.jar
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1.jar
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-compiler-api/2.2/plexus-compiler-api-2.2.jar
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-compiler-manager/2.2/plexus-compiler-manager-2.2.jar
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-compiler-javac/2.2/plexus-compiler-javac-2.2.jar
+         
+Downloading: http://download.java.net/maven/1/org/apache/xbean/xbean-reflect/3.4/xbean-reflect-3.4.jar
+         
+Downloading: http://download.java.net/maven/1/log4j/log4j/1.2.12/log4j-1.2.12.jar
+         
+Downloading: http://download.java.net/maven/1/commons-logging/commons-logging-api/1.1/commons-logging-api-1.1.jar
+         
+Downloading: http://download.java.net/maven/1/com/google/collections/google-collections/1.0/google-collections-1.0.jar
+         
+Downloading: http://download.java.net/maven/1/junit/junit/3.8.2/junit-3.8.2.jar
+         
+         
+         
+         
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/1.5.1/plexus-utils-1.5.1.jar
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-utils/0.1/maven-shared-utils-0.1.jar
+Downloading: http://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/2.0.1/jsr305-2.0.1.jar
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1.jar
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-component-annotations/1.5.5/plexus-component-annotations-1.5.5.jar (5 KB at 54.1 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-api/2.2/plexus-compiler-api-2.2.jar
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-api/2.2/plexus-compiler-api-2.2.jar (25 KB at 256.9 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-manager/2.2/plexus-compiler-manager-2.2.jar
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-manager/2.2/plexus-compiler-manager-2.2.jar (5 KB at 36.2 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-javac/2.2/plexus-compiler-javac-2.2.jar
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-javac/2.2/plexus-compiler-javac-2.2.jar (19 KB at 210.5 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/apache/xbean/xbean-reflect/3.4/xbean-reflect-3.4.jar
+                                                          
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1.jar (14 KB at 26.7 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/log4j/log4j/1.2.12/log4j-1.2.12.jar
+                                                
+Downloaded: http://repo.maven.apache.org/maven2/com/google/code/findbugs/jsr305/2.0.1/jsr305-2.0.1.jar (32 KB at 58.9 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/commons-logging/commons-logging-api/1.1/commons-logging-api-1.1.jar
+                                                              
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/xbean/xbean-reflect/3.4/xbean-reflect-3.4.jar (131 KB at 570.7 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/com/google/collections/google-collections/1.0/google-collections-1.0.jar
+                                                              
+                                                              
+Downloaded: http://repo.maven.apache.org/maven2/commons-logging/commons-logging-api/1.1/commons-logging-api-1.1.jar (44 KB at 378.7 KB/sec)
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-utils/0.1/maven-shared-utils-0.1.jar (151 KB at 234.7 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/junit/junit/3.8.2/junit-3.8.2.jar
+                                      
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/1.5.1/plexus-utils-1.5.1.jar (206 KB at 318.5 KB/sec)
+                                       
+Downloaded: http://repo.maven.apache.org/maven2/junit/junit/3.8.2/junit-3.8.2.jar (118 KB at 1090.9 KB/sec)
+                          
+Downloaded: http://repo.maven.apache.org/maven2/log4j/log4j/1.2.12/log4j-1.2.12.jar (350 KB at 1103.1 KB/sec)
+             
+Downloaded: http://repo.maven.apache.org/maven2/com/google/collections/google-collections/1.0/google-collections-1.0.jar (625 KB at 1589.3 KB/sec)
+Changes detected - recompiling the module!
+Compiling 140 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-core/target/classes
+/Users/atgc/cvsroot/misc/biojava-master/biojava3-core/src/main/java/org/biojava3/core/sequence/ProteinSequence.java: /Users/atgc/cvsroot/misc/biojava-master/biojava3-core/src/main/java/org/biojava3/core/sequence/ProteinSequence.java uses unchecked or unsafe operations.
+/Users/atgc/cvsroot/misc/biojava-master/biojava3-core/src/main/java/org/biojava3/core/sequence/ProteinSequence.java: Recompile with -Xlint:unchecked for details.
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-core ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 8 resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-core ---
+Changes detected - recompiling the module!
+Compiling 17 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-core/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-core ---
+Downloading: http://download.java.net/maven/2/org/apache/maven/surefire/maven-surefire-common/2.14.1/maven-surefire-common-2.14.1.pom
+             
+Downloading: http://download.java.net/maven/1/org/apache/maven/surefire/maven-surefire-common/2.14.1/maven-surefire-common-2.14.1.pom
+             
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/maven-surefire-common/2.14.1/maven-surefire-common-2.14.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/maven-surefire-common/2.14.1/maven-surefire-common-2.14.1.pom (6 KB at 70.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugin-tools/maven-plugin-annotations/3.2/maven-plugin-annotations-3.2.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugin-tools/maven-plugin-annotations/3.2/maven-plugin-annotations-3.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-annotations/3.2/maven-plugin-annotations-3.2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-annotations/3.2/maven-plugin-annotations-3.2.pom (2 KB at 24.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugin-tools/maven-plugin-tools/3.2/maven-plugin-tools-3.2.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugin-tools/maven-plugin-tools/3.2/maven-plugin-tools-3.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools/3.2/maven-plugin-tools-3.2.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools/3.2/maven-plugin-tools-3.2.pom (17 KB at 181.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/surefire/surefire-api/2.14.1/surefire-api-2.14.1.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/surefire/surefire-api/2.14.1/surefire-api-2.14.1.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-api/2.14.1/surefire-api-2.14.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-api/2.14.1/surefire-api-2.14.1.pom (3 KB at 19.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/surefire/surefire-booter/2.14.1/surefire-booter-2.14.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/surefire/surefire-booter/2.14.1/surefire-booter-2.14.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-booter/2.14.1/surefire-booter-2.14.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-booter/2.14.1/surefire-booter-2.14.1.pom (3 KB at 52.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom (17 KB at 307.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/surefire/maven-surefire-common/2.14.1/maven-surefire-common-2.14.1.jar
+Downloading: http://download.java.net/maven/2/org/apache/maven/surefire/surefire-booter/2.14.1/surefire-booter-2.14.1.jar
+Downloading: http://download.java.net/maven/2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar
+Downloading: http://download.java.net/maven/2/org/apache/maven/surefire/surefire-api/2.14.1/surefire-api-2.14.1.jar
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugin-tools/maven-plugin-annotations/3.2/maven-plugin-annotations-3.2.jar
+           
+           
+           
+           
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/surefire/maven-surefire-common/2.14.1/maven-surefire-common-2.14.1.jar
+Downloading: http://download.java.net/maven/1/org/apache/maven/surefire/surefire-booter/2.14.1/surefire-booter-2.14.1.jar
+Downloading: http://download.java.net/maven/1/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar
+Downloading: http://download.java.net/maven/1/org/apache/maven/surefire/surefire-api/2.14.1/surefire-api-2.14.1.jar
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugin-tools/maven-plugin-annotations/3.2/maven-plugin-annotations-3.2.jar
+           
+           
+           
+           
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/maven-surefire-common/2.14.1/maven-surefire-common-2.14.1.jar
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-booter/2.14.1/surefire-booter-2.14.1.jar
+Downloading: http://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-api/2.14.1/surefire-api-2.14.1.jar
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-annotations/3.2/maven-plugin-annotations-3.2.jar
+                                                           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugin-tools/maven-plugin-annotations/3.2/maven-plugin-annotations-3.2.jar (15 KB at 158.3 KB/sec)
+                                                 
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-booter/2.14.1/surefire-booter-2.14.1.jar (36 KB at 308.2 KB/sec)
+                                       
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-api/2.14.1/surefire-api-2.14.1.jar (153 KB at 556.2 KB/sec)
+                                       
+                                       
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar (309 KB at 1117.4 KB/sec)
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/maven-surefire-common/2.14.1/maven-surefire-common-2.14.1.jar (228 KB at 821.3 KB/sec)
+Surefire report directory: /Users/atgc/cvsroot/misc/biojava-master/biojava3-core/target/surefire-reports
+Downloading: http://download.java.net/maven/2/org/apache/maven/surefire/surefire-junit4/2.14.1/surefire-junit4-2.14.1.pom
+                                       
+Downloading: http://download.java.net/maven/1/org/apache/maven/surefire/surefire-junit4/2.14.1/surefire-junit4-2.14.1.pom
+                                       
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-junit4/2.14.1/surefire-junit4-2.14.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-junit4/2.14.1/surefire-junit4-2.14.1.pom (3 KB at 24.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/surefire/surefire-providers/2.14.1/surefire-providers-2.14.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/surefire/surefire-providers/2.14.1/surefire-providers-2.14.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-providers/2.14.1/surefire-providers-2.14.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-providers/2.14.1/surefire-providers-2.14.1.pom (3 KB at 45.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/surefire/surefire-junit4/2.14.1/surefire-junit4-2.14.1.jar
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/surefire/surefire-junit4/2.14.1/surefire-junit4-2.14.1.jar
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-junit4/2.14.1/surefire-junit4-2.14.1.jar
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-junit4/2.14.1/surefire-junit4-2.14.1.jar (78 KB at 1063.5 KB/sec)
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.biojava3.core.sequence.compound.AmbiguityDNACompoundTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.057 sec
+Running org.biojava3.core.sequence.DNATest
+Tests run: 20, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.362 sec
+Running org.biojava3.core.sequence.EditSequenceTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.04 sec
+Running org.biojava3.core.sequence.io.CasePreservingProteinSequenceCreatorTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.038 sec
+Running org.biojava3.core.sequence.io.FastaReaderTest
+process
+process(int)
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.932 sec
+Running org.biojava3.core.sequence.io.FastaWriterTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.469 sec
+Running org.biojava3.core.sequence.io.GenbankCookbookTest
+Oct 28, 2013 9:15:29 AM org.biojava3.core.sequence.loader.GenbankProxySequenceReader getEutilsInputStream
+INFO: Loading http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=protein&id=NP_000257&rettype=gb&retmode=text
+Sequence(NP_000257,133)=MRKHVLAASF...
+Oct 28, 2013 9:15:30 AM org.biojava3.core.sequence.loader.GenbankProxySequenceReader getEutilsInputStream
+INFO: Loading http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=NM_001126&rettype=gb&retmode=text
+Sequence(NM_001126,2791)=ACGGGAGTGG...
+AAGATGCTCCGTGGAAGGGAGCCGAGCGGTGGGCAGAGGCTGAGTCCCCGATAACGAGCGCCTCACATTTCCGTGGCATTCCCATTTGCTAGTGCGCTGCTGCGGCCGCACGCCTGATTGATATATGACTGCAATGGCACTTTTCCATTTGACATTCTCTCTCTCTCTCTCCCTCTCTCTCTCTCCCTCTCTCTCTCCCTCTCTCTCTCTCCCTGTGTCGCTTAAACAACAGTCCTAACTTTTGTGTGTTGCAAATATAAAAGGCAAGCCATGTGACAGAGGGACAGAAGAACAAAAGCATTTGGAAGTAACAGGACCTCTTTCTAGCTCTCAGAAAAGTCTGAGAAGAAAGGAGCCCTGCGTTCCCCTAAGCTGTGCAGCAGATACTGTGATGATGGATTGCAAGTGCAAAGAGTAAGACAAAACTCCAGCACATAAAGGACAATGACAACCAGAAAGCTTCAGCCCGATCCTGCCCTTTCCTTGAACGGGACTGGATCCTAGGAGGTGAAGCCATTTCCAATTTTTTGTCCTCTGCCTCCCTCTGCTGTTCTTCTAGAGAAGTTTTTCCTTACAACAATGAGAAAACATGTACTAGCTGCATCCTTTTCTATGCTCTCCCTGCTGGTGATAATGGGAGATACAGACAGTAAAACGGACAGCTCATTCATAATGGACTCGGACCCTCGACGCTGCATGAGGCACCACTATGTGGATTCTATCAGTCACCCATTGTACAAGTGTAGCTCAAAGATGGTGCTCCTGGCCAGGTGCGAGGGGCACTGCAGCCAGGCGTCACGCTCCGAGCCTTTGGTGTCGTTCAGCACTGTCCTCAAGCAACCCTTCCGTTCCTCCTGTCACTGCTGCCGGCCCCAGACTTCCAAGCTGAAGGCACTGCGGCTGCGATGCTCAGGGGGCATGCGACTCACTGCCACCTACCGGTACATCCTCTCCTGTCACTGCGAGGAATGCAATTCCTGAGGCCCGCTGCTGTGTGTGGCTTCTGGATGGGACAACTGTAGAGGCAGTTCGACCAGCCAGGGAAAGACTGGCAAGAAAAGAGTTAAGGCAAAAAAGGATGCAACAATTCTCCCGGGACTCTGCATATTCTAGTAATAAAGACTCTACATGCTTGTTGACAGAGAGAGATACTCTGGGAACTTCTTTGCAGTTCCCATCTCCTTTCTCTGGTACAATTTCTTTTGGTTCATTTTCAGATTCAGGCATTTTCCCCCTTGGCTCTCAATGCTGTTTGGGTTTCCAACAATTCAGCATTAGTGGGAAAAAGTGGGCCCTCATACACAAGCGTGTCAGGCTGTCAGTGTTTGGTGCACGCTGGGGAAGAATTTACTTTGGAAAGTAGAAAAGCCCAGCTTTTCCTGGGACATCTTCTGTTATTGTTGATGTTTTTTTTTACCTTGTCATTTTGGTCTAAGGTTGCCATTGCTGCTAAAGGTTACCGATTTCAAAGTCCAGATACCAAGCATGTGGATATGTTTAGCTACGTTTACTCACAGCCAGCGAACTGACATTAAAATAACTAACAAACAGATTCTTTTATGTGATGCTGGAACTCTTGACAGCTATAATTATTATTCAGAAATGACTTTTTGAAAGTAAAAGCAGCATAAAGAATTTGTCACAGGAAGGCTGTCTCAGATAAATTATGGTAAAATTTTGTAAGGGAGCAGACTTTTAAAGACTTGCACAAATACGGATCCTGCACTGACTCTGGAAAAGGCATATATGTACTAGTGGCATGGAGAATGCACCATACTCATGCATGCAAATTAGACAACCAAGTATGAATCTATTTGTGGGTGTGCTATAGCTTTAGCCGTGTCACGGGCATCATTCTCTAATATCCACTTGTCCATGTGAAACATGTTGCCAAAATGGTGGCCTGGCTTGTCTTCTGAACGTTTGGTTCAAATGTGTTTTGGTCCTGGAGGCTCAAATTTTGAGTTATTCCCACGTTTTGAAATAAAAAGAGTATATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+MRKHVLAASFSMLSLLVIMGDTDSKTDSSFIMDSDPRRCMRHHYVDSISHPLYKCSSKMVLLARCEGHCSQASRSEPLVSFSTVLKQPFRSSCHCCRPQTSKLKALRLRCSGGMRLTATYRYILSCHCEECNS
+{NM_000266=AAGATGCTCCGTGGAAGGGAGCCGAGCGGTGGGCAGAGGCTGAGTCCCCGATAACGAGCGCCTCACATTTCCGTGGCATTCCCATTTGCTAGTGCGCTGCTGCGGCCGCACGCCTGATTGATATATGACTGCAATGGCACTTTTCCATTTGACATTCTCTCTCTCTCTCTCCCTCTCTCTCTCTCCCTCTCTCTCTCCCTCTCTCTCTCTCCCTGTGTCGCTTAAACAACAGTCCTAACTTTTGTGTGTTGCAAATATAAAAGGCAAGCCATGTGACAGAGGGACAGAAGAACAAAAGCATTTGGAAGTAACAGGACCTCTTTCTAGCTCTCAGAAAAGTCTGAGAAGAAAGGAGCCCTGCGTTCCCCTAAGCTGTGCAGCAGATACTGTGATGATGGATTGCAAGTGCAAAGAGTAAGACAAAACTCCAGCACATAAAGGACAATGACAACCAGAAAGCTTCAGCCCGATCCTGCCCTTTCCTTGAACGGGACTGGATCCTAGGAGGTGAAGCCATTTCCAATTTTTTGTCCTCTGCCTCCCTCTGCTGTTCTTCTAGAGAAGTTTTTCCTTACAACAATGAGAAAACATGTACTAGCTGCATCCTTTTCTATGCTCTCCCTGCTGGTGATAATGGGAGATACAGACAGTAAAACGGACAGCTCATTCATAATGGACTCGGACCCTCGACGCTGCATGAGGCACCACTATGTGGATTCTATCAGTCACCCATTGTACAAGTGTAGCTCAAAGATGGTGCTCCTGGCCAGGTGCGAGGGGCACTGCAGCCAGGCGTCACGCTCCGAGCCTTTGGTGTCGTTCAGCACTGTCCTCAAGCAACCCTTCCGTTCCTCCTGTCACTGCTGCCGGCCCCAGACTTCCAAGCTGAAGGCACTGCGGCTGCGATGCTCAGGGGGCATGCGACTCACTGCCACCTACCGGTACATCCTCTCCTGTCACTGCGAGGAATGCAATTCCTGAGGCCCGCTGCTGTGTGTGGCTTCTGGATGGGACAACTGTAGAGGCAGTTCGACCAGCCAGGGAAAGACTGGCAAGAAAAGAGTTAAGGCAAAAAAGGATGCAACAATTCTCCCGGGACTCTGCATATTCTAGTAATAAAGACTCTACATGCTTGTTGACAGAGAGAGATACTCTGGGAACTTCTTTGCAGTTCCCATCTCCTTTCTCTGGTACAATTTCTTTTGGTTCATTTTCAGATTCAGGCATTTTCCCCCTTGGCTCTCAATGCTGTTTGGGTTTCCAACAATTCAGCATTAGTGGGAAAAAGTGGGCCCTCATACACAAGCGTGTCAGGCTGTCAGTGTTTGGTGCACGCTGGGGAAGAATTTACTTTGGAAAGTAGAAAAGCCCAGCTTTTCCTGGGACATCTTCTGTTATTGTTGATGTTTTTTTTTACCTTGTCATTTTGGTCTAAGGTTGCCATTGCTGCTAAAGGTTACCGATTTCAAAGTCCAGATACCAAGCATGTGGATATGTTTAGCTACGTTTACTCACAGCCAGCGAACTGACATTAAAATAACTAACAAACAGATTCTTTTATGTGATGCTGGAACTCTTGACAGCTATAATTATTATTCAGAAATGACTTTTTGAAAGTAAAAGCAGCATAAAGAATTTGTCACAGGAAGGCTGTCTCAGATAAATTATGGTAAAATTTTGTAAGGGAGCAGACTTTTAAAGACTTGCACAAATACGGATCCTGCACTGACTCTGGAAAAGGCATATATGTACTAGTGGCATGGAGAATGCACCATACTCATGCATGCAAATTAGACAACCAAGTATGAATCTATTTGTGGGTGTGCTATAGCTTTAGCCGTGTCACGGGCATCATTCTCTAATATCCACTTGTCCATGTGAAACATGTTGCCAAAATGGTGGCCTGGCTTGTCTTCTGAACGTTTGGTTCAAATGTGTTTTGGTCCTGGAGGCTCAAATTTTGAGTTATTCCCACGTTTTGAAATAAAAAGAGTATATTCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA}
+{NP_000257=MRKHVLAASFSMLSLLVIMGDTDSKTDSSFIMDSDPRRCMRHHYVDSISHPLYKCSSKMVLLARCEGHCSQASRSEPLVSFSTVLKQPFRSSCHCCRPQTSKLKALRLRCSGGMRLTATYRYILSCHCEECNS}
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.286 sec
+Running org.biojava3.core.sequence.io.GenbankReaderTest
+process protein
+process DNA
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava3.core.sequence.io.GenbankWriterTest
+DIVISION:UNK linear
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava3.core.sequence.io.GenericFastaHeaderParserTest
+parseHeader
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava3.core.sequence.JoiningSequenceReaderTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+Running org.biojava3.core.sequence.location.LocationParserTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.041 sec
+Running org.biojava3.core.sequence.location.LocationTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.019 sec
+Running org.biojava3.core.sequence.MultipleSequenceAlignmentTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.099 sec
+Running org.biojava3.core.sequence.SequenceViewTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava3.core.sequence.TranslationTest
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.399 sec
+
+Results :
+
+Tests run: 60, Failures: 0, Errors: 0, Skipped: 0
+
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-core ---
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.pom (5 KB at 70.3 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-components/17/maven-shared-components-17.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-components/17/maven-shared-components-17.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/17/maven-shared-components-17.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/17/maven-shared-components-17.pom (9 KB at 89.5 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.pom (3 KB at 57.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.pom (2 KB at 33.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-interpolation/1.15/plexus-interpolation-1.15.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-interpolation/1.15/plexus-interpolation-1.15.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.15/plexus-interpolation-1.15.pom
+              
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.15/plexus-interpolation-1.15.pom (1018 B at 11.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.jar
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-interpolation/1.15/plexus-interpolation-1.15.jar
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.jar
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.jar
+              
+              
+              
+              
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.jar
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-interpolation/1.15/plexus-interpolation-1.15.jar
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.jar
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.jar
+              
+              
+              
+              
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.jar
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.15/plexus-interpolation-1.15.jar
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.jar
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.jar
+                                             
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-archiver/2.5/maven-archiver-2.5.jar (22 KB at 116.4 KB/sec)
+                                   
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.2/plexus-io-2.0.2.jar (57 KB at 238.1 KB/sec)
+                                   
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.15/plexus-interpolation-1.15.jar (60 KB at 245.0 KB/sec)
+             
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/2.1/plexus-archiver-2.1.jar (181 KB at 647.9 KB/sec)
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-core/target/biojava3-core-3.0.8-SNAPSHOT.jar
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-core ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-core/target/biojava3-core-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-core/3.0.8-SNAPSHOT/biojava3-core-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-core/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-core/3.0.8-SNAPSHOT/biojava3-core-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-phylo 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+Downloading: http://www.biojava.org/download/maven/org/forester/forester-lgpl/1.005/forester-lgpl-1.005.pom
+            
+Downloaded: http://www.biojava.org/download/maven/org/forester/forester-lgpl/1.005/forester-lgpl-1.005.pom (398 B at 0.6 KB/sec)
+Downloading: http://www.biojava.org/download/maven/org/forester/forester-lgpl/1.005/forester-lgpl-1.005.jar
+               
+Downloaded: http://www.biojava.org/download/maven/org/forester/forester-lgpl/1.005/forester-lgpl-1.005.jar (1169 KB at 460.0 KB/sec)
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-phylo ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-phylo ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 1 resource
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-phylo ---
+Changes detected - recompiling the module!
+Compiling 10 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-phylo/target/classes
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-phylo ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+skip non existing resourceDirectory /Users/atgc/cvsroot/misc/biojava-master/biojava3-phylo/src/test/resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-phylo ---
+Changes detected - recompiling the module!
+Compiling 1 source file to /Users/atgc/cvsroot/misc/biojava-master/biojava3-phylo/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-phylo ---
+Surefire report directory: /Users/atgc/cvsroot/misc/biojava-master/biojava3-phylo/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.biojava3.phylo.AppTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.035 sec
+
+Results :
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-phylo ---
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-phylo/target/biojava3-phylo-3.0.8-SNAPSHOT.jar
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-phylo ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-phylo/target/biojava3-phylo-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-phylo/3.0.8-SNAPSHOT/biojava3-phylo-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-phylo/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-phylo/3.0.8-SNAPSHOT/biojava3-phylo-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-sequencing 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+Downloading: http://download.java.net/maven/2/com/google/guava/guava/15.0/guava-15.0.pom
+               
+Downloading: http://download.java.net/maven/1/com/google/guava/guava/15.0/guava-15.0.pom
+               
+Downloading: http://www.biojava.org/download/maven/com/google/guava/guava/15.0/guava-15.0.pom
+               
+Downloading: http://repo.maven.apache.org/maven2/com/google/guava/guava/15.0/guava-15.0.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/com/google/guava/guava/15.0/guava-15.0.pom (7 KB at 93.9 KB/sec)
+Downloading: http://download.java.net/maven/2/com/google/guava/guava-parent/15.0/guava-parent-15.0.pom
+         
+Downloading: http://download.java.net/maven/1/com/google/guava/guava-parent/15.0/guava-parent-15.0.pom
+         
+Downloading: http://www.biojava.org/download/maven/com/google/guava/guava-parent/15.0/guava-parent-15.0.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/com/google/guava/guava-parent/15.0/guava-parent-15.0.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/com/google/guava/guava-parent/15.0/guava-parent-15.0.pom (8 KB at 155.7 KB/sec)
+Downloading: http://download.java.net/maven/2/com/google/guava/guava/15.0/guava-15.0.jar
+         
+Downloading: http://download.java.net/maven/1/com/google/guava/guava/15.0/guava-15.0.jar
+         
+Downloading: http://www.biojava.org/download/maven/com/google/guava/guava/15.0/guava-15.0.jar
+         
+Downloading: http://repo.maven.apache.org/maven2/com/google/guava/guava/15.0/guava-15.0.jar
+               
+Downloaded: http://repo.maven.apache.org/maven2/com/google/guava/guava/15.0/guava-15.0.jar (2122 KB at 2221.2 KB/sec)
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-sequencing ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-sequencing ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+skip non existing resourceDirectory /Users/atgc/cvsroot/misc/biojava-master/biojava3-sequencing/src/main/resources
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-sequencing ---
+Changes detected - recompiling the module!
+Compiling 19 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-sequencing/target/classes
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-sequencing ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 74 resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-sequencing ---
+Changes detected - recompiling the module!
+Compiling 13 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-sequencing/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-sequencing ---
+Surefire report directory: /Users/atgc/cvsroot/misc/biojava-master/biojava3-sequencing/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.biojava3.sequencing.io.fastq.FastqBuilderTest
+Tests run: 21, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.112 sec
+Running org.biojava3.sequencing.io.fastq.FastqTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.012 sec
+Running org.biojava3.sequencing.io.fastq.FastqToolsTest
+Tests run: 28, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.116 sec
+Running org.biojava3.sequencing.io.fastq.FastqVariantTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 sec
+Running org.biojava3.sequencing.io.fastq.IlluminaFastqReaderTest
+Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.168 sec
+Running org.biojava3.sequencing.io.fastq.IlluminaFastqWriterTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 sec
+Running org.biojava3.sequencing.io.fastq.SangerFastqReaderTest
+Tests run: 30, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.06 sec
+Running org.biojava3.sequencing.io.fastq.SangerFastqWriterTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.096 sec
+Running org.biojava3.sequencing.io.fastq.SolexaFastqReaderTest
+Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.101 sec
+Running org.biojava3.sequencing.io.fastq.SolexaFastqWriterTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec
+Running org.biojava3.sequencing.io.fastq.StreamingFastqParserTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec
+
+Results :
+
+Tests run: 175, Failures: 0, Errors: 0, Skipped: 0
+
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-sequencing ---
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-sequencing/target/biojava3-sequencing-3.0.8-SNAPSHOT.jar
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-sequencing ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-sequencing/target/biojava3-sequencing-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-sequencing/3.0.8-SNAPSHOT/biojava3-sequencing-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-sequencing/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-sequencing/3.0.8-SNAPSHOT/biojava3-sequencing-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-alignment 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-alignment ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-alignment ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 20 resources
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-alignment ---
+Changes detected - recompiling the module!
+Compiling 65 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-alignment/target/classes
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-alignment ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 9 resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-alignment ---
+Changes detected - recompiling the module!
+Compiling 22 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-alignment/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-alignment ---
+Surefire report directory: /Users/atgc/cvsroot/misc/biojava-master/biojava3-alignment/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.biojava3.alignment.aaindex.TestAAINDEXLoading
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.356 sec
+Running org.biojava3.alignment.FractionalIdentityScorerTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.164 sec
+Running org.biojava3.alignment.FractionalSimilarityScorerTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 sec
+Running org.biojava3.alignment.GuideTreeTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.108 sec
+Running org.biojava3.alignment.io.TestStockholmParser
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.039 sec
+Running org.biojava3.alignment.NeedlemanWunschTest
+Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.025 sec
+Running org.biojava3.alignment.routines.GuanUberbacherTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.009 sec
+Running org.biojava3.alignment.SimpleAlignedSequenceTest
+Tests run: 33, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.027 sec
+Running org.biojava3.alignment.SimpleGapPenaltyTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava3.alignment.SimpleProfilePairTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec
+Running org.biojava3.alignment.SimpleProfileProfileAlignerTest
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.056 sec
+Running org.biojava3.alignment.SimpleProfileTest
+Tests run: 54, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.059 sec
+Running org.biojava3.alignment.SimpleSequencePairTest
+Tests run: 34, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec
+Running org.biojava3.alignment.SimpleSubstitutionMatrixTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.016 sec
+Running org.biojava3.alignment.SmithWatermanTest
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.036 sec
+Running org.biojava3.alignment.TestDNAAlignment
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.592 sec
+
+Results :
+
+Tests run: 216, Failures: 0, Errors: 0, Skipped: 3
+
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-alignment ---
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-alignment/target/biojava3-alignment-3.0.8-SNAPSHOT.jar
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-alignment ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-alignment/target/biojava3-alignment-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-alignment/3.0.8-SNAPSHOT/biojava3-alignment-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-alignment/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-alignment/3.0.8-SNAPSHOT/biojava3-alignment-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-structure 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+Downloading: http://download.java.net/maven/2/org/apache/logging/log4j/log4j-core/2.0-beta7/log4j-core-2.0-beta7.pom
+               
+Downloading: http://download.java.net/maven/1/org/apache/logging/log4j/log4j-core/2.0-beta7/log4j-core-2.0-beta7.pom
+               
+Downloading: http://www.biojava.org/download/maven/org/apache/logging/log4j/log4j-core/2.0-beta7/log4j-core-2.0-beta7.pom
+               
+Downloading: http://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.0-beta7/log4j-core-2.0-beta7.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.0-beta7/log4j-core-2.0-beta7.pom (14 KB at 29.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/logging/log4j/log4j/2.0-beta7/log4j-2.0-beta7.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/logging/log4j/log4j/2.0-beta7/log4j-2.0-beta7.pom
+           
+Downloading: http://www.biojava.org/download/maven/org/apache/logging/log4j/log4j/2.0-beta7/log4j-2.0-beta7.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j/2.0-beta7/log4j-2.0-beta7.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j/2.0-beta7/log4j-2.0-beta7.pom (32 KB at 196.7 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/logging/log4j/log4j-api/2.0-beta7/log4j-api-2.0-beta7.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/logging/log4j/log4j-api/2.0-beta7/log4j-api-2.0-beta7.pom
+           
+Downloading: http://www.biojava.org/download/maven/org/apache/logging/log4j/log4j-api/2.0-beta7/log4j-api-2.0-beta7.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.0-beta7/log4j-api-2.0-beta7.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.0-beta7/log4j-api-2.0-beta7.pom (7 KB at 40.4 KB/sec)
+Downloading: http://download.java.net/maven/2/xmlunit/xmlunit/1.4/xmlunit-1.4.pom
+         
+Downloading: http://download.java.net/maven/1/xmlunit/xmlunit/1.4/xmlunit-1.4.pom
+         
+Downloading: http://www.biojava.org/download/maven/xmlunit/xmlunit/1.4/xmlunit-1.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/xmlunit/xmlunit/1.4/xmlunit-1.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/xmlunit/xmlunit/1.4/xmlunit-1.4.pom (3 KB at 59.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/logging/log4j/log4j-core/2.0-beta7/log4j-core-2.0-beta7.jar
+Downloading: http://download.java.net/maven/2/org/apache/logging/log4j/log4j-api/2.0-beta7/log4j-api-2.0-beta7.jar
+Downloading: http://download.java.net/maven/2/xmlunit/xmlunit/1.4/xmlunit-1.4.jar
+         
+         
+         
+Downloading: http://download.java.net/maven/1/org/apache/logging/log4j/log4j-core/2.0-beta7/log4j-core-2.0-beta7.jar
+Downloading: http://download.java.net/maven/1/org/apache/logging/log4j/log4j-api/2.0-beta7/log4j-api-2.0-beta7.jar
+Downloading: http://download.java.net/maven/1/xmlunit/xmlunit/1.4/xmlunit-1.4.jar
+         
+         
+         
+Downloading: http://www.biojava.org/download/maven/org/apache/logging/log4j/log4j-core/2.0-beta7/log4j-core-2.0-beta7.jar
+Downloading: http://www.biojava.org/download/maven/org/apache/logging/log4j/log4j-api/2.0-beta7/log4j-api-2.0-beta7.jar
+Downloading: http://www.biojava.org/download/maven/xmlunit/xmlunit/1.4/xmlunit-1.4.jar
+         
+         
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.0-beta7/log4j-core-2.0-beta7.jar
+Downloading: http://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.0-beta7/log4j-api-2.0-beta7.jar
+Downloading: http://repo.maven.apache.org/maven2/xmlunit/xmlunit/1.4/xmlunit-1.4.jar
+                                     
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-api/2.0-beta7/log4j-api-2.0-beta7.jar (105 KB at 612.7 KB/sec)
+                        
+Downloaded: http://repo.maven.apache.org/maven2/xmlunit/xmlunit/1.4/xmlunit-1.4.jar (97 KB at 397.7 KB/sec)
+             
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/logging/log4j/log4j-core/2.0-beta7/log4j-core-2.0-beta7.jar (605 KB at 1871.2 KB/sec)
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-structure ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-structure ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 3 resources
+Copying 58 resources
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-structure ---
+Changes detected - recompiling the module!
+Compiling 314 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure/target/classes
+/Users/atgc/cvsroot/misc/biojava-master/biojava3-structure/src/main/java/org/biojava/bio/structure/io/PDBSRSReader.java: Some input files use or override a deprecated API.
+/Users/atgc/cvsroot/misc/biojava-master/biojava3-structure/src/main/java/org/biojava/bio/structure/io/PDBSRSReader.java: Recompile with -Xlint:deprecation for details.
+/Users/atgc/cvsroot/misc/biojava-master/biojava3-structure/src/main/java/org/biojava/bio/structure/domain/SerializableCache.java: Some input files use unchecked or unsafe operations.
+/Users/atgc/cvsroot/misc/biojava-master/biojava3-structure/src/main/java/org/biojava/bio/structure/domain/SerializableCache.java: Recompile with -Xlint:unchecked for details.
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-structure ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 25 resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-structure ---
+Changes detected - recompiling the module!
+Compiling 42 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-structure ---
+Surefire report directory: /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.biojava.bio.structure.align.ce.CeCPMainTest
+creating new cache /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/remotepdpdomaindefs.ser
+http://source.rcsb.org/jfatcatserver/domains/getRepresentativePDPDomains
+got 26838 domain ranges for PDP domains from server.
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1wy5a2
+d1wy5a2	1wy5	A:217-311	d.229.1.1	121429	cl=53931,cf=82828,sf=82829,fa=82830,dm=143132,sp=143133,px=121429
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=82829
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.165 sec
+Running org.biojava.bio.structure.align.ce.TestSmallAlignment
+AFPAlignmentDisplay can't calc ID if alignment strings are null! 
+AFPAlignmentDisplay can't calc ID if alignment strings are null! 
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.965 sec
+Running org.biojava.bio.structure.align.ce.TestWebStartClient
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava.bio.structure.align.LoadOldXMLfileTest
+loading 1P80.D 2IUF.E
+AFPChainXMLParser: warning: pos1: 726 D:753 pos2: -1 E:1710 should never be -1. Probably parsing an.
+Ignore h1: 5 10 linePos: 5  >65:D      <
+Ignore h1: 8 10 linePos: 8  >2:E       <
+loading 1FEZ.A 1O08.A
+Ignore h1: 5 10 linePos: 5  >5:A       <
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.58 sec
+Running org.biojava.bio.structure.align.TestAlignDBSearchPairs
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava.bio.structure.align.util.AlignmentToolsTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.93 sec
+Running org.biojava.bio.structure.align.util.AtomCacheTest
+Setting ScopDatabase to type: org.biojava.bio.structure.scop.BerkeleyScopInstallation
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=1H6W,
+downloading http://scop.berkeley.edu/downloads/parse/dir.cla.scop.1.75B.txt to: /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/dir.cla.scop.txt_1.75B
+parsed 136313 scop sunid domains.
+downloading http://scop.berkeley.edu/downloads/parse/dir.des.scop.1.75B.txt to: /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/dir.des.scop.txt_1.75B
+parsed 173793 scop sunid descriptions.
+Setting ScopDatabase to type: org.biojava.bio.structure.scop.BerkeleyScopInstallation
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=1I3O,
+Setting ScopDatabase to type: org.biojava.bio.structure.scop.BerkeleyScopInstallation
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.028 sec
+Running org.biojava.bio.structure.align.util.RotationAxisTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.028 sec
+Running org.biojava.bio.structure.AtomPositionMapTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.602 sec
+Running org.biojava.bio.structure.ChemCompTest
+creating directory /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/chemcomp
+ Problem with chemical component: PRR  Did not find one letter code!
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.168 sec
+Running org.biojava.bio.structure.ElementTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava.bio.structure.HetatomImplTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.048 sec
+Running org.biojava.bio.structure.io.FastaAFPChainConverterTest
+Setting ScopDatabase to type: org.biojava.bio.structure.scop.BerkeleyScopInstallation
+Setting ScopDatabase to type: org.biojava.bio.structure.scop.BerkeleyScopInstallation
+Setting ScopDatabase to type: org.biojava.bio.structure.scop.BerkeleyScopInstallation
+d3er9b_	3er9	B:	e.69.1.1	175167	cl=56572,cf=160956,sf=160957,fa=160958,dm=191048,sp=188895,px=175167
+Setting ScopDatabase to type: org.biojava.bio.structure.scop.BerkeleyScopInstallation
+Setting ScopDatabase to type: org.biojava.bio.structure.scop.BerkeleyScopInstallation
+Warning: chain C residue 251 in the Structure 1QDM has no corresponding amino acid in the sequence.
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.423 sec
+Running org.biojava.bio.structure.io.StructureSequenceMatcherTest
+Note: the following 10 warnings about missing residues are expected.
+Warning: chain E residue 38 in the Structure 2PTC has no corresponding amino acid in the sequence.
+Warning: chain E residue 39 in the Structure 2PTC has no corresponding amino acid in the sequence.
+Warning: chain E residue 40 in the Structure 2PTC has no corresponding amino acid in the sequence.
+Warning: chain E residue 41 in the Structure 2PTC has no corresponding amino acid in the sequence.
+Warning: chain E residue 42 in the Structure 2PTC has no corresponding amino acid in the sequence.
+Warning: chain E residue 43 in the Structure 2PTC has no corresponding amino acid in the sequence.
+Warning: chain E residue 44 in the Structure 2PTC has no corresponding amino acid in the sequence.
+Warning: chain E residue 45 in the Structure 2PTC has no corresponding amino acid in the sequence.
+Warning: chain E residue 46 in the Structure 2PTC has no corresponding amino acid in the sequence.
+Warning: chain E residue 47 in the Structure 2PTC has no corresponding amino acid in the sequence.
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.391 sec
+Running org.biojava.bio.structure.io.TestChemCompProvider
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.21 sec
+Running org.biojava.bio.structure.io.TestHardBioUnits
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.387 sec
+Running org.biojava.bio.structure.io.TestMMcifOrganismParsing
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/structures/all/mmCIF/1a4w.cif.gz
+writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/a4/1a4w.cif.gz
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/structures/all/mmCIF/1stp.cif.gz
+writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/st/1stp.cif.gz
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/structures/all/mmCIF/4hhb.cif.gz
+writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/hh/4hhb.cif.gz
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/structures/all/mmCIF/3zd6.cif.gz
+writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/zd/3zd6.cif.gz
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.233 sec
+Running org.biojava.bio.structure.io.TestQuaternaryStructureProviders
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/biounit/coordinates/divided/st/1stp.pdb1.gz
+Writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/bio_assembly/st/1stp.pdb1.gz
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/structures/all/mmCIF/3fad.cif.gz
+writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/fa/3fad.cif.gz
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/biounit/coordinates/divided/fa/3fad.pdb1.gz
+Writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/bio_assembly/fa/3fad.pdb1.gz
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/biounit/coordinates/divided/fa/3fad.pdb2.gz
+Writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/bio_assembly/fa/3fad.pdb2.gz
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/structures/all/mmCIF/5ldh.cif.gz
+writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/ld/5ldh.cif.gz
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/biounit/coordinates/divided/ld/5ldh.pdb1.gz
+Writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/bio_assembly/ld/5ldh.pdb1.gz
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 15.84 sec
+Running org.biojava.bio.structure.io.TestSiftsParsing
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.141 sec
+Running org.biojava.bio.structure.PdbFileFormat30Test
+104D is a LEGACY entry - this will most likely not parse correctly.
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.251 sec
+Running org.biojava.bio.structure.PDBStatusTest
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=1HHB,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=3HHB,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=4HHB,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=1CMW,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=2HHB,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=1CAT,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=3CAT,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=8CAT,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=7CAT,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=1KSA,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=3ENI,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=1M50,
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.932 sec
+Running org.biojava.bio.structure.rcsb.RCSBDescriptionFactoryTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.607 sec
+Running org.biojava.bio.structure.rcsb.RCSBLigandsFactoryTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.298 sec
+Running org.biojava.bio.structure.ResidueNumberTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.014 sec
+Running org.biojava.bio.structure.ResidueRangeTest
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=1CPH,
+Fetching http://www.rcsb.org/pdb/rest/idStatus?structureId=2EKE,
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.66 sec
+Running org.biojava.bio.structure.scop.BerkeleyScopInstallationTest
+downloading http://scop.berkeley.edu/downloads/parse/dir.com.scop.1.75B.txt to: /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/dir.com.scop.txt_1.75B
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.887 sec
+Running org.biojava.bio.structure.scop.ScopDescriptionTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 sec
+Running org.biojava.bio.structure.scop.ScopInstallationTest
+downloading http://scop.mrc-lmb.cam.ac.uk/scop/parse/dir.com.scop.txt_1.75 to: /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/dir.com.scop.txt_1.75
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.449 sec
+Running org.biojava.bio.structure.SiteTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava.bio.structure.SourceCompoundTest
+SOURCE INFO:
+Fragment? UNP RESIDUES 32-576
+Organism Scientific: MUS MUSCULUS
+Organism Tax Id: 10090
+Organism Common: MOUSE
+Gene: ACHE
+Expression System: HOMO SAPIENS
+Expression System Tax Id: 9606
+Expression System Strain: HEK293F
+Expression System Vector Type: PLASMID
+Expression System Plasmid: PCDNA3.1
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.308 sec
+Running org.biojava.bio.structure.StructureIOTest
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/structures/all/mmCIF/1gav.cif.gz
+writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/ga/1gav.cif.gz
+Fetching ftp://ftp.wwpdb.org/pub/pdb/data/structures/all/mmCIF/1hv4.cif.gz
+writing to /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/hv/1hv4.cif.gz
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.792 sec
+Running org.biojava.bio.structure.Test4hhb
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.298 sec
+Running org.biojava.bio.structure.TestAltLocs
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.423 sec
+Running org.biojava.bio.structure.TestAtomCache
+Deleting /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T//hh/pdb4hhb.ent.gz
+Problem while downloading PDB ID 1cmw from FTP server.
+Failed URL: ftp://ftp.wwpdb.org/pub/pdb/data/structures/divided/pdb/cm/pdb1cmw.ent.gz
+java.io.FileNotFoundException: pub/pdb/data/structures/divided/pdb/cm/pdb1cmw.ent.gz
+	at sun.net.www.protocol.ftp.FtpURLConnection.getInputStream(FtpURLConnection.java:485)
+	at java.net.URL.openStream(URL.java:1037)
+	at org.biojava.bio.structure.io.util.FileDownloadUtils.downloadGzipCompressedFile(FileDownloadUtils.java:96)
+	at org.biojava.bio.structure.io.PDBFileReader.downloadPDB(PDBFileReader.java:677)
+	at org.biojava.bio.structure.io.PDBFileReader.downloadAndGetInputStream(PDBFileReader.java:795)
+	at org.biojava.bio.structure.io.PDBFileReader.getInputStream(PDBFileReader.java:429)
+	at org.biojava.bio.structure.io.PDBFileReader.getStructureById(PDBFileReader.java:875)
+	at org.biojava.bio.structure.align.util.AtomCache.loadStructureFromPdbByPdbId(AtomCache.java:1173)
+	at org.biojava.bio.structure.align.util.AtomCache.getStructure(AtomCache.java:406)
+	at org.biojava.bio.structure.TestAtomCache.testFetchCurrent(TestAtomCache.java:169)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at junit.framework.TestCase.runTest(TestCase.java:168)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:110)
+	at junit.framework.TestResult.runProtected(TestResult.java:128)
+	at junit.framework.TestResult.run(TestResult.java:113)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at junit.framework.TestSuite.runTest(TestSuite.java:243)
+	at junit.framework.TestSuite.run(TestSuite.java:238)
+	at org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:264)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:153)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:124)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray2(ReflectionUtils.java:208)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:159)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:87)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:153)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:95)
+problem loading:1CMW
+org.biojava.bio.structure.StructureException: could not find PDB 1cmw in file system and also could not download while parsing 1CMW
+	at org.biojava.bio.structure.align.util.AtomCache.loadStructureFromPdbByPdbId(AtomCache.java:1177)
+	at org.biojava.bio.structure.align.util.AtomCache.getStructure(AtomCache.java:406)
+	at org.biojava.bio.structure.TestAtomCache.testFetchCurrent(TestAtomCache.java:169)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at junit.framework.TestCase.runTest(TestCase.java:168)
+	at junit.framework.TestCase.runBare(TestCase.java:134)
+	at junit.framework.TestResult$1.protect(TestResult.java:110)
+	at junit.framework.TestResult.runProtected(TestResult.java:128)
+	at junit.framework.TestResult.run(TestResult.java:113)
+	at junit.framework.TestCase.run(TestCase.java:124)
+	at junit.framework.TestSuite.runTest(TestSuite.java:243)
+	at junit.framework.TestSuite.run(TestSuite.java:238)
+	at org.junit.internal.runners.JUnit38ClassRunner.run(JUnit38ClassRunner.java:83)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:264)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:153)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:124)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.apache.maven.surefire.util.ReflectionUtils.invokeMethodWithArray2(ReflectionUtils.java:208)
+	at org.apache.maven.surefire.booter.ProviderFactory$ProviderProxy.invoke(ProviderFactory.java:159)
+	at org.apache.maven.surefire.booter.ProviderFactory.invokeProvider(ProviderFactory.java:87)
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:153)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:95)
+Caused by: java.io.IOException: could not find PDB 1cmw in file system and also could not download
+	at org.biojava.bio.structure.io.PDBFileReader.downloadAndGetInputStream(PDBFileReader.java:802)
+	at org.biojava.bio.structure.io.PDBFileReader.getInputStream(PDBFileReader.java:429)
+	at org.biojava.bio.structure.io.PDBFileReader.getStructureById(PDBFileReader.java:875)
+	at org.biojava.bio.structure.align.util.AtomCache.loadStructureFromPdbByPdbId(AtomCache.java:1173)
+	... 27 more
+Please ignore previous exceptions. They are expected.
+Deleting /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T//hh/pdb4hhb.ent.gz
+Please ignore the previous four errors. They are expected for this ancient PDB.
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 10.432 sec
+Running org.biojava.bio.structure.TestBond
+Problem while aligning ATOM and SEQRES records for 1BDX chain: J
+Problem while aligning ATOM and SEQRES records for 1BDX chain: K
+Problem while aligning ATOM and SEQRES records for 1BDX chain: L
+Problem while aligning ATOM and SEQRES records for 1BDX chain: M
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.343 sec
+Running org.biojava.bio.structure.TestCloning
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.821 sec
+Running org.biojava.bio.structure.TestDNAAlignment
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.913 sec
+Running org.biojava.bio.structure.TestDownloadChemCompProvider
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.471 sec
+Running org.biojava.bio.structure.TestLoadStructureFromURL
+making dir with space:/var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/SUB DIR
+file:/var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/SUB%20DIR/zn/pdb1znf.ent.gz
+fetching structure from URL:file:/var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/SUB%20DIR/zn/pdb1znf.ent.gz?args=test
+structure  1ZNF  models: 1
+Description: subset of 1ZNF null NrBioAssemblies: -1 BioUnitTranformationMap: {} Title: THREE-DIMENSIONAL SOLUTION STRUCTURE OF A SINGLE ZINC FINGER DNA-BINDING DOMAIN Authors: M.S.LEE,G.P.GIPPERT,K.V.SOMAN,D.A.CASE,P.E.WRIGHT IdCode: 1ZNF Classification: ZINC FINGER DNA BINDING DOMAIN DepDate: Mon Sep 25 00:00:00 PDT 1989 Technique: SOLUTION NMR  Resolution: 99.0 ModDate: Tue Feb 24 00:00:00 PST 2009 
+ model[0]:
+ chains:
+chain 0: >A< 31ST ZINC FINGER FROM XFIN
+ length SEQRES: 0 length ATOM: 28 aminos: 25 hetatms: 3 nucleotides: 0
+DBRefs: 1
+DBREF  1ZNF A    1    25  UNP    P08045   XFIN_XENLA    1044   1068
+Molecules: 
+Compound: 1 31ST ZINC FINGER FROM XFIN Chains: ChainId: A OrganismTaxId: 8355 Engineered: YES OrganismScientific: XENOPUS LAEVIS OrganismCommon: AFRICAN CLAWED FROG 
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.111 sec
+Running org.biojava.bio.structure.TestNucleotides
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.094 sec
+Running org.biojava.bio.structure.TestVeryLongFileName
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+
+Results :
+
+Tests run: 133, Failures: 0, Errors: 0, Skipped: 0
+
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-structure ---
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure/target/biojava3-structure-3.0.8-SNAPSHOT.jar
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-structure ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure/target/biojava3-structure-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-structure/3.0.8-SNAPSHOT/biojava3-structure-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-structure/3.0.8-SNAPSHOT/biojava3-structure-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-structure-gui 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+Downloading: http://www.biojava.org/download/maven/javaws/javaws/1.0/javaws-1.0.pom
+            
+Downloaded: http://www.biojava.org/download/maven/javaws/javaws/1.0/javaws-1.0.pom (383 B at 0.2 KB/sec)
+Downloading: http://www.biojava.org/download/maven/net/sourceforge/jmol/jmol/13.0.12/jmol-13.0.12.pom
+            
+Downloading: http://download.java.net/maven/2/net/sourceforge/jmol/jmol/13.0.12/jmol-13.0.12.pom
+            
+Downloading: http://download.java.net/maven/1/net/sourceforge/jmol/jmol/13.0.12/jmol-13.0.12.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/net/sourceforge/jmol/jmol/13.0.12/jmol-13.0.12.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/net/sourceforge/jmol/jmol/13.0.12/jmol-13.0.12.pom (2 KB at 5.3 KB/sec)
+Downloading: http://www.biojava.org/download/maven/javaws/javaws/1.0/javaws-1.0.jar
+Downloading: http://www.biojava.org/download/maven/net/sourceforge/jmol/jmol/13.0.12/jmol-13.0.12.jar
+            
+             
+Downloaded: http://www.biojava.org/download/maven/javaws/javaws/1.0/javaws-1.0.jar (850 KB at 296.8 KB/sec)
+Downloading: http://download.java.net/maven/2/net/sourceforge/jmol/jmol/13.0.12/jmol-13.0.12.jar
+             
+Downloading: http://download.java.net/maven/1/net/sourceforge/jmol/jmol/13.0.12/jmol-13.0.12.jar
+             
+Downloading: http://repo.maven.apache.org/maven2/net/sourceforge/jmol/jmol/13.0.12/jmol-13.0.12.jar
+               
+Downloaded: http://repo.maven.apache.org/maven2/net/sourceforge/jmol/jmol/13.0.12/jmol-13.0.12.jar (6559 KB at 524.5 KB/sec)
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-structure-gui ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-structure-gui ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 14 resources
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-structure-gui ---
+Changes detected - recompiling the module!
+Compiling 105 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure-gui/target/classes
+/Users/atgc/cvsroot/misc/biojava-master/biojava3-structure-gui/src/main/java/org/biojava/bio/structure/align/gui/jmol/StructureAlignmentJmol.java: Some input files use unchecked or unsafe operations.
+/Users/atgc/cvsroot/misc/biojava-master/biojava3-structure-gui/src/main/java/org/biojava/bio/structure/align/gui/jmol/StructureAlignmentJmol.java: Recompile with -Xlint:unchecked for details.
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-structure-gui ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+skip non existing resourceDirectory /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure-gui/src/test/resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-structure-gui ---
+Changes detected - recompiling the module!
+Compiling 6 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure-gui/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-structure-gui ---
+Surefire report directory: /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure-gui/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.biojava.bio.structure.gui.TestAtomInfo
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.124 sec
+Running org.biojava.structure.gui.JmolViewerImplTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava.structure.gui.RenderStyleTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Running org.biojava.structure.gui.StructureViewerTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.053 sec
+Running org.biojava.structure.gui.ViewerTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+
+Results :
+
+Tests run: 14, Failures: 0, Errors: 0, Skipped: 0
+
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-structure-gui ---
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure-gui/target/biojava3-structure-gui-3.0.8-SNAPSHOT.jar
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-structure-gui ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure-gui/target/biojava3-structure-gui-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-structure-gui/3.0.8-SNAPSHOT/biojava3-structure-gui-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-structure-gui/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-structure-gui/3.0.8-SNAPSHOT/biojava3-structure-gui-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-genome 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+Downloading: http://www.biojava.org/download/maven/junit-addons/junit-addons/1.4/junit-addons-1.4.pom
+               
+Downloading: http://download.java.net/maven/2/junit-addons/junit-addons/1.4/junit-addons-1.4.pom
+               
+Downloading: http://download.java.net/maven/1/junit-addons/junit-addons/1.4/junit-addons-1.4.pom
+               
+Downloading: http://repo.maven.apache.org/maven2/junit-addons/junit-addons/1.4/junit-addons-1.4.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/junit-addons/junit-addons/1.4/junit-addons-1.4.pom (626 B at 5.2 KB/sec)
+Downloading: http://www.biojava.org/download/maven/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.pom
+            
+Downloading: http://download.java.net/maven/2/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.pom
+            
+Downloading: http://download.java.net/maven/1/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.pom (150 B at 2.3 KB/sec)
+Downloading: http://www.biojava.org/download/maven/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.pom
+            
+Downloading: http://download.java.net/maven/2/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.pom
+            
+Downloading: http://download.java.net/maven/1/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.pom (153 B at 1.0 KB/sec)
+Downloading: http://www.biojava.org/download/maven/junit-addons/junit-addons/1.4/junit-addons-1.4.jar
+Downloading: http://www.biojava.org/download/maven/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar
+Downloading: http://www.biojava.org/download/maven/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.jar
+            
+            
+            
+Downloading: http://download.java.net/maven/2/junit-addons/junit-addons/1.4/junit-addons-1.4.jar
+Downloading: http://download.java.net/maven/2/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar
+Downloading: http://download.java.net/maven/2/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.jar
+            
+            
+            
+Downloading: http://download.java.net/maven/1/junit-addons/junit-addons/1.4/junit-addons-1.4.jar
+Downloading: http://download.java.net/maven/1/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar
+Downloading: http://download.java.net/maven/1/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.jar
+            
+            
+            
+Downloading: http://repo.maven.apache.org/maven2/junit-addons/junit-addons/1.4/junit-addons-1.4.jar
+Downloading: http://repo.maven.apache.org/maven2/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar
+Downloading: http://repo.maven.apache.org/maven2/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.jar
+                                   
+Downloaded: http://repo.maven.apache.org/maven2/junit-addons/junit-addons/1.4/junit-addons-1.4.jar (53 KB at 509.2 KB/sec)
+                          
+Downloaded: http://repo.maven.apache.org/maven2/xerces/xmlParserAPIs/2.6.2/xmlParserAPIs-2.6.2.jar (122 KB at 676.7 KB/sec)
+             
+Downloaded: http://repo.maven.apache.org/maven2/xerces/xercesImpl/2.4.0/xercesImpl-2.4.0.jar (875 KB at 2308.5 KB/sec)
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-genome ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-genome ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+skip non existing resourceDirectory /Users/atgc/cvsroot/misc/biojava-master/biojava3-genome/src/main/resources
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-genome ---
+Changes detected - recompiling the module!
+Compiling 20 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-genome/target/classes
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-genome ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 8 resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-genome ---
+Changes detected - recompiling the module!
+Compiling 2 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-genome/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-genome ---
+Surefire report directory: /Users/atgc/cvsroot/misc/biojava-master/biojava3-genome/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.biojava3.genome.AppTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.031 sec
+Running org.biojava3.genome.GeneFeatureHelperTest
+Oct 28, 2013 9:19:42 AM org.biojava3.genome.parsers.gff.GFF3Reader read
+INFO: Gff.read(): Reading src/test/resources/amphimedon.gff3
+Gene EDEN found at ctgA 1050 9000 POSITIVE
+Gene rna-Apple3 found at ctgA 18000 21200 POSITIVE
+Oct 28, 2013 9:19:43 AM org.biojava3.genome.parsers.gff.GFF3Reader read
+INFO: Gff.read(): Reading /Users/atgc/cvsroot/misc/biojava-master/biojava3-genome/src/test/resources/volvox.gff3
+Note [protein kinase]
+Oct 28, 2013 9:19:44 AM org.biojava3.genome.parsers.gff.GFF3Reader read
+INFO: Gff.read(): Reading /Users/atgc/cvsroot/misc/biojava-master/biojava3-genome/src/test/resources/volvox.gff3
+Oct 28, 2013 9:19:44 AM org.biojava3.genome.parsers.gff.GFF3Reader read
+INFO: Gff.read(): Reading /Users/atgc/cvsroot/misc/biojava-master/biojava3-genome/src/test/resources/volvox.gff3
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.77 sec
+
+Results :
+
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0
+
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-genome ---
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-genome/target/biojava3-genome-3.0.8-SNAPSHOT.jar
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-genome ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-genome/target/biojava3-genome-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-genome/3.0.8-SNAPSHOT/biojava3-genome-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-genome/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-genome/3.0.8-SNAPSHOT/biojava3-genome-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-modfinder 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-modfinder ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-modfinder ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 1 resource
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-modfinder ---
+Changes detected - recompiling the module!
+Compiling 21 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-modfinder/target/classes
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-modfinder ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 1 resource
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-modfinder ---
+Changes detected - recompiling the module!
+Compiling 4 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-modfinder/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-modfinder ---
+Surefire report directory: /Users/atgc/cvsroot/misc/biojava-master/biojava3-modfinder/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.biojava3.protmod.structure.ModifiedCompoundSerializationTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.941 sec
+Running org.biojava3.protmod.structure.ProteinModificationParserTest
+Did not identify any modified compounds for 1MCC
+Did not identify any modified compounds for 1SCY
+Did not identify any modified compounds for 1UIS
+Did not identify any modified compounds for 3MVJ
+Did not identify any modified compounds for 1DOJ
+Did not identify any modified compounds for 1UIS
+Did not identify any modified compounds for 3M6S
+Did not identify any modified compounds for 1A6L
+Did not identify any modified compounds for 1A70
+Did not identify any modified compounds for 1RPB
+Did not identify any modified compounds for 1FP4
+Did not identify any modified compounds for 1EMA
+Did not identify any modified compounds for 2IWK
+Did not identify any modified compounds for 1SU6
+Did not identify any modified compounds for 2AXR
+Did not identify any modified compounds for 3H8L
+Did not identify any modified compounds for 1CAD
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 17.167 sec
+Running org.biojava3.protmod.structure.ProteinModificationRegistryTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+
+Results :
+
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-modfinder ---
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-modfinder/target/biojava3-modfinder-3.0.8-SNAPSHOT.jar
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-modfinder ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-modfinder/target/biojava3-modfinder-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-modfinder/3.0.8-SNAPSHOT/biojava3-modfinder-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-modfinder/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-modfinder/3.0.8-SNAPSHOT/biojava3-modfinder-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-ws 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+Downloading: http://download.java.net/maven/2/net/sf/json-lib/json-lib/2.3/json-lib-2.3.pom
+             
+Downloading: http://download.java.net/maven/1/net/sf/json-lib/json-lib/2.3/json-lib-2.3.pom
+             
+Downloading: http://www.biojava.org/download/maven/net/sf/json-lib/json-lib/2.3/json-lib-2.3.pom
+             
+Downloading: http://repo.maven.apache.org/maven2/net/sf/json-lib/json-lib/2.3/json-lib-2.3.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/net/sf/json-lib/json-lib/2.3/json-lib-2.3.pom (14 KB at 83.9 KB/sec)
+Downloading: http://download.java.net/maven/2/net/sf/json-lib/json-lib/2.3/json-lib-2.3-jdk15.jar
+           
+Downloading: http://download.java.net/maven/1/net/sf/json-lib/json-lib/2.3/json-lib-2.3-jdk15.jar
+           
+Downloading: http://www.biojava.org/download/maven/net/sf/json-lib/json-lib/2.3/json-lib-2.3-jdk15.jar
+           
+Downloading: http://repo.maven.apache.org/maven2/net/sf/json-lib/json-lib/2.3/json-lib-2.3-jdk15.jar
+             
+Downloaded: http://repo.maven.apache.org/maven2/net/sf/json-lib/json-lib/2.3/json-lib-2.3-jdk15.jar (149 KB at 882.6 KB/sec)
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-ws ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-ws ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+skip non existing resourceDirectory /Users/atgc/cvsroot/misc/biojava-master/biojava3-ws/src/main/resources
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-ws ---
+Changes detected - recompiling the module!
+Compiling 20 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-ws/target/classes
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-ws ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+skip non existing resourceDirectory /Users/atgc/cvsroot/misc/biojava-master/biojava3-ws/src/test/resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-ws ---
+No sources to compile
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-ws ---
+No tests to run.
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-ws ---
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-ws/target/biojava3-ws-3.0.8-SNAPSHOT.jar
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-ws ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-ws/target/biojava3-ws-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-ws/3.0.8-SNAPSHOT/biojava3-ws-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-ws/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-ws/3.0.8-SNAPSHOT/biojava3-ws-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-protein-disorder 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-protein-disorder ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-protein-disorder ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 10 resources
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-protein-disorder ---
+Changes detected - recompiling the module!
+Compiling 13 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-protein-disorder/target/classes
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-protein-disorder ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 1 resource
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-protein-disorder ---
+Changes detected - recompiling the module!
+Compiling 3 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-protein-disorder/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-protein-disorder ---
+Surefire report directory: /Users/atgc/cvsroot/misc/biojava-master/biojava3-protein-disorder/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.biojava3.ronn.JronnTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.99 sec
+Running org.biojava3.ronn.NonstandardProteinCompoundTest
+Oct 28, 2013 9:20:18 AM org.biojava3.core.sequence.loader.UniprotProxySequenceReader getUniprotXML
+INFO: Loading http://www.uniprot.org/uniprot/?query=O30642&format=xml
+Oct 28, 2013 9:20:20 AM org.biojava3.core.sequence.loader.UniprotProxySequenceReader getUniprotXML
+INFO: Load complete
+Oct 28, 2013 9:20:22 AM org.biojava3.core.sequence.loader.UniprotProxySequenceReader getUniprotXML
+INFO: Loading http://www.uniprot.org/uniprot/?query=P59797&format=xml
+Oct 28, 2013 9:20:23 AM org.biojava3.core.sequence.loader.UniprotProxySequenceReader getUniprotXML
+INFO: Load complete
+Oct 28, 2013 9:20:24 AM org.biojava3.core.sequence.loader.UniprotProxySequenceReader getUniprotXML
+INFO: Loading http://www.uniprot.org/uniprot/?query=Q9N2D9&format=xml
+Oct 28, 2013 9:20:26 AM org.biojava3.core.sequence.loader.UniprotProxySequenceReader getUniprotXML
+INFO: Load complete
+Oct 28, 2013 9:20:27 AM org.biojava3.core.sequence.loader.UniprotProxySequenceReader getUniprotXML
+INFO: Loading http://www.uniprot.org/uniprot/?query=Q9N2D9&format=xml
+Oct 28, 2013 9:20:28 AM org.biojava3.core.sequence.loader.UniprotProxySequenceReader getUniprotXML
+INFO: Load complete
+Oct 28, 2013 9:20:30 AM org.biojava3.core.sequence.loader.UniprotProxySequenceReader getUniprotXML
+INFO: Loading http://www.uniprot.org/uniprot/?query=Q6UFZ3&format=xml
+Oct 28, 2013 9:20:31 AM org.biojava3.core.sequence.loader.UniprotProxySequenceReader getUniprotXML
+INFO: Load complete
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.514 sec
+
+Results :
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-protein-disorder ---
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-protein-disorder/target/biojava3-protein-disorder-3.0.8-SNAPSHOT.jar
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-protein-disorder ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-protein-disorder/target/biojava3-protein-disorder-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-protein-disorder/3.0.8-SNAPSHOT/biojava3-protein-disorder-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-protein-disorder/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-protein-disorder/3.0.8-SNAPSHOT/biojava3-protein-disorder-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building biojava3-aa-prop 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-assembly-plugin/2.4/maven-assembly-plugin-2.4.pom
+             
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-assembly-plugin/2.4/maven-assembly-plugin-2.4.pom
+             
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/2.4/maven-assembly-plugin-2.4.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/2.4/maven-assembly-plugin-2.4.pom (17 KB at 175.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-plugins/23/maven-plugins-23.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-plugins/23/maven-plugins-23.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/23/maven-plugins-23.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/23/maven-plugins-23.pom (9 KB at 179.6 KB/sec)
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ biojava3-aa-prop ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ biojava3-aa-prop ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 10 resources
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ biojava3-aa-prop ---
+Changes detected - recompiling the module!
+Compiling 31 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/classes
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ biojava3-aa-prop ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 12 resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ biojava3-aa-prop ---
+Changes detected - recompiling the module!
+Compiling 9 source files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ biojava3-aa-prop ---
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ biojava3-aa-prop ---
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/biojava3-aa-prop-3.0.8-SNAPSHOT.jar
+
+--- maven-assembly-plugin:2.4:single (assemble) @ biojava3-aa-prop ---
+Downloading: http://download.java.net/maven/2/org/apache/maven/reporting/maven-reporting-api/2.2.1/maven-reporting-api-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/reporting/maven-reporting-api/2.2.1/maven-reporting-api-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/2.2.1/maven-reporting-api-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/2.2.1/maven-reporting-api-2.2.1.pom (2 KB at 36.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/reporting/maven-reporting/2.2.1/maven-reporting-2.2.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/reporting/maven-reporting/2.2.1/maven-reporting-2.2.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting/2.2.1/maven-reporting-2.2.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting/2.2.1/maven-reporting-2.2.1.pom (2 KB at 30.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/doxia/doxia-sink-api/1.1/doxia-sink-api-1.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/doxia/doxia-sink-api/1.1/doxia-sink-api-1.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-sink-api/1.1/doxia-sink-api-1.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-sink-api/1.1/doxia-sink-api-1.1.pom (2 KB at 24.3 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/doxia/doxia/1.1/doxia-1.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/doxia/doxia/1.1/doxia-1.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia/1.1/doxia-1.1.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia/1.1/doxia-1.1.pom (15 KB at 208.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/doxia/doxia-logging-api/1.1/doxia-logging-api-1.1.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/doxia/doxia-logging-api/1.1/doxia-logging-api-1.1.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-logging-api/1.1/doxia-logging-api-1.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-logging-api/1.1/doxia-logging-api-1.1.pom (2 KB at 31.4 KB/sec)
+Downloading: http://download.java.net/maven/2/commons-cli/commons-cli/1.2/commons-cli-1.2.pom
+         
+Downloading: http://download.java.net/maven/1/commons-cli/commons-cli/1.2/commons-cli-1.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.2/commons-cli-1.2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.2/commons-cli-1.2.pom (8 KB at 165.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-common-artifact-filters/1.4/maven-common-artifact-filters-1.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-common-artifact-filters/1.4/maven-common-artifact-filters-1.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.4/maven-common-artifact-filters-1.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.4/maven-common-artifact-filters-1.4.pom (4 KB at 58.3 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-archiver/2.2/plexus-archiver-2.2.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-archiver/2.2/plexus-archiver-2.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/2.2/plexus-archiver-2.2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/2.2/plexus-archiver-2.2.pom (4 KB at 64.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-components/1.1.20/plexus-components-1.1.20.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-components/1.1.20/plexus-components-1.1.20.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-components/1.1.20/plexus-components-1.1.20.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-components/1.1.20/plexus-components-1.1.20.pom (3 KB at 60.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus/3.1/plexus-3.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus/3.1/plexus-3.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus/3.1/plexus-3.1.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus/3.1/plexus-3.1.pom (19 KB at 227.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-utils/3.0.7/plexus-utils-3.0.7.pom
+           
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-utils/3.0.7/plexus-utils-3.0.7.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0.7/plexus-utils-3.0.7.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0.7/plexus-utils-3.0.7.pom (3 KB at 50.1 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-io/2.0.4/plexus-io-2.0.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-io/2.0.4/plexus-io-2.0.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.4/plexus-io-2.0.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.4/plexus-io-2.0.4.pom (2 KB at 31.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/file-management/1.1/file-management-1.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/file-management/1.1/file-management-1.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/file-management/1.1/file-management-1.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/file-management/1.1/file-management-1.1.pom (3 KB at 53.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-components/4/maven-shared-components-4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-components/4/maven-shared-components-4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/4/maven-shared-components-4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/4/maven-shared-components-4.pom (3 KB at 47.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-parent/4/maven-parent-4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-parent/4/maven-parent-4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-parent/4/maven-parent-4.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-parent/4/maven-parent-4.pom (10 KB at 195.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-io/1.0/maven-shared-io-1.0.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-io/1.0/maven-shared-io-1.0.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-io/1.0/maven-shared-io-1.0.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-io/1.0/maven-shared-io-1.0.pom (3 KB at 56.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-artifact/2.0.2/maven-artifact-2.0.2.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-artifact/2.0.2/maven-artifact-2.0.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact/2.0.2/maven-artifact-2.0.2.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact/2.0.2/maven-artifact-2.0.2.pom (765 B at 17.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven/2.0.2/maven-2.0.2.pom
+            
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven/2.0.2/maven-2.0.2.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven/2.0.2/maven-2.0.2.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven/2.0.2/maven-2.0.2.pom (13 KB at 103.7 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-artifact-manager/2.0.2/maven-artifact-manager-2.0.2.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-artifact-manager/2.0.2/maven-artifact-manager-2.0.2.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact-manager/2.0.2/maven-artifact-manager-2.0.2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact-manager/2.0.2/maven-artifact-manager-2.0.2.pom (2 KB at 28.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-repository-metadata/2.0.2/maven-repository-metadata-2.0.2.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-repository-metadata/2.0.2/maven-repository-metadata-2.0.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-repository-metadata/2.0.2/maven-repository-metadata-2.0.2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-repository-metadata/2.0.2/maven-repository-metadata-2.0.2.pom (2 KB at 24.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/wagon/wagon-provider-api/1.0-alpha-6/wagon-provider-api-1.0-alpha-6.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/wagon/wagon-provider-api/1.0-alpha-6/wagon-provider-api-1.0-alpha-6.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-provider-api/1.0-alpha-6/wagon-provider-api-1.0-alpha-6.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon-provider-api/1.0-alpha-6/wagon-provider-api-1.0-alpha-6.pom (588 B at 12.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/wagon/wagon/1.0-alpha-6/wagon-1.0-alpha-6.pom
+            
+Downloading: http://download.java.net/maven/1/org/apache/maven/wagon/wagon/1.0-alpha-6/wagon-1.0-alpha-6.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon/1.0-alpha-6/wagon-1.0-alpha-6.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/wagon/wagon/1.0-alpha-6/wagon-1.0-alpha-6.pom (7 KB at 127.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-io/1.1/maven-shared-io-1.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-io/1.1/maven-shared-io-1.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-io/1.1/maven-shared-io-1.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-io/1.1/maven-shared-io-1.1.pom (4 KB at 80.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-filtering/1.1/maven-filtering-1.1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-filtering/1.1/maven-filtering-1.1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-filtering/1.1/maven-filtering-1.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-filtering/1.1/maven-filtering-1.1.pom (6 KB at 110.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-io/2.0.6/plexus-io-2.0.6.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-io/2.0.6/plexus-io-2.0.6.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.6/plexus-io-2.0.6.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.6/plexus-io-2.0.6.pom (3 KB at 31.3 KB/sec)
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-components/1.2/plexus-components-1.2.pom
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-components/1.2/plexus-components-1.2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-components/1.2/plexus-components-1.2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-components/1.2/plexus-components-1.2.pom (3 KB at 38.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-repository-builder/1.0-alpha-2/maven-repository-builder-1.0-alpha-2.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-repository-builder/1.0-alpha-2/maven-repository-builder-1.0-alpha-2.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-repository-builder/1.0-alpha-2/maven-repository-builder-1.0-alpha-2.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-repository-builder/1.0-alpha-2/maven-repository-builder-1.0-alpha-2.pom (4 KB at 60.6 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-components/7/maven-shared-components-7.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-components/7/maven-shared-components-7.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/7/maven-shared-components-7.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/7/maven-shared-components-7.pom (3 KB at 52.9 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-artifact/2.0.4/maven-artifact-2.0.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-artifact/2.0.4/maven-artifact-2.0.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact/2.0.4/maven-artifact-2.0.4.pom
+            
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact/2.0.4/maven-artifact-2.0.4.pom (765 B at 11.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven/2.0.4/maven-2.0.4.pom
+            
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven/2.0.4/maven-2.0.4.pom
+            
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven/2.0.4/maven-2.0.4.pom
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven/2.0.4/maven-2.0.4.pom (12 KB at 250.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-artifact-manager/2.0.4/maven-artifact-manager-2.0.4.pom
+           
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-artifact-manager/2.0.4/maven-artifact-manager-2.0.4.pom
+           
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact-manager/2.0.4/maven-artifact-manager-2.0.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact-manager/2.0.4/maven-artifact-manager-2.0.4.pom (2 KB at 28.2 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-repository-metadata/2.0.4/maven-repository-metadata-2.0.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-repository-metadata/2.0.4/maven-repository-metadata-2.0.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-repository-metadata/2.0.4/maven-repository-metadata-2.0.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-repository-metadata/2.0.4/maven-repository-metadata-2.0.4.pom (2 KB at 23.8 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-project/2.0.4/maven-project-2.0.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-project/2.0.4/maven-project-2.0.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-project/2.0.4/maven-project-2.0.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-project/2.0.4/maven-project-2.0.4.pom (2 KB at 36.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-settings/2.0.4/maven-settings-2.0.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-settings/2.0.4/maven-settings-2.0.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-settings/2.0.4/maven-settings-2.0.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-settings/2.0.4/maven-settings-2.0.4.pom (2 KB at 15.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-model/2.0.4/maven-model-2.0.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-model/2.0.4/maven-model-2.0.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-model/2.0.4/maven-model-2.0.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-model/2.0.4/maven-model-2.0.4.pom (3 KB at 54.0 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/maven-profile/2.0.4/maven-profile-2.0.4.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/maven-profile/2.0.4/maven-profile-2.0.4.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-profile/2.0.4/maven-profile-2.0.4.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-profile/2.0.4/maven-profile-2.0.4.pom (2 KB at 24.7 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-common-artifact-filters/1.0-alpha-1/maven-common-artifact-filters-1.0-alpha-1.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-common-artifact-filters/1.0-alpha-1/maven-common-artifact-filters-1.0-alpha-1.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.0-alpha-1/maven-common-artifact-filters-1.0-alpha-1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.0-alpha-1/maven-common-artifact-filters-1.0-alpha-1.pom (2 KB at 24.4 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-components/6/maven-shared-components-6.pom
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-components/6/maven-shared-components-6.pom
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/6/maven-shared-components-6.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/6/maven-shared-components-6.pom (4 KB at 60.7 KB/sec)
+Downloading: http://download.java.net/maven/2/org/slf4j/slf4j-jdk14/1.5.6/slf4j-jdk14-1.5.6.jar
+Downloading: http://download.java.net/maven/2/org/slf4j/slf4j-api/1.5.6/slf4j-api-1.5.6.jar
+Downloading: http://download.java.net/maven/2/org/slf4j/jcl-over-slf4j/1.5.6/jcl-over-slf4j-1.5.6.jar
+Downloading: http://download.java.net/maven/2/org/apache/maven/reporting/maven-reporting-api/2.2.1/maven-reporting-api-2.2.1.jar
+Downloading: http://download.java.net/maven/2/org/apache/maven/doxia/doxia-sink-api/1.1/doxia-sink-api-1.1.jar
+         
+Downloading: http://download.java.net/maven/2/org/apache/maven/doxia/doxia-logging-api/1.1/doxia-logging-api-1.1.jar
+         
+Downloading: http://download.java.net/maven/2/commons-cli/commons-cli/1.2/commons-cli-1.2.jar
+         
+Downloading: http://download.java.net/maven/2/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.jar
+         
+Downloading: http://download.java.net/maven/2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.jar
+         
+Downloading: http://download.java.net/maven/2/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.jar
+         
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-common-artifact-filters/1.4/maven-common-artifact-filters-1.4.jar
+         
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-archiver/2.2/plexus-archiver-2.2.jar
+         
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/file-management/1.1/file-management-1.1.jar
+         
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-shared-io/1.1/maven-shared-io-1.1.jar
+         
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-filtering/1.1/maven-filtering-1.1.jar
+         
+Downloading: http://download.java.net/maven/2/org/codehaus/plexus/plexus-io/2.0.6/plexus-io-2.0.6.jar
+         
+Downloading: http://download.java.net/maven/2/org/apache/maven/shared/maven-repository-builder/1.0-alpha-2/maven-repository-builder-1.0-alpha-2.jar
+         
+         
+         
+         
+         
+Downloading: http://download.java.net/maven/1/org/slf4j/slf4j-jdk14/1.5.6/slf4j-jdk14-1.5.6.jar
+Downloading: http://download.java.net/maven/1/org/slf4j/slf4j-api/1.5.6/slf4j-api-1.5.6.jar
+Downloading: http://download.java.net/maven/1/org/slf4j/jcl-over-slf4j/1.5.6/jcl-over-slf4j-1.5.6.jar
+Downloading: http://download.java.net/maven/1/org/apache/maven/reporting/maven-reporting-api/2.2.1/maven-reporting-api-2.2.1.jar
+Downloading: http://download.java.net/maven/1/org/apache/maven/doxia/doxia-sink-api/1.1/doxia-sink-api-1.1.jar
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/doxia/doxia-logging-api/1.1/doxia-logging-api-1.1.jar
+         
+Downloading: http://download.java.net/maven/1/commons-cli/commons-cli/1.2/commons-cli-1.2.jar
+         
+Downloading: http://download.java.net/maven/1/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.jar
+         
+Downloading: http://download.java.net/maven/1/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.jar
+         
+Downloading: http://download.java.net/maven/1/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.jar
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-common-artifact-filters/1.4/maven-common-artifact-filters-1.4.jar
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-archiver/2.2/plexus-archiver-2.2.jar
+         
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/file-management/1.1/file-management-1.1.jar
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-shared-io/1.1/maven-shared-io-1.1.jar
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-filtering/1.1/maven-filtering-1.1.jar
+         
+Downloading: http://download.java.net/maven/1/org/codehaus/plexus/plexus-io/2.0.6/plexus-io-2.0.6.jar
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/shared/maven-repository-builder/1.0-alpha-2/maven-repository-builder-1.0-alpha-2.jar
+         
+         
+         
+         
+         
+Downloading: http://repo.maven.apache.org/maven2/org/slf4j/slf4j-jdk14/1.5.6/slf4j-jdk14-1.5.6.jar
+Downloading: http://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.5.6/slf4j-api-1.5.6.jar
+Downloading: http://repo.maven.apache.org/maven2/org/slf4j/jcl-over-slf4j/1.5.6/jcl-over-slf4j-1.5.6.jar
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/2.2.1/maven-reporting-api-2.2.1.jar
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-sink-api/1.1/doxia-sink-api-1.1.jar
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/slf4j/slf4j-jdk14/1.5.6/slf4j-jdk14-1.5.6.jar (9 KB at 136.6 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-logging-api/1.1/doxia-logging-api-1.1.jar
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-logging-api/1.1/doxia-logging-api-1.1.jar (12 KB at 160.4 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.2/commons-cli-1.2.jar
+           
+Downloaded: http://repo.maven.apache.org/maven2/commons-cli/commons-cli/1.2/commons-cli-1.2.jar (41 KB at 382.5 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.jar
+                                                         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/2.2.1/maven-reporting-api-2.2.1.jar (10 KB at 17.8 KB/sec)
+                                                         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-sink-api/1.1/doxia-sink-api-1.1.jar (13 KB at 23.3 KB/sec)
+                                                         
+Downloading: http://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.jar
+Downloading: http://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.jar
+                                                         
+Downloaded: http://repo.maven.apache.org/maven2/org/slf4j/jcl-over-slf4j/1.5.6/jcl-over-slf4j-1.5.6.jar (17 KB at 30.3 KB/sec)
+Downloaded: http://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.5.6/slf4j-api-1.5.6.jar (22 KB at 40.5 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.4/maven-common-artifact-filters-1.4.jar
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/2.2/plexus-archiver-2.2.jar
+                                                          
+Downloaded: http://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.jar (14 KB at 151.5 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/file-management/1.1/file-management-1.1.jar
+                                               
+Downloaded: http://repo.maven.apache.org/maven2/org/sonatype/plexus/plexus-sec-dispatcher/1.3/plexus-sec-dispatcher-1.3.jar (28 KB at 316.9 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-io/1.1/maven-shared-io-1.1.jar
+                                    
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.4/maven-common-artifact-filters-1.4.jar (31 KB at 288.4 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-filtering/1.1/maven-filtering-1.1.jar
+                                                
+Downloaded: http://repo.maven.apache.org/maven2/backport-util-concurrent/backport-util-concurrent/3.1/backport-util-concurrent-3.1.jar (324 KB at 749.9 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.6/plexus-io-2.0.6.jar
+                                                         
+                                                         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-io/1.1/maven-shared-io-1.1.jar (39 KB at 433.2 KB/sec)
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/file-management/1.1/file-management-1.1.jar (31 KB at 342.0 KB/sec)
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-repository-builder/1.0-alpha-2/maven-repository-builder-1.0-alpha-2.jar
+                                                         
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/2.2/plexus-archiver-2.2.jar (181 KB at 1026.4 KB/sec)
+                      
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-filtering/1.1/maven-filtering-1.1.jar (43 KB at 539.7 KB/sec)
+                      
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-repository-builder/1.0-alpha-2/maven-repository-builder-1.0-alpha-2.jar (23 KB at 353.3 KB/sec)
+                      
+Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/2.0.6/plexus-io-2.0.6.jar (57 KB at 507.4 KB/sec)
+Reading assembly descriptor: src/main/assembly/assembly.xml
+The following patterns were never triggered in this artifact inclusion filter:
+o  'org.biojava:biojava3-core'
+o  'org.biojava:biojava3-structure'
+
+The following patterns were never triggered in this artifact inclusion filter:
+o  'org.biojava:biojava3-core'
+o  'org.biojava:biojava3-structure'
+
+NOTE: Currently, inclusion of module dependencies may produce unpredictable results if a version conflict occurs.
+Copying files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/AAProperties-AAProperties
+Assembly file: /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/AAProperties-AAProperties is not a regular file (it may be a directory). It cannot be attached to the project build for installation or deployment.
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/AAProperties-jar-with-dependencies.jar
+
+--- maven-assembly-plugin:2.4:single (make-assembly) @ biojava3-aa-prop ---
+Reading assembly descriptor: src/main/assembly/assembly.xml
+The following patterns were never triggered in this artifact inclusion filter:
+o  'org.biojava:biojava3-core'
+o  'org.biojava:biojava3-structure'
+
+The following patterns were never triggered in this artifact inclusion filter:
+o  'org.biojava:biojava3-core'
+o  'org.biojava:biojava3-structure'
+
+NOTE: Currently, inclusion of module dependencies may produce unpredictable results if a version conflict occurs.
+Copying files to /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/AAProperties-AAProperties
+Assembly file: /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/AAProperties-AAProperties is not a regular file (it may be a directory). It cannot be attached to the project build for installation or deployment.
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/AAProperties-jar-with-dependencies.jar
+Artifact org.biojava:biojava3-aa-prop:jar:jar-with-dependencies:3.0.8-SNAPSHOT already attached to project, ignoring duplicate
+
+--- maven-install-plugin:2.3.1:install (default-install) @ biojava3-aa-prop ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/biojava3-aa-prop-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-aa-prop/3.0.8-SNAPSHOT/biojava3-aa-prop-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/pom.xml to /Users/atgc/.m2/repository/org/biojava/biojava3-aa-prop/3.0.8-SNAPSHOT/biojava3-aa-prop-3.0.8-SNAPSHOT.pom
+Installing /Users/atgc/cvsroot/misc/biojava-master/biojava3-aa-prop/target/AAProperties-jar-with-dependencies.jar to /Users/atgc/.m2/repository/org/biojava/biojava3-aa-prop/3.0.8-SNAPSHOT/biojava3-aa-prop-3.0.8-SNAPSHOT-jar-with-dependencies.jar
+                                                                        
+------------------------------------------------------------------------
+Building integrationtest 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-failsafe-plugin/2.14.1/maven-failsafe-plugin-2.14.1.pom
+                      
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-failsafe-plugin/2.14.1/maven-failsafe-plugin-2.14.1.pom
+                      
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-failsafe-plugin/2.14.1/maven-failsafe-plugin-2.14.1.pom
+         
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-failsafe-plugin/2.14.1/maven-failsafe-plugin-2.14.1.pom (8 KB at 153.7 KB/sec)
+Downloading: http://download.java.net/maven/2/org/apache/maven/plugins/maven-failsafe-plugin/2.14.1/maven-failsafe-plugin-2.14.1.jar
+         
+Downloading: http://download.java.net/maven/1/org/apache/maven/plugins/maven-failsafe-plugin/2.14.1/maven-failsafe-plugin-2.14.1.jar
+         
+Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-failsafe-plugin/2.14.1/maven-failsafe-plugin-2.14.1.jar
+           
+Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-failsafe-plugin/2.14.1/maven-failsafe-plugin-2.14.1.jar (76 KB at 564.1 KB/sec)
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ integrationtest ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ integrationtest ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+skip non existing resourceDirectory /Users/atgc/cvsroot/misc/biojava-master/integrationtest/src/main/resources
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ integrationtest ---
+No sources to compile
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ integrationtest ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+Copying 14 resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ integrationtest ---
+Changes detected - recompiling the module!
+Compiling 19 source files to /Users/atgc/cvsroot/misc/biojava-master/integrationtest/target/test-classes
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ integrationtest ---
+Surefire report directory: /Users/atgc/cvsroot/misc/biojava-master/integrationtest/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running org.biojava.bio.structure.align.ce.OptimalCECPMainTest
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1qdmA1
+d1qdma1	1qdm	A:1S-104S	a.64.1.2	18141	cl=46456,cf=47861,sf=47862,fa=47866,dm=47867,sp=47868,px=18141
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1nklA_
+d1nkla_	1nkl	A:	a.64.1.1	18140	cl=46456,cf=47861,sf=47862,fa=47863,dm=47864,sp=47865,px=18140
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1nklA_
+d1nkla_	1nkl	A:	a.64.1.1	18140	cl=46456,cf=47861,sf=47862,fa=47863,dm=47864,sp=47865,px=18140
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1qdmA1
+d1qdma1	1qdm	A:1S-104S	a.64.1.2	18141	cl=46456,cf=47861,sf=47862,fa=47866,dm=47867,sp=47868,px=18141
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1nklA_
+d1nkla_	1nkl	A:	a.64.1.1	18140	cl=46456,cf=47861,sf=47862,fa=47863,dm=47864,sp=47865,px=18140
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1qdmA1
+d1qdma1	1qdm	A:1S-104S	a.64.1.2	18141	cl=46456,cf=47861,sf=47862,fa=47866,dm=47867,sp=47868,px=18141
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1nklA_
+d1nkla_	1nkl	A:	a.64.1.1	18140	cl=46456,cf=47861,sf=47862,fa=47863,dm=47864,sp=47865,px=18140
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+|============================================================================|
+..............................................................................
+78 alignments took 3.8320 s (49.1 ms avg)
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1nklA_
+d1nkla_	1nkl	A:	a.64.1.1	18140	cl=46456,cf=47861,sf=47862,fa=47863,dm=47864,sp=47865,px=18140
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1nklA_
+d1nkla_	1nkl	A:	a.64.1.1	18140	cl=46456,cf=47861,sf=47862,fa=47863,dm=47864,sp=47865,px=18140
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1nklA_
+d1nkla_	1nkl	A:	a.64.1.1	18140	cl=46456,cf=47861,sf=47862,fa=47863,dm=47864,sp=47865,px=18140
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1nklA_
+d1nkla_	1nkl	A:	a.64.1.1	18140	cl=46456,cf=47861,sf=47862,fa=47863,dm=47864,sp=47865,px=18140
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1nklA_
+d1nkla_	1nkl	A:	a.64.1.1	18140	cl=46456,cf=47861,sf=47862,fa=47863,dm=47864,sp=47865,px=18140
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+http://source.rcsb.org/jfatcatserver/domains/getDomainByScopID?scopId=d1nklA_
+d1nkla_	1nkl	A:	a.64.1.1	18140	cl=46456,cf=47861,sf=47862,fa=47863,dm=47864,sp=47865,px=18140
+http://source.rcsb.org/jfatcatserver/domains/getScopDescriptionBySunid?sunid=47862
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.1 sec
+Running org.biojava.bio.structure.align.fatcat.AFPChainSerialisationTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.664 sec
+Running org.biojava.bio.structure.align.fatcat.FlipAFPChainTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.626 sec
+Running org.biojava.bio.structure.align.fatcat.TestFlexibleRotationMatrices
+Not testing shift vectors for blocks > 1. There is still a problem...
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.662 sec
+Running org.biojava.bio.structure.align.fatcat.TestOutputStrings
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.912 sec
+Running org.biojava.bio.structure.align.FlipAFPChainTest
+mismatch in line: 101
+line1:     <shift x="-6.029" y="-24.374
+line2:     <shift x="-6.029" y="-24.373
+mismatch at position 32 c1: 4 3
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.468 sec
+Running org.biojava.bio.structure.cath.CathTest
+ CathTest: After CATH tests: 793 Mb
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+Running org.biojava.bio.structure.HeaderOnlyTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.848 sec
+Running org.biojava.bio.structure.MMcifTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.207 sec
+Running org.biojava.bio.structure.PDBFileParserTest
+Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.045 sec
+Running org.biojava.bio.structure.scop.ScopTest
+Setting ScopDatabase to type: org.biojava.bio.structure.scop.ScopInstallation
+downloading http://scop.mrc-lmb.cam.ac.uk/scop/parse/dir.cla.scop.txt_1.75 to: /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/dir.cla.scop.txt_1.75
+parsed 110800 scop sunid domains.
+downloading http://scop.mrc-lmb.cam.ac.uk/scop/parse/dir.des.scop.txt_1.75 to: /var/folders/1l/1y67kl4j0bx42zy13p6jk8v40000gn/T/dir.des.scop.txt_1.75
+parsed 143428 scop sunid descriptions.
+Setting ScopDatabase to type: org.biojava.bio.structure.scop.RemoteScopInstallation
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 35.477 sec
+Running org.biojava.bio.structure.StructurePairAlignerTest
+1TAP is a LEGACY entry - this will most likely not parse correctly.
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.258 sec
+Running org.biojava.bio.structure.StructureTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.126 sec
+Running org.biojava.bio.structure.StructureToolsTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.399 sec
+Running org.biojava.bio.structure.Test1a4w
+LIGANDS:[Hetatom 541  NA true atoms: 1, Hetatom 542  NA true atoms: 1, Hetatom 373 ANS true atoms: 16, Hetatom 350 DAR true atoms: 11, Hetatom 375 2EP true atoms: 8, Hetatom 377 KTH true atoms: 7]
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.559 sec
+Running org.biojava.bio.structure.TestSECalignment
+unknown char U
+unknown char U
+unknown char U
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.421 sec
+Running org.integrationtest.AppTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+
+Results :
+
+Tests run: 57, Failures: 0, Errors: 0, Skipped: 0
+
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ integrationtest ---
+JAR will be empty - no content was marked for inclusion!
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/integrationtest/target/integrationtest-3.0.8-SNAPSHOT.jar
+
+--- maven-failsafe-plugin:2.14.1:integration-test (default) @ integrationtest ---
+File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+
+--- maven-failsafe-plugin:2.14.1:verify (default) @ integrationtest ---
+Failsafe report directory: /Users/atgc/cvsroot/misc/biojava-master/integrationtest/target/failsafe-reports
+File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+
+--- maven-install-plugin:2.3.1:install (default-install) @ integrationtest ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/integrationtest/target/integrationtest-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava3/integrationtest/3.0.8-SNAPSHOT/integrationtest-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/integrationtest/pom.xml to /Users/atgc/.m2/repository/org/biojava3/integrationtest/3.0.8-SNAPSHOT/integrationtest-3.0.8-SNAPSHOT.pom
+                                                                        
+------------------------------------------------------------------------
+Building protein-comparison-tool 3.0.8-SNAPSHOT
+------------------------------------------------------------------------
+
+--- maven-clean-plugin:2.5:clean (default-clean) @ protein-comparison-tool ---
+
+--- maven-resources-plugin:2.5:resources (default-resources) @ protein-comparison-tool ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+skip non existing resourceDirectory /Users/atgc/cvsroot/misc/biojava-master/protein-comparison-tool/src/main/resources
+
+--- maven-compiler-plugin:3.1:compile (default-compile) @ protein-comparison-tool ---
+No sources to compile
+
+--- maven-resources-plugin:2.5:testResources (default-testResources) @ protein-comparison-tool ---
+[debug] execute contextualize
+Using 'UTF-8' encoding to copy filtered resources.
+skip non existing resourceDirectory /Users/atgc/cvsroot/misc/biojava-master/protein-comparison-tool/src/test/resources
+
+--- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ protein-comparison-tool ---
+No sources to compile
+
+--- maven-surefire-plugin:2.14.1:test (default-test) @ protein-comparison-tool ---
+No tests to run.
+
+--- maven-jar-plugin:2.4:jar (default-jar) @ protein-comparison-tool ---
+JAR will be empty - no content was marked for inclusion!
+Building jar: /Users/atgc/cvsroot/misc/biojava-master/protein-comparison-tool/target/protein-comparison-tool-3.0.8-SNAPSHOT.jar
+
+--- maven-assembly-plugin:2.4:single (assemble) @ protein-comparison-tool ---
+Reading assembly descriptor: src/main/assembly/assembly.xml
+Building tar: /Users/atgc/cvsroot/misc/biojava-master/protein-comparison-tool/target/protein-comparison-tool_20131028.tar.gz
+
+--- maven-install-plugin:2.3.1:install (default-install) @ protein-comparison-tool ---
+Installing /Users/atgc/cvsroot/misc/biojava-master/protein-comparison-tool/target/protein-comparison-tool-3.0.8-SNAPSHOT.jar to /Users/atgc/.m2/repository/org/biojava/protein-comparison-tool/3.0.8-SNAPSHOT/protein-comparison-tool-3.0.8-SNAPSHOT.jar
+Installing /Users/atgc/cvsroot/misc/biojava-master/protein-comparison-tool/pom.xml to /Users/atgc/.m2/repository/org/biojava/protein-comparison-tool/3.0.8-SNAPSHOT/protein-comparison-tool-3.0.8-SNAPSHOT.pom
+Installing /Users/atgc/cvsroot/misc/biojava-master/protein-comparison-tool/target/protein-comparison-tool_20131028.tar.gz to /Users/atgc/.m2/repository/org/biojava/protein-comparison-tool/3.0.8-SNAPSHOT/protein-comparison-tool-3.0.8-SNAPSHOT.tar.gz
+------------------------------------------------------------------------
+Reactor Summary:
+
+biojava ........................................... SUCCESS [1.662s]
+biojava3-core ..................................... SUCCESS [43.784s]
+biojava3-phylo .................................... SUCCESS [4.880s]
+biojava3-sequencing ............................... SUCCESS [4.899s]
+biojava3-alignment ................................ SUCCESS [14.648s]
+biojava3-structure ................................ SUCCESS [2:52.369s]
+biojava3-structure-gui ............................ SUCCESS [44.881s]
+biojava3-genome ................................... SUCCESS [5.990s]
+biojava3-modfinder ................................ SUCCESS [28.007s]
+biojava3-ws ....................................... SUCCESS [2.849s]
+biojava3-protein-disorder ......................... SUCCESS [16.998s]
+biojava3-aa-prop .................................. SUCCESS [23.369s]
+integrationtest ................................... SUCCESS [1:29.387s]
+protein-comparison-tool ........................... SUCCESS [4.619s]
+------------------------------------------------------------------------
+BUILD SUCCESS
+------------------------------------------------------------------------
+Total time: 7:46.788s
+Finished at: Mon Oct 28 09:22:29 PDT 2013
+Final Memory: 32M/154M
+------------------------------------------------------------------------
+

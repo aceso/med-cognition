@@ -1,0 +1,80 @@
+
+Modeling
+
+A theory that is consistent with the data
+Coarse-grained abstraction of the system
+Need to be cognitively and mathematically understood
+Represent the structure and/or dynamics of the real system
+Need to be predictive
+Models are all wrong but some are useful
+
+
+Konigsberg Bridge Problem
+1736 - Euler
+Network modeling of complex systems
+Graph Theory - seven bridges
+Erdos-Renyi Random Networks
+What are the mathematical consequences of throwing on the floor a
+random number of buttons and randomly connecting them with a random number
+of links?
+
+The connecting frequency distribution follows Poisson.
+Plot number of connection per node, and frequency of nodes.
+
+Real Networks are Small World
+Film actors, Powergrid, C. elegans
+
+Real world networks are not random
+High clustering coefficient, relative short characteristic pathway
+Level of clustering - avg. distance between pairs of nodes
+
+Lactual v/s Lrandom. Lrandom is expected for random networks
+
+L >= Lrandom and C >= Crandom
+
+How to computer Clustering Coefficient
+
+C=1 all of the neighbors are connected to each other
+C=1/2 only 3 out of possible are implemented
+C=0 when there are no connections between neighbors.
+
+characteric path length
+Avg. shortest path between all possible pairs of nodes
+
+There are shortest path segments found in highly clustered networks.
+In real world networks.
+
+Barabasi and Albert
+Powerlog distributed network instaed of poisson
+
+Rich get richer
+High fitness agents increase their connections and fitness faster
+than the less connected.
+
+Node ID    Connection      p
+1		2	0.17
+2		3	0.25
+3		4	0.33
+4		2	0.17
+5		2	0.08
+sum		12
+
+The node 3 is connected with higher probability to other nodes.
+
+The importance of hubs
+Most of the nodes in the network have very few connections
+Then there are those highly connected nodes
+Lethality and centrality in protein networks
+if you destory those hubs, the network will fall apart faster
+When you knock down the genes that are highly connected,
+the viability of the organism is going to be much lower
+
+Complex systems are made up of diverse agents
+when you compare a lot of things that are different, we get 
+the log k v/s log P(k)
+
+sometimes there is a drop in the size of hubs - two reasons
+- sometype of limit of how tall a building can be
+- hubs nodes age, and lose capacity to accept links
+- maximal physical capacity for hub to grow
+

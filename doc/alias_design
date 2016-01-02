@@ -1,0 +1,41 @@
+
+Overview
+
+Many genes, proteins, and possibly other bio-entities have aliases.
+These aliases are being mined as we import NCI pathways, Intact,
+and other databases. It is not very efficient to add the aliases
+as nodes in the main Neo4J instance, which is used for relationship
+mining. Since we are only doing lookups of aliases (as found in
+Pubmed or other articles), we will need to know the name of the
+actual or original gene (HUGOGeneSymbol) or original protein (UnitProtId).
+
+Keeping this information in Redis or other key/value stores is inefficient,
+as several aliases map to the same gene or protein. So the UniProtId
+is repeated several times, and storage is wasted. Lookups are not efficient.
+
+Storing them in a separate Neo4J instance dedicated for lookups is a
+more efficient approach. 
+
+Design
+
+1. Protein Node P (origin) has distinct alias nodes P1, P2, ... Pk
+2. Gene Node G (origin) has distinct alias nodes G1, G2, ... Gn
+3. The set of nodes Sp of {Pi} should not intersect with set of nodes
+Sg of {Gj}. 
+4. Node P is distinct from Node G.
+5. Similarly Enzyme Node E (origin) and it's aliases must have distinct nodes
+from Sp and Sg.
+6. Unlimited number of bio-entities and their aliases can be added 
+to the same Neo4J alias instance.
+7. Each Pi can be traced back to a unique P. Similarly, Gj and El
+8. P, G, E etc are called the origin nodes. Set property origin=true
+for all origin nodes. Compare this with alias nodes, where no property
+is set.
+9. Both origin and alias nodes should have the property "nodeType"
+and it's value will be "protein", "gene", "enzyme" etc.
+10. If a term is being used interchangeably as both protein or gene
+then, we create distinct origins and alias nodes for these.
+11. When we implement this new code, for existing libraries, we need
+to provide a way to populate only the alias instance, when scanning
+existing files such as NCI, Intact etc. We will need to set import
+options to import the main Neo4J instance and/or the alias Neo4J instance.

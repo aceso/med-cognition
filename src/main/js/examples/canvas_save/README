@@ -1,0 +1,28 @@
+Copy the html and the image in this directory to the webserver docroot
+and open it in browser. It shows an example of how to convert an
+image into canvas, and then back into image. 
+
+The purpose is to show that we can save reports as images, which can
+be downloaded or uploaded to the cloud.
+
+However, more work needs to be done on this sample. We need to be able
+to select the region of the canvas that we want to convert to an image,
+and not all the region. We also want to use a javascript drawing of
+a graph as an input rather than an image.
+
+Refer to this page for more details:
+
+http://davidwalsh.name/convert-canvas-image
+
+The saibaba webserver can be started like this:
+
+sudo apachectl start
+
+The DocumentRoot is in 
+
+/Library/WebServer/Documents/atgc/examples/js
+
+The URL is:
+
+http://saibaba.local/atgc/examples/js/convertCanvasToImage.html
+
