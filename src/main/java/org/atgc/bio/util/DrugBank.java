@@ -10,16 +10,13 @@ import com.mongodb.DBCursor;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.DrugBankFields;
 import org.atgc.bio.DrugBankSplitter;
-import org.atgc.bio.domain.DrugPrice;
-import org.atgc.bio.domain.Drug;
-import org.atgc.bio.domain.DrugManufacturer;
-import org.atgc.bio.domain.DrugPackager;
+import org.atgc.bio.domain.*;
 import org.atgc.bio.repository.Subgraph;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.atgc.bio.ImportCollectionNames;
-import org.atgc.bio.domain.BioTypes;
 
+import java.net.URISyntaxException;
 import java.util.*;
 
 
@@ -65,44 +62,106 @@ public class DrugBank {
         if (bio == null) {
             drug = new Drug();
             drug.setDrugName(drugName);
+        }
+        if (drug.getCasId() == null) {
             drug.setCasId(getCasId(obj));
+        }
+        if (drug.getDrugDescription() == null) {
             drug.setDrugDescription(getDrugDescription(obj));
+        }
+        if (drug.getDrugType() == null) {
             drug.setDrugType(getDrugType(obj));
+        }
+        if (drug.getDrugbankId() == null) {
             drug.setDrugbankId(getDrugBankId(obj));
+        }
 
             //general references - pubmed
 
             // synthesis references -
+        if (drug.getIndication() == null) {
             drug.setIndication(getIndication(obj));
+        }
+        if (drug.getPharmacology() == null) {
             drug.setPharmacology(getPharmcology(obj));
+        }
+        if (drug.getMechanismOfAction() == null) {
             drug.setMechanismOfAction((getMechanismOfAction(obj)));
+        }
+        if (drug.getToxicity() == null) {
             drug.setToxicity(getValue(obj, DrugBankFields.TOXICITY));
+        }
+        if (drug.getBiotransformation() == null) {
             drug.setBiotransformation(getValue(obj, DrugBankFields.BIO_TRANSFORMATION));
+        }
+        if (drug.getAbsorption() == null) {
             drug.setAbsorption(getValue(obj, DrugBankFields.ABSORPTION));
+        }
+        if (drug.getHalfLife() == null) {
             drug.setHalfLife(getValue(obj, DrugBankFields.HALF_LIFE));
+        }
+        if (drug.getProteinBinding() == null) {
             drug.setProteinBinding(getValue(obj, DrugBankFields.PROTEIN_BINDING));
+        }
+        if (drug.getRouteOfElimination() == null) {
             drug.setRouteOfElimination(getValue(obj, DrugBankFields.ROUTE_OF_ELIMINATION));
+        }
+        if (drug.getVolumeOfDistribution() == null) {
             drug.setVolumeOfDistribution(getValue(obj, DrugBankFields.VOLUME_OF_DISTRIBUTION));
+        }
+        if (drug.getClearance() == null) {
             drug.setClearance(getValue(obj, DrugBankFields.CLEARANCE));
+        }
 
-            //secondary accession numbers
+        //secondary accession numbers
+        if (drug.getSecondaryAccessionNumbers() == null) {
             addAccessionNumbers(obj, drug);
+        }
+        if (drug.getDrugStatusGroups() == null) {
             addStatusGroups(obj, drug);
+        }
+
+        // add pubmed generic references
             //addDrugSubStructures();
             // verify Tanisha
-            //addSalts();
-            addSynonyms(obj, drug);
-            drug.setBrands(getList(obj, drug, DrugBankFields.BRANDS));
-            setMixtures(obj, drug);
-            setDrugPackagers(obj, drug, subGraph);
-            setDrugManufacturers(obj, drug, subGraph);
-            setDrugPrices(obj, drug, subGraph);
-            addCategories(obj, drug);
-            subGraph.add(drug);
+
+        //addSalts();
+        if (drug.getSalts() == null) {
+            drug.setSalts(getSalts(obj));
         }
+        if (drug.getSynonyms() == null) {
+            addSynonyms(obj, drug);
+        }
+        if (drug.getBrands() == null) {
+            drug.setBrands(getBrands(obj));
+        }
+        if (drug.getMixtures() == null) {
+            setMixtures(obj, drug);
+        }
+        if (drug.getDrugPackagers() == null) {
+            setDrugPackagers(obj, drug, subGraph);
+        }
+        if (drug.getDrugManufacturers() == null) {
+            setDrugManufacturers(obj, drug, subGraph);
+        }
+        if (drug.getDrugPrices() == null) {
+            setDrugPrices(obj, drug, subGraph);
+        }
+        if (drug.getCategories() == null) {
+            addCategories(obj, drug);
+        }
+        subGraph.add(drug);
 
     }
 
+
+    private static List<String> getSalts(BasicDBObject obj) {
+        return getList(obj, DrugBankFields.SALTS);
+    }
+
+    private static List<String> getBrands(BasicDBObject obj) {
+        return getList(obj, DrugBankFields.BRANDS);
+    }
 
     private static String getDrugType(BasicDBObject dbObj) {
         return OntologyStrUtil.getString(dbObj, DrugBankFields.DTYPE);
@@ -179,7 +238,7 @@ public class DrugBank {
         }
     }
 
-    private static List<String> getList(BasicDBObject dbObj, Drug drug, DrugBankFields name) {
+    private static List<String> getList(BasicDBObject dbObj, DrugBankFields name) {
         if (OntologyStrUtil.isObjectNull(dbObj, name)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, name);
             if (dbList != null) {
@@ -217,9 +276,15 @@ public class DrugBank {
                 for (Object obj : dbList) {
                     String packagerName = getValue((BasicDBObject)obj, DrugBankFields.NAME);
                     String url = getValue((BasicDBObject)obj, DrugBankFields.URL);
-                    DrugPackager drugPackager = new DrugPackager();
-                    drugPackager.setName(packagerName);
-                    drugPackager.setUrl(url);
+                    Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.DRUG_PACKAGER, BioFields.NAME, packagerName);
+                    DrugPackager drugPackager = (DrugPackager)bioEntity;
+                    if (drugPackager != null) {
+                        drugPackager = new DrugPackager();
+                        drugPackager.setName(packagerName);
+                    }
+                    if (drugPackager.getUrl() == null) {
+                        drugPackager.setUrl(url);
+                    }
                     subGraph.add(drugPackager);
                     dpSet.add(drugPackager);
                 }
@@ -238,9 +303,16 @@ public class DrugBank {
                 for (Object obj : dbList) {
                     String manufacturerName = getValue((BasicDBObject)obj, DrugBankFields.TEXT);
                     String generic = getValue((BasicDBObject)obj, DrugBankFields.GENERIC);
-                    DrugManufacturer drugManufacturer = new DrugManufacturer();
-                    drugManufacturer.setName(manufacturerName);
-                    drugManufacturer.setGeneric(generic);
+                    Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.DRUG_MANUFACTURER, BioFields.NAME, manufacturerName);
+                    DrugManufacturer drugManufacturer = (DrugManufacturer)bioEntity;
+                    if (drugManufacturer == null) {
+                        drugManufacturer = new DrugManufacturer();
+                        drugManufacturer.setName(manufacturerName);
+
+                    }
+                    if (drugManufacturer.getGeneric() == null) {
+                        drugManufacturer.setGeneric(generic);
+                    }
                     subGraph.add(drugManufacturer);
                     dmSet.add(drugManufacturer);
                 }
@@ -259,10 +331,18 @@ public class DrugBank {
                     String unit = getValue((BasicDBObject)obj, DrugBankFields.UNIT);
                     String currency = getValue((BasicDBObject)obj, DrugBankFields.CURRENCY);
                     String cost = getValue((BasicDBObject)obj, DrugBankFields.TEXT);
-                    DrugPrice drugPrice = new DrugPrice();
-                    drugPrice.setDrugName((drug.getDrugName()));
-                    drugPrice.setDescription(description);
-                    drugPrice.setCost(cost);
+                    Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.DRUG_PRICE, BioFields.DRUG_NAME, drug.getDrugName());
+                    DrugPrice drugPrice = (DrugPrice)bioEntity;
+                    if (drugPrice == null) {
+                        drugPrice = new DrugPrice();
+                        drugPrice.setDrugName((drug.getDrugName()));
+                    }
+                    if (drugPrice.getDescription() == null) {
+                        drugPrice.setDescription(description);
+                    }
+                    if (drugPrice.getCost() == null) {
+                        drugPrice.setCost(cost);
+                    }
                     subGraph.add(drugPrice);
                     dmSet.add(drugPrice);
                 }
@@ -281,27 +361,23 @@ public class DrugBank {
         }
     }
 
-    private static List setOrganismRelation(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
+    private static void setOrganismRelation(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.AFFECTED_ORGANISMS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.AFFECTED_ORGANISMS);
             if (dbList != null) {
-                HashSet<DrugPrice> dmSet = new HashSet<DrugPrice>();
                 for (Object obj : dbList) {
-                    String description = getValue((BasicDBObject)obj, DrugBankFields.DESCRIPTION);
-                    String unit = getValue((BasicDBObject)obj, DrugBankFields.UNIT);
-                    String currency = getValue((BasicDBObject)obj, DrugBankFields.CURRENCY);
-                    String cost = getValue((BasicDBObject)obj, DrugBankFields.TEXT);
-                    DrugPrice drugPrice = new DrugPrice();
-                    drugPrice.setDrugName((drug.getDrugName()));
-                    drugPrice.setDescription(description);
-                    drugPrice.setCost(cost);
-                    subGraph.add(drugPrice);
-                    dmSet.add(drugPrice);
+                    String organismName = obj.toString();
+                    Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.ORGANISM, BioFields.ORGANISM_SHORT_LABEL, organismName);
+                    Organism organism = (Organism)bioEntity;
+                    if (organism == null) {
+                       organism = new Organism();
+                       organism.setOrganismShortLabel(organismName);
+                    }
+                    subGraph.add(organism);
+                    drug.setOrganismComponents(organism);
                 }
-                drug.setDrugPrices(dmSet);
             }
         }
-        return null;
     }
 
 
