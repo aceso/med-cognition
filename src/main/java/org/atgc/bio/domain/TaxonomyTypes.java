@@ -1066,6 +1066,8 @@ public enum TaxonomyTypes {
      */
     CHEMICAL_ABSTRACT_ID("Chemical Abstract Id"),
 
+    FORM("Form"),
+
     /**
      *
      */
