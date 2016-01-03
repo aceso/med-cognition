@@ -7,10 +7,10 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
-import org.atgc.bio.*;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.DrugBankFields;
 import org.atgc.bio.DrugBankSplitter;
+import org.atgc.bio.domain.DrugPrice;
 import org.atgc.bio.domain.Drug;
 import org.atgc.bio.domain.DrugManufacturer;
 import org.atgc.bio.domain.DrugPackager;
@@ -95,7 +95,9 @@ public class DrugBank {
             drug.setBrands(getList(obj, drug, DrugBankFields.BRANDS));
             setMixtures(obj, drug);
             setDrugPackagers(obj, drug, subGraph);
-            setManufacturers(obj, drug, subGraph);
+            setDrugManufacturers(obj, drug, subGraph);
+            setDrugPrices(obj, drug, subGraph);
+            addCategories(obj, drug);
             subGraph.add(drug);
         }
 
@@ -226,24 +228,7 @@ public class DrugBank {
         }
     }
 
-    private static void setManufacturers(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
-        if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.PACKAGERS)) {
-            BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.PACKAGERS);
-            if (dbList != null) {
-                HashSet<DrugPackager> dpSet = new HashSet<DrugPackager>();
-                for (Object obj : dbList) {
-                    String packagerName = getValue((BasicDBObject)obj, DrugBankFields.NAME);
-                    String url = getValue((BasicDBObject)obj, DrugBankFields.URL);
-                    DrugPackager drugPackager = new DrugPackager();
-                    drugPackager.setName(packagerName);
-                    drugPackager.setUrl(url);
-                    subGraph.add(drugPackager);
-                    dpSet.add(drugPackager);
-                }
-                drug.setDrugPackagers(dpSet);
-            }
-        }
-    }
+
 
     private static void setDrugManufacturers(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.MANUFACTURERS)) {
@@ -296,10 +281,32 @@ public class DrugBank {
         }
     }
 
-}
+    private static List setOrganismRelation(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
+        if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.AFFECTED_ORGANISMS)) {
+            BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.AFFECTED_ORGANISMS);
+            if (dbList != null) {
+                HashSet<DrugPrice> dmSet = new HashSet<DrugPrice>();
+                for (Object obj : dbList) {
+                    String description = getValue((BasicDBObject)obj, DrugBankFields.DESCRIPTION);
+                    String unit = getValue((BasicDBObject)obj, DrugBankFields.UNIT);
+                    String currency = getValue((BasicDBObject)obj, DrugBankFields.CURRENCY);
+                    String cost = getValue((BasicDBObject)obj, DrugBankFields.TEXT);
+                    DrugPrice drugPrice = new DrugPrice();
+                    drugPrice.setDrugName((drug.getDrugName()));
+                    drugPrice.setDescription(description);
+                    drugPrice.setCost(cost);
+                    subGraph.add(drugPrice);
+                    dmSet.add(drugPrice);
+                }
+                drug.setDrugPrices(dmSet);
+            }
+        }
+        return null;
+    }
 
 
 
 }
+
 
 
