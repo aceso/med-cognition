@@ -5,6 +5,7 @@
 package org.atgc.bio.util;
 
 import java.net.URISyntaxException;
+import java.util.Iterator;
 
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexHits;
@@ -100,12 +101,31 @@ public class Neo4JExample {
             IndexHits<Node> pNodeHits = myIndex.get(key, "prime");
             if (pNodeHits.size() > 0) {
                 firstNode = pNodeHits.getSingle();
-                System.out.println("firstNode from index = " + firstNode);
-            }
+                Iterator j = firstNode.getLabels().iterator();
+                while (j.hasNext()) {
+                    String k = ((Label)j.next()).toString();
+                    System.out.println("firstNode label = " + k);
+                }
+                Iterator i = firstNode.getPropertyKeys().iterator();
+                while (i.hasNext()) {
+                    String k = (String)i.next();
+                    System.out.println("firstNode key = " + k + ", value = " + firstNode.getProperty(k));
+                }
+             }
             pNodeHits = myIndex.get(key, "galaxy");
             if (pNodeHits.size() > 0) {
                 secondNode = pNodeHits.getSingle();
                 System.out.println("secondNode from index = " + secondNode);
+                Iterator j = secondNode.getLabels().iterator();
+                while (j.hasNext()) {
+                    String k = ((Label)j.next()).toString();
+                    System.out.println("secondNode label = " + k);
+                }
+                Iterator i = secondNode.getPropertyKeys().iterator();
+                while (i.hasNext()) {
+                    String k = (String)i.next();
+                    System.out.println("secondNode key = " + k + ", value = " + secondNode.getProperty(k));
+                }
             }
             pNodeHits.close();
             System.out.println("firstNode id = " + firstNode.toString());
