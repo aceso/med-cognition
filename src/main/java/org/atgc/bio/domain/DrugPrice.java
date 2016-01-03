@@ -135,10 +135,10 @@ public class DrugPrice {
 	/**
 	 * cas identifier. Eg. "120993-53-5"
 	 */
-	//@PartKey
-	//@Visual
-	//@Taxonomy (rbClass=TaxonomyTypes.CHEMICAL_ABSTRACT_ID, rbField=BioFields.CHEMICAL_ABSTRACT_ID)
-	//private String casId;
+	@PartKey
+	@Visual
+	@Taxonomy (rbClass=TaxonomyTypes.CHEMICAL_ABSTRACT_ID, rbField=BioFields.CHEMICAL_ABSTRACT_ID)
+	private String chemicalAbstractId;
 
 	@PartKey
 	@Visual
@@ -267,11 +267,15 @@ public class DrugPrice {
 
 	/**
 	 * get getDrugName
-	 *
-	 * @param drugName
-	 */
-	public String getDrugName(String drugName) {
+	 **/
+	public String getDrugName() {
 		return drugName;
+	}
+
+	public String getChemicalAbstractId() { return chemicalAbstractId;};
+
+	public void setChemicalAbstractId(String casId) {
+		this.chemicalAbstractId = casId;
 	}
 
 }

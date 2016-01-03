@@ -93,7 +93,7 @@ public class LuceneTemplate<T> {
             }
         } else {
             PrimaryKey primaryKey = PrimaryKey.getPrimaryKey(t);
-            //log.info("pkey = " + primaryKey.getKey() + ", pval = " + primaryKey.getValue());
+            log.info("pkey = " + primaryKey.getKey() + ", pval = " + primaryKey.getValue());
             List<Document> docs = lookupTerm(primaryKey.getKey(), primaryKey.getValue());
             if (docs.size() > 0) {
                log.info("key " + primaryKey.getKey() + ", value = " + primaryKey.getValue() + ", already exists in lucene.");
