@@ -14,6 +14,7 @@ import org.atgc.init.Config;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
 import org.atgc.neo4j.NeoUtil;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
@@ -22,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpException;
@@ -32,10 +34,9 @@ import org.neo4j.rest.graphdb.RestGraphDatabase;
 import org.neo4j.rest.graphdb.index.RestIndex;
 
 /**
- *
- * @author jtanisha-ee
- * Use BioFields to fetch BioEntities and Nodes
  * @param <T>
+ * @author jtanisha-ee
+ *         Use BioFields to fetch BioEntities and Nodes
  */
 public class RedbasinTemplate<T> {
 
@@ -58,19 +59,19 @@ public class RedbasinTemplate<T> {
         String dbUrl = Config.NEO4J_DATA_DIR.toString();
         //String dbUrl = "http://saibaba.local:7474/db/data";
         graphDb = new RestGraphDatabase(dbUrl);
-        registerShutdownHook( graphDb );
+        registerShutdownHook(graphDb);
     }
 
-    private static void registerShutdownHook( RestGraphDatabase graphDb1) {
-    // Registers a shutdown hook for the Neo4j instance so that it
-    // shuts down nicely when the VM exits (even if you "Ctrl-C" the
-    // running example before it's completed)
-        Runtime.getRuntime().addShutdownHook( new Thread() {
-        @Override
-        public void run() {
-            graphDb.shutdown();
-        }
-    } );
+    private static void registerShutdownHook(RestGraphDatabase graphDb1) {
+        // Registers a shutdown hook for the Neo4j instance so that it
+        // shuts down nicely when the VM exits (even if you "Ctrl-C" the
+        // running example before it's completed)
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                graphDb.shutdown();
+            }
+        });
     }
 
     public static boolean fieldMatch(Annotation anno, AnnotationTypes type) {
@@ -80,9 +81,9 @@ public class RedbasinTemplate<T> {
 
     /**
      * Save {@link#BioEntity} in Graph
+     *
      * @param <T>
      * @param subGraph {@link#Subgraph}
-     *
      * @throws IllegalAccessException
      * @throws URISyntaxException
      * @throws UnsupportedEncodingException
@@ -94,35 +95,36 @@ public class RedbasinTemplate<T> {
      */
     public static <T> void saveSubgraph(Subgraph subGraph) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, IllegalArgumentException, NoSuchFieldException {
         //log.info("saveSubGraph()");
-         if (subGraph != null) {
-             Map<BioTypes, List> beMap = subGraph.getBeMap();
-             if (!beMap.isEmpty())  {
-                 for (List list : beMap.values()) {
-                     for (Object obj : list.toArray()) {
-                         if (obj != null) {
+        if (subGraph != null) {
+            Map<BioTypes, List> beMap = subGraph.getBeMap();
+            if (!beMap.isEmpty()) {
+                for (List list : beMap.values()) {
+                    for (Object obj : list.toArray()) {
+                        if (obj != null) {
                             //log.info("Saving BioEntity " + (++cntr) + "," + obj.toString());
-                            persistGraph((T)obj);
-                         }
-                     }
-                 }
-                 // save Relations
-                 for (List list : beMap.values()) {
-                     for (Object obj : list.toArray()) {
-                         if (obj != null) {
-                             //saveRelations((T)obj);
-                             log.info("saveRelations for obj = " + obj.getClass().getSimpleName());
-                             saveRelations(obj);
-                             StatusUtil.idInsert(obj);
-                             //getBioEntity((T)obj);
-                         }
-                     }
-                 }
-             }
-         }
+                            persistGraph((T) obj);
+                        }
+                    }
+                }
+                // save Relations
+                for (List list : beMap.values()) {
+                    for (Object obj : list.toArray()) {
+                        if (obj != null) {
+                            //saveRelations((T)obj);
+                            log.info("saveRelations for obj = " + obj.getClass().getSimpleName());
+                            saveRelations(obj);
+                            StatusUtil.idInsert(obj);
+                            //getBioEntity((T)obj);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
      * saveRelation
+     *
      * @param direction
      * @param element
      * @throws IllegalArgumentException
@@ -154,15 +156,15 @@ public class RedbasinTemplate<T> {
                     log.info("startEntity = " + startEntity.getClass().getSimpleName());
                 } else if (fieldMatch(elementAnno, AnnotationTypes.END_NODE)) {
                     endEntity = elementField.get(element);  // potentially a node
-                  if (endEntity != null)
-                    log.info("endEntity = " + endEntity.getClass().getSimpleName());
-                  else
-                    log.warn("endEntity is null!");
+                    if (endEntity != null)
+                        log.info("endEntity = " + endEntity.getClass().getSimpleName());
+                    else
+                        log.warn("endEntity is null!");
                 } else if (fieldMatch(elementAnno, AnnotationTypes.RELATIONSHIP_ENTITY)) {
                     //type = ((RelationshipEntity)elementAnno).type();
                     //direction = ((RelationshipEntity)elementAnno).direction();
                 } else if (fieldMatch(elementAnno, AnnotationTypes.REL_TYPE)) {
-                    type = ((BioRelTypes)elementField.get(element)).toString();
+                    type = ((BioRelTypes) elementField.get(element)).toString();
                     log.info("type = " + type);
                 } else if (fieldMatch(elementAnno, AnnotationTypes.REL_PROPERTY)) {
                     Object relElement = elementField.get(element);
@@ -171,8 +173,8 @@ public class RedbasinTemplate<T> {
                             throw new RuntimeException("@RelProperty only supports java.lang.String");
                         } else {
                             //log.info("setting property values =" + elementField.getName());
-                            propertyVal = (String)elementField.get(element);
-                            propertyName = (String)elementField.getName();
+                            propertyVal = (String) elementField.get(element);
+                            propertyName = (String) elementField.getName();
                             propMap.put(propertyName, propertyVal);
                         }
                     }
@@ -196,19 +198,19 @@ public class RedbasinTemplate<T> {
      * Save all the relations for a node. Assume that the startNode and all the
      * endNodes exist. Also assume that the startNode in the @RelatedToVia collections
      * is the same as T, param passed to this method, which is the @BioEntity.
-     *
+     * <p>
      * So before calling this method, make sure all the nodes are created.
      *
      * @param <T>
-     * @param t  this is a @BioEntity
+     * @param t   this is a @BioEntity
      * @throws java.lang.IllegalAccessException
      * @throws java.net.URISyntaxException
      * @throws java.io.UnsupportedEncodingException
      */
     public static <T> void saveRelations(T t) throws IllegalArgumentException, IllegalAccessException, UnsupportedEncodingException, URISyntaxException {
-       //log.info("saveRelations(), " + t.toString());
+        //log.info("saveRelations(), " + t.toString());
 
-       try {
+        try {
             Class tClass = t.getClass();
             Field[] fields = t.getClass().getDeclaredFields();
             for (Field field : fields) {
@@ -217,30 +219,30 @@ public class RedbasinTemplate<T> {
                 Annotation[] annotations = field.getAnnotations();
                 for (Annotation annotation : annotations) {
                     if (fieldMatch(annotation, AnnotationTypes.RELATED_TO_VIA)) {
-                        HashSet relations = (HashSet)field.get(t);
+                        HashSet relations = (HashSet) field.get(t);
                         if (relations != null && !relations.isEmpty()) {
-                            Direction direction = ((RelatedToVia)annotation).direction();
+                            Direction direction = ((RelatedToVia) annotation).direction();
                             for (Object element : relations) { // element is a @RelationshipEntity annotated object
-                                 //log.info("RelatedToVia = " + element.toString());
+                                //log.info("RelatedToVia = " + element.toString());
                                 //log.info("relation class = " + element.getClass().getSimpleName());
                                 saveRelation(direction, element);
                             }
                         }
                     } else if (fieldMatch(annotation, AnnotationTypes.RELATED_TO)) {
                         //log.info("field.get(t)" + field.get(t).toString());
-                        Direction direction = ((RelatedTo)annotation).direction();
+                        Direction direction = ((RelatedTo) annotation).direction();
                         //log.info("RELATED_TO()," + field.getName() + ", direction=" + direction.toString());
                         if (field.get(t) != null) {
                             //log.info("field.get(t) =" + field.get(t));
-                           saveRelation(direction, field.get(t));
+                            saveRelation(direction, field.get(t));
                         }
                     }
                 }
             }
-       } catch (SecurityException e) {
-           throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
-       } catch (IllegalArgumentException e) {
-           throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
+        } catch (SecurityException e) {
+            throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
         } catch (UnsupportedEncodingException e) {
@@ -251,7 +253,6 @@ public class RedbasinTemplate<T> {
             throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
         }
     }
-
 
 
     /**
@@ -273,12 +274,12 @@ public class RedbasinTemplate<T> {
     public static <T> T getBioEntity(BioTypes bioType, String value) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NoSuchFieldException {
         //log.info("getBioEntity(bioType, value");
 
-        T t = (T)new ClassInstantiator().createInstance(bioType.toString());
+        T t = (T) new ClassInstantiator().createInstance(bioType.toString());
         Class tClass = t.getClass();
 
         Annotation bioEntityAnno = tClass.getAnnotation(BioEntity.class);
         if (bioEntityAnno == null) {
-           throw new RuntimeException("BioEntityAnnotation is null, for " + value );
+            throw new RuntimeException("BioEntityAnnotation is null, for " + value);
         }
 
         Node node;
@@ -302,7 +303,7 @@ public class RedbasinTemplate<T> {
                 Annotation[] fieldAnnotations = field.getAnnotations();
                 for (Annotation fieldAnnotation : fieldAnnotations) {
                     if (fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED)) {
-                        IndexNames indexName = ((UniquelyIndexed)fieldAnnotation).indexName();
+                        IndexNames indexName = ((UniquelyIndexed) fieldAnnotation).indexName();
                         /**
                          * Retrieves Node if it exists
                          */
@@ -327,9 +328,9 @@ public class RedbasinTemplate<T> {
      * IndexNames are retrieved within the method
      *
      * @param <T>
-     * @param bioType {@link BioTypes}
+     * @param bioType  {@link BioTypes}
      * @param bioField {@link BioFields}
-     * @param value   {@link BioTypes} value
+     * @param value    {@link BioTypes} value
      * @return
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
@@ -339,12 +340,12 @@ public class RedbasinTemplate<T> {
      */
     public static <T> T getBioEntity(BioTypes bioType, BioFields bioField, String value) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException {
         //log.info("getBioEntity()," + bioType.toString() + "," + bioField.toString() + "=" + value);
-        T t = (T)new ClassInstantiator().createInstance(bioType.toString());
+        T t = (T) new ClassInstantiator().createInstance(bioType.toString());
         Class tClass = t.getClass();
 
         Annotation bioEntityAnno = tClass.getAnnotation(BioEntity.class);
         if (bioEntityAnno == null) {
-           throw new RuntimeException("BioEntityAnnotation is null, for " + value );
+            throw new RuntimeException("BioEntityAnnotation is null, for " + value);
         }
 
         Field[] fields = tClass.getDeclaredFields();
@@ -356,11 +357,11 @@ public class RedbasinTemplate<T> {
             for (Annotation fieldAnnotation : fieldAnnotations) {
                 if (field.getName().equals(bioField.toString())) {
                     if (fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED)) {
-                        IndexNames indexName = ((UniquelyIndexed)fieldAnnotation).indexName();
+                        IndexNames indexName = ((UniquelyIndexed) fieldAnnotation).indexName();
                         return getBioEntityFromIndex(bioField, value, indexName);
                     }
                     if (fieldMatch(fieldAnnotation, AnnotationTypes.INDEXED)) {
-                        IndexNames indexName = ((Indexed)fieldAnnotation).indexName();
+                        IndexNames indexName = ((Indexed) fieldAnnotation).indexName();
                         return getBioEntityFromIndex(bioField, value, indexName);
                     }
                 }
@@ -373,6 +374,7 @@ public class RedbasinTemplate<T> {
 
     /**
      * Checks if a property exists in a template
+     *
      * @param <T> {@link BioEntity}
      * @param t
      * @param key {@link String}
@@ -466,13 +468,13 @@ public class RedbasinTemplate<T> {
             for (Annotation fieldAnnotation : fieldAnnotations) {
                 IndexNames indexName;
                 if (fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED)) {
-                     indexName = ((UniquelyIndexed)fieldAnnotation).indexName();
-                     if (field.get(nodeEntity) == null) {
+                    indexName = ((UniquelyIndexed) fieldAnnotation).indexName();
+                    if (field.get(nodeEntity) == null) {
                         //log.info("indexName=" + indexName.toString());
                         //log.info(field.getName());
-                     } else {
+                    } else {
                         node = getNodeFromGraphDb(field.getName(), field.get(nodeEntity).toString(), indexName);
-                     }
+                    }
                 }
             }
         }
@@ -502,18 +504,18 @@ public class RedbasinTemplate<T> {
         //log.info("createRelationship(), type=" + type + ",Direction=" + direction.toString());
 
         if (startEntity == null || endEntity == null || type == null || direction == null) {
-          if (startEntity == null)
-            log.error("startEntity is null, propMap = " + propMap.toString());
-          else if (endEntity == null)
-            log.error("endEntity is null, startEntity = " + startEntity.toString() + ", propMap = " + propMap.toString());
-          else if (type == null)
-            log.error("type is null, startEntity = " + startEntity.toString() + ", endEntity = " + endEntity.toString() + ", propMap = " + propMap.toString());
-          else if (direction == null)
-            log.error("direction is null, startEntity = " + startEntity.toString() + ", endEntity = " + endEntity.toString() + ", type = " + type + ", propMap = " + propMap.toString());
-          return;
+            if (startEntity == null)
+                log.error("startEntity is null, propMap = " + propMap.toString());
+            else if (endEntity == null)
+                log.error("endEntity is null, startEntity = " + startEntity.toString() + ", propMap = " + propMap.toString());
+            else if (type == null)
+                log.error("type is null, startEntity = " + startEntity.toString() + ", endEntity = " + endEntity.toString() + ", propMap = " + propMap.toString());
+            else if (direction == null)
+                log.error("direction is null, startEntity = " + startEntity.toString() + ", endEntity = " + endEntity.toString() + ", type = " + type + ", propMap = " + propMap.toString());
+            return;
 
         }
-      log.info("Good news! startEntity, endEntity, type and direction are not null");
+        log.info("Good news! startEntity, endEntity, type and direction are not null");
 
         Node startNode = getNode(startEntity);
         Node endNode = getNode(endEntity);
@@ -580,9 +582,9 @@ public class RedbasinTemplate<T> {
     } */
 
     /**
-     *
      * Fetch just the BioEntity properties from a node, and not the relations.
      * getBioEntity
+     *
      * @param <T>
      * @param t
      * @return
@@ -596,7 +598,7 @@ public class RedbasinTemplate<T> {
 
         Annotation bioEntityAnno = tClass.getAnnotation(BioEntity.class);
         if (bioEntityAnno == null) {
-           throw new RuntimeException("Only saving @BioEntity objects are supported.");
+            throw new RuntimeException("Only saving @BioEntity objects are supported.");
         }
 
         boolean foundCompoundKey = false;
@@ -619,7 +621,7 @@ public class RedbasinTemplate<T> {
                 Annotation[] fieldAnnotations = field.getAnnotations();
                 for (Annotation fieldAnnotation : fieldAnnotations) {
                     if (fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED)) {
-                        IndexNames indexName = ((UniquelyIndexed)fieldAnnotation).indexName();
+                        IndexNames indexName = ((UniquelyIndexed) fieldAnnotation).indexName();
                         node = getUniquelyIndexedNode(field.getName(), field.get(t).toString(), indexName);
                         exitOuterLoop = true;
                         uniqProp = field.getName();
@@ -632,7 +634,7 @@ public class RedbasinTemplate<T> {
             }
         } else {
             if (compoundKey != null) {
-               node = getUniquelyIndexedNode(compoundKey.getKey(), compoundKey.getValue(), compoundKey.getIndexName());
+                node = getUniquelyIndexedNode(compoundKey.getKey(), compoundKey.getValue(), compoundKey.getIndexName());
             }
         }
 
@@ -643,16 +645,16 @@ public class RedbasinTemplate<T> {
 
         if (node != null) {
             for (String propKey : node.getPropertyKeys()) {
-                 if (propKey.equals(uniqProp)) {
-                     continue;
-                 }
-                 for (Field field : fields) {
-                     field.setAccessible(true);
-                     if (field.getName().equals(propKey)) {
-                         //log.info("propKey = " + propKey + ", propValue = " + node.getProperty(propKey));
-                         field.set(t, node.getProperty(propKey));
-                     }
-                 }
+                if (propKey.equals(uniqProp)) {
+                    continue;
+                }
+                for (Field field : fields) {
+                    field.setAccessible(true);
+                    if (field.getName().equals(propKey)) {
+                        //log.info("propKey = " + propKey + ", propValue = " + node.getProperty(propKey));
+                        field.set(t, node.getProperty(propKey));
+                    }
+                }
             }
         }
         /* if (node != null) {
@@ -667,6 +669,7 @@ public class RedbasinTemplate<T> {
     /**
      * Fetches BioEntity from index
      * Use BioField values for fetching entities and nodes
+     *
      * @param propName
      * @param propValue
      * @param indexName
@@ -687,6 +690,7 @@ public class RedbasinTemplate<T> {
 
     /**
      * Get an array of relations
+     *
      * @param <T>
      * @param <R>
      * @param t
@@ -701,7 +705,7 @@ public class RedbasinTemplate<T> {
         Class tClass = t.getClass();
         Annotation bioEntityAnno = tClass.getAnnotation(BioEntity.class);
         if (bioEntityAnno == null) {
-          throw new RuntimeException("Only @BioEntity objects are supported.");
+            throw new RuntimeException("Only @BioEntity objects are supported.");
         }
 
         boolean foundCompoundKey = false;
@@ -721,7 +725,7 @@ public class RedbasinTemplate<T> {
                 Annotation[] fieldAnnotations = field.getAnnotations();
                 for (Annotation fieldAnnotation : fieldAnnotations) {
                     if (fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED)) {
-                        IndexNames indexName = ((UniquelyIndexed)fieldAnnotation).indexName();
+                        IndexNames indexName = ((UniquelyIndexed) fieldAnnotation).indexName();
                         /**
                          * Retrieve Node if it exists
                          */
@@ -736,7 +740,7 @@ public class RedbasinTemplate<T> {
             }
         } else {
             if (compoundKey != null) {
-               node = getUniquelyIndexedNode(compoundKey.getKey(), compoundKey.getValue(), compoundKey.getIndexName());
+                node = getUniquelyIndexedNode(compoundKey.getKey(), compoundKey.getValue(), compoundKey.getIndexName());
             }
         }
 
@@ -747,7 +751,7 @@ public class RedbasinTemplate<T> {
                 RelationshipType relationshipType = rel.getType();
                 String type = relationshipType.name();
                 for (String propKey : rel.getPropertyKeys()) {
-                    R relation = (R)rClass.newInstance();
+                    R relation = (R) rClass.newInstance();
                     for (Field field : relation.getClass().getDeclaredFields()) {
                         if (field.getName().equals(propKey)) {
                             field.setAccessible(true);
@@ -822,21 +826,21 @@ public class RedbasinTemplate<T> {
      * @throws java.net.URISyntaxException
      */
     public static <T> BasicDBObject persist(T t) throws IllegalAccessException, URISyntaxException {
-       Class tClass = t.getClass();
-       String nodeType = null;
-       String uniqueKey = null;
-       BasicDBObject basicDBObject = new BasicDBObject();
-       List<String> indexedFields = new ArrayList<String>();
-       Annotation bioEntityAnno = tClass.getAnnotation(BioEntity.class);
-       if (bioEntityAnno == null) {
-           throw new RuntimeException("Only saving @BioEntity objects to Mongo are supported.");
-       }
+        Class tClass = t.getClass();
+        String nodeType = null;
+        String uniqueKey = null;
+        BasicDBObject basicDBObject = new BasicDBObject();
+        List<String> indexedFields = new ArrayList<String>();
+        Annotation bioEntityAnno = tClass.getAnnotation(BioEntity.class);
+        if (bioEntityAnno == null) {
+            throw new RuntimeException("Only saving @BioEntity objects to Mongo are supported.");
+        }
 
-       if (graphDb == null) {
-           setup();
-       }
-       Transaction tx = graphDb.beginTx();
-       try {
+        if (graphDb == null) {
+            setup();
+        }
+        Transaction tx = graphDb.beginTx();
+        try {
             Field[] fields = tClass.getDeclaredFields();
 
             // now process all other annotations other than @UniquelyIndexed
@@ -850,45 +854,45 @@ public class RedbasinTemplate<T> {
                     //log.info("annotation = " + fieldAnnotation.toString());
                     //log.info("potential node property = " + field.getName() + ", potential node property value = " + field.get(t));
                     if (fieldMatch(fieldAnnotation, AnnotationTypes.GRAPH_ID) ||
-                        fieldMatch(fieldAnnotation, AnnotationTypes.INDEXED) ||
-                        fieldMatch(fieldAnnotation, AnnotationTypes.FULLTEXT_INDEXED) ||
-                        fieldMatch(fieldAnnotation, AnnotationTypes.NON_INDEXED) ||
-                        fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED)  ||
-                        fieldMatch(fieldAnnotation, AnnotationTypes.PARTKEY)) {
+                            fieldMatch(fieldAnnotation, AnnotationTypes.INDEXED) ||
+                            fieldMatch(fieldAnnotation, AnnotationTypes.FULLTEXT_INDEXED) ||
+                            fieldMatch(fieldAnnotation, AnnotationTypes.NON_INDEXED) ||
+                            fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED) ||
+                            fieldMatch(fieldAnnotation, AnnotationTypes.PARTKEY)) {
                         String key = field.getName();
                         String value = field.get(t).toString();
                         //log.info("key = " + key);
                         if (ModelFields.NODE_TYPE.equals(key)) {
                             nodeType = value;
                         }
-                        if (fieldMatch(fieldAnnotation, AnnotationTypes.INDEXED)||
-                           fieldMatch(fieldAnnotation, AnnotationTypes.FULLTEXT_INDEXED) ||
-                           fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED)) {
-                           indexedFields.add(field.getName());
+                        if (fieldMatch(fieldAnnotation, AnnotationTypes.INDEXED) ||
+                                fieldMatch(fieldAnnotation, AnnotationTypes.FULLTEXT_INDEXED) ||
+                                fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED)) {
+                            indexedFields.add(field.getName());
                         }
                         if (fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED)) {
-                           uniqueKey = field.getName();
+                            uniqueKey = field.getName();
                         }
                         basicDBObject.put(field.getName(), field.get(t).toString());
                     } else {
-                         // do nothing for fields that are not properties
+                        // do nothing for fields that are not properties
                     }
                 }
             }
             tx.success();
             saveMongo(indexedFields, basicDBObject, nodeType, uniqueKey);
-       } catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException("Something went wrong while saving bioentity.", e);
-       } catch (IllegalArgumentException e) {
-           throw new RuntimeException("Something went wrong while saving bioentity.", e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Something went wrong while saving bioentity.", e);
         } catch (SecurityException e) {
             throw new RuntimeException("Something went wrong while saving bioentity.", e);
         } catch (UnknownHostException e) {
             throw new RuntimeException("Something went wrong while saving bioentity.", e);
         } finally {
-           tx.finish();
-       }
-       return basicDBObject;
+            tx.finish();
+        }
+        return basicDBObject;
     }
 
 
@@ -898,9 +902,8 @@ public class RedbasinTemplate<T> {
      * <code>saveRelations(t)</code>.
      *
      * @param <T>
-     * @param t {@link#BioEntity}
+     * @param t    {@link#BioEntity}
      * @param node
-     *
      * @throws IllegalAccessException
      * @throws java.net.URISyntaxException
      * @throws java.io.UnsupportedEncodingException
@@ -912,10 +915,10 @@ public class RedbasinTemplate<T> {
      */
 
     public static <T> void saveProperties(T t, Node node) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, CorruptIndexException, IllegalArgumentException, NoSuchFieldException {
-       Class tClass = t.getClass();
-       if (node != null) {
+        Class tClass = t.getClass();
+        if (node != null) {
             try {
-                 Field[] fields = tClass.getDeclaredFields();
+                Field[] fields = tClass.getDeclaredFields();
                 // now process all other annotations other than @UniquelyIndexed
                 for (Field field : fields) {
                     field.setAccessible(true);
@@ -929,47 +932,49 @@ public class RedbasinTemplate<T> {
                         } else {
                             /* UniquelyIndexed is saved as property when a node is created */
                             if (fieldMatch(fieldAnnotation, AnnotationTypes.INDEXED)) {
-                                IndexNames indexName = ((Indexed)fieldAnnotation).indexName();
+                                IndexNames indexName = ((Indexed) fieldAnnotation).indexName();
                                 /**
-                                * save indexed fields as properties. These index fields are non-unique
-                                */
+                                 * save indexed fields as properties. These index fields are non-unique
+                                 */
                                 saveNodeProperty(node, field.getName(), field.get(t).toString(), true, false, indexName.toString());
                             } else if (fieldMatch(fieldAnnotation, AnnotationTypes.FULLTEXT_INDEXED)) {
                                 //log.info("fieldAnnotation =" + fieldAnnotation.toString());
                                 //log.info("annotationType =" + AnnotationTypes.FULLTEXT_INDEXED.toString());
-                                IndexNames indexName = ((FullTextIndexed)fieldAnnotation).indexName();
+                                IndexNames indexName = ((FullTextIndexed) fieldAnnotation).indexName();
                                 processFullTextIndex(indexName, node.getId(), field.getName(), field.get(t).toString());
                             } else if (fieldMatch(fieldAnnotation, AnnotationTypes.NON_INDEXED)) {
                                 /**
-                                * save fields which non indexed fields & not unique as properties
-                                */
+                                 * save fields which non indexed fields & not unique as properties
+                                 */
                                 saveNodeProperty(node, field.getName(), field.get(t).toString(), false, false, null);
                             }
                         }
                     }
                 }
             } catch (SecurityException e) {
-                    throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+                throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
             } catch (IllegalArgumentException e) {
                 throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
-           } catch (IllegalAccessException e) {
-               throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
-           } catch (URISyntaxException e) {
-               throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
-           } catch (IOException e) {
-               throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
-           } catch (HttpException e) {
-               throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
-           }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+            } catch (URISyntaxException e) {
+                throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+            } catch (IOException e) {
+                throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+            } catch (HttpException e) {
+                throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+            }
         }
         LuceneTemplate.addDocument(t); // add this doc to lucene
     }
 
-    /**t); // add this doc to lucene
-    }
-
     /**
+     * t); // add this doc to lucene
+     * }
+     * <p>
+     * /**
      * persistGraph
+     *
      * @param <T>
      * @param t
      * @throws IllegalAccessException
@@ -982,22 +987,22 @@ public class RedbasinTemplate<T> {
      * @throws java.lang.NoSuchFieldException
      */
     public static <T> void persistGraph(T t) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, IllegalArgumentException, NoSuchFieldException {
-       //log.info("persistGraph()," + t.toString());
+        //log.info("persistGraph()," + t.toString());
 
-       Node node = getNode(t);
-       Annotation a = t.getClass().getAnnotation(BioEntity.class);
-       String bioType = ((BioEntity)a).bioType().toString();
-       if (node == null) {
-           log.info("persistGraph(), node does not exist, add() " + (++cntr) + ", bioType = " + bioType);
-           save(t);
-       } else {
+        Node node = getNode(t);
+        Annotation a = t.getClass().getAnnotation(BioEntity.class);
+        String bioType = ((BioEntity) a).bioType().toString();
+        if (node == null) {
+            log.info("persistGraph(), node does not exist, add() " + (++cntr) + ", bioType = " + bioType);
+            save(t);
+        } else {
 
-           log.info("persistGraph(), node exists" + t.toString());
+            log.info("persistGraph(), node exists" + t.toString());
 
-           log.info("persistGraph(), node exists, bioType = " + bioType);
+            log.info("persistGraph(), node exists, bioType = " + bioType);
 
-           saveProperties(t, node);
-       }
+            saveProperties(t, node);
+        }
     }
 
     /**
@@ -1006,8 +1011,7 @@ public class RedbasinTemplate<T> {
      * <code>saveRelations(t)</code>.
      *
      * @param <T>
-     * @param t {@link#BioEntity}
-     *
+     * @param t   {@link#BioEntity}
      * @throws IllegalAccessException
      * @throws java.net.URISyntaxException
      * @throws java.io.UnsupportedEncodingException
@@ -1018,20 +1022,24 @@ public class RedbasinTemplate<T> {
      * @throws java.lang.NoSuchFieldException
      */
     public static <T> void save(T t) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, CorruptIndexException, IllegalArgumentException, NoSuchFieldException {
-       //log.info("save()" + t.toString());
+        //log.info("save()" + t.toString());
 
-       Class tClass = t.getClass();
-       //log.info("save()" + t.toString());
+        Class tClass = t.getClass();
+        //log.info("save()" + t.toString());
 
-       try {
+        try {
             //Annotation[] classAnnotations = tClass.getAnnotations();
 
             Node node = null;
             String uniqueIndexId = null;
+            BioTypes bioType = TemplateUtils.extractBioType(t); // moved outside for loop
             CompoundKey compoundKey = CompoundKey.getCompoundKey(t);
             if (compoundKey != null) {
                 node = processUniquelyIndexedNode(compoundKey.getKey(), compoundKey.getValue(), compoundKey.getIndexName().toString());
                 uniqueIndexId = compoundKey.getValue();
+                if (null != bioType && !bioType.toString().isEmpty()) {
+                    node.addLabel(DynamicLabel.label(bioType.toString()));
+                }
             } // no else block, as we want to process @Visual annotations in the for
             // loop below even for compoundKey scenario
 
@@ -1043,7 +1051,7 @@ public class RedbasinTemplate<T> {
                 Annotation[] fieldAnnotations = field.getAnnotations();
                 for (Annotation fieldAnnotation : fieldAnnotations) {
                     if (compoundKey == null && fieldMatch(fieldAnnotation, AnnotationTypes.UNIQUELY_INDEXED)) {
-                        IndexNames indexName = ((UniquelyIndexed)fieldAnnotation).indexName();
+                        IndexNames indexName = ((UniquelyIndexed) fieldAnnotation).indexName();
                         //log.info("Found unique index " + indexName + ", field name = " + field.getName());
                         /**
                          * Save the uniqueIndexId for future @NodeLabel entry.
@@ -1058,8 +1066,11 @@ public class RedbasinTemplate<T> {
                              * Save IndexName which is Uniquely indexed as a Node property
                              */
                             if (node != null) {
-                               saveNodeProperty(node, field.getName(), uniqueIndexId, true, true, indexName.toString());
-                               break;
+                                saveNodeProperty(node, field.getName(), uniqueIndexId, true, true, indexName.toString());
+                                if (null != bioType && !bioType.toString().isEmpty()) {
+                                    node.addLabel(DynamicLabel.label(bioType.toString()));
+                                }
+                                break;
                             }
                         }
                     } else {
@@ -1070,9 +1081,9 @@ public class RedbasinTemplate<T> {
                          * that is processed below.
                          */
                         if (compoundKey == null && field.get(t) != null) {
-                           if (fieldMatch(fieldAnnotation, AnnotationTypes.VISUAL)) {
-                               message = field.get(t).toString();
-                           }
+                            if (fieldMatch(fieldAnnotation, AnnotationTypes.VISUAL)) {
+                                message = field.get(t).toString();
+                            }
                         }
                     }
                 }
@@ -1080,8 +1091,8 @@ public class RedbasinTemplate<T> {
 
             if (node == null) { // we did not find 1 uniquely indexed node
                 //log.info("node is null");
-              log.error("Every @BioEntity domain must have at least 1 @UniquelyIndexed field. t = " + t.toString());
-              //throw new RuntimeException("Every @BioEntity domain must have at least 1 @UniquelyIndexed field.");
+                log.error("Every @BioEntity domain must have at least 1 @UniquelyIndexed field. t = " + t.toString());
+                //throw new RuntimeException("Every @BioEntity domain must have at least 1 @UniquelyIndexed field.");
             }
 
             // First, initialize the message field
@@ -1096,7 +1107,7 @@ public class RedbasinTemplate<T> {
                      * This gets displayed as the label in Neo4J graph node.
                      */
                     if (fieldMatch(fieldAnnotation, AnnotationTypes.NODE_LABEL)) {
-                        BioTypes bioType = TemplateUtils.extractBioType(t);
+                        //BioTypes bioType = TemplateUtils.extractBioType(t);
                         if ((message != null) && (message.length() > 0)) {
                             message = bioType + "-" + uniqueIndexId + "-" + message;
                         } else {
@@ -1111,6 +1122,7 @@ public class RedbasinTemplate<T> {
                     break;
                 }
             }
+
             // now process all other annotations other than @UniquelyIndexed
             for (Field field : fields) {
                 field.setAccessible(true);
@@ -1124,15 +1136,15 @@ public class RedbasinTemplate<T> {
                         continue;
                     } else {
                         if (fieldMatch(fieldAnnotation, AnnotationTypes.INDEXED)) {
-                            IndexNames indexName = ((Indexed)fieldAnnotation).indexName();
+                            IndexNames indexName = ((Indexed) fieldAnnotation).indexName();
                             /**
                              * save indexed fields as properties. These index fields are non-unique
                              */
                             saveNodeProperty(node, field.getName(), field.get(t).toString(), true, false, indexName.toString());
                         } else if (fieldMatch(fieldAnnotation, AnnotationTypes.FULLTEXT_INDEXED)) {
-                            IndexNames indexName = ((FullTextIndexed)fieldAnnotation).indexName();
-                          if (node != null)
-                            processFullTextIndex(indexName, node.getId(), field.getName(), field.get(t).toString());
+                            IndexNames indexName = ((FullTextIndexed) fieldAnnotation).indexName();
+                            if (node != null)
+                                processFullTextIndex(indexName, node.getId(), field.getName(), field.get(t).toString());
                         } else if (fieldMatch(fieldAnnotation, AnnotationTypes.NON_INDEXED) ||
                                 fieldMatch(fieldAnnotation, AnnotationTypes.PARTKEY)) {
                             // Include PARTKEY scenario as otherwise, we will not save node property for partkeys.
@@ -1144,11 +1156,11 @@ public class RedbasinTemplate<T> {
                     }
                 }
             }
-           log.info("Bioentity saved correctly");
-       } catch (IllegalAccessException e) {
+            log.info("Bioentity saved correctly");
+        } catch (IllegalAccessException e) {
             throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
-       } catch (URISyntaxException e) {
-           throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
         } catch (NoSuchFieldException e) {
             throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
         } catch (RuntimeException e) {
@@ -1159,8 +1171,8 @@ public class RedbasinTemplate<T> {
             throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
         }
 
-       // save to lucene
-       LuceneTemplate.addDocument(t);
+        // save to lucene
+        LuceneTemplate.addDocument(t);
     }
 
     /**
@@ -1247,7 +1259,7 @@ public class RedbasinTemplate<T> {
             }
             tx.success();
         } catch (RuntimeException e) {
-                throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
         } finally {
             tx.finish();
         }
@@ -1260,9 +1272,10 @@ public class RedbasinTemplate<T> {
         return node;
     }
 
-     /**
+    /**
      * Create Index, Fetch node just once based on unique index.
      * If Node does not exist, return null
+     *
      * @param key
      * @param value
      * @param indexName
@@ -1299,7 +1312,7 @@ public class RedbasinTemplate<T> {
         log.info(sb.toString());
 
         // do not save null properties, it's a waste of time and money
-        if ((value == null) || (value.trim().length() ==0)) {
+        if ((value == null) || (value.trim().length() == 0)) {
             return;
         }
         /*
@@ -1314,16 +1327,17 @@ public class RedbasinTemplate<T> {
                     if (graphDb == null) {
                         setup();
                     }
-                   RestIndex<Node> nodeIndex = graphDb.index().forNodes(indexName);
-                   nodeIndex.putIfAbsent(node, name, value);
+                    RestIndex<Node> nodeIndex = graphDb.index().forNodes(indexName);
+                    nodeIndex.putIfAbsent(node, name, value);
                 }
             }
         }
     }
 
 
-     /**
+    /**
      * Get an array of BioRelations
+     *
      * @throws InstantiationException
      * @throws IllegalAccessException
      */
@@ -1381,7 +1395,7 @@ public class RedbasinTemplate<T> {
     */
 
 
-    @Indexed(indexName=IndexNames.INTERACTOR_ID)
+    @Indexed(indexName = IndexNames.INTERACTOR_ID)
     public static String uniprotId = "P154876";
 
     //@RelatedToVia(elementClass = BioRelation.class)
@@ -1398,19 +1412,19 @@ public class RedbasinTemplate<T> {
         for (Field field : fields) {
             Annotation[] fieldAnnotations = field.getAnnotations();
             for (Annotation fieldAnnotation : fieldAnnotations) {
-               //log.info("annotation = " + fieldAnnotation.toString());
+                //log.info("annotation = " + fieldAnnotation.toString());
                 if (fieldAnnotation.toString().startsWith(PackagePath.META + "RelatedToVia")) {
                     //log.info("Field name = " + field.getName());
                     field.setAccessible(true);
                     //log.info("Field value = " + field.get(startProtein));
                     //log.info("Field value class = " + field.get(startProtein).getClass().getName());
-                    HashSet<BioRelation> proteinInteractions = (HashSet<BioRelation>)field.get(startProtein);
+                    HashSet<BioRelation> proteinInteractions = (HashSet<BioRelation>) field.get(startProtein);
                     for (BioRelation pi : proteinInteractions) {
                         //log.info("startProtein = " + pi.getStartNode());
                         //log.info("endProtein = " + pi.getEndNode());
                         //log.info("interaction name = " + pi.getName());
                     }
-                    HashSet relations = (HashSet)field.get(startProtein);
+                    HashSet relations = (HashSet) field.get(startProtein);
                     for (Object element : relations) {
                         Class elementClass = element.getClass();
                         Field[] elementFields = elementClass.getDeclaredFields();
@@ -1488,12 +1502,12 @@ public class RedbasinTemplate<T> {
             for (Annotation fieldAnnotation : fieldAnnotations) {
                 //log.info("annotation = " + fieldAnnotation.toString());
                 if (fieldAnnotation.toString().startsWith(PackagePath.META + "Indexed")) {
-                   //log.info("Found the indexed class");
-                   //boolean uniq = ((Indexed)fieldAnnotation).unique();
-                   IndexNames indexName = ((Indexed)fieldAnnotation).indexName();
-                   //log.info("indexName = " + indexName);
-                   //log.info("potential node property = " + field.getName() + ", potential node property value = " + field.get(rt));
-               }
+                    //log.info("Found the indexed class");
+                    //boolean uniq = ((Indexed)fieldAnnotation).unique();
+                    IndexNames indexName = ((Indexed) fieldAnnotation).indexName();
+                    //log.info("indexName = " + indexName);
+                    //log.info("potential node property = " + field.getName() + ", potential node property value = " + field.get(rt));
+                }
             }
         }
     }
