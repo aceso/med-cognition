@@ -1496,7 +1496,5 @@ public class RedbasinTemplate<T> {
                }
             }
         }
-
-
     }
 }
