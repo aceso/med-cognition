@@ -12,6 +12,7 @@ import org.atgc.bio.DrugBankFields;
 import org.atgc.bio.DrugBankSplitter;
 import org.atgc.bio.domain.*;
 import org.atgc.bio.repository.CompoundKey;
+import org.atgc.bio.repository.RedbasinTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -90,28 +91,28 @@ public class DrugBank {
             drug.setMechanismOfAction((getMechanismOfAction(obj)));
         }
         if (drug.getToxicity() == null) {
-            drug.setToxicity(getValue(obj, DrugBankFields.TOXICITY));
+            drug.setToxicity(getList(obj, DrugBankFields.TOXICITY).toString());
         }
         if (drug.getBiotransformation() == null) {
-            drug.setBiotransformation(getValue(obj, DrugBankFields.BIO_TRANSFORMATION));
+            drug.setBiotransformation(getList(obj, DrugBankFields.BIO_TRANSFORMATION).toString());
         }
         if (drug.getAbsorption() == null) {
-            drug.setAbsorption(getValue(obj, DrugBankFields.ABSORPTION));
+            drug.setAbsorption(getList(obj, DrugBankFields.ABSORPTION).toString());
         }
         if (drug.getHalfLife() == null) {
-            drug.setHalfLife(getValue(obj, DrugBankFields.HALF_LIFE));
+            drug.setHalfLife(getList(obj, DrugBankFields.HALF_LIFE).toString());
         }
         if (drug.getProteinBinding() == null) {
-            drug.setProteinBinding(getValue(obj, DrugBankFields.PROTEIN_BINDING));
+            drug.setProteinBinding(getList(obj, DrugBankFields.PROTEIN_BINDING).toString());
         }
         if (drug.getRouteOfElimination() == null) {
-            drug.setRouteOfElimination(getValue(obj, DrugBankFields.ROUTE_OF_ELIMINATION));
+            drug.setRouteOfElimination(getList(obj, DrugBankFields.ROUTE_OF_ELIMINATION).toString());
         }
         if (drug.getVolumeOfDistribution() == null) {
-            drug.setVolumeOfDistribution(getValue(obj, DrugBankFields.VOLUME_OF_DISTRIBUTION));
+            drug.setVolumeOfDistribution(getList(obj, DrugBankFields.VOLUME_OF_DISTRIBUTION).toString());
         }
         if (drug.getClearance() == null) {
-            drug.setClearance(getValue(obj, DrugBankFields.CLEARANCE));
+            drug.setClearance(getList(obj, DrugBankFields.CLEARANCE).toString());
         }
 
         //secondary accession numbers
@@ -123,10 +124,9 @@ public class DrugBank {
         }
 
         // add pubmed generic references
-        //addDrugSubStructures();
+        // addDrugSubStructures();
         // verify Tanisha
 
-        //addSalts();
         if (drug.getSalts() == null) {
             drug.setSalts(getSalts(obj));
         }
@@ -176,6 +176,7 @@ public class DrugBank {
         setFoodInteractions(obj, drug);
         setProteinRelation(obj, drug, subGraph);
         subGraph.add(drug);
+        RedbasinTemplate.saveSubgraph(subGraph);
 
     }
 
@@ -204,11 +205,17 @@ public class DrugBank {
     }
 
     private static String getCasId(BasicDBObject dbObj) {
-        return OntologyStrUtil.getString(dbObj, DrugBankFields.CAS_NUMBER);
+        if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.CAS_NUMBER)) {
+            return OntologyStrUtil.getString(dbObj, DrugBankFields.CAS_NUMBER);
+        }
+        return OntologyStrUtil.getList(dbObj, DrugBankFields.CAS_NUMBER).toString();
     }
 
     private static String getDrugDescription(BasicDBObject dbObj) {
-        return OntologyStrUtil.getString(dbObj, DrugBankFields.DESCRIPTION);
+        if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.DESCRIPTION)) {
+            return OntologyStrUtil.getString(dbObj, DrugBankFields.DESCRIPTION);
+        }
+        return OntologyStrUtil.getList(dbObj, DrugBankFields.DESCRIPTION).toString();
     }
 
     private static String getDrugBankId(BasicDBObject dbObj) {
@@ -228,15 +235,25 @@ public class DrugBank {
     }
 
     private static String getIndication(BasicDBObject dbObj) {
-        return OntologyStrUtil.getString(dbObj, DrugBankFields.INDICATION);
+        if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.INDICATION)) {
+            return OntologyStrUtil.getString(dbObj, DrugBankFields.INDICATION);
+
+        }
+        return OntologyStrUtil.getList(dbObj, DrugBankFields.INDICATION).toString();
     }
 
     private static String getMechanismOfAction(BasicDBObject dbObj) {
-        return OntologyStrUtil.getString(dbObj, DrugBankFields.MECHANISM_OF_ACTION);
+        if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.MECHANISM_OF_ACTION)) {
+            return OntologyStrUtil.getString(dbObj, DrugBankFields.MECHANISM_OF_ACTION);
+        }
+        return OntologyStrUtil.getList(dbObj, DrugBankFields.MECHANISM_OF_ACTION).toString();
     }
 
     private static String getPharmcology(BasicDBObject dbObj) {
-        return OntologyStrUtil.getString(dbObj, DrugBankFields.PHARMACOLOGY);
+        if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.PHARMACOLOGY)) {
+            return OntologyStrUtil.getString(dbObj, DrugBankFields.PHARMACOLOGY);
+        }
+        return OntologyStrUtil.getList(dbObj, DrugBankFields.PHARMACOLOGY).toString();
     }
 
     private static String getValue(BasicDBObject dbObj, DrugBankFields key) {
@@ -297,8 +314,18 @@ public class DrugBank {
         }
     }
 
+    private static String getIngredients(BasicDBObject dbObj) {
+        if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.INGREDIENTS)) {
+            if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.INGREDIENTS)) {
+                return OntologyStrUtil.getString(dbObj, DrugBankFields.INGREDIENTS);
+            }
+            return OntologyStrUtil.getList(dbObj, DrugBankFields.INGREDIENTS).toString();
+        }
+        return null;
+    }
+
     private static String getKingdom(BasicDBObject dbObj) {
-        return getValue(dbObj, DrugBankFields.KINGDOM);
+        return getList(dbObj, DrugBankFields.KINGDOM).toString();
     }
 
 
@@ -309,8 +336,10 @@ public class DrugBank {
                 Map<String, String> map = new HashMap<String, String>();
                 for (Object obj : dbList) {
                     String key = getValue((BasicDBObject) obj, DrugBankFields.NAME);
-                    String value = getValue((BasicDBObject) obj, DrugBankFields.INGREDIENTS);
-                    map.put(key, value);
+                    String value = getIngredients((BasicDBObject)obj);
+                    if (key != null && value != null) {
+                        map.put(key, value);
+                    }
                 }
                 drug.setMixtures(map);
             }
@@ -322,9 +351,14 @@ public class DrugBank {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.PACKAGERS);
             if (dbList != null) {
                 HashSet<DrugPackager> dpSet = new HashSet<DrugPackager>();
-                for (Object obj : dbList) {
-                    String packagerName = getValue((BasicDBObject) obj, DrugBankFields.NAME);
-                    String url = getValue((BasicDBObject) obj, DrugBankFields.URL);
+                for (Object packageObj : dbList) {
+                    log.info("packagers " + packageObj);
+                    BasicDBObject obj = (BasicDBObject)packageObj;
+                    if (OntologyStrUtil.isObjectNull((BasicDBObject) obj, DrugBankFields.PACKAGER)) {
+                        obj = OntologyStrUtil.getDBObject((BasicDBObject) obj, DrugBankFields.PACKAGER);
+                    }
+                    String packagerName = getValue(obj, DrugBankFields.NAME);
+                    String url = getList(obj, DrugBankFields.URL).toString();
                     Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.DRUG_PACKAGER, BioFields.NAME, packagerName);
                     DrugPackager drugPackager = (DrugPackager) bioEntity;
                     if (drugPackager == null) {
@@ -432,10 +466,16 @@ public class DrugBank {
             if (dbList != null) {
                 HashSet<Dosage> dosageSet = new HashSet<Dosage>();
                 for (Object obj : dbList) {
-                    String form = getValue((BasicDBObject) obj, DrugBankFields.FORM);
+                    log.info("dosages object =" + (BasicDBObject)obj);
+                    BasicDBObject dosageObj = (BasicDBObject)obj;
+                    if (OntologyStrUtil.isObjectNull((BasicDBObject) obj, DrugBankFields.DOSAGE)) {
+                        dosageObj = OntologyStrUtil.getDBObject((BasicDBObject) obj, DrugBankFields.DOSAGE);
+                    }
+                    String form = getValue(dosageObj, DrugBankFields.FORM);
                     Dosage dosage = new Dosage();
                     dosage.setForm(form);
-                    dosage.setCasId(drug.getCasId());
+                    dosage.setChemicalAbstractId(drug.getCasId());
+                    dosage.setRoute(getValue(dosageObj, DrugBankFields.ROUTE));
                     CompoundKey compoundKey = CompoundKey.getCompoundKey(dosage);
                     Dosage bioEntity = null;
                     if (compoundKey != null) {
@@ -444,11 +484,9 @@ public class DrugBank {
                             dosage = bioEntity;
                         }
                     }
-                    if (dosage.getRoute() == null) {
-                        dosage.setRoute(getValue((BasicDBObject) obj, DrugBankFields.ROUTE));
-                    }
+
                     if (dosage.getStrength() == null) {
-                        dosage.setStrength(getValue((BasicDBObject) obj, DrugBankFields.STRENGTH));
+                        dosage.setStrength(getList(dosageObj, DrugBankFields.STRENGTH).toString());
                     }
                     subGraph.add(dosage);
                     dosageSet.add(dosage);
@@ -513,15 +551,15 @@ public class DrugBank {
                     String drugName= getValue((BasicDBObject)obj, DrugBankFields.NAME);
                     Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.DRUG, BioFields.NAME, drugName);
                     Drug drugInteraction = (Drug)bioEntity;
-                    if (drug == null) {
+                    if (drugInteraction == null) {
                         drugInteraction = new Drug();
-                        drug.setDrugName(drugName);
+                        drugInteraction.setDrugName(drugName);
                     }
 
-                    if (drug.getDrugbankId() == null) {
-                        drug.setDrugbankId(getValue((BasicDBObject)obj, DrugBankFields.DRUGBANK_ID));
+                    if (drugInteraction.getDrugbankId() == null) {
+                        drugInteraction.setDrugbankId(getValue((BasicDBObject)obj, DrugBankFields.DRUGBANK_ID));
                     }
-                    if (drug.getDrugDescription() == null) {
+                    if (drugInteraction.getDrugDescription() == null) {
                         drugInteraction.setDrugDescription(getValue((BasicDBObject)obj, DrugBankFields.DESCRIPTION));
                     }
                     subGraph.add(drugInteraction);
@@ -546,17 +584,23 @@ public class DrugBank {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.EXTERNAL_IDENTIFIERS);
             if (dbList != null) {
                 for (Object obj : dbList) {
+                    log.info("identifiers=" + obj);
                     String resource = getValue((BasicDBObject) obj, DrugBankFields.RESOURCE);
-                    if (resource.equals(DrugBankFields.UNIPROT_KB.toString())) {
-                        String uniprotId = getValue((BasicDBObject)obj, DrugBankFields.UNIPROT_KB);
-                        Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, uniprotId);
-                        Protein protein = (Protein)bioEntity;
-                        if (protein == null) {
-                            protein = new Protein();
-                            protein.setUniprot(uniprotId);
+                    if (resource != null) {
+                        if (resource.equals(DrugBankFields.UNIPROT_KB.toString())) {
+                            String uniprotId = getValue((BasicDBObject) obj, DrugBankFields.UNIPROT_KB);
+                            Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, uniprotId);
+                            Protein protein = (Protein) bioEntity;
+                            if (protein == null) {
+                                protein = new Protein();
+                                protein.setUniprot(uniprotId);
+                            }
+                            drug.setProteinRelation(protein);
+                        } else {
+                            //
                         }
-                        drug.setProteinRelation(protein);
                     }
+
                 }
             }
         }
