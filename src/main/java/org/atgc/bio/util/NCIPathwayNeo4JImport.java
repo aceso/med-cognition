@@ -8,7 +8,6 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.atgc.bio.*;
-import org.atgc.bio.*;
 import org.atgc.bio.domain.*;
 import org.atgc.bio.meta.BioEntity;
 import org.atgc.bio.meta.EndNode;
@@ -71,7 +70,7 @@ import org.apache.http.HttpException;
  * @author jtanisha-ee
  */
 
-public class NCIPathway {
+public class NCIPathwayNeo4JImport {
     
    // public static final String DB_URL = "http://saibaba.local:7474/db/data";
    
@@ -81,7 +80,7 @@ public class NCIPathway {
     private static final Map<String, GeneOntology> processMap = new HashMap<String, GeneOntology>();
     private static final Map<String, GeneOntology> functionMap = new HashMap<String, GeneOntology>();
     // private static ArrayList<RelQueue> foundList, notFoundList;  
-    protected static Log log = LogFactory.getLog(NCIPathway.class);
+    protected static Log log = LogFactory.getLog(NCIPathwayNeo4JImport.class);
     private static ArrayList <RelQueue>relGraph;
     
     /**
@@ -100,7 +99,7 @@ public class NCIPathway {
     public static void main(String[] args) throws java.io.IOException, java.net.URISyntaxException, UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NoSuchMethodException, InvocationTargetException, MalformedURLException, UnknownHostException, HttpException, NoSuchFieldException, RuntimeException, Exception {
         List<Map> pathwayList = NCIPathwayUtil.getPathwayList(); // return all that are DUE
         Iterator<Map> pathwayIter = pathwayList.iterator();
-        NCIPathway nciPathway = new NCIPathway();
+        NCIPathwayNeo4JImport nciPathwayNeo4JImport = new NCIPathwayNeo4JImport();
         //foundList = new <RelQueue>ArrayList();
         //notFoundList = new <RelQueue>ArrayList();
         while (pathwayIter.hasNext()) {
@@ -108,7 +107,7 @@ public class NCIPathway {
             String shortName = (String)map.get(getStringFromEnum(NciPathwayFields.SHORT_NAME));
             log.info("********** shortName " + shortName);
             try {
-                NciPathway pathwayNode = nciPathway.createPathwayNode(shortName);
+                NciPathway pathwayNode = nciPathwayNeo4JImport.createPathwayNode(shortName);
             } catch (java.io.IOException e) {
                 throw new RuntimeException(e);
             }
