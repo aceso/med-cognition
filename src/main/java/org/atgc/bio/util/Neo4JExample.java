@@ -11,8 +11,6 @@ import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.rest.graphdb.RestGraphDatabase;
 import org.neo4j.rest.graphdb.index.RestIndex;
-//import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-//import org.neo4j.rest.graphdb.RestGraphDatabase;
 
 /**
  *
@@ -130,10 +128,6 @@ public class Neo4JExample {
             pNodeHits.close();
             System.out.println("firstNode id = " + firstNode.toString());
             System.out.println("secondNode id = " + firstNode.toString());
-            //System.out.println("secondNode id" + secondNode.toString());
-            //System.out.print( firstNode.getProperty( "message" ) );
-            //System.out.print( relationship.getProperty( "message" ) );
-            //System.out.print( secondNode.getProperty( "message" ) );
         } finally {
             //tx.finish();
             tx.close();
