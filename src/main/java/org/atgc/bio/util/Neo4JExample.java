@@ -59,7 +59,7 @@ public class Neo4JExample {
         try {
     // Mutating operations go here
             firstNode = graphDb.createNode();
-            firstNode.setProperty(key, "prime");
+            //firstNode.setProperty(key, "prime");
             /*
             A label is a grouping facility for Node where all nodes having a label are part of the same group. Labels on nodes are optional
             and any node can have an arbitrary number of labels attached to it. Objects of classes implementing this interface can be used as
@@ -79,7 +79,7 @@ public class Neo4JExample {
             secondNode.addLabel(DynamicLabel.label("test"));
 
             relationship = firstNode.createRelationshipTo(secondNode, RelTypes.INHIBITS );
-            relationship.setProperty( "message", "brave heart Neo4j " );
+            relationship.setProperty( "message", "brave heart Neo4j ");
 
             myIndex = graphDb.index().forNodes(indexName);
             myIndex.add(firstNode, key, "prime");
@@ -91,7 +91,6 @@ public class Neo4JExample {
             //tx.finish();
             tx.close();
         }
-
 
         tx = graphDb.beginTx();
         try {

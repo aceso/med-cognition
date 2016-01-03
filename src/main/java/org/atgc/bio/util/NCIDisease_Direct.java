@@ -802,11 +802,13 @@ public class NCIDisease_Direct {
             } catch (Exception e) {
                 // do we need to close gNodeHits.close() here: ask Manoj
                 //System.out.println("exception caught");
+                tx.failure();
                 e.printStackTrace();
             } finally {
                 //System.out.println("geneNode" + geneNode.toString());
                 //System.out.println("finally");
-                tx.finish();
+                //tx.finish();
+                tx.close();
                 //System.out.println("came out of finally");
             }
             //System.out.println("completed geneNode");

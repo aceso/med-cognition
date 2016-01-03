@@ -1307,10 +1307,12 @@ public class NCIPathway_Direct {
             }
             tx.success();
         } catch (Exception e) {
+            tx.failure();
             e.printStackTrace();
         } finally {
             log.info("Before tx.finish");
-            tx.finish();
+            //tx.finish();
+            tx.close();
             log.info("After tx.finish");
         }
         return pathwayNode;

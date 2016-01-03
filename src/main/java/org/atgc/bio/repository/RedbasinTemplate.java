@@ -882,15 +882,20 @@ public class RedbasinTemplate<T> {
             tx.success();
             saveMongo(indexedFields, basicDBObject, nodeType, uniqueKey);
         } catch (IllegalAccessException e) {
+            tx.failure(); //rollback
             throw new RuntimeException("Something went wrong while saving bioentity.", e);
         } catch (IllegalArgumentException e) {
+            tx.failure();
             throw new RuntimeException("Something went wrong while saving bioentity.", e);
         } catch (SecurityException e) {
+            tx.failure();
             throw new RuntimeException("Something went wrong while saving bioentity.", e);
         } catch (UnknownHostException e) {
+            tx.failure();
             throw new RuntimeException("Something went wrong while saving bioentity.", e);
         } finally {
-            tx.finish();
+            //tx.finish();
+            tx.close();
         }
         return basicDBObject;
     }
@@ -1259,9 +1264,11 @@ public class RedbasinTemplate<T> {
             }
             tx.success();
         } catch (RuntimeException e) {
+            tx.failure(); //rollback
             throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
         } finally {
-            tx.finish();
+            //tx.finish();
+            tx.close();
         }
         if (node != null && nodeCreated && nodeIndex != null) {
             nodeIndex.putIfAbsent(node, key, value);

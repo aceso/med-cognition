@@ -59,7 +59,7 @@ public class IndexSearchExample {
             RestIndex<Node> speciesIndex;
             firstNode.setProperty("species", species);
             speciesIndex = graphDb.index().forNodes("aspecies");
-            speciesIndex.add(firstNode, "species", species);  
+            speciesIndex.add(firstNode, "species", species);
             tx.success();
 
             IndexHits<Node> pNodeHits = speciesIndex.get("species", "mouse");
@@ -70,8 +70,12 @@ public class IndexSearchExample {
                     }
                 }
             }
+            tx.success();
+        } catch (Exception e) {
+            tx.failure();
         } finally {
-            tx.finish();
+            //tx.finish();
+            tx.close();
         }
     }
 }
