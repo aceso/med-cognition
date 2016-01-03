@@ -2006,6 +2006,7 @@ public class Drug {
      * @param salts
      */
     public void setSalts(List<String> salts) {
+
         this.salts = salts;
     }
 
