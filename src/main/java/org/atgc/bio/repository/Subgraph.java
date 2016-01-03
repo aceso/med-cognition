@@ -10,6 +10,7 @@ import org.atgc.bio.meta.BioEntity;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -177,6 +178,7 @@ public class Subgraph<T> {
         return beMap;
     }
 
+
     /**
      *
      * @param args
@@ -190,6 +192,26 @@ public class Subgraph<T> {
      */
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchFieldException, NotFoundException, IllegalArgumentException, InvocationTargetException {
         Subgraph grMapper = new Subgraph();
+    }
+
+    /**
+     * getBioEntityFromBioType
+     * @param subGraph
+     * @param bioType
+     * @param key
+     * @param value
+     * @return
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws URISyntaxException
+     */
+    public static Object getBioEntityFromBioType(Subgraph subGraph, BioTypes bioType, BioFields key, String value) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException {
+        //log.info("getBioEntityFromBioType()," + bioType.toString() + "," + key.toString() + "=" + value);
+        Object bioEntity = subGraph.search(bioType, key, value);
+        return bioEntity;
     }
 
 }
