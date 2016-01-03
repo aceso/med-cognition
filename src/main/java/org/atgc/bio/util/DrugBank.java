@@ -479,11 +479,14 @@ public class DrugBank {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.AFFECTED_ORGANISMS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.AFFECTED_ORGANISMS);
             if (dbList != null) {
-                for (Object obj : dbList) {
-
+                for (Object organismObj : dbList) {
+                    BasicDBObject obj = (BasicDBObject)organismObj;
+                    if (OntologyStrUtil.isObjectNull(obj, DrugBankFields.AFFECTED_ORGANISM)) {
+                        obj = OntologyStrUtil.getDBObject(obj, DrugBankFields.AFFECTED_ORGANISM);
+                    }
                     String organismName = obj.toString();
                     Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.ORGANISM, BioFields.ORGANISM_SHORT_LABEL, organismName);
-                    Organism organism = (Organism) bioEntity;
+                    Organism organism = (Organism)bioEntity;
                     if (organism == null) {
                         organism = new Organism();
                         organism.setOrganismShortLabel(organismName);
@@ -636,7 +639,8 @@ public class DrugBank {
                     String resource = getValue((BasicDBObject) obj, DrugBankFields.RESOURCE);
                     if (resource != null) {
                         if (resource.equals(DrugBankFields.UNIPROT_KB.toString())) {
-                            String uniprotId = getValue((BasicDBObject) obj, DrugBankFields.UNIPROT_KB);
+                            String uniprotId = getValue((BasicDBObject) obj, DrugBankFields.IDENTIFIER);
+                            log.info("uniprotId" + uniprotId);
                             Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, uniprotId);
                             Protein protein = (Protein) bioEntity;
                             if (protein == null) {
