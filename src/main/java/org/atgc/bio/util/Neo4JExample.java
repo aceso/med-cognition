@@ -54,8 +54,7 @@ public class Neo4JExample {
 
         RestIndex<Node> myIndex;
         String indexName = "myindex";
-        String key = "choot";
-        String value = "Hello";
+        String key = "message";
 
         Transaction tx = graphDb.beginTx();
 
@@ -63,38 +62,47 @@ public class Neo4JExample {
         try {
     // Mutating operations go here
             firstNode = graphDb.createNode();
-            firstNode.setProperty(key, value);
+            firstNode.setProperty(key, "prime");
 
-            //secondNode = graphDb.createNode();
-            //secondNode.setProperty( "message", "World!" );
-            //relationship = firstNode.createRelationshipTo( secondNode, RelTypes.INHIBITS );
-            //relationship.setProperty( "message", "brave heart Neo4j " );
+            secondNode = graphDb.createNode();
+            secondNode.setProperty(key, "galaxy" );
+            relationship = firstNode.createRelationshipTo(secondNode, RelTypes.INHIBITS );
+            relationship.setProperty( "message", "brave heart Neo4j " );
 
             myIndex = graphDb.index().forNodes(indexName);
-            myIndex.add(firstNode, key, value);
+            myIndex.add(firstNode, key, "prime");
+            myIndex.add(secondNode, key, "galaxy");
             tx.success();
             
         } finally {
-            tx.finish();
+            //tx.finish();
+            tx.close();
         }
 
 
         tx = graphDb.beginTx();
         try {
             myIndex = graphDb.index().forNodes(indexName);
-            IndexHits<Node> pNodeHits = myIndex.get(key, value);
-            if (pNodeHits.size() > 0) {  
-                firstNode = pNodeHits.getSingle(); 
+            IndexHits<Node> pNodeHits = myIndex.get(key, "prime");
+            if (pNodeHits.size() > 0) {
+                firstNode = pNodeHits.getSingle();
                 System.out.println("firstNode from index = " + firstNode);
             }
+            pNodeHits = myIndex.get(key, "galaxy");
+            if (pNodeHits.size() > 0) {
+                secondNode = pNodeHits.getSingle();
+                System.out.println("secondNode from index = " + secondNode);
+            }
             pNodeHits.close();
-            System.out.println("firstNode id" + firstNode.toString());
+            System.out.println("firstNode id = " + firstNode.toString());
+            System.out.println("secondNode id = " + firstNode.toString());
             //System.out.println("secondNode id" + secondNode.toString());
             //System.out.print( firstNode.getProperty( "message" ) );
             //System.out.print( relationship.getProperty( "message" ) );
             //System.out.print( secondNode.getProperty( "message" ) );
         } finally {
-            tx.finish();
+            //tx.finish();
+            tx.close();
         }
     }
 }
