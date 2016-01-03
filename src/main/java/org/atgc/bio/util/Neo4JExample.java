@@ -59,7 +59,7 @@ public class Neo4JExample {
         try {
     // Mutating operations go here
             firstNode = graphDb.createNode();
-            //firstNode.setProperty(key, "prime");
+            firstNode.setProperty(key, "P1876345");
             /*
             A label is a grouping facility for Node where all nodes having a label are part of the same group. Labels on nodes are optional
             and any node can have an arbitrary number of labels attached to it. Objects of classes implementing this interface can be used as
@@ -72,18 +72,18 @@ public class Neo4JExample {
             implements Label { PERSON, RESTAURANT; } For labels that your application don't know up front you can make use of
             DynamicLabel.label(String), or your own implementation of this interface, as it's just the name that matters.
              */
-            firstNode.addLabel(DynamicLabel.label("test"));
+            firstNode.addLabel(DynamicLabel.label("Protein"));
 
             secondNode = graphDb.createNode();
-            secondNode.setProperty(key, "galaxy" );
-            secondNode.addLabel(DynamicLabel.label("test"));
+            secondNode.setProperty(key, "BRCA1" );
+            secondNode.addLabel(DynamicLabel.label("Gene"));
 
             relationship = firstNode.createRelationshipTo(secondNode, RelTypes.INHIBITS );
-            relationship.setProperty( "message", "brave heart Neo4j ");
+            relationship.setProperty( "message", "INHIBITS");
 
             myIndex = graphDb.index().forNodes(indexName);
-            myIndex.add(firstNode, key, "prime");
-            myIndex.add(secondNode, key, "galaxy");
+            myIndex.add(firstNode, key, "P1876345");
+            myIndex.add(secondNode, key, "BRCA1");
 
             tx.success();
             
@@ -95,7 +95,7 @@ public class Neo4JExample {
         tx = graphDb.beginTx();
         try {
             myIndex = graphDb.index().forNodes(indexName);
-            IndexHits<Node> pNodeHits = myIndex.get(key, "prime");
+            IndexHits<Node> pNodeHits = myIndex.get(key, "P1876345");
             if (pNodeHits.size() > 0) {
                 firstNode = pNodeHits.getSingle();
                 Iterator j = firstNode.getLabels().iterator();
@@ -109,7 +109,7 @@ public class Neo4JExample {
                     System.out.println("firstNode key = " + k + ", value = " + firstNode.getProperty(k));
                 }
              }
-            pNodeHits = myIndex.get(key, "galaxy");
+            pNodeHits = myIndex.get(key, "BRCA1");
             if (pNodeHits.size() > 0) {
                 secondNode = pNodeHits.getSingle();
                 System.out.println("secondNode from index = " + secondNode);
