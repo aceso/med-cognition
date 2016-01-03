@@ -121,7 +121,7 @@ public class DrugPatent {
     /**
      * Set the cost of the drug.
      * 
-     * @param cost 
+     * @param approvedDate
      */
     public void setApprovedDate(String approvedDate) {
         this.approvedDate = approvedDate;

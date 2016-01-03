@@ -93,6 +93,17 @@ public class Drug {
     @RelatedTo(direction=Direction.BOTH, relType=BioRelTypes.IS_OBSERVED_IN_NCBI_TAXONOMY, elementClass = BioRelation.class)
     private BioRelation ncbiTaxonomyRelation;
 
+    /*
+       external-identifiers refer to other pharmgkb, KEGG drug too
+       "external-identifiers" : [
+		{
+            	"resource" : "UniProtKB",
+			    "identifier" : "P06621"
+		}
+		]
+     */
+    @RelatedTo(direction=Direction.BOTH, relType=BioRelTypes.IDENTIFIED_PROTEIN, elementClass = BioRelation.class)
+    private BioRelation proteinRelation;
 
 
     /**
@@ -2437,40 +2448,20 @@ public class Drug {
         this.foodInteractions = foodInteractions;
     }
 
-    @SubList (indexName=IndexNames.DRUG_INTERACTIONS)
+   /* @SubList (indexName=IndexNames.DRUG_INTERACTIONS)
     private List<String> drugInteractions;
 
-    /**
-     * Get the drug interactions.
-     *
-     * <pre>
-     db.drugbank.find({"drugbank-id" : "DB00015"}, {"drug-interactions" : 1}).pretty()
-     {
-     "_id" : ObjectId("52956554300417c0cfbb1046"),
-     "drug-interactions" : [
-     {
-     "drug" : "DB01381",
-     "name" : "Ginkgo biloba",
-     "description" : "Additive anticoagulant/antiplatelet effects may increase bleed risk. Concomitant therapy should be avoided."
-     },
-     {
-     "drug" : "DB00208",
-     "name" : "Ticlopidine",
-     "description" : "Increased bleeding risk. Monitor for signs of bleeding."
-     }
-     ]
-     }
-
-     * </pre>
-     *
-     * @return List<String>
-     */
     public List<String> getDrugInteractions() {
         return drugInteractions;
     }
 
+    public void setDrugInteractions(List<String> drugInteractions) {
+        this.drugInteractions = drugInteractions;
+    } */
+
     /**
-     * Set the drug interactions.
+     * Set the drug - drug interactions.
+     *
      *
      * <pre>
      db.drugbank.find({"drugbank-id" : "DB00015"}, {"drug-interactions" : 1}).pretty()
@@ -2494,9 +2485,8 @@ public class Drug {
      *
      * @param drugInteractions
      */
-    public void setDrugInteractions(List<String> drugInteractions) {
-        this.drugInteractions = drugInteractions;
-    }
+    @RelatedToVia (direction=Direction.BOTH, elementClass=BioRelation.class)
+    private HashSet<BioRelation> drugInteractionRelations;
 
     @RelatedToVia (direction=Direction.BOTH, elementClass=BioRelation.class)
     private HashSet<BioRelation> chemicalPropertyRelations;
@@ -3087,6 +3077,9 @@ public class Drug {
     @RelatedToVia(direction=Direction.BOTH, relType=BioRelTypes.REFERENCES_PUBMED, elementClass=BioRelation.class)
     private HashSet<BioRelation> synthesisPubmedRelations;
 
+    @RelatedToVia(direction=Direction.BOTH, relType=BioRelTypes.REFERENCES_PATENT, elementClass=BioRelation.class)
+    private HashSet<BioRelation> drugPatentRelations;
+
     /**
      * Reference or patent number to description of drug's synthesis.
      * Source are: Manual Search, PubChem, Merck Manual, PubMed.
@@ -3138,7 +3131,6 @@ public class Drug {
      "Kohler, Maxie, et al. \"Metabolism of 4-hydroxyandrostenedione and 4-hydroxytestosterone: Mass spectrometric identification of urinary metabolites.\" Steroids 72.3 (2007): 278-286.",
      "Benardeau A, Benz J, Binggeli A, Blum D, Boehringer M, Grether U, Hilpert H, Kuhn B, Marki HP, Meyer M, Puntener K, Raab S, Ruf A, Schlatter D, Mohr P: Aleglitazar, a new, potent, and balanced dual PPARalpha/gamma agonist for the treatment of type II diabetes. Bioorg Med Chem Lett. 2009 May 1;19(9):2468-73. doi: 10.1016/j.bmcl.2009.03.036. Epub 2009 Mar "
      ]
-
      * </pre>
      *
      * @param pubmedList
@@ -3164,6 +3156,55 @@ public class Drug {
         }
         return pubmedList;
     }
+
+    public void setDrugPatent(HashSet<DrugPatent> drugPatentList) {
+        drugPatentRelations = new HashSet<BioRelation>();
+        for (DrugPatent drugPatent : drugPatentList) {
+            drugPatentRelations.add(new BioRelation(this, drugPatent, BioRelTypes.REFERENCES_PATENT));
+        }
+    }
+
+    public HashSet<DrugPatent> getDrugPatent() {
+        HashSet<DrugPatent> drugPatentList = new HashSet<DrugPatent>();
+        for (BioRelation bioRelation : drugPatentRelations) {
+            drugPatentList.add((DrugPatent)bioRelation.getEndNode());
+        }
+        return drugPatentList;
+    }
+
+    public HashSet<Drug> getDrugInteraction() {
+        HashSet<Drug> drugList = new HashSet<Drug>();
+        for (BioRelation bioRelation : drugInteractionRelations) {
+            drugList.add((Drug)bioRelation.getEndNode());
+        }
+        return drugList;
+    }
+
+    public void setDrugInteraction(HashSet<Drug> drugList) {
+        drugInteractionRelations = new HashSet<BioRelation>();
+        for (Drug drug : drugList) {
+            drugInteractionRelations.add(new BioRelation(this, drug, BioRelTypes.DRUG_INTERACTS_WITH));
+        }
+    }
+
+
+    public BioRelation getProteinRelation() {
+        return proteinRelation;
+    }
+
+    public void setProteinRelation(Protein protein) {
+       proteinRelation = new BioRelation(this, protein, BioRelTypes.IDENTIFIED_PROTEIN);
+    }
+
+
+
+
+
+
+
+
+
+
 }
 
 
