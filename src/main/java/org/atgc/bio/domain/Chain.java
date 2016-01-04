@@ -8,6 +8,7 @@ package org.atgc.bio.domain;
 
 import com.mongodb.BasicDBObject;
 import org.atgc.bio.BioFields;
+//import org.atgc.bio.UniProtAccess;
 import org.atgc.bio.UniProtAccess;
 import org.atgc.bio.meta.BioEntity;
 import org.atgc.bio.meta.FullTextIndexed;
