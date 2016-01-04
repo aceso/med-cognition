@@ -1526,7 +1526,7 @@ public class UniprotUtil {
      */
     public static Protein processProtein(Protein protein, String id, Subgraph subGraph) throws Exception {
         log.info("processProtein(), id = " + id);
-        BasicDBObject obj = UniProtAccessNew.getProteinObj(id);
+        BasicDBObject obj = UniProtAccess.getProteinObj(id);
 
         if (obj != null) {
             setFullName(protein, obj);
