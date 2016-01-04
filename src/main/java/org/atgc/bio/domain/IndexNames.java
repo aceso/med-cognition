@@ -1154,7 +1154,10 @@ public enum IndexNames {
     EVIDENCE_ID("evidenceId"),
 
     /* drug price */
-    UNIT("unit");
+    UNIT("unit"),
+
+    LOG_P("logP"),
+    ;
     
     private final String value;
     private static final Map<String, IndexNames> stringToEnum = new HashMap<String, IndexNames>();
