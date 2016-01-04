@@ -280,7 +280,7 @@ public class NCIPathwayNeo4JImport {
     * sets the protein names including 
     * {@link BioFields#UNIPROT_ID} {@link BioFields#PROTEIN_PREFERRED_SYMBOL} and alias
     * @param molecule
-    * @param protein 
+    * @param partProtein
     */
    private static void setPartProteinNames(BasicDBObject molecule, PartProtein partProtein) {
        log.info("setPartProteinNames()");
@@ -379,7 +379,7 @@ public class NCIPathwayNeo4JImport {
    
    /**
     * Retrieves Uniprot identifier
-    * @param molecule
+    * @param obj
     * @return 
     */
    private static String getUniProtId(BasicDBObject obj) {
@@ -585,9 +585,9 @@ public class NCIPathwayNeo4JImport {
     * If not found, searches in key {@link BioFields#MOLECULE_IDREF} and value (moleculeIdRef)
     * @param subGraph
     * @param bioType {@link BioTypes}
-    * @param molecule - used to retrieve moleculeIdRef
-    * @param key  {@link BioFields}
-    * @param value
+    * @param key1 - used to retrieve moleculeIdRef
+    * @param value1  {@link BioFields}
+    * @param value2
     * @return
     * @throws NoSuchFieldException
     * @throws IllegalArgumentException
@@ -688,7 +688,7 @@ public class NCIPathwayNeo4JImport {
    
    /**
     * 
-    * @param protein - {@link Protein}
+    * @param partProtein - {@link Protein}
     * @param molecule - contains information about PTMExpression {@link BasicDBObject}
     * @param subGraph - {@link Subgraph}
     * set PTMValues - sets PTM Expression values associated with it
@@ -818,7 +818,6 @@ public class NCIPathwayNeo4JImport {
     * @param complex {@link Complex}
     * @param endEntity {@link Protein} {@link PartProtein}
     * @param labelMap
-    * @param template 
     */
    private static void createComplexComponentLabelRelationship(Complex complex, BioEntity endEntity, Map labelMap) {
        log.info("createComplexComponentLabelRelationship()");
@@ -912,8 +911,8 @@ public class NCIPathwayNeo4JImport {
   }
     
    /**
-    * setGeneOntologyRelationship {@link startNode} {@link BioTypes#GENE_ONTOLOGY}
-    * sets GeneOntology (GO) process and location relationship with an {@link endNode}
+    * setGeneOntologyRelationship {@link BioTypes#GENE_ONTOLOGY}
+    * sets GeneOntology (GO) process and location relationship with an
     */
    public static void setGeneOntologyRelationship(Object endEntity, Map map) {    
        if (endEntity != null) {
@@ -937,7 +936,6 @@ public class NCIPathwayNeo4JImport {
     * createComplexComponentRelationship
     * @param complex {@link Complex}
     * @param endEntity {@link Protein} or {@link PartProtein}
-    * @param template 
     */
    private static void createComplexComponentRelationship(Complex complex, BioEntity endEntity) {
        log.info("createComplexComponentRelationship()");
@@ -958,7 +956,6 @@ public class NCIPathwayNeo4JImport {
     * @param complex -  {@link Complex}
     * @param endEntity - {@link PartProtein} or {@link Protein}
     * @param molecule - contains information about PTMExpression
-    * @param template - RedbasinTemplate
     * @throws IllegalArgumentException
     * @throws IllegalAccessException
     * @throws ClassNotFoundException
@@ -1217,7 +1214,7 @@ public class NCIPathwayNeo4JImport {
     * Checks and sets family member 
     * @param dbObj {@link BasicDBObject}
     * @param startEntity {@link NamedProtein}
-    * @param template {@link RedbasinTemplate}
+    * @param subGraph
     * 
     * MoleculeIdRef is referred to:
     * FamilyMemberList: {@link NciPathwayFields#MEMBER_MOLECULE_IDREF}
@@ -1330,9 +1327,10 @@ public class NCIPathwayNeo4JImport {
    /**
     * 
     * getBioEntity
+    * @param indexName
     * @param key {@link BioFields}
     * @param value  value of the BioField
-    * @param subgraph {@link Subgraph}
+    * @param subGraph {@link Subgraph}
     * @return
     * @throws ClassNotFoundException
     * @throws IllegalAccessException
@@ -1438,7 +1436,7 @@ public class NCIPathwayNeo4JImport {
     * process molecule list
     * @param pathwayEntity
     * @param moleculeList
-    * @param template
+    * @param subGraph
     * @throws UnsupportedEncodingException 
     */
    private static void processMoleculeList(NciPathway pathwayEntity, BasicDBList moleculeList, Subgraph subGraph) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NoSuchMethodException, InvocationTargetException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, Exception {       
@@ -1589,7 +1587,7 @@ public class NCIPathwayNeo4JImport {
     * 
     * getGeneOntology
     * @param dbObj
-    * @param bioEntity {@link bioEntity}
+    * @param bioEntity
     * @param subGraph
     * @return
     * @throws NoSuchFieldException
@@ -1746,8 +1744,7 @@ public class NCIPathwayNeo4JImport {
    * setPreferredSymbol 
    * @param dbObj
    * @param complex
-   * @param template
-   * @throws IllegalAccessException 
+   * @throws IllegalAccessException
    */
    private static void setPreferredSymbol(BasicDBObject dbObj, Complex complex) throws IllegalAccessException, URISyntaxException {         
         complex.setComplexPreferredSymbol(getPreferredSymbol(dbObj));
@@ -1759,20 +1756,32 @@ public class NCIPathwayNeo4JImport {
     * setAlias in a complex
     * @param dbObj
     * @param complex
-    * @param template
-    * @throws IllegalAccessException 
+    * @throws IllegalAccessException
     */
    private static void setAlias(BasicDBObject dbObj, Complex complex) throws IllegalAccessException, URISyntaxException {         
         complex.setAliases(getAlias(dbObj));    
    }
 
-    /** 
+    /**
      * createInteractionEntity
      * use BioFields for BioEntity to extract the fields.
-     * For BasicDBObject 
      * @param pathwayEntity
-     * @param interaction
-     * @return 
+     * @param interactionObj
+     * @param subGraph
+     * @return
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws URISyntaxException
+     * @throws UnsupportedEncodingException
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws UnknownHostException
+     * @throws HttpException
+     * @throws NoSuchFieldException
+     * @throws InvocationTargetException
+     * @throws Exception
      */
     public static NciPathwayInteraction createInteractionEntity(NciPathway pathwayEntity, BasicDBObject interactionObj, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException,InvocationTargetException, Exception {
         log.info("createInteractionEntity()");
@@ -1855,8 +1864,8 @@ public class NCIPathwayNeo4JImport {
     /**
      * setPubMedRelation
      * @param obj
+     * @param entity
      * @param pubMedEntity
-     * @param endEntity
      * @throws NoSuchMethodException
      * @throws IllegalAccessException
      * @throws IllegalArgumentException
@@ -1894,14 +1903,27 @@ public class NCIPathwayNeo4JImport {
             }
         }
     }
-    
+
     /**
      * Process the InteractionList section, which also contains EvidenceList, ReferenceList
      * and InteractionComponentList. Here we also create the interaction node and it's indexes.
      * We also make the interaction node isPartOf the pathway as a relationship
-     * 
-     * @param pathwayEntity 
-     * @param interactionList 
+     *
+     * @param pathwayEntity
+     * @param dbList
+     * @param subGraph
+     * @throws UnsupportedEncodingException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws URISyntaxException
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws UnknownHostException
+     * @throws HttpException
+     * @throws NoSuchFieldException
+     * @throws InvocationTargetException
      */
     public static void processOrganismList(NciPathway pathwayEntity, BasicDBList dbList, Subgraph subGraph) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException,InvocationTargetException {
         //BasicDBList interactionList = (BasicDBList)pathwayInfo.get((Object)INTERACTION_LIST);
@@ -2002,14 +2024,14 @@ public class NCIPathwayNeo4JImport {
         return null;
     }
     
-    
-   /**
-    * checkAndSetLabel - set label values for a given BioEntity
-    * @param molecule
-    * @param entity 
-    * @param template
-    * @throws IllegalAccessException 
-    */
+
+    /**
+     * checkAndSetLabel - set label values for a given BioEntity
+     * @param molecule
+     * @param entity
+     * @throws IllegalAccessException
+     * @throws URISyntaxException
+     */
     private static void checkAndSetLabel(BasicDBObject molecule, BioEntity entity) throws IllegalAccessException, URISyntaxException {  
         if (labelExists(molecule)) {
             BasicDBObject labelObj = getLabel(molecule);
@@ -2062,25 +2084,31 @@ public class NCIPathwayNeo4JImport {
        return null;
     }
     
-     /**
+
+    /**
      * Creates nodes for the InteractionComponentList and links them through relationships.
      * Currently supports creating one or more input nodes, and one output node. It links
      * each input node to the output node using the isOutputOf relationship. Additionally
      * each input node and the output node isPartOf the pathwayNode and isInteractionOf
      * interactionNode. Input and output nodes here can be used as protein nodes in future.
      * In future, we will support other role types such as agent, inhibitor.
-     * 
+     *
      * For each input node and the output node, we also create indexes for @role_type,
      * @molecule_idref and an optional index for location, if it exists.
-     * 
+     *
      * We assume that the location of a protein does not depend on the interaction. It remains
      * the same. If it was in cytoplasm, it will continue to be in cytoplasm irrespective of
      * the interaction.
-     * 
+     *
      * @param pathwayEntity
-     * @param entity
-     * @param interaction
-     * 
+     * @param interactionEntity
+     * @param interactionDbObj
+     * @param subGraph
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws URISyntaxException
+     * @throws NoSuchFieldException
      */
     public static void processInteractionComponentList(NciPathway pathwayEntity, NciPathwayInteraction interactionEntity, BasicDBObject interactionDbObj, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException {            
        
@@ -2174,7 +2202,7 @@ public class NCIPathwayNeo4JImport {
              boolean setFieldValue = npt.setFieldValue(entity, getStringFromMap(mapObj, key), key);
          }
     }
-    
+
      /**
      * createInteractionComponentList and links them through relationships.
      * Currently supports creating one or more input nodes, and one output node. It links
@@ -2182,18 +2210,23 @@ public class NCIPathwayNeo4JImport {
      * each input node and the output node isPartOf the pathwayNode and isInteractionOf
      * interactionNode. Input and output nodes here can be used as protein nodes in future.
      * In future, we will support other role types such as agent, inhibitor.
-     * 
+     *
      * For each input node and the output node, we also create indexes for @role_type,
      * @molecule_idref and an optional index for location, if it exists.
-     * 
+     *
      * We assume that the location of a protein does not depend on the interaction. It remains
      * the same. If it was in cytoplasm, it will continue to be in cytoplasm irrespective of
      * the interaction.
-     * 
-     * @param pathwayEntity
-     * @parma interactionEntity
+     * @param interactionEntity
      * @param moleculeList
      * @param outputMoleculeList
+     * @param subGraph
+     * @throws UnsupportedEncodingException
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws URISyntaxException
+     * @throws NoSuchFieldException
      */
     public static void createInteractionComponent(NciPathwayInteraction interactionEntity, List moleculeList, List outputMoleculeList, Subgraph subGraph) throws UnsupportedEncodingException, ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException {
          log.info("createInteractionComponent()");
@@ -2250,15 +2283,18 @@ public class NCIPathwayNeo4JImport {
         }
     }
     
-    
+
     /**
-     * Retrieves molecule entity 
-     * {@link BioFields#ROLE_TYPE} 
-     * @param molecule
+     * Retrieves molecule entity
+     * {@link BioFields#ROLE_TYPE}
+     * @param objMap
+     * @param subGraph
      * @return
      * @throws ClassNotFoundException
      * @throws IllegalAccessException
-     * @throws InstantiationException 
+     * @throws InstantiationException
+     * @throws URISyntaxException
+     * @throws NoSuchFieldException
      */
     private static BioEntity getMoleculeEntity(Map objMap, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException {
         log.info("getMoleculeEntity()");
@@ -2276,16 +2312,14 @@ public class NCIPathwayNeo4JImport {
         }
         return null;
     }
-    
+
     /**
      * This creates relationship for InteractionComponentOncoRelation
-     *
-     * @param interactionId {@link BioFields#INTERACTION_ID}
-     * @param startRole {@link BioFields#ROLE_TYPE}
-     * @param endRole {@link BioFields#ROLE_TYPE}
-     * @param startEntity {{@link BioEntity} {@link StartNode}
-     * @param endEntity {@link NciPathwayInteraction} {@link EndNode}
-     * @param map {@link Map}
+     * @param startRole
+     * @param endRole
+     * @param startEntity
+     * @param endEntity
+     * @param map
      */
     private static void createInteractionComponentOncoRelation(Enum startRole, Enum endRole, BioEntity startEntity, BioEntity endEntity, Map map ) {
            ((NciPathwayInteraction)endEntity).interactsWith(
@@ -2399,10 +2433,21 @@ public class NCIPathwayNeo4JImport {
         } 
         return null;
     }
-     
+
     /**
      * Process location GO objects
-     * @param obj Ontology location object
+     * @param ontologyObj
+     * @param subGraph
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws URISyntaxException
+     * @throws InvocationTargetException
+     * @throws UnknownHostException
+     * @throws RuntimeException
+     * @throws Exception
      */
     public static void setLocationList(BasicDBList ontologyObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
          for (Object obj : ontologyObj) {
@@ -2418,9 +2463,8 @@ public class NCIPathwayNeo4JImport {
              }
          }
     }  
-  
-    
-    /** 
+
+    /**
      * process_function
      * "LabelValueList" : [
      * {
@@ -2428,8 +2472,18 @@ public class NCIPathwayNeo4JImport {
      *      "@id" : "97",
      *     "@parent_idref" : "19000",
      *      "@GO" : "GO:0007254"
-     * }
-     * @param obj
+     * @param ontologyObj
+     * @param subGraph
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws URISyntaxException
+     * @throws InvocationTargetException
+     * @throws UnknownHostException
+     * @throws RuntimeException
+     * @throws Exception
      */
     public static void setProcessList(BasicDBList ontologyObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
           for (Object obj : ontologyObj) {
@@ -2445,11 +2499,11 @@ public class NCIPathwayNeo4JImport {
              }
          }
     }
-    
-    
+
     /**
      * check if this process-type
      * @param dbObj
+     * @return
      */
     public static boolean isProcessType(BasicDBObject dbObj) {
         String name = getString(dbObj, NciPathwayFields.AT_NAME);
@@ -2474,12 +2528,12 @@ public class NCIPathwayNeo4JImport {
               return false;
           }
     }
-    
+
     /**
-     * 
-     * @param interaction
-     * @param field 
-     * @return 
+     *
+     * @param list
+     * @param field
+     * @return
      */
     private static String getListAsString(BasicDBList list, NciPathwayFields field) {
        // BasicDBList list = getBasicDBList(interaction, NciPathwayFields.EVIDENCE_LIST);
@@ -2580,11 +2634,11 @@ public class NCIPathwayNeo4JImport {
         }
         return organism;    
     }
-    
+
     /**
      * returns organism ncbitaxid
-     * @param BasicDBObject
-     * @return String
+     * @param obj
+     * @return
      */
     private static String getNcbiTaxId(BasicDBObject obj) {
        String NCBI_TAX_ID = "9606";
@@ -2752,10 +2806,10 @@ public class NCIPathwayNeo4JImport {
     
     
     /**
-     * creates two sets of FamilyMemberRelationships of {@link startNode} {@link endNode}
-     * {@link startNode} {@link BioRelTypes#CONTAINS} 
+     * creates two sets of FamilyMemberRelationships of {@link org.atgc.bio.meta.StartNode} {@link EndNode}
+     * {@link org.atgc.bio.meta.StartNode} {@link BioRelTypes#CONTAINS}
      *           set with GeneOntology values (process and location
-     * {@link endNode}  {@link BioRelTypes#IS_A_COMPONENT_OF} 
+     * {@link EndNode}  {@link BioRelTypes#IS_A_COMPONENT_OF}
      *           set with GeneOntology Values
      * 
      * @param molecule
@@ -2766,7 +2820,6 @@ public class NCIPathwayNeo4JImport {
      * @throws IllegalArgumentException
      * @throws InvocationTargetException 
      */
-    
     private static void setFamilyMemberRelation(BasicDBObject molecule, Object startEntity, Object endEntity) throws IllegalAccessException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
          String METHOD_NAME = "setFamilyMemberRelation";
          //((NamedProtein)startEntity).setFamilyMemberRelation(relation);
@@ -2793,9 +2846,24 @@ public class NCIPathwayNeo4JImport {
          Object[] values = {relation}; 
          NciPathwayTemplate.invokeMethod(endEntity, METHOD_NAME, params, values);     
    }
-    
-    /*
-     * late binding of relationships for the molecule entities 
+
+    /**
+     * late binding of relationships for the molecule entities
+     * @param subGraph
+     * @param relGraph
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws URISyntaxException
+     * @throws UnsupportedEncodingException
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws UnknownHostException
+     * @throws HttpException
+     * @throws InvocationTargetException
+     * @throws NoSuchMethodException
      */
     private static void processRelGraph(Subgraph subGraph, ArrayList<RelQueue> relGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, InvocationTargetException, NoSuchMethodException {
        for (int i = 0; i < relGraph.size(); i++) {
