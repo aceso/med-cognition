@@ -8,7 +8,8 @@ package org.atgc.bio.domain;
 
 import com.mongodb.BasicDBObject;
 import org.atgc.bio.BioFields;
-import org.atgc.bio.UniProtAccess;
+//import org.atgc.bio.UniProtAccess;
+import org.atgc.bio.UniProtAccessNew;
 import org.atgc.bio.meta.BioEntity;
 import org.atgc.bio.meta.FullTextIndexed;
 import org.atgc.bio.meta.GraphId;
@@ -130,7 +131,7 @@ public class Chain {
      * @throws Exception
      */
     public void setProtein(String uniprotId) throws Exception {
-        BasicDBObject uniprotObj = UniProtAccess.getUniProt(chainId);
+        BasicDBObject uniprotObj = UniProtAccessNew.getNewUniProt(chainId);
     }
 
     /**
