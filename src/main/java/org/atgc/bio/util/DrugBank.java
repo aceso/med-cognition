@@ -374,8 +374,10 @@ public class DrugBank {
                         String url = getList(obj, DrugBankFields.URL).toString();
                         drugPackager.setUrl(url);
                     }
-                    subGraph.add(drugPackager);
-                    dpSet.add(drugPackager);
+                    if (drugPackager != null) {
+                        subGraph.add(drugPackager);
+                        dpSet.add(drugPackager);
+                    }
                 }
                 drug.setDrugPackagers(dpSet);
             }
@@ -406,8 +408,10 @@ public class DrugBank {
                     if (drugManufacturer.getGeneric() == null) {
                         drugManufacturer.setGeneric(getValue(obj, DrugBankFields.GENERIC));
                     }
-                    subGraph.add(drugManufacturer);
-                    dmSet.add(drugManufacturer);
+                    if (drugManufacturer != null) {
+                        subGraph.add(drugManufacturer);
+                        dmSet.add(drugManufacturer);
+                    }
                 }
                 drug.setDrugManufacturers(dmSet);
             }
@@ -458,8 +462,10 @@ public class DrugBank {
                     if (drugPrice.getCost() == null) {
                         drugPrice.setCost(getValue(obj, DrugBankFields.TEXT));
                     }
-                    subGraph.add(drugPrice);
-                    dmSet.add(drugPrice);
+                    if (drugPrice != null) {
+                        subGraph.add(drugPrice);
+                        dmSet.add(drugPrice);
+                    }
                 }
                 drug.setDrugPrices(dmSet);
             }
@@ -491,8 +497,10 @@ public class DrugBank {
                         organism = new Organism();
                         organism.setOrganismShortLabel(organismName);
                     }
-                    subGraph.add(organism);
-                    drug.setOrganismComponents(organism);
+                    if (organism != null) {
+                        subGraph.add(organism);
+                        drug.setOrganismComponents(organism);
+                    }
                 }
             }
         }
@@ -533,8 +541,10 @@ public class DrugBank {
                     if (dosage.getStrength() == null) {
                         dosage.setStrength(getList(dosageObj, DrugBankFields.STRENGTH).toString());
                     }
-                    subGraph.add(dosage);
-                    dosageSet.add(dosage);
+                    if (dosage != null) {
+                        subGraph.add(dosage);
+                        dosageSet.add(dosage);
+                    }
                 }
                 drug.setDrugDosage(dosageSet);
             }
@@ -574,8 +584,10 @@ public class DrugBank {
                     if (drugPatent.getExpiryDate() == null) {
                         drugPatent.setExpiryDate(getValue((BasicDBObject)obj, DrugBankFields.EXPIRES));
                     }
-                    subGraph.add(drugPatent);
-                    dpSet.add(drugPatent);
+                    if (drugPatent != null) {
+                        subGraph.add(drugPatent);
+                        dpSet.add(drugPatent);
+                    }
                 }
                 drug.setDrugPatent(dpSet);
             }
@@ -613,8 +625,10 @@ public class DrugBank {
                     if (drugInteraction.getDrugDescription() == null) {
                         drugInteraction.setDrugDescription(getValue((BasicDBObject)obj, DrugBankFields.DESCRIPTION));
                     }
-                    subGraph.add(drugInteraction);
-                    dpSet.add(drugInteraction);
+                    if (drugInteraction != null) {
+                        subGraph.add(drugInteraction);
+                        dpSet.add(drugInteraction);
+                    }
                 }
                 drug.setDrugInteraction(dpSet);
             }
@@ -648,10 +662,11 @@ public class DrugBank {
                                 protein = UniprotUtil.getProtein(uniprotId, subGraph);
                                 //protein.setUniprot(uniprotId);
                             }
-                            drug.setProteinRelation(protein);
+                            if (protein != null) {
+                                drug.setProteinRelation(protein);
+                            }
                         }
                     }
-
                 }
             }
         }
