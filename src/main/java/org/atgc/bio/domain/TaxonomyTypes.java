@@ -2012,7 +2012,9 @@ public enum TaxonomyTypes {
 
     COMMENT_TYPE("Comment Type"),
     COMMENT_STATUS("Comment Status"),
-    COMMENT_ID("Comment Id");
+    COMMENT_ID("Comment Id"),
+
+    LOG_P("logP");
 
     private final String value;
 
