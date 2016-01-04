@@ -329,9 +329,8 @@ public enum BioTypes {
     
     CITATION("Citation"),
     
-    PROTEIN_ANNOTATION_COMMENT("ProteinAnnotationComment");
-
-
+    PROTEIN_ANNOTATION_COMMENT("ProteinAnnotationComment"),
+    LOG_P("LogP");
 
     private final String value;
 
