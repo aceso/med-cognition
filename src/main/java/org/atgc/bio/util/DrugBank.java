@@ -644,12 +644,11 @@ public class DrugBank {
                             Object bioEntity = subGraph.getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, uniprotId);
                             Protein protein = (Protein) bioEntity;
                             if (protein == null) {
-                                protein = new Protein();
-                                protein.setUniprot(uniprotId);
+                                //protein = new Protein();
+                                protein = UniprotUtil.getProtein(uniprotId, subGraph);
+                                //protein.setUniprot(uniprotId);
                             }
                             drug.setProteinRelation(protein);
-                        } else {
-                            //
                         }
                     }
 
