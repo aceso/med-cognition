@@ -213,7 +213,8 @@ public class CompoundKey {
                 }
             }
         }
-        try { 
+        try {
+            log.info("compoundKey=" + indexName + ", field1=" + val1 + ", field2=" + val2 + ",field3=" + val3);
             return new CompoundKey(indexName, field1, field2, field3, val1, val2, val3);
         } catch(IllegalArgumentException e) {
             log.error("CompoundKey " + e.toString(), e);

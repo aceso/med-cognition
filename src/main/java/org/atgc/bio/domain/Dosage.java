@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
 
  * @author jtanisha-ee
  */
-@UniqueCompoundIndex(indexName=IndexNames.DOSAGE, field1=BioFields.CHEMICAL_ABSTRACT_ID, field2=BioFields.FORM, field3=BioFields.NONE)
+@UniqueCompoundIndex(indexName=IndexNames.DOSAGE_ID, field1=BioFields.CHEMICAL_ABSTRACT_ID, field2=BioFields.FORM, field3=BioFields.NONE)
 @BioEntity (bioType = BioTypes.DOSAGE)
 public class Dosage {
     
@@ -55,31 +55,36 @@ public class Dosage {
     private Long id;
     
     /**
+	* BioFields have to match with the memberVariable
     * cas identifier. Eg. "120993-53-5"
     */
     @PartKey
     @Visual
     @Taxonomy (rbClass=TaxonomyTypes.CHEMICAL_ABSTRACT_ID, rbField=BioFields.CHEMICAL_ABSTRACT_ID)
-    private String casId;
+    private String chemicalAbstractId;
 
    /**
     * form of dosage
     */
     @Visual
     @PartKey
-    private String form;
+	@Taxonomy (rbClass=TaxonomyTypes.FORM, rbField=BioFields.FORM)
+	private String form;
     
     @Indexed (indexName=IndexNames.NODE_TYPE)
     @Taxonomy (rbClass=TaxonomyTypes.NODE_TYPE, rbField=BioFields.NODE_TYPE)
     private String nodeType = BioTypes.DOSAGE.toString();
+
+    @NonIndexed
+	private String route;
 
     /**
      * Get the Chemical Abstract Id.
      * 
      * @return String 
      */
-    public String getCasId() {
-        return casId;
+    public String getChemicalAbstractId() {
+        return chemicalAbstractId;
     }
 
     /**
@@ -87,8 +92,9 @@ public class Dosage {
      * 
      * @param casId 
      */
-    public void setCasId(String casId) {
-        this.casId = casId;
+    public void setChemicalAbstractId(String casId) {
+		log.info("casid=" + casId);
+        this.chemicalAbstractId = casId;
     }
 
     /**
@@ -221,9 +227,7 @@ public class Dosage {
     @Indexed (indexName=IndexNames.DOSAGE_MESSAGE)
     @Taxonomy (rbClass=TaxonomyTypes.DOSAGE_MESSAGE, rbField=BioFields.MESSAGE)
     private String message;
-    
-    @NonIndexed
-    private String route;
+
     
     @NonIndexed
     private String strength;

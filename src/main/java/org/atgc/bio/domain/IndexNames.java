@@ -102,7 +102,7 @@ public enum IndexNames {
     /**
      * Compound key index for Dosage 
      */
-    DOSAGE("Dosage"),
+    DOSAGE_ID("DosageId"),
     
     /**
      * Drug affected organisms
