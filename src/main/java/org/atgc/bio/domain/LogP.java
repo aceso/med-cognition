@@ -43,7 +43,7 @@ public class LogP {
     
     @Indexed(indexName=IndexNames.LOG_P)
     @Taxonomy (rbClass=TaxonomyTypes.LOG_P, rbField=BioFields.LOG_P)
-    private String logP;
+    private float logP;
     
     @Indexed (indexName=IndexNames.NODE_TYPE)
     @Taxonomy (rbClass=TaxonomyTypes.NODE_TYPE, rbField=BioFields.NODE_TYPE)
@@ -80,7 +80,7 @@ public class LogP {
      * 
      * @return String 
      */
-    public String getLogP() {
+    public float getLogP() {
         return logP;
     }
 
@@ -89,7 +89,7 @@ public class LogP {
      * 
      * @param logP
      */
-    public void setLogP(String logP) {
+    public void setLogP(float logP) {
         this.logP = logP;
     }
     
