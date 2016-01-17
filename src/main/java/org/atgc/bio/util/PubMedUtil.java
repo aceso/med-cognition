@@ -191,7 +191,8 @@ public class PubMedUtil {
      */
     private static BasicDBList getBasicDBList(DBObject dbObject, PubmedMongoFields field) {
         if (dbObject == null || field == null) {
-            throw new IllegalArgumentException("dbObject is null for field ");
+            log.error("dbObject is null for field ");
+            return null;
         }
         Object obj = dbObject.get(field.toString());
         if (obj == null) {
