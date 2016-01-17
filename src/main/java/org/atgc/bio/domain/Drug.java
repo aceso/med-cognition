@@ -55,9 +55,6 @@ public class Drug {
     private String drugDescription;
 
 
-
-
-
     /**
      * Evidence Codes with respect to Gene
      * Evidence codes qualify the assertions with respect to the association of a gene to a disease or compound term by

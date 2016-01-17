@@ -1987,6 +1987,8 @@ public enum TaxonomyTypes {
 
     MOLECULAR_WEIGHT("Molecular Weight"),
 
+    MOLECULAR_FORMULA("Molecular Formula"),
+
     SEQUENCE_LENGTH("Sequence Length"),
 
     /**
@@ -2014,7 +2016,15 @@ public enum TaxonomyTypes {
     COMMENT_STATUS("Comment Status"),
     COMMENT_ID("Comment Id"),
 
-    LOG_P("logP");
+    LOG_P("LogP"),
+    LOG_S("LogS"),
+    WATER_SOLUBILITY("Water Solubility"),
+    MONOISOTOPIC_WEIGHT("Monoisotopic Weight"),
+
+
+
+    ;
+
 
     private final String value;
 
