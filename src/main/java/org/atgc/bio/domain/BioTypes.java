@@ -343,6 +343,11 @@ public enum BioTypes {
     MOLECULAR_FORMULA("MolecularFormula"),
 
     WATER_SOLUBILITY("WaterSolubility"),
+
+    PKA_ACIDIC("PkaAcidic"),
+
+    PKA_BASIC("PkaBasic"),
+
     ;
 
     private final String value;

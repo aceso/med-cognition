@@ -1172,6 +1172,10 @@ public enum IndexNames {
 
     REFRACTIVITY("Refractivity"),
 
+    PKA_ACIDIC("PkaAcidic"),
+
+    PKA_BASIC("PkaBasic"),
+
     ;
     
     private final String value;

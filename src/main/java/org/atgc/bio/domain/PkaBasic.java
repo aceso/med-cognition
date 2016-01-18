@@ -11,13 +11,15 @@ import org.atgc.bio.meta.*;
 
 /**
  *
- "kind" : "pKa (strongest acidic)",
- "value" : "15.99",
+ {
+ "kind" : "pKa (strongest basic)",
+ "value" : "7.2",
  "source" : "ChemAxon"
+ },
  *
  */
-@BioEntity (bioType = BioTypes.PKA_ACIDIC)
-public class PkaAcidic {
+@BioEntity (bioType = BioTypes.PKA_BASIC)
+public class PkaBasic {
     
     protected static Log log = LogFactory.getLog(new Object().getClass());
 
@@ -31,13 +33,13 @@ public class PkaAcidic {
     @Taxonomy(rbClass=TaxonomyTypes.DRUG_NAME, rbField=BioFields.DRUG_NAME)
     private String drugName;
     
-    @Indexed(indexName=IndexNames.PKA_ACIDIC)
-    @Taxonomy (rbClass=TaxonomyTypes.PKA_ACIDIC, rbField=BioFields.PKA_ACIDIC)
-    private float pkaAcidic;
+    @Indexed(indexName=IndexNames.PKA_BASIC)
+    @Taxonomy (rbClass=TaxonomyTypes.PKA_BASIC, rbField=BioFields.PKA_BASIC)
+    private float pkaBasic;
     
     @Indexed (indexName=IndexNames.NODE_TYPE)
     @Taxonomy (rbClass=TaxonomyTypes.NODE_TYPE, rbField=BioFields.NODE_TYPE)
-    private String nodeType = BioTypes.PKA_ACIDIC.toString();
+    private String nodeType = BioTypes.PKA_BASIC.toString();
 
     @Indexed(indexName=IndexNames.SOURCE)
     @Taxonomy (rbClass=TaxonomyTypes.SOURCE, rbField=BioFields.SOURCE)
@@ -70,17 +72,17 @@ public class PkaAcidic {
      *
      * @return float
      */
-    public float getPkaAcidic() {
-        return pkaAcidic;
+    public float getPkaBasic() {
+        return pkaBasic;
     }
 
     /**
-     * pKa acidic value of drug
+     * pKa Basic value of drug
      * 
      * @param value
      */
-    public void setPkaAcidic(float value) {
-        this.pkaAcidic = value;
+    public void setPkaBasic(float value) {
+        this.pkaBasic = value;
     }
     
 }

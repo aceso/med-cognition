@@ -2022,6 +2022,11 @@ public enum TaxonomyTypes {
     MONOISOTOPIC_WEIGHT("Monoisotopic Weight"),
     REFRACTIVITY("Refractivity"),
 
+    PKA_ACIDIC("PKA Acidic"),
+
+    PKA_BASIC("PKA Basic"),
+
+
 
 
     ;
