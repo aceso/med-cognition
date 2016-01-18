@@ -11,17 +11,13 @@ import org.atgc.bio.meta.*;
 
 /**
  *
- {
- "kind" : "logS",
- "value" : "-4.4",
+ "kind" : "Water Solubility",
+ "value" : "2.23e-02 g/l",
  "source" : "ALOGPS"
- },
-
  *
  */
-@UniqueCompoundIndex(indexName=IndexNames.LOG_S, field1=BioFields.DRUG_NAME, field2=BioFields.SOURCE, field3=BioFields.NONE)
-@BioEntity (bioType = BioTypes.LOG_S)
-public class LogS {
+@BioEntity (bioType = BioTypes.WATER_SOLUBILITY)
+public class WaterSolubility {
     
     protected static Log log = LogFactory.getLog(new Object().getClass());
 
@@ -31,25 +27,20 @@ public class LogS {
    /**
     * drugName
     */
-    @PartKey
     @Visual
     @UniquelyIndexed(indexName=IndexNames.DRUG_NAME)
     @Taxonomy(rbClass=TaxonomyTypes.DRUG_NAME, rbField=BioFields.DRUG_NAME)
     private String drugName;
     
-    @Indexed(indexName=IndexNames.LOG_S_VALUE)
-    @Taxonomy (rbClass=TaxonomyTypes.LOG_S_VALUE, rbField=BioFields.LOG_S)
-    private float logS;
+    @Indexed(indexName=IndexNames.WATER_SOLUBILITY)
+    @Taxonomy (rbClass=TaxonomyTypes.WATER_SOLUBILITY, rbField=BioFields.WATER_SOLUBILITY)
+    private float waterSolubility;
     
     @Indexed (indexName=IndexNames.NODE_TYPE)
     @Taxonomy (rbClass=TaxonomyTypes.NODE_TYPE, rbField=BioFields.NODE_TYPE)
-    private String nodeType = BioTypes.LOG_S.toString();
+    private String nodeType = BioTypes.WATER_SOLUBILITY.toString();
 
-
-    @PartKey
-    @Visual
-    @Indexed(indexName=IndexNames.SOURCE)
-    @Taxonomy (rbClass=TaxonomyTypes.SOURCE, rbField=BioFields.SOURCE)
+    @NonIndexed
     private String source;
 
     @NodeLabel
@@ -76,21 +67,20 @@ public class LogS {
     }
 
     /**
-     * Url of the drug packager.
-     * 
+     * get Water Solubility
      * @return String 
      */
-    public float getLogS() {
-        return logS;
+    public float getWaterSolubility() {
+        return waterSolubility;
     }
 
     /**
-     * logS fo the drug
+     * waterSolubility fo the drug
      * 
-     * @param logS
+     * @param waterSolubility
      */
-    public void setLogS(float logS) {
-        this.logS = logS;
+    public void setWaterSolubility(float waterSolubility) {
+        this.waterSolubility = waterSolubility;
     }
     
 }

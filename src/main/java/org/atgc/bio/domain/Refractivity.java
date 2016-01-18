@@ -11,17 +11,14 @@ import org.atgc.bio.meta.*;
 
 /**
  *
- {
- "kind" : "logS",
- "value" : "-4.4",
- "source" : "ALOGPS"
- },
-
+ *
+ "kind" : "Refractivity",
+ "value" : "152.42",
+ "source" : "ChemAxon
  *
  */
-@UniqueCompoundIndex(indexName=IndexNames.LOG_S, field1=BioFields.DRUG_NAME, field2=BioFields.SOURCE, field3=BioFields.NONE)
-@BioEntity (bioType = BioTypes.LOG_S)
-public class LogS {
+@BioEntity (bioType = BioTypes.REFRACTIVITY)
+public class Refractivity {
     
     protected static Log log = LogFactory.getLog(new Object().getClass());
 
@@ -31,25 +28,20 @@ public class LogS {
    /**
     * drugName
     */
-    @PartKey
     @Visual
     @UniquelyIndexed(indexName=IndexNames.DRUG_NAME)
     @Taxonomy(rbClass=TaxonomyTypes.DRUG_NAME, rbField=BioFields.DRUG_NAME)
     private String drugName;
     
-    @Indexed(indexName=IndexNames.LOG_S_VALUE)
-    @Taxonomy (rbClass=TaxonomyTypes.LOG_S_VALUE, rbField=BioFields.LOG_S)
-    private float logS;
+    @Indexed(indexName=IndexNames.REFRACTIVITY)
+    @Taxonomy (rbClass=TaxonomyTypes.REFRACTIVITY, rbField=BioFields.REFRACTIVITY)
+    private float refractivity;
     
     @Indexed (indexName=IndexNames.NODE_TYPE)
     @Taxonomy (rbClass=TaxonomyTypes.NODE_TYPE, rbField=BioFields.NODE_TYPE)
-    private String nodeType = BioTypes.LOG_S.toString();
+    private String nodeType = BioTypes.REFRACTIVITY.toString();
 
-
-    @PartKey
-    @Visual
-    @Indexed(indexName=IndexNames.SOURCE)
-    @Taxonomy (rbClass=TaxonomyTypes.SOURCE, rbField=BioFields.SOURCE)
+    @NonIndexed
     private String source;
 
     @NodeLabel
@@ -76,21 +68,20 @@ public class LogS {
     }
 
     /**
-     * Url of the drug packager.
-     * 
+     * get refractvity
      * @return String 
      */
-    public float getLogS() {
-        return logS;
+    public float getRefractivity() {
+        return refractivity;
     }
 
     /**
-     * logS fo the drug
+     * refractivity the drug
      * 
-     * @param logS
+     * @param refractivity
      */
-    public void setLogS(float logS) {
-        this.logS = logS;
+    public void setRefractivity(float refractivity) {
+        this.refractivity = refractivity;
     }
     
 }

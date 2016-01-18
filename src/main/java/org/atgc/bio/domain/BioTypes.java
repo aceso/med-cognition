@@ -332,9 +332,9 @@ public enum BioTypes {
     PROTEIN_ANNOTATION_COMMENT("ProteinAnnotationComment"),
     LOG_P("LogP"),
 
-    LOG_S("LogS"),
+    REFRACTIVITY("Refractivity"),
 
-    WATER_SOLUBILITY("WaterSolubility"),
+    LOG_S("LogS"),
 
     MOLECULAR_WEIGHT("MolecularWeight"),
 
@@ -342,6 +342,7 @@ public enum BioTypes {
 
     MOLECULAR_FORMULA("MolecularFormula"),
 
+    WATER_SOLUBILITY("WaterSolubility"),
     ;
 
     private final String value;

@@ -25,42 +25,49 @@ import org.atgc.bio.meta.*;
 
  *
  */
+@UniqueCompoundIndex(indexName=IndexNames.LOG_P, field1=BioFields.DRUG_NAME, field2=BioFields.SOURCE, field3=BioFields.NONE)
 @BioEntity (bioType = BioTypes.LOG_P)
 public class LogP {
-    
+
     protected static Log log = LogFactory.getLog(new Object().getClass());
 
     @GraphId
     private Long id;
 
-   /**
-    * drugName
-    */
+    /**
+     * drugName
+     */
+    @PartKey
     @Visual
-    @UniquelyIndexed(indexName=IndexNames.DRUG_NAME)
-    @Taxonomy(rbClass=TaxonomyTypes.DRUG_NAME, rbField=BioFields.DRUG_NAME)
+    @Indexed(indexName = IndexNames.DRUG_NAME)
+    @Taxonomy(rbClass = TaxonomyTypes.DRUG_NAME, rbField = BioFields.DRUG_NAME)
     private String drugName;
-    
-    @Indexed(indexName=IndexNames.LOG_P)
-    @Taxonomy (rbClass=TaxonomyTypes.LOG_P, rbField=BioFields.LOG_P)
-    private float logP;
-    
-    @Indexed (indexName=IndexNames.NODE_TYPE)
-    @Taxonomy (rbClass=TaxonomyTypes.NODE_TYPE, rbField=BioFields.NODE_TYPE)
-    private String nodeType = BioTypes.LOG_P.toString();
 
-    @NonIndexed
+    @Indexed(indexName = IndexNames.LOG_P_VALUE)
+    @Taxonomy(rbClass = TaxonomyTypes.LOG_P_VALUE, rbField = BioFields.LOG_P)
+    private float logP;
+
+    @PartKey
+    @Visual
+    @Indexed(indexName = IndexNames.SOURCE)
+    @Taxonomy(rbClass = TaxonomyTypes.SOURCE, rbField = BioFields.SOURCE)
     private String source;
 
+
+    @Indexed(indexName = IndexNames.NODE_TYPE)
+    @Taxonomy(rbClass = TaxonomyTypes.NODE_TYPE, rbField = BioFields.NODE_TYPE)
+    private String nodeType = BioTypes.LOG_P.toString();
+
+
     @NodeLabel
-    @Indexed (indexName=IndexNames.MESSAGE)
-    @Taxonomy (rbClass=TaxonomyTypes.MESSAGE, rbField=BioFields.MESSAGE)
+    @Indexed(indexName = IndexNames.MESSAGE)
+    @Taxonomy(rbClass = TaxonomyTypes.MESSAGE, rbField = BioFields.MESSAGE)
     private String message;
 
     /**
      * Name of the drug
-     * 
-     * @return String 
+     *
+     * @return String
      */
     public String getDrugName() {
         return drugName;
@@ -68,7 +75,7 @@ public class LogP {
 
     /**
      * set name of the drug
-     * 
+     *
      * @param drugName
      */
     public void setDrugName(String drugName) {
@@ -77,8 +84,8 @@ public class LogP {
 
     /**
      * Url of the drug packager.
-     * 
-     * @return String 
+     *
+     * @return String
      */
     public float getLogP() {
         return logP;
@@ -86,11 +93,24 @@ public class LogP {
 
     /**
      * logP fo the drug
-     * 
+     *
      * @param logP
      */
     public void setLogP(float logP) {
         this.logP = logP;
     }
-    
+
+    /**
+     * source (ChemAxon, ALOGPS)
+     */
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    /**
+     * source
+     */
+    public String getSource() {
+        return this.source;
+    }
 }

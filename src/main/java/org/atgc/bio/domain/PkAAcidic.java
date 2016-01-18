@@ -21,7 +21,7 @@ import org.atgc.bio.meta.*;
  */
 @UniqueCompoundIndex(indexName=IndexNames.LOG_S, field1=BioFields.DRUG_NAME, field2=BioFields.SOURCE, field3=BioFields.NONE)
 @BioEntity (bioType = BioTypes.LOG_S)
-public class LogS {
+public class PkAAcidic {
     
     protected static Log log = LogFactory.getLog(new Object().getClass());
 

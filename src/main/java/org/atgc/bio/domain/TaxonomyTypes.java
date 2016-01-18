@@ -2016,10 +2016,11 @@ public enum TaxonomyTypes {
     COMMENT_STATUS("Comment Status"),
     COMMENT_ID("Comment Id"),
 
-    LOG_P("LogP"),
-    LOG_S("LogS"),
+    LOG_S_VALUE("LogS Value"),
+    LOG_P_VALUE("LogP Value"),
     WATER_SOLUBILITY("Water Solubility"),
     MONOISOTOPIC_WEIGHT("Monoisotopic Weight"),
+    REFRACTIVITY("Refractivity"),
 
 
 

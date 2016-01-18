@@ -1127,6 +1127,8 @@ public enum IndexNames {
 
     MOLECULAR_WEIGHT("MolecularWeight"),
 
+    MOLECULAR_FORMULA("MolecularFormula"),
+
     MONOISOTOPIC_WEIGHT("MonoisotopicWeight"),
 
     SEQUENCE_LENGTH("SequenceLength"),
@@ -1159,10 +1161,16 @@ public enum IndexNames {
     UNIT("unit"),
 
     LOG_P("logP"),
+
     LOG_S("logS"),
+
+    LOG_P_VALUE("logPValue"),
+
+    LOG_S_VALUE("logSValue"),
 
     WATER_SOLUBILITY("waterSolubility"),
 
+    REFRACTIVITY("Refractivity"),
 
     ;
     
