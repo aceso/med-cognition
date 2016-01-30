@@ -17,7 +17,7 @@ import org.atgc.bio.meta.*;
  *
  */
 @BioEntity (bioType = BioTypes.PKA_ACIDIC)
-public class PkaAcidic {
+public class PkAAcidic {
     
     protected static Log log = LogFactory.getLog(new Object().getClass());
 
