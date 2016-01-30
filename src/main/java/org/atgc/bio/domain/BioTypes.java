@@ -330,7 +330,25 @@ public enum BioTypes {
     CITATION("Citation"),
     
     PROTEIN_ANNOTATION_COMMENT("ProteinAnnotationComment"),
-    LOG_P("LogP");
+    LOG_P("LogP"),
+
+    REFRACTIVITY("Refractivity"),
+
+    LOG_S("LogS"),
+
+    MOLECULAR_WEIGHT("MolecularWeight"),
+
+    MONOISOTOPIC_WEIGHT("MonoisotopicWeight"),
+
+    MOLECULAR_FORMULA("MolecularFormula"),
+
+    WATER_SOLUBILITY("WaterSolubility"),
+
+    PKA_ACIDIC("PkaAcidic"),
+
+    PKA_BASIC("PkaBasic"),
+
+    ;
 
     private final String value;
 

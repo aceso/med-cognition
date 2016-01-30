@@ -123,7 +123,7 @@ import org.apache.commons.logging.LogFactory;
 
  * @author jtanisha-ee
  */
-@UniqueCompoundIndex(indexName=IndexNames.DRUG_PRICE, field1=BioFields.CHEMICAL_ABSTRACT_ID, field2=BioFields.DESCRIPTION, field3=BioFields.NONE)
+@UniqueCompoundIndex(indexName=IndexNames.DRUG_PRICE, field1=BioFields.CHEMICAL_ABSTRACT_ID, field2=BioFields.DRUG_NAME, field3=BioFields.DESCRIPTION)
 @BioEntity (bioType = BioTypes.DRUG_PRICE)
 public class DrugPrice {
 
