@@ -6,7 +6,7 @@ package org.atgc.bio.util;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import org.atgc.bio.BioEntityTypes;
+import org.atgc.bio.BioEntityType;
 import org.atgc.bio.NCIDiseaseUtil;
 import org.atgc.neo4j.NeoUtil;
 import java.io.UnsupportedEncodingException;
@@ -118,7 +118,7 @@ public class NCIDisease_Direct {
     
     private static void setup() throws URISyntaxException {
         //graphDb = new GraphDatabaseFactory().newEmbeddedDatabase( DB_PATH );
-        graphDb = new RestGraphDatabase(BioEntityTypes.DB_URL);
+        graphDb = new RestGraphDatabase(BioEntityType.DB_URL.toString());
         registerShutdownHook(graphDb);
     }    
    
@@ -139,14 +139,14 @@ public class NCIDisease_Direct {
             //System.out.println("i =" + i);
             Map map = diseaseIter.next(); 
             //System.out.println("map =" + map.toString());           
-            String geneSymbol = (String)map.get(BioEntityTypes.HUGO_GENE_SYMBOL);
+            String geneSymbol = (String)map.get(BioEntityType.HUGO_GENE_SYMBOL);
             
             //System.out.println("geneSymbol =" + geneSymbol);
             try {
                 Node diseaseNode = createGeneNode(geneSymbol);
-                //NCIDiseaseUtil.updateImportStatus(geneSymbol, BioEntityTypes.DONE);
+                //NCIDiseaseUtil.updateImportStatus(geneSymbol, BioEntityType.DONE);
             } catch (Exception e) {
-                //NCIDiseaseUtil.updateImportStatus(geneSymbol,  BioEntityTypes.ERROR);
+                //NCIDiseaseUtil.updateImportStatus(geneSymbol,  BioEntityType.ERROR);
                 throw new RuntimeException(e);
             } 
         }  
@@ -180,8 +180,8 @@ public class NCIDisease_Direct {
                     if ((rel = NeoUtil.checkCreateRel(geneNode, seqNode, HAS_SEQUENCE)) != null) {
                         rel.setProperty(MESSAGE, HAS_SEQUENCE);
                     }
-                    if (!seqNode.hasProperty(BioEntityTypes.NODE_TYPE)) {
-                        seqNode.setProperty(BioEntityTypes.NODE_TYPE, BioEntityTypes.RB_SEQNODE);
+                    if (!seqNode.hasProperty(BioEntityType.NODE_TYPE.toString())) {
+                        seqNode.setProperty(BioEntityType.NODE_TYPE.toString(), BioEntityType.RB_SEQNODE);
                     }
                     if (!seqNode.hasProperty(HGNCID) && hgncId != null) {
                         seqNode.setProperty(HGNCID, hgncId);    
@@ -227,7 +227,7 @@ public class NCIDisease_Direct {
                         
                         Relationship rel = geneNode.createRelationshipTo(seqNode, DynamicRelationshipType.withName(URLEncoder.encode(HAS_SEQUENCE, "UTF-8")));
                         rel.setProperty(MESSAGE, HAS_SEQUENCE );
-                        seqNode.setProperty(BioEntityTypes.NODE_TYPE, BioEntityTypes.RB_SEQNODE);
+                        seqNode.setProperty(BioEntityType.NODE_TYPE.toString(), BioEntityType.RB_SEQNODE);
                     }
                 }
                 return proteinId;
@@ -301,8 +301,8 @@ public class NCIDisease_Direct {
                                         if (!diseaseNode.hasProperty(NCI_DISEASE_CONCEPT_CODE))  {
                                             diseaseNode.setProperty(NCI_DISEASE_CONCEPT_CODE,  diseaseConceptCode);
                                         }
-                                        if (!diseaseNode.hasProperty(BioEntityTypes.NODE_TYPE)) {
-                                            diseaseNode.setProperty(BioEntityTypes.NODE_TYPE, BioEntityTypes.RB_DISEASE);
+                                        if (!diseaseNode.hasProperty(BioEntityType.NODE_TYPE.toString())) {
+                                            diseaseNode.setProperty(BioEntityType.NODE_TYPE.toString(), BioEntityType.RB_DISEASE);
                                         }
                                         if (!diseaseNode.hasProperty(MATCHED_DISEASE_TERM) && diseaseTerm != null) {
                                             diseaseNode.setProperty(MATCHED_DISEASE_TERM, diseaseTerm);
@@ -370,7 +370,7 @@ public class NCIDisease_Direct {
                                     if (diseaseNode != null) {
                                         diseaseIdIndex.add(diseaseNode, DISEASE_ID,  diseaseConceptCode);
                                         diseaseNode.setProperty(NCI_DISEASE_CONCEPT_CODE,  diseaseConceptCode);
-                                        diseaseNode.setProperty(BioEntityTypes.NODE_TYPE,  BioEntityTypes.RB_DISEASE);
+                                        diseaseNode.setProperty(BioEntityType.NODE_TYPE.toString(),  BioEntityType.RB_DISEASE);
                                         if (diseaseTerm != null) {
                                            diseaseNode.setProperty(MESSAGE, diseaseTerm);
                                            diseaseNode.setProperty(MATCHED_DISEASE_TERM, diseaseTerm);
@@ -450,8 +450,8 @@ public class NCIDisease_Direct {
                                             if (!pubMedNode.hasProperty(PUBMEDID)) {
                                                 pubMedNode.setProperty(PUBMEDID,  pubMedId);
                                             }
-                                            if (!pubMedNode.hasProperty(BioEntityTypes.NODE_TYPE)) {
-                                                pubMedNode.setProperty(BioEntityTypes.NODE_TYPE, BioEntityTypes.RB_PUBMED);
+                                            if (!pubMedNode.hasProperty(BioEntityType.NODE_TYPE.toString())) {
+                                                pubMedNode.setProperty(BioEntityType.NODE_TYPE.toString(), BioEntityType.RB_PUBMED);
                                             }
                                             if (!pubMedNode.hasProperty(MESSAGE)) {
                                                 pubMedNode.setProperty(MESSAGE, pubMedId);
@@ -472,7 +472,7 @@ public class NCIDisease_Direct {
                                         pubMedNode = graphDb.createNode();
                                         if (pubMedNode != null) {
                                             pubMedIdIndex.add(pubMedNode, PUBMEDID,  pubMedId);  
-                                            pubMedNode.setProperty(BioEntityTypes.NODE_TYPE, BioEntityTypes.RB_PUBMED);
+                                            pubMedNode.setProperty(BioEntityType.NODE_TYPE.toString(), BioEntityType.RB_PUBMED);
                                             pubMedNode.setProperty(PUBMEDID,  pubMedId);
                                             pubMedNode.setProperty(MESSAGE, pubMedId);
                                             Relationship rel = null;
@@ -504,8 +504,8 @@ public class NCIDisease_Direct {
                                 if  (pNodeHits != null && pNodeHits.size() > 0) { // i node already exists
                                     organismNode = pNodeHits.getSingle();  
                                     if (organismNode != null) {
-                                        if (!organismNode.hasProperty(BioEntityTypes.NODE_TYPE)) {
-                                            organismNode.setProperty(BioEntityTypes.NODE_TYPE, ORGANISM);  
+                                        if (!organismNode.hasProperty(BioEntityType.NODE_TYPE.toString())) {
+                                            organismNode.setProperty(BioEntityType.NODE_TYPE.toString(), ORGANISM);
                                         }
                                         if (!organismNode.hasProperty(ORGANISMID)) {
                                             organismNode.setProperty(ORGANISMID, organism);
@@ -533,7 +533,7 @@ public class NCIDisease_Direct {
                                 organismNode = graphDb.createNode();
                                 if (organismNode != null) {
                                     organismIdIndex.add(organismNode, ORGANISMID,  organism);  
-                                    organismNode.setProperty(BioEntityTypes.NODE_TYPE, BioEntityTypes.RB_ORGANISM);
+                                    organismNode.setProperty(BioEntityType.NODE_TYPE.toString(), BioEntityType.RB_ORGANISM);
                                     organismNode.setProperty(MESSAGE, organism);
                                     organismNode.setProperty(ORGANISMID, organism);
                                     Relationship rel = null;
@@ -612,8 +612,8 @@ public class NCIDisease_Direct {
                                             if (!statementNode.hasProperty(STATEMENT_ID)) {
                                                 statementNode.setProperty(STATEMENT_ID, statementId);
                                             }
-                                            if (!statementNode.hasProperty(BioEntityTypes.NODE_TYPE)) {
-                                                statementNode.setProperty(BioEntityTypes.NODE_TYPE, BioEntityTypes.RB_STATEMENT);
+                                            if (!statementNode.hasProperty(BioEntityType.NODE_TYPE.toString())) {
+                                                statementNode.setProperty(BioEntityType.NODE_TYPE.toString(), BioEntityType.RB_STATEMENT);
                                             }
                                         //ask jtanisha-ee about this
                                             if (!statementNode.hasProperty(MESSAGE)) {
@@ -645,7 +645,7 @@ public class NCIDisease_Direct {
                                         statementNode = graphDb.createNode();
                                         if (statementNode != null) {
                                             statementIdIndex.add(statementNode, STATEMENT_ID,  statementId);  
-                                            statementNode.setProperty(BioEntityTypes.NODE_TYPE,  BioEntityTypes.RB_STATEMENT);
+                                            statementNode.setProperty(BioEntityType.NODE_TYPE.toString(),  BioEntityType.RB_STATEMENT);
                                             //ask jtanisha-ee about this
                                             statementNode.setProperty(MESSAGE,  msgStatement);
                                             statementNode.setProperty(STATEMENT_ID, statementId);
@@ -708,8 +708,8 @@ public class NCIDisease_Direct {
                     if (!proteinNode.hasProperty(MESSAGE)) {
                         proteinNode.setProperty(MESSAGE, proteinId);
                     }
-                    if (!proteinNode.hasProperty(BioEntityTypes.NODE_TYPE)) {
-                        proteinNode.setProperty(BioEntityTypes.NODE_TYPE, BioEntityTypes.RB_PROTEIN);
+                    if (!proteinNode.hasProperty(BioEntityType.NODE_TYPE.toString())) {
+                        proteinNode.setProperty(BioEntityType.NODE_TYPE.toString(), BioEntityType.RB_PROTEIN);
                     }
                     Relationship rel = null;
                     if  ((rel = NeoUtil.checkCreateRel(geneNode, proteinNode,  HAS_PROTEIN)) !=  null ) {
@@ -720,7 +720,7 @@ public class NCIDisease_Direct {
                    proteinIdIndex.add(proteinNode, UNIPROT,  proteinId);  
                    proteinNode.setProperty(UNIPROT, proteinId);
                    proteinNode.setProperty(MESSAGE, proteinId);
-                   proteinNode.setProperty(BioEntityTypes.NODE_TYPE, BioEntityTypes.RB_PROTEIN);                   
+                   proteinNode.setProperty(BioEntityType.NODE_TYPE.toString(), BioEntityType.RB_PROTEIN);
                    Relationship rel = geneNode.createRelationshipTo(proteinNode, DynamicRelationshipType.withName(URLEncoder.encode(HAS_PROTEIN, "UTF-8")));
                    rel.setProperty(MESSAGE,  HAS_PROTEIN);
                 }
@@ -759,8 +759,8 @@ public class NCIDisease_Direct {
                         //System.out.println(name + " could not retrieve geneNode from index");
                         return null;
                     }
-                    if (!geneNode.hasProperty(BioEntityTypes.NODE_TYPE )) {
-                    geneNode.setProperty(BioEntityTypes.NODE_TYPE,  BioEntityTypes.RB_GENE);
+                    if (!geneNode.hasProperty(BioEntityType.NODE_TYPE.toString())) {
+                    geneNode.setProperty(BioEntityType.NODE_TYPE.toString(),  BioEntityType.RB_GENE);
                     }
                     if (!geneNode.hasProperty(MESSAGE) && geneSymbol != null) {
                     geneNode.setProperty(MESSAGE,  geneSymbol);
@@ -779,7 +779,7 @@ public class NCIDisease_Direct {
                     if (geneSymbol != null) {
                         geneidIndex.add(geneNode,GENEID, geneSymbol);  
                          
-                        geneNode.setProperty(BioEntityTypes.NODE_TYPE,  BioEntityTypes.RB_GENE);
+                        geneNode.setProperty(BioEntityType.NODE_TYPE.toString(),  BioEntityType.RB_GENE);
                         if (geneSymbol != null) {
                             geneNode.setProperty(HUGO_GENE_SYMBOL, geneSymbol );
                             geneNode.setProperty(MESSAGE, geneSymbol );
