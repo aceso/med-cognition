@@ -61,15 +61,15 @@ public class NCIDisease {
                 BasicDBObject result = (BasicDBObject)dbCursor.next();
                 log.info("result = " + result);
                 
-                //String geneSymbol = (String)result.get(BioEntityTypes.ZERO_HUGO_GENE_SYMBOL.toString());    
+                //String geneSymbol = (String)result.get(BioEntityType.ZERO_HUGO_GENE_SYMBOL.toString());
                 //log.info("******* geneSymbol =" + geneSymbol);
                 // if (geneSymbol.equals("CACNA1G")) {
                     try {
                         processDisease(result);
                         //break;
-                        //NCIDiseaseUtil.updateImportStatus(geneSymbol, BioEntityTypes.DONE);
+                        //NCIDiseaseUtil.updateImportStatus(geneSymbol, BioEntityType.DONE);
                     } catch (Exception e) {
-                        //NCIDiseaseUtil.updateImportStatus(geneSymbol,  BioEntityTypes.ERROR);
+                        //NCIDiseaseUtil.updateImportStatus(geneSymbol,  BioEntityType.ERROR);
                         throw new RuntimeException(e);
                     }
                 //} 
@@ -82,7 +82,7 @@ public class NCIDisease {
     
      /**
     * Retrieves UniprotID identifier
-    * @param molecule
+    * @param obj
     * @return 
     */
    private static String getUniProtId(BasicDBObject obj) {
@@ -155,7 +155,7 @@ public class NCIDisease {
      * 
      * @param sequence
      * @param protein
-     * @param gene
+     * @param geneSet
      * @param subGraph
      * @throws java.io.IOException
      * @throws java.net.URISyntaxException 
@@ -496,7 +496,8 @@ public class NCIDisease {
     /**
      * getOrganism()
      * Organism : "Human"
-     * @param organism
+     * @param dbObj
+     * @param subGraph
      * @return {@link Organism}
      */
     public static Organism getOrganism(BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException {
@@ -541,9 +542,8 @@ public class NCIDisease {
      * processSentence()
      * 
      * @param zeroObject
-     * @param gene {@link Gene}
-     * @param protein {@link Protein}
-     * @param subGraph {@link SubGraph}
+     * @param geneSet {@link Gene}
+     * @param subGraph {@link Subgraph}
      * @throws java.io.IOException
      * @throws java.net.URISyntaxException
      * @throws NoSuchFieldException
