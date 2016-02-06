@@ -31,7 +31,7 @@ public class Disease {
     private Long id;
 
     /*
-     * For generic terms like cancer, check with Manoj on this
+     * For generic terms like cancer, check
      */
     @UniquelyIndexed (indexName=IndexNames.DISEASE_TERM)
     @Taxonomy(rbClass=TaxonomyTypes.DISEASE_TERM, rbField=BioFields.DISEASE_TERM)
