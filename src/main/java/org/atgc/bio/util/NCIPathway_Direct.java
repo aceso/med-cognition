@@ -6,7 +6,7 @@ package org.atgc.bio.util;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import org.atgc.bio.BioEntityTypes;
+import org.atgc.bio.BioEntityType;
 import org.atgc.bio.NCIPathwayUtil;
 import org.atgc.neo4j.NeoUtil;
 import java.io.UnsupportedEncodingException;
@@ -154,7 +154,7 @@ public class NCIPathway_Direct {
     
     private static void setup() throws URISyntaxException {
         //graphDb = new GraphDatabaseFactory().newEmbeddedDatabase( DB_PATH );
-        graphDb = new RestGraphDatabase(BioEntityTypes.DB_URL);
+        graphDb = new RestGraphDatabase(BioEntityType.DB_URL.toString());
         
         registerShutdownHook( graphDb );
     }
@@ -194,21 +194,21 @@ public class NCIPathway_Direct {
     
     private static String getNodeType(String moleculeType) {
         
-        if (moleculeType.equals(BioEntityTypes.RB_COMPLEX)) {
-            return BioEntityTypes.RB_COMPLEX;
-        } else if (moleculeType.equals(BioEntityTypes.RB_COMPOUND)) {
-            return BioEntityTypes.RB_COMPOUND;
-        } else if (moleculeType.equals(BioEntityTypes.RB_MOLECULE_TYPE)) {
-            return BioEntityTypes.RB_MOLECULE_TYPE;
-        } else if (moleculeType.equals(BioEntityTypes.RB_PROTEIN)) {
-            return BioEntityTypes.RB_PROTEIN;
-        } else if (moleculeType.equals(BioEntityTypes.RB_RNA)) {
-            return BioEntityTypes.RB_RNA;
+        if (moleculeType.equals(BioEntityType.RB_COMPLEX)) {
+            return BioEntityType.RB_COMPLEX.toString();
+        } else if (moleculeType.equals(BioEntityType.RB_COMPOUND)) {
+            return BioEntityType.RB_COMPOUND.toString();
+        } else if (moleculeType.equals(BioEntityType.RB_MOLECULE_TYPE)) {
+            return BioEntityType.RB_MOLECULE_TYPE.toString();
+        } else if (moleculeType.equals(BioEntityType.RB_PROTEIN)) {
+            return BioEntityType.RB_PROTEIN.toString();
+        } else if (moleculeType.equals(BioEntityType.RB_RNA)) {
+            return BioEntityType.RB_RNA.toString();
         }
         return null;
     }
     
-    /**
+    /*
      * This method checks if a relationship of a specific type exists between startNode and endNode
      * If it exists, it returns null, if it does not exist, then it creates it and returns the relationship.
      * 
@@ -817,7 +817,7 @@ public class NCIPathway_Direct {
         while (iter.hasNext()) {
             BasicDBObject molecule = (BasicDBObject)iter.next();
             String moleculeType = molecule.getString(MOLECULE_TYPE);
-            String moleculeId = molecule.getString(BioEntityTypes.NCI_ID);
+            String moleculeId = molecule.getString(BioEntityType.NCI_ID.toString());
             //Transaction tx = graphDb.beginTx();
             Node moleculeNode = null;
             try {
@@ -830,8 +830,8 @@ public class NCIPathway_Direct {
                     if (!moleculeNode.hasProperty(MOLECULE_TYPE)) {
                         moleculeNode.setProperty(MOLECULE_TYPE, moleculeType);
                     }
-                    if (!moleculeNode.hasProperty(BioEntityTypes.NODE_TYPE)) {
-                        moleculeNode.setProperty(BioEntityTypes.NODE_TYPE, getNodeType(moleculeType));
+                    if (!moleculeNode.hasProperty(BioEntityType.NODE_TYPE.toString())) {
+                        moleculeNode.setProperty(BioEntityType.NODE_TYPE.toString(), getNodeType(moleculeType));
                     }
                 } else { // if output node does not exist
                     moleculeNode = graphDb.createNode();
@@ -839,7 +839,7 @@ public class NCIPathway_Direct {
                     moleculeIdIndex.add(moleculeNode, MOLECULE_IDREF, moleculeId); 
                     moleculeNode.setProperty(MOLECULE_TYPE, moleculeType);
                     moleculeIdIndex.add(moleculeNode, MOLECULE_TYPE, moleculeType);
-                    moleculeNode.setProperty(BioEntityTypes.NODE_TYPE, getNodeType(moleculeType));
+                    moleculeNode.setProperty(BioEntityType.NODE_TYPE.toString(), getNodeType(moleculeType));
                 }
                 pNodeHits.close();
                 //tx.success();
@@ -1143,7 +1143,7 @@ public class NCIPathway_Direct {
             BasicDBObject interaction = (BasicDBObject)iter.next();
             //System.out.println("interaction = " + interaction.toString());
             String interactionType = interaction.getString(INTERACTION_TYPE);
-            String interactionId = interaction.getString(BioEntityTypes.NCI_ID);
+            String interactionId = interaction.getString(BioEntityType.NCI_ID.toString());
             
             BasicDBList evidenceList = ((BasicDBList)interaction.get(EVIDENCE_LIST));
             Iterator evidenceIter = evidenceList.iterator();
@@ -1256,7 +1256,7 @@ public class NCIPathway_Direct {
     // Mutating operations go here
                 pathwayNode = graphDb.createNode();
                 //System.out.println("pathwayId = " + pathwayInfo.get((Object)NCI_PATHWAY_ID));
-                pathwayNode.setProperty(PATHWAY_ID, pathwayInfo.get((Object)BioEntityTypes.NCI_ID) );
+                pathwayNode.setProperty(PATHWAY_ID, pathwayInfo.get((Object)BioEntityType.NCI_ID) );
                 pathwayNode.setProperty(SUBNET, pathwayInfo.get((Object)SUBNET));
                 pathwayNode.setProperty(ORGANISM, pathwayInfo.get((Object)ORGANISM));
                 if (organismIndex == null) {
@@ -1265,7 +1265,7 @@ public class NCIPathway_Direct {
                 organismIndex.add(pathwayNode, ORGANISM, pathwayInfo.get((Object)ORGANISM));
                 pathwayNode.setProperty(LONG_NAME, pathwayInfo.get((Object)LONG_NAME));
                 pathwayNode.setProperty(SHORT_NAME, pathwayInfo.get((Object)SHORT_NAME));
-                String sourceId = (String)((Map)pathwayInfo.get((Object)SOURCE)).get(BioEntityTypes.NCI_ID);
+                String sourceId = (String)((Map)pathwayInfo.get((Object)SOURCE)).get(BioEntityType.NCI_ID);
 
                 pathwayNode.setProperty(SOURCE_ID, sourceId);
                 String sourceText = (String)((Map)pathwayInfo.get((Object)SOURCE)).get(NCI_SOURCE_TEXT);
