@@ -25,9 +25,9 @@ public class ClassAnnotationsTest {
 
     public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException {
         Author author = new Author();
-        author.setForeName("Manoj");
-        author.setInitials("P");
-        author.setLastName("Joshi");
+        author.setForeName("John");
+        author.setInitials("K");
+        author.setLastName("Doe");
         BioFields field1 = null;
         BioFields field2 = null;
         BioFields field3 = null;

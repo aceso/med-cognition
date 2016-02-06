@@ -800,7 +800,7 @@ public class NCIDisease_Direct {
                 gNodeHits.close();
                 tx.success();
             } catch (Exception e) {
-                // do we need to close gNodeHits.close() here: ask Manoj
+                // do we need to close gNodeHits.close() here:
                 //System.out.println("exception caught");
                 tx.failure();
                 e.printStackTrace();

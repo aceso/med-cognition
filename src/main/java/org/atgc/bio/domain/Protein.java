@@ -51,6 +51,10 @@ import org.neo4j.graphdb.Direction;
  * default to uniprot ID. Currently not supporting NON_INDEXED.
  * 
  * Uniprot fields are added.
+ *
+ * index:  http://localhost:7474/db/data/index/node/
+ * for uniprotId:   key:  uniprot  value = P20809
+ * Relationships:  http://localhost:7474/db/data/node/15959/relationships/out/INHIBITS&FOUND_EVIDENCE_IN&AUTHOR&CONTAINS&EVIDENCE_IN_COMMENT&IS_A&DRUG_PACKAGED_BY&DRUG_PRICED_AS&DRUG_MANUFACTURED_BY&HAS_DRUG_DOSAGE&DRUG_INTERACTS_WITH&REFERENCES_PATENT&ISSUE_OF_JOURNAL&HAS_AUTHOR&PUBLISHED_IN_JOURNAL&REFERENCES_PUBMED&HAS_TAXONOMY&GENE_RELATION&EXHIBITS_ONTOLOGY&HAS_ONTOLOGIES&GENE_ON_RIGHT&GENE_ON_LEFT&OVERLAPPING_GENE
  * 
  * @author jtanisha-ee
  * @see BioEntity
@@ -61,22 +65,20 @@ import org.neo4j.graphdb.Direction;
 @BioEntity(bioType = BioTypes.PROTEIN)
 public class Protein {
 
-    /**
-     *
-     */
     protected static Log log = LogFactory.getLog(new Object().getClass());
 
     @GraphId
     private Long id;
     /**
      * primaryUniprotAccession :  : "Q99JG7"
+     *
+     *
      */
     @UniquelyIndexed(indexName=IndexNames.UNIPROT_ID)
     @Taxonomy(rbClass=TaxonomyTypes.UNIPROT_ID, rbField=BioFields.UNIPROT_ID)  // this is value
     private String uniprot;
 
     @Indexed(indexName = IndexNames.NODE_TYPE)
-    //private String nodeType = BioTypes.PROTEIN.toString();
     private String nodeType = TemplateUtils.extractBioType(this).toString();
 
     @NodeLabel
@@ -129,7 +131,7 @@ public class Protein {
      *  "2: Evidence at transcript level" "4: Predicted"
      *  
      */
-    /* Smitha
+    /*
     @FullTextIndexed (indexName=IndexNames.UNIPROT_PROTEIN_EVIDENCE_EXISTENCE)
     @Taxonomy (rbClass=TaxonomyTypes.UNIPROT_PROTEIN_EVIDENCE_EXISTENCE, rbField=BioFields.PROTEIN_EVIDENCE_EXISTENCE)
     private String proteinEvidenceExistence;

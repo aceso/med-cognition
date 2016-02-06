@@ -1261,7 +1261,7 @@ public class NCIBioCartaPathway {
    
    
    /*
-    * Discuss this with Manoj regarding which approach is better for late binding
+    * Discuss regarding which approach is better for late binding
     * for relationships when a moleculeIdRef is given, it could be either PartProtein or Protein
     * Do we do conversion from PartProtein to Protein or 
     * should we create a temporary BioMolecule and create relationships with the temporary one

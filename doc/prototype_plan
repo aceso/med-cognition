@@ -1,12 +1,8 @@
 Goal
 To create a drug analysis study that will work with cancer drugs.
 
-Timeline
-August 31st, 2012
-
 Tasks
 
-Manoj
 complete intact
 complete clinicaltrails.gov
 fix ncipathway for bioentities and indexing
@@ -18,7 +14,6 @@ write analytics code related to drug molecule
 create study presentation software
 investigate pubmed UIMA for NLP
 
-Smitha
 complete biocarta
 covert all the existing code to object models
 add ncidrug and disease concept code

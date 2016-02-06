@@ -32,7 +32,6 @@ public class Drug {
     private Long id;
 
     /*
-     * For generic terms like cancer, check with Manoj on this
      * NCI_DRUG_TERM, name in drugbank are mapped to Drug -> drugName.
      */
     @UniquelyIndexed(indexName=IndexNames.DRUG_NAME)

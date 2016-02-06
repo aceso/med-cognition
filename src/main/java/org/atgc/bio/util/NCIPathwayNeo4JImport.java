@@ -1350,7 +1350,6 @@ public class NCIPathwayNeo4JImport {
    
    
    /*
-    * Discuss this with Manoj regarding which approach is better for late binding
     * for relationships when a moleculeIdRef is given, it could be either PartProtein or Protein
     * Do we do conversion from PartProtein to Protein or 
     * should we create a temporary BioMolecule and create relationships with the temporary one
@@ -1359,7 +1358,7 @@ public class NCIPathwayNeo4JImport {
     * Delete the BioMolecule relationship from complex and namedProtein.
     * 
     * If Protein and PartProtein extend from BioMolecule, how does it affect the Annotation field
-    * and relationships in RedbasinTemplate. Does Annotation pull up the superclass and subclass
+    * and relationships. Does Annotation pull up the superclass and subclass
     * fields and relationships?
     * 
     */

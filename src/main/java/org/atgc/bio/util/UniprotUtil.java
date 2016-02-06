@@ -525,7 +525,6 @@ public class UniprotUtil {
      * @param subGraph
      */
     public static void setOrganismNames(Protein protein, BasicDBObject dbObj, Subgraph subGraph) {
-        // check with manoj if it makes sense to set this
     }
 
 
@@ -543,7 +542,6 @@ public class UniprotUtil {
      * },
      * </pre>
      * keywords
-     * check with Manoj on this if these are multiple words
      * @param dbObj
      */
     public static String getKeywords(BasicDBObject dbObj) {
@@ -578,7 +576,6 @@ public class UniprotUtil {
      * ],
      *
      * setGeneRelationship
-     * check with Manoj if we should set relationship with multiple genes
      * or with only one
      * @param protein
      * @param dbObj
