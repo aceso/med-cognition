@@ -19,7 +19,6 @@ import java.util.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpException;
-import org.atgc.bio.BioEntityTypes;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.NCICompoundUtil;
 import org.atgc.bio.NciFields;
@@ -52,13 +51,13 @@ public class NCICompound {
         for (int i = 0; i < drugList.size(); i++ ) { 
             Map map = drugIter.next(); 
             //System.out.println("map =" + map.toString());           
-            String geneSymbol = (String)map.get(BioEntityTypes.HUGO_GENE_SYMBOL);
+            String geneSymbol = (String)map.get(BioEntityType.HUGO_GENE_SYMBOL);
             log.info("******* geneSymbol =" + geneSymbol);
             try {
                 processCompound(geneSymbol);
-                //NCICompoundUtil.updateImportStatus(geneSymbol, BioEntityTypes.DONE);
+                //NCICompoundUtil.updateImportStatus(geneSymbol, BioEntityType.DONE);
             } catch (Exception e) {
-                //NCICompoundUtil.updateImportStatus(geneSymbol,  BioEntityTypes.ERROR);
+                //NCICompoundUtil.updateImportStatus(geneSymbol,  BioEntityType.ERROR);
                 throw new RuntimeException(e);
             }
             
