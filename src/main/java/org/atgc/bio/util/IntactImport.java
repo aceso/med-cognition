@@ -95,7 +95,7 @@ public class IntactImport {
     protected static Log log = LogFactory.getLog(IntactImport.class);
 
     private static void setup() throws URISyntaxException {
-        graphDb = new RestGraphDatabase(BioEntityTypes.DB_URL);
+        graphDb = new RestGraphDatabase(BioEntityType.DB_URL.toString());
         registerShutdownHook( graphDb );
     }
 
@@ -965,9 +965,9 @@ public class IntactImport {
             try {
                 subgraph = processIntact((DBObject)e);
                 RedbasinTemplate.saveSubgraph(subgraph);
-                InTactUtil.updateImportStatus(intactId, BioEntityTypes.DONE);
+                InTactUtil.updateImportStatus(intactId, BioEntityType.DONE.toString());
             } catch (UnknownHostException ex) {
-                InTactUtil.updateImportStatus(intactId, BioEntityTypes.ERROR);
+                InTactUtil.updateImportStatus(intactId, BioEntityType.ERROR.toString());
                 throw ex;
             }
             break;
