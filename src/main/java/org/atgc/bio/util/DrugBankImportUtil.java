@@ -18,7 +18,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.atgc.bio.ImportCollectionNames;
 
-import java.net.URISyntaxException;
 import java.util.*;
 
 
@@ -27,9 +26,9 @@ import java.util.*;
  * uses Compound bio entity
  *
  */
-public class DrugBank {
+public class DrugBankImportUtil {
 
-    protected static Log log = LogFactory.getLog(DrugBank.class);
+    protected static Log log = LogFactory.getLog(DrugBankImportUtil.class);
 
     /**
      * This method uses compound collection and adds genesymbol, importstatus
