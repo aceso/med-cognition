@@ -2652,7 +2652,7 @@ public class NCIPathwayNeo4JImport {
      * @return 
      */
     private static String getSourceId(BasicDBObject pathwayInfo) {
-        return (String)((BasicDBObject)pathwayInfo.get(getStringFromEnum(NciPathwayFields.SOURCE))).get(BioEntityTypes.NCI_ID);
+        return (String)((BasicDBObject)pathwayInfo.get(getStringFromEnum(NciPathwayFields.SOURCE))).get(BioEntityType.NCI_ID);
     }
     
     private static String getSource(BasicDBObject pathwayInfo) {
