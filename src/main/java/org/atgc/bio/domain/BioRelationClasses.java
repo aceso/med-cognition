@@ -17,7 +17,7 @@ import java.util.Map;
  * in variable paths. Also if the vendors change the package library, the
  * path names can change, but the class names will usually stay the same.
  *
- * Check places like {@link BioRelation} and {@link org.atgc.bio.meta.Feature} for
+ * Check places like {@link BioRelation} and {@link Feature} for
  * usage of this code. The isValid method in BioRelation in particular
  * uses this enum.
  *
