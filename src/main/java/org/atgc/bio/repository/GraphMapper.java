@@ -20,7 +20,7 @@ import org.neo4j.graphdb.RelationshipType;
 
 /**
  *
- * Use {@link BioFields} to fetch {@link BioEntity}  and Nodes
+ * Use {@link org.atgc.bio.BioFields} to fetch {@link BioEntity}  and Nodes
  * @author jtanisha-ee
  *
  */
