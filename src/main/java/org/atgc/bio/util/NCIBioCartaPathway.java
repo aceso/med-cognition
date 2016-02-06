@@ -276,7 +276,7 @@ public class NCIBioCartaPathway {
     * sets the protein names including 
     * {@link BioFields#UNIPROT_ID} {@link BioFields#PROTEIN_PREFERRED_SYMBOL} and alias
     * @param molecule
-    * @param protein 
+    * @param partProtein
     */
    private static void setPartProteinNames(BasicDBObject molecule, PartProtein partProtein) {
        log.info("setPartProteinNames()");
@@ -375,7 +375,7 @@ public class NCIBioCartaPathway {
    
    /**
     * Retrieves Uniprot identifier
-    * @param molecule
+    * @param obj
     * @return 
     */
    private static String getUniProtId(BasicDBObject obj) {
@@ -555,9 +555,9 @@ public class NCIBioCartaPathway {
     * If not found, searches in key {@link BioFields#MOLECULE_IDREF} and value (moleculeIdRef)
     * @param subGraph
     * @param bioType {@link BioTypes}
-    * @param molecule - used to retrieve moleculeIdRef
-    * @param key  {@link BioFields}
-    * @param value
+    * @param key1 - used to retrieve moleculeIdRef
+    * @param value1
+    * @param value2
     * @return
     * @throws NoSuchFieldException
     * @throws IllegalArgumentException
@@ -658,7 +658,7 @@ public class NCIBioCartaPathway {
    
    /**
     * 
-    * @param protein - {@link Protein}
+    * @param partProtein - {@link Protein}
     * @param molecule - contains information about PTMExpression {@link BasicDBObject}
     * @param subGraph - {@link Subgraph}
     * set PTMValues - sets PTM Expression values associated with it
@@ -786,7 +786,6 @@ public class NCIBioCartaPathway {
     * @param complex {@link Complex}
     * @param endEntity {@link Protein} {@link PartProtein}
     * @param labelMap
-    * @param template 
     */
    private static void createComplexComponentLabelRelationship(Complex complex, BioEntity endEntity, Map labelMap) {
        log.info("createComplexComponentLabelRelationship()");
@@ -820,7 +819,6 @@ public class NCIBioCartaPathway {
     * createComplexComponentRelationship
     * @param complex {@link Complex}
     * @param endEntity {@link Protein} or {@link PartProtein}
-    * @param template 
     */
    private static void createComplexComponentRelationship(Complex complex, BioEntity endEntity) {
        log.info("createComplexComponentRelationship()");
@@ -839,7 +837,7 @@ public class NCIBioCartaPathway {
     * @param complex -  {@link Complex}
     * @param endEntity - {@link PartProtein} or {@link Protein}
     * @param molecule - contains information about PTMExpression
-    * @param template - RedbasinTemplate
+    * @param subGraph - RedbasinTemplate
     * @throws IllegalArgumentException
     * @throws IllegalAccessException
     * @throws ClassNotFoundException
@@ -1128,7 +1126,7 @@ public class NCIBioCartaPathway {
     * Checks and sets family member 
     * @param dbObj {@link BasicDBObject}
     * @param startEntity {@link NamedProtein}
-    * @param template {@link RedbasinTemplate}
+    * @param subGraph {@link Subgraph}
     * 
     * MoleculeIdRef is referred to:
     * FamilyMemberList: {@link NciPathwayFields#MEMBER_MOLECULE_IDREF}
@@ -1243,8 +1241,8 @@ public class NCIBioCartaPathway {
     * getBioEntity
     * @param key {@link BioFields}
     * @param value  value of the BioField
-    * @param subgraph {@link Subgraph}
-    * @return
+    * @param subGraph {@link Subgraph}
+    * @return Object
     * @throws ClassNotFoundException
     * @throws IllegalAccessException
     * @throws InstantiationException 
@@ -1349,7 +1347,7 @@ public class NCIBioCartaPathway {
     * process molecule list
     * @param pathwayEntity
     * @param moleculeList
-    * @param template
+    * @param subGraph
     * @throws UnsupportedEncodingException 
     */
    private static void processMoleculeList(NciPathway pathwayEntity, BasicDBList moleculeList, Subgraph subGraph) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NoSuchMethodException, InvocationTargetException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NotFoundException, NoSuchFieldException {       
@@ -1611,8 +1609,7 @@ public class NCIBioCartaPathway {
     * setAlias in a complex
     * @param dbObj
     * @param complex
-    * @param template
-    * @throws IllegalAccessException 
+    * @throws IllegalAccessException
     */
    private static void setAlias(BasicDBObject dbObj, Complex complex) throws IllegalAccessException, URISyntaxException {         
         complex.setAliases(getAlias(dbObj));
@@ -1623,8 +1620,7 @@ public class NCIBioCartaPathway {
     * setGeneOntology in a complex
     * @param dbObj
     * @param complex
-    * @param template
-    * @throws IllegalAccessException 
+    * @throws IllegalAccessException
     */
    private static void setGeneOntology(BasicDBObject dbObj, Complex complex) throws IllegalAccessException, URISyntaxException {
        String goId = getGeneOntology(dbObj);
@@ -1638,7 +1634,8 @@ public class NCIBioCartaPathway {
      * use BioFields for BioEntity to extract the fields.
      * For BasicDBObject 
      * @param pathwayEntity
-     * @param interaction
+     * @param interactionObj
+     * @param subGraph
      * @return 
      */
     public static NciPathwayInteraction createInteractionEntity(NciPathway pathwayEntity, BasicDBObject interactionObj, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, NotFoundException, InvocationTargetException, Exception {
@@ -1735,8 +1732,8 @@ public class NCIBioCartaPathway {
     /**
      * setPubMedRelation
      * @param obj
+     * @param entity
      * @param pubMedEntity
-     * @param endEntity
      * @throws NoSuchMethodException
      * @throws IllegalAccessException
      * @throws IllegalArgumentException
@@ -1781,7 +1778,8 @@ public class NCIBioCartaPathway {
      * We also make the interaction node isPartOf the pathway as a relationship
      * 
      * @param pathwayEntity 
-     * @param interactionList 
+     * @param dbList
+     * @param subGraph
      */
     public static void processOrganismList(NciPathway pathwayEntity, BasicDBList dbList, Subgraph subGraph) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, NotFoundException, InvocationTargetException {
         //BasicDBList interactionList = (BasicDBList)pathwayInfo.get((Object)INTERACTION_LIST);
@@ -1957,8 +1955,9 @@ public class NCIBioCartaPathway {
      * the interaction.
      * 
      * @param pathwayEntity
-     * @param entity
-     * @param interaction
+     * @param interactionEntity
+     * @param interactionDbObj
+      * @param subGraph
      * 
      */
     public static void processInteractionComponentList(NciPathway pathwayEntity, NciPathwayInteraction interactionEntity, BasicDBObject interactionDbObj, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException {            
@@ -2069,10 +2068,10 @@ public class NCIBioCartaPathway {
      * the same. If it was in cytoplasm, it will continue to be in cytoplasm irrespective of
      * the interaction.
      * 
-     * @param pathwayEntity
      * @parma interactionEntity
      * @param moleculeList
      * @param outputMoleculeList
+      * @param subGraph
      */
     public static void createInteractionComponent(NciPathwayInteraction interactionEntity, List moleculeList, List outputMoleculeList, Subgraph subGraph) throws UnsupportedEncodingException, ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException {
          log.info("createInteractionComponent()");
@@ -2133,7 +2132,8 @@ public class NCIBioCartaPathway {
     /**
      * Retrieves molecule entity 
      * {@link BioFields#ROLE_TYPE} 
-     * @param molecule
+     * @param objMap
+     * @param subGraph
      * @return
      * @throws ClassNotFoundException
      * @throws IllegalAccessException
@@ -2159,7 +2159,6 @@ public class NCIBioCartaPathway {
     /**
      * This creates relationship for InteractionComponentOncoRelation
      *
-     * @param interactionId {@link BioFields#INTERACTION_ID}
      * @param startRole {@link BioFields#ROLE_TYPE}
      * @param endRole {@link BioFields#ROLE_TYPE}
      * @param startEntity {{@link BioEntity} {@link StartNode}
@@ -2212,7 +2211,7 @@ public class NCIBioCartaPathway {
     
     /**
      * 
-     * @param interaction
+     * @param list
      * @param field 
      * @return 
      */
@@ -2318,7 +2317,7 @@ public class NCIBioCartaPathway {
     
     /**
      * returns organism ncbitaxid
-     * @param BasicDBObject
+     * @param obj
      * @return String
      */
     private static String getNcbiTaxId(BasicDBObject obj) {
@@ -2333,7 +2332,7 @@ public class NCIBioCartaPathway {
      * @return 
      */
     private static String getSourceId(BasicDBObject pathwayInfo) {
-        return (String)((BasicDBObject)pathwayInfo.get(getStringFromEnum(NciPathwayFields.SOURCE))).get(BioEntityTypes.NCI_ID);
+        return (String)((BasicDBObject)pathwayInfo.get(getStringFromEnum(NciPathwayFields.SOURCE))).get(BioEntityType.NCI_ID);
     }
     
     private static String getSource(BasicDBObject pathwayInfo) {
