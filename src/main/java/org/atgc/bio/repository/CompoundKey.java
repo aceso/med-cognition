@@ -156,13 +156,13 @@ public class CompoundKey {
                 } else {
                     anno = f.getAnnotation(PartRelation.class);
                     if (anno != null) {
-                        //log.info("field name = " + f.getName());
-                        //log.info("this node type = " + t.getClass().getSimpleName());
+                        log.info("field name = " + f.getName());
+                        log.info("this node type = " + t.getClass().getSimpleName());
                         Object endNode = ((BioRelation)f.get(t)).getEndNode();
                         if (endNode != null) {
-                            //log.info("endNode type = " + endNode.getClass().getSimpleName());
+                            log.info("endNode type = " + endNode.getClass().getSimpleName());
                             String val = ((PartRelation) anno).field().toString();
-                            //log.info("val from PartRelation = " + val);
+                            log.info("val from PartRelation = " + val);
                             Field f1 = endNode.getClass().getDeclaredField(val);
                             f1.setAccessible(true);
                             val1 = (String) f1.get(endNode);
