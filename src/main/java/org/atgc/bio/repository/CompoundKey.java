@@ -156,8 +156,7 @@ public class CompoundKey {
                 } else {
                     anno = f.getAnnotation(PartRelation.class);
                     if (anno != null) {
-                        log.info("field name = " + f.getName());
-                        log.info("this node type = " + t.getClass().getSimpleName());
+                        log.info("field name = " + f.getName() + ", this node type = " + t.getClass().getSimpleName());
                         Object endNode = ((BioRelation)f.get(t)).getEndNode();
                         if (endNode != null) {
                             log.info("endNode type = " + endNode.getClass().getSimpleName());
