@@ -16,8 +16,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.NCICompoundUtil;
@@ -32,7 +32,7 @@ import org.neo4j.graphdb.*;
  */
 public class NCICompound {
     
-    protected static Log log = LogFactory.getLog(NCICompound.class);
+    protected static Logger log = LogManager.getLogger(NCICompound.class);
 
      /**
      * This method uses compound collection and adds genesymbol, importstatus 

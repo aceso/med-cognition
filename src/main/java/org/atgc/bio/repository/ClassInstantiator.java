@@ -6,8 +6,8 @@ package org.atgc.bio.repository;
 
 import org.atgc.bio.domain.Protein;
 import org.atgc.bio.meta.PackagePath;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -15,7 +15,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ClassInstantiator {
     
-    protected static Log log = LogFactory.getLog(RedbasinTemplate.class);
+    protected static Logger log = LogManager.getLogger(RedbasinTemplate.class);
     
     public Object createInstance(String className) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class c = Class.forName(PackagePath.DOMAIN + className);

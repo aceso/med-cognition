@@ -50,8 +50,8 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 import org.atgc.bio.*;
 import org.neo4j.graphdb.Node;
@@ -92,7 +92,7 @@ public class IntactImport {
     public static final String NCI_VALUE = "@value";
     public static final String MESSAGE = "message";
 
-    protected static Log log = LogFactory.getLog(IntactImport.class);
+    protected static Logger log = LogManager.getLogger(IntactImport.class);
 
     private static void setup() throws URISyntaxException {
         graphDb = new RestGraphDatabase(BioEntityType.DB_URL.toString());

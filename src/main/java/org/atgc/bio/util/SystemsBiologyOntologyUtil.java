@@ -17,8 +17,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 import org.atgc.bio.ImportCollectionNames;
 import org.atgc.bio.SystemsBiologyOntologyFields;
@@ -33,7 +33,7 @@ import org.neo4j.graphdb.NotFoundException;
  */
 public class SystemsBiologyOntologyUtil {
     
-    protected static Log log = LogFactory.getLog(SystemsBiologyOntologyUtil.class);
+    protected static Logger log = LogManager.getLogger(SystemsBiologyOntologyUtil.class);
     
     private static MongoCollection getCollection(ImportCollectionNames coll) throws UnknownHostException {
         MongoUtil mongoUtil = MongoUtil.getInstance();

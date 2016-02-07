@@ -11,8 +11,8 @@ import org.atgc.bio.meta.BioEntity;
 import org.atgc.bio.domain.BioRelation;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.Relationship;
@@ -26,7 +26,7 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public class GraphMapper {
 
-    protected static Log log = LogFactory.getLog(GraphMapper.class);
+    protected static Logger log = LogManager.getLogger(GraphMapper.class);
     private static final String BIO_RELATION = "BioRelation";
 
 

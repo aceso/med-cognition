@@ -22,8 +22,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 
 
@@ -80,7 +80,7 @@ public class NCIPathwayNeo4JImport {
     private static final Map<String, GeneOntology> processMap = new HashMap<String, GeneOntology>();
     private static final Map<String, GeneOntology> functionMap = new HashMap<String, GeneOntology>();
     // private static ArrayList<RelQueue> foundList, notFoundList;  
-    protected static Log log = LogFactory.getLog(NCIPathwayNeo4JImport.class);
+    protected static Logger log = LogManager.getLogger(NCIPathwayNeo4JImport.class);
     private static ArrayList <RelQueue>relGraph;
     
     /**

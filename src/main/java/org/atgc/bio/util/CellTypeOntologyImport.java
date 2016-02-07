@@ -15,8 +15,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.ImportCollectionNames;
 import org.neo4j.graphdb.NotFoundException;
 
@@ -25,9 +25,8 @@ import org.neo4j.graphdb.NotFoundException;
  * @author jtanisha-ee
  */
 public class CellTypeOntologyImport {
-    
-    protected static Log log = LogFactory.getLog(CellTypeOntologyImport.class);
-    
+
+    private static final Logger log = LogManager.getLogger(CellTypeOntologyImport.class);
     private static String cellIdPattern = "CL:";
     private static String goIdPattern = "GO:";
     private static String prIdPattern = "PR:";

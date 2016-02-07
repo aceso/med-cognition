@@ -12,8 +12,8 @@ import org.atgc.bio.meta.NodeLabel;
 import org.atgc.bio.meta.Taxonomy;
 import org.atgc.bio.meta.UniquelyIndexed;
 import org.atgc.bio.repository.TemplateUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Experiment dataset in an Intact Experiment. For example:
@@ -86,7 +86,7 @@ import org.apache.commons.logging.LogFactory;
 @BioEntity(bioType = BioTypes.EXPERIMENT_DATASET)
 public class ExperimentDataset {
 
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(ExperimentDataset.class);
 
     /**
      * This is required for the graph database.

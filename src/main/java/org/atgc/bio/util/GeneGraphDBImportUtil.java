@@ -32,8 +32,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 import org.neo4j.graphdb.NotFoundException;
 
@@ -50,7 +50,7 @@ import org.neo4j.graphdb.NotFoundException;
  */
 public class GeneGraphDBImportUtil {
 
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(GeneGraphDBImportUtil.class);
 
     private static MongoCollection getCollection(ImportCollectionNames coll) throws UnknownHostException {
         MongoUtil mongoUtil = MongoUtil.getInstance();

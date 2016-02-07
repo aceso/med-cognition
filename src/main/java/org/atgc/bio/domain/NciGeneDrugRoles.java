@@ -7,8 +7,8 @@ package org.atgc.bio.domain;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.BioEntity;
 
 /**
@@ -99,7 +99,7 @@ public enum NciGeneDrugRoles {
 
 
     private final String value;
-    protected static Log log = LogFactory.getLog(NciGeneDrugRoles.class);
+    protected static Logger log = LogManager.getLogger(NciGeneDrugRoles.class);
 
     private static final Map<String, NciGeneDrugRoles> stringToEnum = new HashMap<String, NciGeneDrugRoles>();
 

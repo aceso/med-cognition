@@ -8,8 +8,8 @@ import org.atgc.bio.BioFields;
 
 import java.util.Collection;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.*;
 import org.neo4j.graphdb.Direction;
 
@@ -23,7 +23,7 @@ import org.neo4j.graphdb.Direction;
 @BioEntity(bioType = BioTypes.SYMPTOM_ONTOLOGY)
 public class UnitOntology {
     	
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(UnitOntology.class);
    
     @GraphId
     private Long id;

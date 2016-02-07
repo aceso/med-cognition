@@ -12,8 +12,8 @@ import org.atgc.bio.repository.Subgraph;
 import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.NotFoundException;
 
 /**
@@ -26,9 +26,9 @@ import org.neo4j.graphdb.NotFoundException;
  * @author jtanisha-ee
  */
 public class CytoplasmOntologyUtil {
-    
-    protected static Log log = LogFactory.getLog(CytoplasmOntology.class);
-   
+
+    private static final Logger log = LogManager.getLogger(CytoplasmOntologyUtil.class);
+
     /*
      private static MongoCollection getCollection(ImportCollectionNames coll) throws UnknownHostException {
         MongoUtil mongoUtil = MongoUtil.getInstance();

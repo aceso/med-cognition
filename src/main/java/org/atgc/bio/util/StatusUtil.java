@@ -12,8 +12,8 @@ import org.atgc.mongod.MongoUtil;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Date;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Update and check the status of Neo4J import. Everytime a BioEntity is
@@ -37,7 +37,7 @@ import org.apache.commons.logging.LogFactory;
  * @param <T>
  */
 public class StatusUtil<T> {
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(StatusUtil.class);
 
     private static BasicDBObject getObjectQuery(String key, String id) {
         BasicDBObject queryMap = new BasicDBObject();
@@ -161,14 +161,21 @@ public class StatusUtil<T> {
             }
             key = primaryKey.getKey();
             value = primaryKey.getValue();
+            log.info("primary key obtained");
         } else {
             key = compoundKey.getKey();
             value = compoundKey.getValue();
+            log.info("secondary key obtained");
+        }
+        log.info("bioType = " + bioType.toString());
+        if (idExists(bioType)) {
+            return null;
         }
         String coll = StatusFields.STATUS + bioType.getClass().getSimpleName();
         DBObject obj = getObject(coll, key, value);
         if (obj == null) {
             MongoCollection statusCollection = getCollection(coll);
+            log.info("coll = " + coll + ", key = " + key + ", value = " + value);
             statusCollection.ensureIndex(key, key, true);
             //DBObject dbObject = XMLToJson.stringToBasicDBObject("{" + key + ":" + "\'"+ id + "\',"   + StatusFields.DATE + ":" + "\'" +  new Date() + "\'" + "}");
             BasicDBObject basicDBObject = (BasicDBObject) new BasicDBObject(key, value);

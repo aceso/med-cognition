@@ -22,8 +22,8 @@ import NonIndexed;
  */
 import java.util.Collection;
 import java.util.HashSet;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.*;
 import org.neo4j.graphdb.Direction;
 
@@ -47,7 +47,7 @@ public class Peptide {
     /**
      *
      */
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(Peptide.class);
 
     @GraphId
     private Long id;

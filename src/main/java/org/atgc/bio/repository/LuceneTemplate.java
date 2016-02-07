@@ -14,8 +14,8 @@ import java.lang.annotation.Annotation;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -48,7 +48,7 @@ public class LuceneTemplate<T> {
     private static IndexWriterConfig indexWriterConfig;
     private static IndexWriter writer;
     private static final String BIOTEXT = "biotext";
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(LuceneTemplate.class);
 
     static {
        try {

@@ -22,8 +22,8 @@ import org.atgc.bio.meta.Taxonomy;
 import org.atgc.bio.meta.UniqueCompoundIndex;
 import org.atgc.bio.meta.Visual;
 import org.atgc.bio.repository.TemplateUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.Direction;
 
 /**
@@ -34,7 +34,7 @@ import org.neo4j.graphdb.Direction;
 @UniqueCompoundIndex(indexName=IndexNames.CHAIN, field1=BioFields.STRUCTURE_ID, field2=BioFields.CHAIN_ID, field3=BioFields.NONE)
 @BioEntity(bioType = BioTypes.CHAIN)
 public class Chain {
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(Chain.class);
 
     @GraphId
     private Long id;

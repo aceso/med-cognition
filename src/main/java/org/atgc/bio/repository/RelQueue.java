@@ -6,8 +6,8 @@ package org.atgc.bio.repository;
 
 import org.atgc.bio.BioFields;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.BioEntity;
 import org.atgc.bio.meta.RelProperty;
 import org.atgc.bio.meta.RelationshipEntity;
@@ -21,7 +21,7 @@ import org.atgc.bio.meta.StartNode;
  */
 public class RelQueue<T> {
    
-    protected static Log log = LogFactory.getLog(RelQueue.class);
+    protected static Logger log = LogManager.getLogger(RelQueue.class);
     
     /**
      * The start node must be a @BioEntity class. And it cannot be null, 

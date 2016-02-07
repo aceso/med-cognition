@@ -24,8 +24,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 import org.atgc.bio.domain.*;
 import org.neo4j.graphdb.NotFoundException;
@@ -79,7 +79,7 @@ public class NCIBioCartaPathway {
     private static final RedbasinTemplate template = new RedbasinTemplate();
     private static final NciPathwayTemplate npt = new NciPathwayTemplate();
    // private static ArrayList<RelQueue> foundList, notFoundList;  
-    protected static Log log = LogFactory.getLog(NCIBioCartaPathway.class);
+    protected static Logger log = LogManager.getLogger(NCIBioCartaPathway.class);
     private static ArrayList <RelQueue>relGraph;
     
     /**

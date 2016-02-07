@@ -8,8 +8,8 @@ import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -22,7 +22,7 @@ import org.apache.commons.logging.LogFactory;
 @AnnoTwo (foo = "good", boo = "bad")
 public class AnnoDemo {
     
-    protected static Log log = LogFactory.getLog(AnnoDemo.class);
+    protected static Logger log = LogManager.getLogger(AnnoDemo.class);
     
     /**
      * This is an annotation demo for a class member or field.

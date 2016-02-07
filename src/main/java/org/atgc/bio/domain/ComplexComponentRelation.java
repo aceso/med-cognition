@@ -7,8 +7,8 @@ package org.atgc.bio.domain;
 import org.atgc.bio.BioFields;
 
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.*;
 
 /**
@@ -18,7 +18,7 @@ import org.atgc.bio.meta.*;
 @RelationshipEntity
 public class ComplexComponentRelation {
 
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(ComplexComponentRelation.class);
 
      /**
      * The start node must be a @BioEntity class. And it cannot be null,

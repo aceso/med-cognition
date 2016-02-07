@@ -13,8 +13,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -150,7 +150,7 @@ public class NCIPathway_Direct {
             OUTGOING_EDGE
     );
     
-    protected static Log log = LogFactory.getLog(NCIPathway_Direct.class);
+    protected static Logger log = LogManager.getLogger(NCIPathway_Direct.class);
     
     private static void setup() throws URISyntaxException {
         //graphDb = new GraphDatabaseFactory().newEmbeddedDatabase( DB_PATH );

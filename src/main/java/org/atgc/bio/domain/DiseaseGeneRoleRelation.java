@@ -10,8 +10,8 @@ import org.atgc.bio.meta.RelProperty;
 import org.atgc.bio.meta.RelType;
 import org.atgc.bio.meta.RelationshipEntity;
 import org.atgc.bio.meta.StartNode;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.*;
 
 /**
@@ -48,7 +48,7 @@ import org.atgc.bio.meta.*;
 @RelationshipEntity
 public class DiseaseGeneRoleRelation {
 
-    protected static Log log = LogFactory.getLog(DiseaseGeneRoleRelation.class);
+    protected static Logger log = LogManager.getLogger(DiseaseGeneRoleRelation.class);
 
     /**
      * DiseaseGeneRelationship

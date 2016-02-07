@@ -16,8 +16,8 @@ import java.net.UnknownHostException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.ImportCollectionNames;
 import org.atgc.bio.domain.*;
 //import org.neo4j.graphdb.NotFoundException;
@@ -28,7 +28,7 @@ import org.atgc.bio.domain.*;
  */
 public class GeneOntologyObo {
 
-    protected static Log log = LogFactory.getLog(GeneOntologyObo.class);
+    protected static Logger log = LogManager.getLogger(GeneOntologyObo.class);
     private static String goPattern = "GO:";
     
     private static MongoCollection getCollection(ImportCollectionNames coll) throws UnknownHostException {

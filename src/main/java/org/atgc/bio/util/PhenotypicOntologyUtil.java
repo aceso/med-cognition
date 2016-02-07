@@ -11,8 +11,8 @@ import org.atgc.bio.repository.Subgraph;
 import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.CellTypeOntologyFields;
 import org.atgc.bio.domain.BioRelTypes;
 import org.atgc.bio.domain.BioTypes;
@@ -29,7 +29,7 @@ import org.neo4j.graphdb.NotFoundException;
  */
 public class PhenotypicOntologyUtil {
     
-    protected static Log log = LogFactory.getLog(PhenotypicOntology.class);
+    protected static Logger log = LogManager.getLogger(PhenotypicOntology.class);
    
     /*
     private static MongoCollection getCollection(ImportCollectionNames coll) throws UnknownHostException {

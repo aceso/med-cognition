@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This contains basic Enum utilities
@@ -28,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
 public class OntologyStrUtil {
 
     /** Logger for this class and subclasses */
-    protected static final Log log = LogFactory.getLog(OntologyStrUtil.class);
+    protected static final Logger log = LogManager.getLogger(OntologyStrUtil.class);
     
     public static String cellIdPattern = "CL:";
     public static String prIdPattern = "PR:";

@@ -14,8 +14,8 @@ import org.atgc.bio.meta.PartKey;
 import org.atgc.bio.meta.Taxonomy;
 import org.atgc.bio.meta.UniqueCompoundIndex;
 import org.atgc.bio.meta.Visual;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * <pre>
@@ -49,7 +49,7 @@ import org.apache.commons.logging.LogFactory;
 @BioEntity (bioType = BioTypes.DOSAGE)
 public class Dosage {
     
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(Dosage.class);
 
     @GraphId
     private Long id;

@@ -8,8 +8,8 @@ import org.atgc.bio.BioFields;
 
 import java.util.Collection;
 import java.util.HashSet;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.*;
 import org.neo4j.graphdb.Direction;
 
@@ -23,7 +23,7 @@ import org.neo4j.graphdb.Direction;
 @BioEntity(bioType = BioTypes.NCI_PATHWAY)
 public class NciPathway {
 
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(NciPathway.class);
 
     @GraphId
     private Long id;

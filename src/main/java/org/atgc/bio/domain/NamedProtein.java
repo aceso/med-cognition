@@ -10,8 +10,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashSet;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.*;
 import org.neo4j.graphdb.Direction;
 
@@ -26,7 +26,7 @@ import org.neo4j.graphdb.Direction;
 @BioEntity(bioType = BioTypes.NAMED_PROTEIN)
 public class NamedProtein {
 
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(NamedProtein.class);
 
     @UniquelyIndexed(indexName=IndexNames.NAMED_PROTEIN_PREFERRED_SYMBOL)
     @Taxonomy(rbClass=TaxonomyTypes.NAMED_PROTEIN_PREFERRED_SYMBOL, rbField= BioFields.NAMED_PROTEIN_PREFERRED_SYMBOL)

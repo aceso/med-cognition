@@ -10,8 +10,8 @@ import org.atgc.bio.meta.RelProperty;
 import org.atgc.bio.meta.RelType;
 import org.atgc.bio.meta.RelationshipEntity;
 import org.atgc.bio.meta.StartNode;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Developers can declare their own classes that use the {@link RelationshipEntity}.
@@ -49,7 +49,7 @@ import org.apache.commons.logging.LogFactory;
 @RelationshipEntity
 public class NciDrugGeneRoleRelation {
 
-    protected static Log log = LogFactory.getLog(NciDrugGeneRoleRelation.class);
+    protected static Logger log = LogManager.getLogger(NciDrugGeneRoleRelation.class);
 
     /**
      * DrugGeneRelationship

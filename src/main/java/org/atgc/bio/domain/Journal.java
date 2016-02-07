@@ -7,8 +7,8 @@ package org.atgc.bio.domain;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.meta.*;
 import org.atgc.bio.repository.TemplateUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Journal object. For instance Nature. It has an ISSN date.
@@ -22,7 +22,7 @@ import org.apache.commons.logging.LogFactory;
 @BioEntity(bioType = BioTypes.JOURNAL)
 public class Journal {
 
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(Journal.class);
 
     /**
      * This is required for the graph database.

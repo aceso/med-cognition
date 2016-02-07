@@ -6,6 +6,7 @@ package org.atgc.bio.repository;
 
 import org.atgc.bio.BioFields;
 import org.atgc.bio.domain.BioRelation;
+import org.atgc.bio.domain.Complex;
 import org.atgc.bio.domain.IndexNames;
 import org.atgc.bio.meta.AnnotationTypes;
 import org.atgc.bio.meta.PartKey;
@@ -15,8 +16,8 @@ import org.atgc.bio.meta.UniqueCompoundIndex;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class is used to create a home for the virtual dynamic compound key, when an @UniqueCompoundIndex
@@ -32,7 +33,7 @@ public class CompoundKey {
     private final IndexNames indexName;
     private final String key;
     private final String value;
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(CompoundKey.class);
 
     /**
      * We assume that key1 and key2 are not null. And their values are also
@@ -51,7 +52,7 @@ public class CompoundKey {
         StringBuilder sbKey = new StringBuilder();
         StringBuilder sbVal = new StringBuilder();
         int cntr = 0;
-        if (key1 == null) {
+        if (key1 == null) {  // reverse counting of null keys
             cntr++;
         }
         if (key2 == null) {
@@ -69,17 +70,17 @@ public class CompoundKey {
         if (key3 != null) {
             sbKey.append("-").append(key3);
         }
-        cntr = 0;
+        int valcntr = 0;
         if (key1 != null) {
             if (val1 == null || val1.isEmpty()) {
-                cntr++;
+                valcntr++;
             } else {
                 sbVal.append(val1);
             }
         }
         if (key2 != null) {
             if (val2 == null || val2.isEmpty()) {
-                cntr++;
+                valcntr++;
             } else {
                 if (sbVal.length() != 0) {
                     sbVal.append("-");
@@ -89,7 +90,7 @@ public class CompoundKey {
         }
         if (key3 != null) {
             if (val3 == null || val3.isEmpty()) {
-                cntr++;
+                valcntr++;
             } else {
                 if (sbVal.length() != 0) {
                     sbVal.append("-");
@@ -97,7 +98,7 @@ public class CompoundKey {
                 sbVal.append(val3);
             }
         }
-        if (cntr > 1) { // fixed the bug
+        if (valcntr > 1) { // fixed the bug
             log.info(key1 + "=" + val1 + "," + key2 + "=" + val2 + "," + key3 + "=" + val3);      
             throw new IllegalArgumentException("Not enough values provided. key1 = " + key1 + ", key2 = " + key2 + ", key3 = " + key3);
             

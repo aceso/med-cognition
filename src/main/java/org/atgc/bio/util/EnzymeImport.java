@@ -17,8 +17,8 @@ import org.atgc.mongod.MongoUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.EnzymeFields;
 import org.neo4j.graphdb.NotFoundException;
 
@@ -28,7 +28,7 @@ import org.neo4j.graphdb.NotFoundException;
  */
 public class EnzymeImport {
     
-     protected static Log log = LogFactory.getLog(EnzymeImport.class);
+     protected static Logger log = LogManager.getLogger(EnzymeImport.class);
      
      private static MongoCollection getCollection(ImportCollectionNames coll) throws UnknownHostException {
         MongoUtil mongoUtil = MongoUtil.getInstance();

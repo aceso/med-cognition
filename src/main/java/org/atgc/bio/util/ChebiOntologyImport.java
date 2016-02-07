@@ -16,8 +16,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 import org.neo4j.graphdb.NotFoundException;
 
@@ -28,9 +28,8 @@ import org.neo4j.graphdb.NotFoundException;
  * @author jtanisha-ee
  */
 public class ChebiOntologyImport {
-    
-    protected static Log log = LogFactory.getLog(ChebiOntologyImport.class);
-    
+
+    private static final Logger log = LogManager.getLogger(ChebiOntologyImport.class);
     /**
      * 
      * @param id

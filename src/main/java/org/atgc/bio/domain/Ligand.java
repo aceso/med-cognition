@@ -15,8 +15,8 @@ import org.atgc.bio.meta.NodeLabel;
 import org.atgc.bio.meta.Taxonomy;
 import org.atgc.bio.meta.UniquelyIndexed;
 import org.atgc.bio.meta.Visual;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The ligand information is found in the pdbligand collection
@@ -116,7 +116,7 @@ import org.apache.commons.logging.LogFactory;
 @BioEntity(bioType = BioTypes.LIGAND)
 public class Ligand {
 
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(Ligand.class);
 
     /**
      * This is required for the graph database.

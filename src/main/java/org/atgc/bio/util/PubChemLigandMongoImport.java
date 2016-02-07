@@ -20,8 +20,8 @@ import org.atgc.mongod.MongoUtil;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 
 /**
@@ -30,7 +30,7 @@ import org.apache.http.HttpException;
  */
 public class PubChemLigandMongoImport {
 
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(PubChemLigandMongoImport.class);
 
     private static final String url = "http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/";
     private static final String JSON = "/JSON";

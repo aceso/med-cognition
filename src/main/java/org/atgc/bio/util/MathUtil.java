@@ -5,8 +5,8 @@
 
 package org.atgc.bio.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This contains basic calendar utilities.
@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 public class MathUtil {
 
     /** Logger for this class and subclasses */
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected static final Logger logger = LogManager.getLogger(MathUtil.class);
 
     private volatile StrUtil strUtil;
 

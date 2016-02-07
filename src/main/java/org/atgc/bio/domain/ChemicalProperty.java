@@ -14,8 +14,8 @@ import org.atgc.bio.meta.PartKey;
 import org.atgc.bio.meta.Taxonomy;
 import org.atgc.bio.meta.UniqueCompoundIndex;
 import org.atgc.bio.meta.UniquelyIndexed;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * These are the calculated properties.
@@ -26,7 +26,7 @@ import org.apache.commons.logging.LogFactory;
 @BioEntity(bioType = BioTypes.CHEMICAL_PROPERTY)
 public class ChemicalProperty {
     
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(ChemicalProperty.class);
 
     @GraphId
     private Long id;

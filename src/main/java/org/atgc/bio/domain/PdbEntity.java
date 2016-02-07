@@ -19,8 +19,8 @@ import org.atgc.bio.meta.Taxonomy;
 import org.atgc.bio.meta.UniqueCompoundIndex;
 import org.atgc.bio.meta.Visual;
 import java.util.HashSet;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.Direction;
 
 /**
@@ -74,7 +74,7 @@ import org.neo4j.graphdb.Direction;
 @UniqueCompoundIndex(indexName=IndexNames.PDB_ENTITY, field1=BioFields.STRUCTURE_ID, field2=BioFields.ENTITY_ID, field3=BioFields.ENTITY_TYPE)
 @BioEntity(bioType = BioTypes.PDB_ENTITY)
 public class PdbEntity {
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(PdbEntity.class);
 
     @GraphId
     private Long id;

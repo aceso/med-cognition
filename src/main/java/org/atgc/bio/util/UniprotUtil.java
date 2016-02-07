@@ -16,8 +16,8 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 import org.atgc.bio.UniprotFields;
 import org.atgc.bio.domain.*;
@@ -30,7 +30,7 @@ import org.neo4j.graphdb.NotFoundException;
  */
 public class UniprotUtil {
 
-    protected static Log log = LogFactory.getLog(UniprotUtil.class);
+    protected static Logger log = LogManager.getLogger(UniprotUtil.class);
     private static String NcbiTaxonPrefix = "NCBITaxon:";
 
     public static Protein getProtein(String id, Subgraph subGraph) throws Exception {

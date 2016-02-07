@@ -13,8 +13,8 @@ import org.atgc.mongod.MongoUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.HomologyOntologyFields;
 import org.atgc.bio.ImportCollectionNames;
 import org.atgc.bio.domain.BioRelTypes;
@@ -30,7 +30,7 @@ import org.neo4j.graphdb.NotFoundException;
  */
 public class HomologyOntologyUtil {
     
-    protected static Log log = LogFactory.getLog(HomologyOntologyUtil.class);
+    protected static Logger log = LogManager.getLogger(HomologyOntologyUtil.class);
     
     private static MongoCollection getCollection(ImportCollectionNames coll) throws UnknownHostException {
         MongoUtil mongoUtil = MongoUtil.getInstance();

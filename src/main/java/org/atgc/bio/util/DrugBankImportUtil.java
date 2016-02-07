@@ -14,8 +14,8 @@ import org.atgc.bio.domain.*;
 import org.atgc.bio.repository.CompoundKey;
 import org.atgc.bio.repository.RedbasinTemplate;
 import org.atgc.bio.repository.Subgraph;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.ImportCollectionNames;
 
 import java.util.*;
@@ -28,7 +28,7 @@ import java.util.*;
  */
 public class DrugBankImportUtil {
 
-    protected static Log log = LogFactory.getLog(DrugBankImportUtil.class);
+    private static final Logger log = LogManager.getLogger(DrugBankImportUtil.class);
 
     /**
      * This method uses compound collection and adds genesymbol, importstatus

@@ -9,8 +9,8 @@ import org.atgc.bio.BioFields;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.*;
 import org.neo4j.graphdb.Direction;
 
@@ -27,7 +27,7 @@ import org.neo4j.graphdb.Direction;
 @BioEntity(bioType = BioTypes.PART_PROTEIN)
 public class PartProtein {
 
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(PartProtein.class);
 
     @UniquelyIndexed (indexName=IndexNames.PART_PROTEIN_PREFERRED_SYMBOL)
     @Taxonomy(rbClass=TaxonomyTypes.PART_PROTEIN_PREFERRED_SYMBOL, rbField=BioFields.PART_PROTEIN_PREFERRED_SYMBOL)

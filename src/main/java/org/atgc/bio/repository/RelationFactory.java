@@ -7,8 +7,8 @@ package org.atgc.bio.repository;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class is not being used. It is only for testing.
@@ -18,7 +18,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class RelationFactory<E> {
 
-    protected static Log log = LogFactory.getLog(RelationFactory.class);
+    protected static Logger log = LogManager.getLogger(RelationFactory.class);
 
 
     public static <E> RelationFactory<E> create(Class<E> c) {

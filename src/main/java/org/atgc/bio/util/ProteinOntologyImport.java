@@ -18,8 +18,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 import org.atgc.bio.ImportCollectionNames;
 import org.neo4j.graphdb.NotFoundException;
@@ -31,7 +31,7 @@ import org.neo4j.graphdb.NotFoundException;
  */
 public class ProteinOntologyImport {
     
-    protected static Log log = LogFactory.getLog(ProteinOntologyImport.class);
+    protected static Logger log = LogManager.getLogger(ProteinOntologyImport.class);
     /*
     private static String cellIdPattern = "CL:";
     private static String prIdPattern = "PR:";

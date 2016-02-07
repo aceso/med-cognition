@@ -4,8 +4,8 @@
  */
 package org.atgc.bio.domain;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.*;
 
 /**
@@ -42,7 +42,7 @@ import org.atgc.bio.meta.*;
 @RelationshipEntity
 public class NciDrugGeneEvidenceRelation {
 
-     protected static Log log = LogFactory.getLog(NciDrugGeneEvidenceRelation.class);
+     protected static Logger log = LogManager.getLogger(NciDrugGeneEvidenceRelation.class);
 
     /**
      *

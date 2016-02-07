@@ -6,8 +6,8 @@ package org.atgc.bio.domain;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * For every relationship which has a new string relation, we add an enum here.
@@ -155,7 +155,7 @@ public enum EvidenceCodes {
 
 
     private final String value;
-    protected static Log log = LogFactory.getLog(EvidenceCodes.class);
+    protected static Logger log = LogManager.getLogger(EvidenceCodes.class);
 
     private static final Map<String, EvidenceCodes> stringToEnum = new HashMap<String, EvidenceCodes>();
 

@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.StringTokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This contains some string functions.
@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
 public class StrUtil {
 
     /** Logger for this class and subclasses */
-    protected final Log logger = LogFactory.getLog(getClass());
+    protected static final Logger logger = LogManager.getLogger(StrUtil.class);
     /**
      * This checks for null and also trims before it compares with "".
      * @param str the string to check

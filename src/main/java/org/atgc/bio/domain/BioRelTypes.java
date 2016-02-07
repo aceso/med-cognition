@@ -6,8 +6,8 @@ package org.atgc.bio.domain;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.ProteinModificationOntologyFields;
 
 /**
@@ -516,7 +516,7 @@ public enum BioRelTypes {
 
     private final String value;
 
-    protected static Log log = LogFactory.getLog(BioRelTypes.class);
+    protected static Logger log = LogManager.getLogger(BioRelTypes.class);
 
     private static final Map<String, BioRelTypes> stringToEnum = new HashMap<String, BioRelTypes>();
 

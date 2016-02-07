@@ -12,8 +12,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.domain.BioTypes;
 import org.neo4j.graphdb.NotFoundException;
 
@@ -26,7 +26,7 @@ import org.neo4j.graphdb.NotFoundException;
  */
 public class Subgraph<T> {
 
-    protected static Log log = LogFactory.getLog(Subgraph.class);
+    protected static Logger log = LogManager.getLogger(Subgraph.class);
     private static final String BIO_RELATION = "BioRelation";
 
     private final Map<BioTypes, List> beMap = new EnumMap<BioTypes, List>(BioTypes.class);

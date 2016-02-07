@@ -24,8 +24,8 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
 import org.apache.lucene.index.CorruptIndexException;
 import org.neo4j.graphdb.*;
@@ -40,7 +40,7 @@ import org.neo4j.rest.graphdb.index.RestIndex;
  */
 public class RedbasinTemplate<T> {
 
-    protected static final Log log = LogFactory.getLog(RedbasinTemplate.class);
+    protected static final Logger log = LogManager.getLogger(RedbasinTemplate.class);
 
     private static RestGraphDatabase graphDb;
 
@@ -113,7 +113,9 @@ public class RedbasinTemplate<T> {
                             //saveRelations((T)obj);
                             log.info("saveRelations for obj = " + obj.getClass().getSimpleName());
                             saveRelations(obj);
-                            StatusUtil.idInsert(obj);
+                            if (!StatusUtil.idExists(obj)) {
+                                StatusUtil.idInsert(obj);
+                            }
                             //getBioEntity((T)obj);
                         }
                     }

@@ -14,8 +14,8 @@ import org.atgc.mongod.MongoUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.util.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.ImportCollectionNames;
 import org.atgc.bio.domain.BioRelTypes;
 import org.atgc.bio.domain.BioTypes;
@@ -29,7 +29,7 @@ import org.neo4j.graphdb.NotFoundException;
  */
 public class SpatialOntologyUtil {
     
-    protected static Log log = LogFactory.getLog(SpatialOntologyUtil.class);
+    protected static Logger log = LogManager.getLogger(SpatialOntologyUtil.class);
     /*
     private static String cellIdPattern = "CL:";
     private static String prIdPattern = "PR:";

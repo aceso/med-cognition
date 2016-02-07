@@ -7,8 +7,8 @@ package org.atgc.bio.domain;
 
 import org.atgc.bio.BioFields;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.meta.*;
 
 /**
@@ -22,7 +22,7 @@ import org.atgc.bio.meta.*;
 @BioEntity(bioType = BioTypes.PROTEIN_SEQUENCE_FEATURE)
 public class ProteinSequenceFeature {
 
-    protected static Log log = LogFactory.getLog(new Object().getClass());
+    protected static Logger log = LogManager.getLogger(ProteinSequenceFeature.class);
 
     @GraphId
     private Long id;
