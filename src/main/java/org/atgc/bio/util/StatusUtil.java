@@ -99,8 +99,13 @@ public class StatusUtil<T> {
         CompoundKey compoundKey = CompoundKey.getCompoundKey(bioType);
         if (compoundKey == null) {
             PrimaryKey primaryKey = PrimaryKey.getPrimaryKey(bioType);
-            key = primaryKey.getKey();
-            value = primaryKey.getValue();
+            if (primaryKey != null) {
+                key = primaryKey.getKey();
+                value = primaryKey.getValue();
+            } else {
+                log.info("primary key is null for bioType = " + bioType);
+                return false;
+            }
         } else {
             key = compoundKey.getKey();
             value = compoundKey.getValue();
