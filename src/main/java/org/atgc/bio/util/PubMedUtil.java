@@ -14,7 +14,7 @@ import org.atgc.bio.domain.Journal;
 import org.atgc.bio.domain.JournalIssue;
 import org.atgc.bio.domain.PubMed;
 import org.atgc.bio.repository.CompoundKey;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoObjects;
@@ -753,7 +753,7 @@ public class PubMedUtil {
             InterruptedException {
         Subgraph subgraph = new Subgraph();
         PubMed pubMed = getPubmed(pubMedId, subgraph);
-        RedbasinTemplate.saveSubgraph(subgraph);
+        PersistenceTemplate.saveSubgraph(subgraph);
         return pubMed;
     }
 
@@ -791,7 +791,7 @@ public class PubMedUtil {
                     pubMed.setPubMedId(pubmedId);
                     try {
                         loadPubmed(pubMed, result, subgraph, pubmedId);
-                        RedbasinTemplate.saveSubgraph(subgraph);
+                        PersistenceTemplate.saveSubgraph(subgraph);
                         //StatusUtil.idInsert(BioTypes.PUBMED.toString(), BioFields.PUBMED_ID.toString(), pubmedId);
                     } catch (NullPointerException e) {
                         throw new RuntimeException("Null pointer exception. PubmedId: " + pubmedId, e);

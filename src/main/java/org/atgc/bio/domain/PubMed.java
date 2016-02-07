@@ -6,7 +6,7 @@ package org.atgc.bio.domain;
 
 import org.atgc.bio.BioFields;
 import org.atgc.bio.meta.*;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.TemplateUtils;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -641,7 +641,7 @@ public class PubMed {
     public BioRelation getJournalIssueRelation() throws InstantiationException, IllegalAccessException, URISyntaxException, IllegalArgumentException, IllegalArgumentException, NoSuchFieldException {
         if (journalIssueRelation == null) {
            if (relations.isEmpty()) {
-               relations = RedbasinTemplate.getRelations(this, BioRelation.class);
+               relations = PersistenceTemplate.getRelations(this, BioRelation.class);
            }
            for (BioRelation relation : relations) {
                if (relation.getRelType().equals(BioRelTypes.PUBLISHED_IN_JOURNAL)) {
@@ -716,7 +716,7 @@ public class PubMed {
     public Collection<BioRelation> getAuthorRelations() throws InstantiationException, IllegalAccessException, URISyntaxException, IllegalArgumentException, NoSuchFieldException {
         if (authorRelations == null || authorRelations.isEmpty()) {
             if (relations.isEmpty()) {
-                relations = RedbasinTemplate.getRelations(this, BioRelation.class);
+                relations = PersistenceTemplate.getRelations(this, BioRelation.class);
             }
             for (BioRelation relation : relations) {
                 if (relation.getRelType().equals(BioRelTypes.HAS_AUTHOR)) {

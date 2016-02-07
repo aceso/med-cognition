@@ -38,9 +38,9 @@ import org.neo4j.rest.graphdb.index.RestIndex;
  * @author jtanisha-ee
  *         Use BioFields to fetch BioEntities and Nodes
  */
-public class RedbasinTemplate<T> {
+public class PersistenceTemplate<T> {
 
-    protected static final Logger log = LogManager.getLogger(RedbasinTemplate.class);
+    protected static final Logger log = LogManager.getLogger(PersistenceTemplate.class);
 
     private static RestGraphDatabase graphDb;
 
@@ -1411,7 +1411,7 @@ public class RedbasinTemplate<T> {
     //Collection<ProteinInteraction> proteinInteractions;
 
     public static void testRelationships() throws IllegalAccessException {
-        RedbasinTemplate rt = new RedbasinTemplate();
+        PersistenceTemplate rt = new PersistenceTemplate();
         //rt.proteinInteractions = new HashSet<ProteinInteraction>();
         Protein startProtein = new Protein("P156745", "protein", "P156745");
         Protein endProtein = new Protein("P156746", "protein", "P156746");
@@ -1469,7 +1469,7 @@ public class RedbasinTemplate<T> {
         protein.setMoleculeIdRef("moleculeIdRef-fdjf43443424");
         protein.setNcbiTaxId("ncbiTaxId-COW");
         protein.setNodeType(BioTypes.PROTEIN);
-        RedbasinTemplate.save(protein);
+        PersistenceTemplate.save(protein);
         protein = getBioEntity(protein);
         log.info("protein = " + protein.toString());
     }
@@ -1488,7 +1488,7 @@ public class RedbasinTemplate<T> {
         protein.setNcbiTaxId("ncbiTaxId-COW");
         protein.setNodeType(BioTypes.PROTEIN);
         //template.save(protein);
-        BasicDBObject basicDBObject = RedbasinTemplate.persist(protein);
+        BasicDBObject basicDBObject = PersistenceTemplate.persist(protein);
         //log.info("basicDBObject = " + basicDBObject.toString());
     }
 
@@ -1504,7 +1504,7 @@ public class RedbasinTemplate<T> {
     }
 
     public static void testNodes() throws IllegalAccessException {
-        RedbasinTemplate rt = new RedbasinTemplate();
+        PersistenceTemplate rt = new PersistenceTemplate();
         Field[] fields = rt.getClass().getDeclaredFields();
         for (Field field : fields) {
             Annotation[] fieldAnnotations = field.getAnnotations();

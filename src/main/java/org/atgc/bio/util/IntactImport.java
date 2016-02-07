@@ -36,7 +36,7 @@ import org.atgc.bio.domain.Protein;
 import org.atgc.bio.domain.PubMed;
 import org.atgc.bio.domain.SmallMolecule;
 import org.atgc.bio.domain.StartStatus;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.json.JsonChars;
 import org.atgc.mongod.MongoObjects;
@@ -53,7 +53,6 @@ import java.util.HashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
-import org.atgc.bio.*;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.rest.graphdb.RestGraphDatabase;
@@ -959,12 +958,12 @@ public class IntactImport {
         BasicDBList intactList = InTactUtil.getIntactList(); // return all that are DUE
         log.info("intactList.length = " + intactList.size());
         Subgraph subgraph;
-        RedbasinTemplate template = new RedbasinTemplate();
+        PersistenceTemplate template = new PersistenceTemplate();
         for (Object e : intactList) {
             String intactId = (String)((DBObject)e).get(InTactUtil.INTACT_ID);
             try {
                 subgraph = processIntact((DBObject)e);
-                RedbasinTemplate.saveSubgraph(subgraph);
+                PersistenceTemplate.saveSubgraph(subgraph);
                 InTactUtil.updateImportStatus(intactId, BioEntityType.DONE.toString());
             } catch (UnknownHostException ex) {
                 InTactUtil.updateImportStatus(intactId, BioEntityType.ERROR.toString());

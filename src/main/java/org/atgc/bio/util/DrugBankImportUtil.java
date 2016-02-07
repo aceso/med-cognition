@@ -12,7 +12,7 @@ import org.atgc.bio.DrugBankFields;
 import org.atgc.bio.DrugBankSplitter;
 import org.atgc.bio.domain.*;
 import org.atgc.bio.repository.CompoundKey;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -178,7 +178,7 @@ public class DrugBankImportUtil {
         setFoodInteractions(obj, drug);
         setProteinRelation(obj, drug, subGraph);
         subGraph.add(drug);
-        RedbasinTemplate.saveSubgraph(subGraph);
+        PersistenceTemplate.saveSubgraph(subGraph);
 
     }
 

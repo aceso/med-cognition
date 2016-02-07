@@ -3,10 +3,9 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
-import org.atgc.bio.*;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.domain.*;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
@@ -408,7 +407,7 @@ public class AnatomicalEntityOntologyUtil {
                 setRelationshipList(onto, obj, subGraph);
             }
             
-            RedbasinTemplate.saveSubgraph(subGraph);
+            PersistenceTemplate.saveSubgraph(subGraph);
          }
      }
     
@@ -593,7 +592,7 @@ public class AnatomicalEntityOntologyUtil {
                 setCARORelationshipList(onto, obj, subGraph);
             }
             
-            RedbasinTemplate.saveSubgraph(subGraph);
+            PersistenceTemplate.saveSubgraph(subGraph);
          }
      }
      
@@ -817,7 +816,7 @@ public class AnatomicalEntityOntologyUtil {
                 setAHDARelationshipList(onto, obj, subGraph);
             }
             
-            RedbasinTemplate.saveSubgraph(subGraph);
+            PersistenceTemplate.saveSubgraph(subGraph);
          }
      }
      
@@ -944,7 +943,7 @@ public class AnatomicalEntityOntologyUtil {
                 setCSRelationshipList(onto, obj, subGraph);
             }
             
-            RedbasinTemplate.saveSubgraph(subGraph);
+            PersistenceTemplate.saveSubgraph(subGraph);
          }
      }
      

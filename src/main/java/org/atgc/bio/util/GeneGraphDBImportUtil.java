@@ -20,7 +20,7 @@ import org.atgc.bio.domain.NcbiTaxonomy;
 import org.atgc.bio.domain.PubMed;
 import org.atgc.bio.domain.types.TaxonomyRank;
 import org.atgc.bio.repository.CompoundKey;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoObjects;
@@ -291,7 +291,7 @@ public class GeneGraphDBImportUtil {
     public static void processOntologyDoc(String taxId, BasicDBObject result) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException {
          Subgraph subGraph = new Subgraph();
          NcbiTaxonomy ncbiTaxonomy = getNcbiTaxonomy(subGraph, taxId, result); 
-         RedbasinTemplate.saveSubgraph(subGraph);
+         PersistenceTemplate.saveSubgraph(subGraph);
     }
     
     public static NcbiTaxonomy getNcbiTaxonomy(Subgraph subgraph, String taxId) throws Exception {
@@ -778,7 +778,7 @@ public class GeneGraphDBImportUtil {
                 updateGeneGroup(subgraph, gene);
                 updateGeneNeighbors(subgraph, gene);
                 //log.info(gene);
-                RedbasinTemplate.saveSubgraph(subgraph);
+                PersistenceTemplate.saveSubgraph(subgraph);
             }
         } finally {
             dbCursor.close();
@@ -797,6 +797,6 @@ public class GeneGraphDBImportUtil {
         GeneGraphDBImportUtil.getGeneById("814650", subgraph);
         GeneGraphDBImportUtil.getGeneById("814630", subgraph);
         GeneGraphDBImportUtil.getGeneById("40323", subgraph);
-        RedbasinTemplate.saveSubgraph(subgraph);
+        PersistenceTemplate.saveSubgraph(subgraph);
     }
 }

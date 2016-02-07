@@ -7,7 +7,7 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import org.atgc.bio.*;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -621,7 +621,7 @@ public class NCICompound {
         
         //log.info("processSentence()");
         subGraph.traverse();
-        RedbasinTemplate.saveSubgraph(subGraph);
+        PersistenceTemplate.saveSubgraph(subGraph);
     }
     
    /**

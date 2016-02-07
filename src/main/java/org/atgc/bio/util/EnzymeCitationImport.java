@@ -4,9 +4,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import org.apache.logging.log4j.Logger;
 import org.atgc.bio.*;
-import org.atgc.bio.*;
 import org.atgc.bio.domain.*;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
@@ -14,7 +13,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.NotFoundException;
 
 /**
@@ -104,7 +102,7 @@ public class EnzymeCitationImport {
                     if (pubMedId != null) { 
                         Subgraph subGraph = new Subgraph();
                         createCitationRelations(citeKey, pubMedId, subGraph);
-                        RedbasinTemplate.saveSubgraph(subGraph);
+                        PersistenceTemplate.saveSubgraph(subGraph);
                     }
                 }
             } finally {

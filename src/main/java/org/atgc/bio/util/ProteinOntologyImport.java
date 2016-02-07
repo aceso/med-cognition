@@ -3,11 +3,10 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
-import org.atgc.bio.*;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.ProteinOntologyFields;
 import org.atgc.bio.domain.*;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
@@ -722,7 +721,7 @@ disjoint_from: PR:000018264 ! proteolytic cleavage product
          }
          
          createPubMedRelationship(prOnto, obj, subGraph);
-         RedbasinTemplate.saveSubgraph(subGraph);
+         PersistenceTemplate.saveSubgraph(subGraph);
      }
     
 }

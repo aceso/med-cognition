@@ -4,8 +4,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import org.atgc.bio.*;
-import org.atgc.bio.*;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
@@ -287,7 +286,7 @@ public class EnzymeProteinImport {
              log.info("dbObj key = " + dbObj.getString(EnzymeFields.NAME.toString()));
              log.info("value =" + dbObj.getString(EnzymeFields.TEXT.toString()));
          } */
-         RedbasinTemplate.saveSubgraph(subGraph);
+         PersistenceTemplate.saveSubgraph(subGraph);
     }
     
     

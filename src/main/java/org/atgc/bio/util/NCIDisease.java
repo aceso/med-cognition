@@ -7,10 +7,9 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
-import org.atgc.bio.*;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.NCIDiseaseUtil;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
@@ -620,7 +619,7 @@ public class NCIDisease {
             processSentence(zeroObject, geneSet, subGraph);
            
             subGraph.traverse();
-            RedbasinTemplate.saveSubgraph(subGraph);
+            PersistenceTemplate.saveSubgraph(subGraph);
         }
     }
     

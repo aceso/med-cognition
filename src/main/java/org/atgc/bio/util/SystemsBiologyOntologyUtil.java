@@ -3,10 +3,9 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
-import org.atgc.bio.*;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.domain.SystemsBiologyOntology;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
@@ -312,7 +311,7 @@ public class SystemsBiologyOntologyUtil {
                sboOnto.setSystemsBiologyOntologyIsObsolete(getIsObsolete(obj));
             }
             createPubMedRelationship(sboOnto, obj, subGraph);
-            RedbasinTemplate.saveSubgraph(subGraph);
+            PersistenceTemplate.saveSubgraph(subGraph);
          }
      }
     

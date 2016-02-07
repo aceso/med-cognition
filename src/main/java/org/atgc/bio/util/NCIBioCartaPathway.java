@@ -9,11 +9,10 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.atgc.bio.*;
 
-import org.atgc.bio.*;
 import org.atgc.bio.meta.BioEntity;
 import org.atgc.bio.meta.EndNode;
 import org.atgc.bio.meta.StartNode;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.RelQueue;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoObjects;
@@ -76,7 +75,7 @@ public class NCIBioCartaPathway {
     
    // public static final String DB_URL = "http://saibaba.local:7474/db/data";
    
-    private static final RedbasinTemplate template = new RedbasinTemplate();
+    private static final PersistenceTemplate template = new PersistenceTemplate();
     private static final NciPathwayTemplate npt = new NciPathwayTemplate();
    // private static ArrayList<RelQueue> foundList, notFoundList;  
     protected static Logger log = LogManager.getLogger(NCIBioCartaPathway.class);
@@ -1049,7 +1048,7 @@ public class NCIBioCartaPathway {
     * getPTMMolecule
     * bioMoleculeId {@link BasicDBObject}
     * bioType {@link BioTypes}
-    * template {@link RedbasinTemplate}
+    * template {@link PersistenceTemplate}
     * return {@link BioEntity}
     * <Molecule molecule_type="protein" id="200082">
         <Name name_type="PF" long_name_type="preferred symbol" value="AKT1-2-active" />
@@ -1576,7 +1575,7 @@ public class NCIBioCartaPathway {
     * @param template
     * @throws IllegalAccessException 
     */
-   private static void checkAndSetComplexNames(BasicDBObject molecule, Complex complex, RedbasinTemplate template) throws IllegalAccessException, URISyntaxException {  
+   private static void checkAndSetComplexNames(BasicDBObject molecule, Complex complex, PersistenceTemplate template) throws IllegalAccessException, URISyntaxException {
         BasicDBList dbList = getBasicDBList((DBObject)molecule, NciPathwayFields.NAME); 
         if (dbList != null) {
             for (Object obj : dbList) { 
@@ -1599,7 +1598,7 @@ public class NCIBioCartaPathway {
    * @param template
    * @throws IllegalAccessException 
    */
-   private static void setPreferredSymbol(BasicDBObject dbObj, Complex complex, RedbasinTemplate template) throws IllegalAccessException, URISyntaxException {         
+   private static void setPreferredSymbol(BasicDBObject dbObj, Complex complex, PersistenceTemplate template) throws IllegalAccessException, URISyntaxException {
         complex.setComplexPreferredSymbol(getPreferredSymbol(dbObj));
         complex.setMessage(getPreferredSymbol(dbObj));
    
@@ -1887,7 +1886,7 @@ public class NCIBioCartaPathway {
     * @param template
     * @throws IllegalAccessException 
     */
-    private static void checkAndSetLabel(BasicDBObject molecule, BioEntity entity, RedbasinTemplate template) throws IllegalAccessException, URISyntaxException {  
+    private static void checkAndSetLabel(BasicDBObject molecule, BioEntity entity, PersistenceTemplate template) throws IllegalAccessException, URISyntaxException {
         if (labelExists(molecule)) {
             BasicDBObject labelObj = getLabel(molecule);
             Map map = new HashMap();

@@ -18,7 +18,7 @@ import org.atgc.bio.domain.Chain;
 import org.atgc.bio.domain.PdbEntity;
 import org.atgc.bio.domain.Structure;
 import org.atgc.bio.domain.types.StructureEntityTypes;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.ext.BioStructure;
 import org.atgc.mongod.MongoCollection;
@@ -476,7 +476,7 @@ public class PdbMongoNeo4JImport {
                 loadStructureEntity(subgraph, structure, query);
                 loadStructureUniprot(subgraph, structure, query);
                 log.info("structure persistence count = " + ++cntr);
-                RedbasinTemplate.saveSubgraph(subgraph);
+                PersistenceTemplate.saveSubgraph(subgraph);
             }
         } finally {
             dbCursor.close();

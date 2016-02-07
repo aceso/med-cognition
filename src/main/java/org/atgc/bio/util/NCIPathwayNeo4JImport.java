@@ -11,7 +11,7 @@ import org.atgc.bio.*;
 import org.atgc.bio.domain.*;
 import org.atgc.bio.meta.BioEntity;
 import org.atgc.bio.meta.EndNode;
-import org.atgc.bio.repository.RedbasinTemplate;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.RelQueue;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoObjects;
@@ -1137,7 +1137,7 @@ public class NCIPathwayNeo4JImport {
     * getPTMMolecule
     * bioMoleculeId {@link BasicDBObject}
     * bioType {@link BioTypes}
-    * template {@link RedbasinTemplate}
+    * template {@link PersistenceTemplate}
     * return {@link BioEntity}
     * <Molecule molecule_type="protein" id="200082">
         <Name name_type="PF" long_name_type="preferred symbol" value="AKT1-2-active" />
@@ -2782,7 +2782,7 @@ public class NCIPathwayNeo4JImport {
         
         subGraph.traverse(); 
         processRelGraph(subGraph, relGraph);
-        RedbasinTemplate.saveSubgraph(subGraph);
+        PersistenceTemplate.saveSubgraph(subGraph);
         return pathwayEntity;
     }
     

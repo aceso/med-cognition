@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class ClassInstantiator {
     
-    protected static Logger log = LogManager.getLogger(RedbasinTemplate.class);
+    protected static Logger log = LogManager.getLogger(PersistenceTemplate.class);
     
     public Object createInstance(String className) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Class c = Class.forName(PackagePath.DOMAIN + className);
