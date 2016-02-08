@@ -1265,7 +1265,7 @@ public class PersistenceTemplate<T> {
                 pNodeHits.close();
                 node = graphDb.createNode();
                 nodeCreated = true;
-                log.info("Created New Node: " + (++indexNodeCount));
+                log.info("ADDED NEW NODE: " + (++indexNodeCount));
             }
             tx.success();
         } catch (RuntimeException e) {
@@ -1277,7 +1277,7 @@ public class PersistenceTemplate<T> {
         }
         if (node != null && nodeCreated && nodeIndex != null) {
             if (null == nodeIndex.putIfAbsent(node, key, value)) {
-                log.info("New property added: "  + (++propertyCount));
+                log.info("ADDED NEW PROPERTY: "  + (++propertyCount));
             }
         }
         /* if (!nodeCreated) {
@@ -1361,7 +1361,7 @@ public class PersistenceTemplate<T> {
                     }
                     RestIndex<Node> nodeIndex = graphDb.index().forNodes(indexName);
                     if (null == nodeIndex.putIfAbsent(node, name, value)) {   // if null, then no previous node exists
-                        log.info("New property added: " + (++propertyCount));
+                        log.info("ADDED NEW PROPERTY: " + (++propertyCount));
                     }
                 }
             }
