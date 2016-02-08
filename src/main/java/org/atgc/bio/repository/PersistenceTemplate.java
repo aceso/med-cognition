@@ -45,6 +45,8 @@ public class PersistenceTemplate<T> {
     private static RestGraphDatabase graphDb;
 
     private static int cntr = 0;
+    private static long indexNodeCount;
+    private static long propertyCount;
 
     static {
         try {
@@ -1263,6 +1265,7 @@ public class PersistenceTemplate<T> {
                 pNodeHits.close();
                 node = graphDb.createNode();
                 nodeCreated = true;
+                log.info("Created New Node: " + (++indexNodeCount));
             }
             tx.success();
         } catch (RuntimeException e) {
@@ -1273,12 +1276,32 @@ public class PersistenceTemplate<T> {
             tx.close();
         }
         if (node != null && nodeCreated && nodeIndex != null) {
-            nodeIndex.putIfAbsent(node, key, value);
+            if (null == nodeIndex.putIfAbsent(node, key, value)) {
+                log.info("New property added: "  + (++propertyCount));
+            }
         }
         /* if (!nodeCreated) {
             log.info("Node exists " + key + "=" + value);
         }*/
         return node;
+    }
+
+    /**
+     * How many properties were added.
+     *
+     * @return
+     */
+    public static long getPropertyCount() {
+        return propertyCount;
+    }
+
+    /**
+     * How many nodes were added.
+     *
+     * @return long
+     */
+    public static long getIndexNodeCount() {
+        return indexNodeCount;
     }
 
     /**
@@ -1337,7 +1360,9 @@ public class PersistenceTemplate<T> {
                         setup();
                     }
                     RestIndex<Node> nodeIndex = graphDb.index().forNodes(indexName);
-                    nodeIndex.putIfAbsent(node, name, value);
+                    if (null == nodeIndex.putIfAbsent(node, name, value)) {   // if null, then no previous node exists
+                        log.info("New property added: " + (++propertyCount));
+                    }
                 }
             }
         }
