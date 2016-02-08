@@ -49,10 +49,12 @@ public class DrugBankImportUtil {
                     log.info("******* drugName =" + drugName);
                 }
                 setDrug(result, drugName);
+                log.info("Total properties added: " + PersistenceTemplate.getPropertyCount() + ", Total nodes added: " + PersistenceTemplate.getIndexNodeCount());
             }
         } finally {
             dbCursor.close();
         }
+        log.info("Total properties added: " + PersistenceTemplate.getPropertyCount() + ", Total nodes added: " + PersistenceTemplate.getIndexNodeCount());
     }
 
 
