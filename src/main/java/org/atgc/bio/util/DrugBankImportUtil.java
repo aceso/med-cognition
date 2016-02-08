@@ -49,12 +49,14 @@ public class DrugBankImportUtil {
                     log.info("******* drugName =" + drugName);
                 }
                 setDrug(result, drugName);
-                log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+                log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+                log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
             }
         } finally {
             dbCursor.close();
         }
-        log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+        log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+        log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
     }
 
 
