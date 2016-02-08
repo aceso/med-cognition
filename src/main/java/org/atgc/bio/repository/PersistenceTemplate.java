@@ -48,7 +48,7 @@ public class PersistenceTemplate<T> {
     private static long indexNodeCount;
     private static long propertyCount;
     private static long propertySetCount;
-    private static Map<String, Integer> nodeCounts = new HashMap<>();
+    private static Map<String, Integer> indexNodeCounts = new HashMap<>();
     private static Map<String, Integer> propertyCounts = new HashMap<>();
     private static Map<String, Integer> propertySetCounts = new HashMap<>();
 
@@ -1270,7 +1270,7 @@ public class PersistenceTemplate<T> {
                 node = graphDb.createNode();
                 nodeCreated = true;
                 log.info("ADDED NEW NODE: " + (++indexNodeCount));
-                nodeCounts.put(indexName, nodeCounts.getOrDefault(indexName, 0) + 1);
+                indexNodeCounts.put(indexName, indexNodeCounts.getOrDefault(indexName, 0) + 1);
             }
             tx.success();
         } catch (RuntimeException e) {
@@ -1306,6 +1306,14 @@ public class PersistenceTemplate<T> {
     }
 
     /**
+     * How many existing properties were set.
+     * @return
+     */
+    public static long getPropertySetCount() {
+        return propertySetCount;
+    }
+
+    /**
      * How many nodes were added.
      *
      * @return long
@@ -1323,7 +1331,7 @@ public class PersistenceTemplate<T> {
     }
 
     /**
-     * How many properties weere set per indexName
+     * How many properties were set per indexName
      * @return
      */
     public static Map getPropertySetCounts() {
@@ -1334,8 +1342,8 @@ public class PersistenceTemplate<T> {
      * How many nodes were added per index
      * @return
      */
-    public static Map getIndexCounts() {
-        return nodeCounts;
+    public static Map getIndexNodeCounts() {
+        return indexNodeCounts;
     }
 
     /**
