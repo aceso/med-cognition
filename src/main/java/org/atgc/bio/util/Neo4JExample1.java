@@ -6,6 +6,7 @@ package org.atgc.bio.util;
 
 import java.net.URISyntaxException;
 import java.util.Iterator;
+import java.util.UUID;
 
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexHits;
@@ -16,7 +17,7 @@ import org.neo4j.rest.graphdb.index.RestIndex;
  *
  * @author jtanisha-ee
  */
-public class Neo4JExample {
+public class Neo4JExample1 {
     private static enum RelTypes implements RelationshipType {
        INHIBITS
     }
@@ -52,14 +53,22 @@ public class Neo4JExample {
         RestIndex<Node> myIndex;
         String indexName = "myindex";
         String key = "message";
-
+        String key1 = "unindexed";
+        String uuid = UUID.randomUUID().toString();
         Transaction tx = graphDb.beginTx();
 
 
         try {
     // Mutating operations go here
-            firstNode = graphDb.createNode();
-            firstNode.setProperty(key, "P1876345");
+            myIndex = graphDb.index().forNodes(indexName);
+            IndexHits<Node> pNodeHits = myIndex.get(key, "P1876345");
+            if (pNodeHits.size() <= 0) {
+                firstNode = graphDb.createNode();
+                firstNode.setProperty(key, "P1876345");
+            } else {
+                firstNode = pNodeHits.getSingle();
+            }
+            firstNode.setProperty(key1, uuid);  // unindexed property, we will check if this is retrievable
             /*
             A label is a grouping facility for Node where all nodes having a label are part of the same group. Labels on nodes are optional
             and any node can have an arbitrary number of labels attached to it. Objects of classes implementing this interface can be used as
@@ -108,6 +117,7 @@ public class Neo4JExample {
                     String k = (String)i.next();
                     System.out.println("firstNode key = " + k + ", value = " + firstNode.getProperty(k));
                 }
+                System.out.println("uuid sent = " + uuid + ", uuid received = " + firstNode.getProperty(key1) + ", matched = " + uuid.equals(firstNode.getProperty(key1)));
              }
             pNodeHits = myIndex.get(key, "BRCA1");
             if (pNodeHits.size() > 0) {
