@@ -6,8 +6,11 @@ package org.atgc.bio.util;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.BioEntityType;
 import org.atgc.bio.NCIDiseaseUtil;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.neo4j.NeoUtil;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -91,6 +94,7 @@ public class NCIDisease_Direct {
     private static String COMMENTS = "Comments";
     private static int MAX_MSG_SIZE = 60;
     private static boolean INITIALIZED = false;
+    protected static Logger log = LogManager.getLogger(NCIDisease_Direct.class);
        
     
      /**
@@ -148,8 +152,12 @@ public class NCIDisease_Direct {
             } catch (Exception e) {
                 //NCIDiseaseUtil.updateImportStatus(geneSymbol,  BioEntityType.ERROR);
                 throw new RuntimeException(e);
-            } 
-        }  
+            }
+            log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+            log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+        }
+        log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+        log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
         
      /*   try {
              createGeneNode("PKP4");        
