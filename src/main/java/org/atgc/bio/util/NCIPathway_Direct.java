@@ -8,6 +8,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import org.atgc.bio.BioEntityType;
 import org.atgc.bio.NCIPathwayUtil;
+import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.neo4j.NeoUtil;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -187,7 +188,11 @@ public class NCIPathway_Direct {
                 NCIPathwayUtil.updateImportStatus(shortName, NCIPathwayUtil.ERROR);
                 throw new RuntimeException(e);
             }
-         }  
+            log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+            log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+         }
+        log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+        log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
         //Node pathwayNode = createPathwayNode("a6b1_a6b4_integrin_pathway");
         //NCIPathwayUtil.updateImportStatus("a6b1_a6b4_integrin_pathway", "done");
     }
@@ -277,7 +282,7 @@ public class NCIPathway_Direct {
      * @param pathwayNode
      * @param interactionNode
      * @param moleculeList
-     * @param outputMap 
+     * @param outputMoleculeList
      */
     public static void createNodeInteractionComponent(Node pathwayNode, Node interactionNode, List moleculeList, List outputMoleculeList) throws UnsupportedEncodingException {
               
