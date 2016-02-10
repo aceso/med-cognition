@@ -46,7 +46,7 @@ public class EnzymeCitationImport {
             // we expect only one document match
             while (dbCursor.hasNext()) {
                 BasicDBObject result = (BasicDBObject)dbCursor.next();
-                System.out.println("result =" + result.toString());           
+                log.info("result =" + result.toString());
                 String citeKey = (String)result.get(EnzymeFields.CITE_KEY.toString());
                 log.info("###### citeKey =" + citeKey);
                 // until then a quick fix. later remove it.
@@ -55,10 +55,15 @@ public class EnzymeCitationImport {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+                log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+                log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
             }
         } finally {
            dbCursor.close();
-        }   
+        }
+        log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+        log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+        log.info("Completed successfully!");
     }
     
     public static boolean isObj(BasicDBObject obj) {
