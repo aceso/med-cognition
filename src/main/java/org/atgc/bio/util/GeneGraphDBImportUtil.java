@@ -791,10 +791,10 @@ public class GeneGraphDBImportUtil {
 
     public static void main(String[] args) throws Exception {
         //PubMedUtil.getPubmed("16341006");
-        PubMedUtil.loadPubmed("20462514");
+        //PubMedUtil.loadPubmed("20462514");
 
         // If you want to load all genes, uncomment the line below.
-        //GeneGraphDBImportUtil.loadGenes();
+        GeneGraphDBImportUtil.loadGenes();
 
         // Some individual loads
         Subgraph subgraph = new Subgraph();
@@ -802,5 +802,7 @@ public class GeneGraphDBImportUtil {
         GeneGraphDBImportUtil.getGeneById("814630", subgraph);
         GeneGraphDBImportUtil.getGeneById("40323", subgraph);
         PersistenceTemplate.saveSubgraph(subgraph);
+
+        log.info("Done successfully with the program!");
     }
 }
