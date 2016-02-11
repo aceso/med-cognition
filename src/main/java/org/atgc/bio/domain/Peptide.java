@@ -176,6 +176,15 @@ public class Peptide {
     @RelatedToVia(direction=Direction.BOTH, elementClass=BioRelation.class)
     private Collection<BioRelation> intactInteractions = new HashSet<BioRelation>();
 
+    @RelatedTo(direction=Direction.OUTGOING, relType=BioRelTypes.HAS_A_PROTEIN, elementClass=BioRelation.class)
+    private BioRelation proteinRelation;
+
+    @RelatedToVia(direction=Direction.OUTGOING, relType=BioRelTypes.HAS_A_PROTEIN, elementClass=BioRelation.class)
+    private Collection<BioRelation> proteinRelations;
+
+    @RelatedTo(direction=Direction.OUTGOING, relType=BioRelTypes.IN_ORGANISM, elementClass=BioRelation.class)
+    private BioRelation ncbiTaxonomyRelation;
+
     /**
      *
      */
@@ -240,7 +249,7 @@ public class Peptide {
     /**
      * {@link Indexed} {@link IndexNames#PEPTIDE_FULL_NAME}
      * <p>
-     * {@link Taxonomy} {@link TaxonomyTypes#PEPTID_FULL_NAME}
+     * {@link Taxonomy} {@link TaxonomyTypes}
      * {@link BioFields#FULL_NAME}
      *
      * @return String
@@ -619,7 +628,7 @@ public class Peptide {
      * In the following, <code>this<code> Peptide object is related to other objects
      * with an outgoing relationship called <code>IntactInteraction</code>.
      * <p>
-     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction.BOTH}
+     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction}
      * <DL>
      * <LI>
      * startNodeBioType {@link BioTypes#PEPTIDE}
@@ -701,7 +710,7 @@ public class Peptide {
      * In the following, <code>this<code> Peptide object is related to other objects
      * with an outgoing relationship called <code>IntactInteraction</code>.
      * <p>
-     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction.BOTH}
+     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction}
      * <DL>
      * <LI>
      * startNodeBioType {@link BioTypes#PEPTIDE}
@@ -724,7 +733,7 @@ public class Peptide {
      * In the following, <code>this<code> Peptide object is related to other objects
      * with an outgoing relationship called <code>IntactInteraction</code>.
      * <p>
-     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction.BOTH}
+     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction}
      * <DL>
      * <LI>
      * startNodeBioType {@link BioTypes#PEPTIDE}
@@ -746,6 +755,10 @@ public class Peptide {
         intactInteractions.add(intactInteraction);
         log.info("intactInteractions size = " + intactInteractions.size());
         return intactInteraction;
+    }
+
+    public void setNcbiTaxonomyRelation(NcbiTaxonomy ncbiTaxonomy) {
+        ncbiTaxonomyRelation = new BioRelation(this, ncbiTaxonomy, BioRelTypes.IN_ORGANISM);
     }
 
     /**
@@ -804,12 +817,22 @@ public class Peptide {
 
     /**
      * Creates a new peptide
-     * @return {@link BioEntity#PEPTIDE}
+     * @return {@link BioEntity}
      */
     public Peptide Peptide() {
         Peptide peptide = new Peptide();
         peptide.setNodeType(BioTypes.PEPTIDE);
         return peptide;
+    }
+
+    public void setProteinRelation(Protein protein) {
+        proteinRelation = new BioRelation(this, protein, BioRelTypes.HAS_A_PROTEIN);
+    }
+
+    public void addProteinRelation(Protein protein) {
+        if (proteinRelations == null)
+            proteinRelations = new HashSet<>();
+        proteinRelations.add(new BioRelation(this, protein, BioRelTypes.HAS_A_PROTEIN));
     }
 
     /**
