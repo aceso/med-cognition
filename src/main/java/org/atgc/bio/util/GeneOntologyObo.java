@@ -29,12 +29,25 @@ public class GeneOntologyObo {
 
     protected static Logger log = LogManager.getLogger(GeneOntologyObo.class);
     private static String goPattern = "GO:";
-    
+
+    /**
+     *
+     * @param coll
+     * @return
+     * @throws UnknownHostException
+     */
     private static MongoCollection getCollection(ImportCollectionNames coll) throws UnknownHostException {
         MongoUtil mongoUtil = MongoUtil.getInstance();
         return mongoUtil.getCollection(coll.toString());
     }
-    
+
+    /**
+     *
+     * @param args
+     * @throws java.io.IOException
+     * @throws UnknownHostException
+     * @throws Exception
+     */
     public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
            DBCursor dbCursor = getCollection(ImportCollectionNames.GENE_ONTOLOGY).findDBCursor("{}" );
            try {
@@ -43,10 +56,15 @@ public class GeneOntologyObo {
                     BasicDBObject result = (BasicDBObject)dbCursor.next();
                     String ontologyId = getOntologyId(result);
                     processOntologyDoc(ontologyId, result);
+                    log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+                    log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
                 }
             } finally {
                dbCursor.close();
            }
+        log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+        log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+        log.info("Completed successfully!");
     }
 
     /**
@@ -127,8 +145,12 @@ public class GeneOntologyObo {
         }
     }
     */
-     
-   
+
+    /**
+     *
+     * @param s
+     * @return
+     */
     public static String removeComma(String s) {
         if (s.contains(",")) {
             return s.split(",")[0].trim();
@@ -136,7 +158,12 @@ public class GeneOntologyObo {
             return s;
         }
     }
-    
+
+    /**
+     *
+     * @param s
+     * @return
+     */
     public static String removeHalfBracket(String s) {
         if (s.contains("]")) {
             return s.split("]")[0].trim();
@@ -144,7 +171,12 @@ public class GeneOntologyObo {
             return s;
         }
     }
-    
+
+    /**
+     *
+     * @param body
+     * @return
+     */
     public static boolean hasDigits(String body) {
        if (body != null) {
           /* "\\d+" */
@@ -154,7 +186,13 @@ public class GeneOntologyObo {
        }
        return false;
     }
-     
+
+    /**
+     *
+     * @param val
+     * @param pList
+     * @return
+     */
     public static List<String> extractPubMedId(String val, List pList) {   
         if (val != null) {
             if (val.contains("PMID:")) {
@@ -184,8 +222,8 @@ public class GeneOntologyObo {
      *
      * exact_synonym: "HIRA complex" [PMID:19620282, PMID:20976105]
      * def: [GOC:elh, GOC:mah, PMID:16303565, PMID:17180700]
+     * @param geneOnto
      * @param dbObj
-     * @param field
      * @param subGraph
      */
     public static void setPubMedRelationship(GeneOntology geneOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
@@ -272,6 +310,11 @@ public class GeneOntologyObo {
        return OntologyStrUtil.getString(dbObj, OBOGeneOntologyFields.NAME_SPACE);
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     public static String getDef(BasicDBObject dbObj) {
         return OntologyStrUtil.getString(dbObj, OBOGeneOntologyFields.DEF);
     }
@@ -286,10 +329,20 @@ public class GeneOntologyObo {
         return OntologyStrUtil.getString(dbObj, OBOGeneOntologyFields.COMMENT);
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     public static BasicDBList getConsiderList(BasicDBObject dbObj) {
         return OntologyStrUtil.getList(dbObj, OBOGeneOntologyFields.CONSIDER_LIST);
     }
-    
+
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
      public static String getIsObsolete(BasicDBObject dbObj) {
         return OntologyStrUtil.getString(dbObj, OBOGeneOntologyFields.IS_OBSOLETE);
     } 
@@ -308,7 +361,7 @@ public class GeneOntologyObo {
      *   {
      *      "subset" : "gosubset_prok"
      *    }
-     * @param BasicDBObject
+     * @param dbObj
      * @param field
      * @return
      */
@@ -322,6 +375,11 @@ public class GeneOntologyObo {
         return str.toString();
     }
 
+    /**
+     *
+     * @param val
+     * @return
+     */
     public static boolean isEnzyme(String val) {
         log.info("enzyme =" + val);
         return val.contains("[EC:");
@@ -338,6 +396,11 @@ public class GeneOntologyObo {
             //return enzymeVal.split("]")[0];
     }
 
+    /**
+     *
+     * @param str
+     * @return
+     */
     public static String getEnzymeDesc(String str) {
         return str.split("\"")[1].split("\"")[0].trim();
     }
@@ -422,20 +485,20 @@ public class GeneOntologyObo {
          return enzyme;
     }
 
-
     /**
      * createEnzymeRel - creates enzyme relationship with {@link GeneOntology}
      * @param goEntity
-     * @param list EnzymeList
+     * @param list
      * @param relType
      * @param subGraph
      * @throws NoSuchFieldException
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
-     * @throws NotFoundException
      * @throws InvocationTargetException
      * @throws URISyntaxException
      * @throws UnknownHostException
+     * @throws RuntimeException
+     * @throws Exception
      */
     public static void createEnzymeRel(GeneOntology goEntity, List<String> list, BioRelTypes relType, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnknownHostException, RuntimeException, Exception {
         for (Object key : list) {
@@ -475,7 +538,7 @@ public class GeneOntologyObo {
      *  For example, a number of synonyms are designated as systematic synonyms;
      *  synonyms of this type are exact synonyms of the term name.
      * @param goEntity
-     * @param map
+     * @param dbObj
      * @param subGraph
      * @throws java.lang.NoSuchFieldException
      * @throws java.lang.IllegalAccessException
@@ -510,7 +573,7 @@ public class GeneOntologyObo {
      *  }
      *  ],
      * EC refers to Enzyme commission
-     * @param map
+     * @param dbObj
      * @return String from DBList
      */
     public static String getExactSynonyms(BasicDBObject dbObj) {
@@ -529,7 +592,7 @@ public class GeneOntologyObo {
      *   {
      *    "broad_synonym" : "\"lactase-phlorizin hydrolase activity\" [EC:3.2.1.108]"
      *   }
-     * @param map
+     * @param dbObj
      * @return String
      */
     public static String getBroadSynonyms(BasicDBObject dbObj) {
@@ -540,7 +603,7 @@ public class GeneOntologyObo {
 
     /**
      * getNarrowSynonyms
-     * @param map
+     * @param dbObj
      * @return String
      */
     public static String getNarrowSynonyms(BasicDBObject dbObj) {
@@ -581,6 +644,19 @@ public class GeneOntologyObo {
         }
     }
 
+    /**
+     *
+     * @param goId
+     * @param name
+     * @param subGraph
+     * @return
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws URISyntaxException
+     * @throws UnknownHostException
+     */
     public static GeneOntology getGeneOntology(String goId, String name, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnknownHostException {
         return createGeneOntologyLight(goId, name, subGraph);
     }
@@ -664,7 +740,6 @@ public class GeneOntologyObo {
     }
 
 
-
     /**
      * "isList" : [
      * {
@@ -677,10 +752,9 @@ public class GeneOntologyObo {
      * @throws NoSuchFieldException
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
-     * @throws NotFoundException
      * @throws InvocationTargetException
-     * @throws java.net.URISyntaxException
-     * @throws java.net.UnknownHostException
+     * @throws URISyntaxException
+     * @throws UnknownHostException
      */
     public static void createIsARelationships(GeneOntology geneOntology, BasicDBObject map, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnknownHostException {
          if (OntologyStrUtil.listExists(map, OBOGeneOntologyFields.IS_LIST)) {
@@ -742,7 +816,6 @@ public class GeneOntologyObo {
     }
 
     /**
-     * 
      * "disjointList" : [
      *	{
      *      "disjoint_from" : "GO:0005575 ! cellular_component"
@@ -759,10 +832,9 @@ public class GeneOntologyObo {
      * @throws NoSuchFieldException
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
-     * @throws NotFoundException
      * @throws InvocationTargetException
      * @throws URISyntaxException
-     * @throws UnknownHostException 
+     * @throws UnknownHostException
      */
     public static void createDisjointRelationship(GeneOntology geneOntology, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnknownHostException {
         if (OntologyStrUtil.listExists(dbObj, OBOGeneOntologyFields.DISJOINT_LIST)) {
@@ -782,16 +854,16 @@ public class GeneOntologyObo {
     }
 
     /**
-     * createGeneOntology
+     *
      * @param id
      * @param dbObj
      * @param subGraph
-     * @return GeneOntology {@link BioTypes#GENE_ONTOLOGY}
+     * @return
      * @throws NoSuchFieldException
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
-     * @throws NotFoundException
      * @throws InvocationTargetException
+     * @throws Exception
      */
     public static GeneOntology createGeneOntology(String id, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, Exception {
          GeneOntology geneOntology = (GeneOntology)subGraph.search(BioTypes.GENE_ONTOLOGY, BioFields.GENE_ONTOLOGY_OBO_ID, id);
@@ -852,6 +924,16 @@ public class GeneOntologyObo {
             PersistenceTemplate.saveSubgraph(subGraph);
     }
 
+    /**
+     *
+     * @param ontologyId
+     * @param subGraph
+     * @param dbObj
+     * @return
+     * @throws UnknownHostException
+     * @throws RuntimeException
+     * @throws Exception
+     */
     public static GeneOntology fetchOBOGeneOntology(String ontologyId, Subgraph subGraph, BasicDBObject dbObj) throws UnknownHostException, RuntimeException, Exception {
           
            if (dbObj != null) {
@@ -892,7 +974,12 @@ public class GeneOntologyObo {
           return null;
           
       }
-    
+
+    /**
+     *
+     * @param obj
+     * @return
+     */
       public static String getOntologyId(BasicDBObject obj) {
           return (String)obj.get(OBOGeneOntologyFields.GENE_ONTOLOGY_OBO_ID.toString()); 
       }
