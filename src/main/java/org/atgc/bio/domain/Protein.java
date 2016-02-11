@@ -350,7 +350,13 @@ public class Protein {
     private Collection<BioRelation> commentRelations;
     
     @RelatedToVia(direction=Direction.BOTH, relType=BioRelTypes.FOUND_EVIDENCE_IN, elementClass=BioRelation.class)
-    private Collection<BioRelation> evidenceRelations;       
+    private Collection<BioRelation> evidenceRelations;
+
+    @RelatedToVia(direction=Direction.BOTH, relType=BioRelTypes.HAS_A_PROTEIN, elementClass=BioRelation.class)
+    private Collection<BioRelation> proteinRelations;
+
+    @RelatedTo(direction=Direction.OUTGOING, relType=BioRelTypes.IN_ORGANISM, elementClass=BioRelation.class)
+    private BioRelation ncbiTaxonomyRelation;
     
     public void setProteinSequenceRelations(ProteinSequence entity) {
         if (proteinSequenceRelations == null) {
@@ -490,7 +496,7 @@ public class Protein {
     /**
      * {@link Indexed} {@link IndexNames#PROTEIN_SHORT_LABEL}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#PROTEIN_SHORT_LABEL} {@link BioFields#SHORT_LABEL}
+     * {@link Taxonomy} {@link TaxonomyTypes#PROTEIN_SHORT_LABEL} {@link BioFields#SHORT_LABEL}
      *
      * @param shortLabel
      */
@@ -501,7 +507,7 @@ public class Protein {
     /**
      * {@link Indexed} {@link IndexNames#PROTEIN_SHORT_LABEL}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#PROTEIN_SHORT_LABEL} {@link BioFields#SHORT_LABEL}
+     * {@link Taxonomy} {@link TaxonomyTypes#PROTEIN_SHORT_LABEL} {@link BioFields#SHORT_LABEL}
      *
      * @return String
      */
@@ -512,7 +518,7 @@ public class Protein {
     /**
      * {@link Indexed} {@link IndexNames#PROTEIN_FULL_NAME}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#PROTEIN_FULL_NAME} {@link BioFields#FULL_NAME}
+     * {@link Taxonomy} {@link TaxonomyTypes#PROTEIN_FULL_NAME} {@link BioFields#FULL_NAME}
      *
      * @param fullName
      */
@@ -539,7 +545,7 @@ public class Protein {
     /**
      * {@link Indexed} {@link IndexNames#PROTEIN_FULL_NAME}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#PROTEIN_FULL_NAME} {@link BioFields#FULL_NAME}
+     * {@link Taxonomy} {@link TaxonomyTypes} {@link BioFields#FULL_NAME}
      *
      * @return String
      */
@@ -553,7 +559,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_UNIPROT_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#UNIPROT_ID} {@link BioFields#UNIPROT_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#UNIPROT_ID} {@link BioFields#UNIPROT_SECONDARY_REFS}
      *
      * @return String
      */
@@ -567,7 +573,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_UNIPROT_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#UNIPROT_ID} {@link BioFields#UNIPROT_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#UNIPROT_ID} {@link BioFields#UNIPROT_SECONDARY_REFS}
      *
      * @param uniprotSecondaryRefs
      */
@@ -581,7 +587,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_INTERPRO_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#INTERPRO_ID} {@link BioFields#INTERPRO_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#INTERPRO_ID} {@link BioFields#INTERPRO_SECONDARY_REFS}
      *
      * @return String
      */
@@ -595,7 +601,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_INTERPRO_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#INTERPRO_ID} {@link BioFields#INTERPRO_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#INTERPRO_ID} {@link BioFields#INTERPRO_SECONDARY_REFS}
      *
      * @param interproSecondaryRefs
      */
@@ -609,7 +615,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_IPI_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#IPI_ID} {@link BioFields#IPI_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#IPI_ID} {@link BioFields#IPI_SECONDARY_REFS}
      *
      * @return String
      */
@@ -623,7 +629,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_IPI_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#IPI_ID} {@link BioFields#IPI_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#IPI_ID} {@link BioFields#IPI_SECONDARY_REFS}
      *
      * @param ipiSecondaryRefs
      */
@@ -637,7 +643,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_GO_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#GO_ID} {@link BioFields#GO_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#GO_ID} {@link BioFields#GO_SECONDARY_REFS}
      *
      * @return String
      */
@@ -651,7 +657,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_GO_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#GO_ID} {@link BioFields#GO_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#GO_ID} {@link BioFields#GO_SECONDARY_REFS}
      *
      * @param goSecondaryRefs
      */
@@ -665,7 +671,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_INTACT_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#INTACT_ID} {@link BioFields#INTACT_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#INTACT_ID} {@link BioFields#INTACT_SECONDARY_REFS}
      *
      * @return String
      */
@@ -679,7 +685,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_INTACT_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#INTACT_ID} {@link BioFields#INTACT_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#INTACT_ID} {@link BioFields#INTACT_SECONDARY_REFS}
      *
      * @param intactSecondaryRefs
      */
@@ -715,7 +721,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_ENSEMBL_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#ENSEMBL_ID} {@link BioFields#ENSEMBL_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#ENSEMBL_ID} {@link BioFields#ENSEMBL_SECONDARY_REFS}
      *
      * @return String
      */
@@ -729,7 +735,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_ENSEMBL_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#ENSEMBL_ID} {@link BioFields#ENSEMBL_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#ENSEMBL_ID} {@link BioFields#ENSEMBL_SECONDARY_REFS}
      *
      * @param ensemblSecondaryRefs
      */
@@ -740,7 +746,7 @@ public class Protein {
     /**
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_REFSEQ_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#REFSEQ_ID} {@link BioFields#REFSEQ_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#REFSEQ_ID} {@link BioFields#REFSEQ_SECONDARY_REFS}
      *
      * @return String
      */
@@ -751,7 +757,7 @@ public class Protein {
     /**
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_REFSEQ_SECONDARY_REFS}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#REFSEQ_ID} {@link BioFields#REFSEQ_SECONDARY_REFS}
+     * {@link Taxonomy} {@link TaxonomyTypes#REFSEQ_ID} {@link BioFields#REFSEQ_SECONDARY_REFS}
      *
      * @param refseqSecondaryRefs
      */
@@ -764,7 +770,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_ALIASES}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#PROTEIN_ALIAS} {@link BioFields#ALIASES}
+     * {@link Taxonomy} {@link TaxonomyTypes#PROTEIN_ALIAS} {@link BioFields#ALIASES}
      *
      * @return String
      */
@@ -777,7 +783,7 @@ public class Protein {
      * <p>
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_ALIASES}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#PROTEIN_ALIAS} {@link BioFields#ALIASES}
+     * {@link Taxonomy} {@link TaxonomyTypes#PROTEIN_ALIAS} {@link BioFields#ALIASES}
      *
      * @param aliases
      */
@@ -790,7 +796,7 @@ public class Protein {
      * <p>
      * {@link Indexed} {@link IndexNames#INTACT_ID}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#INTACT_ID} {@link BioFields#INTACT_ID}
+     * {@link Taxonomy} {@link TaxonomyTypes#INTACT_ID} {@link BioFields#INTACT_ID}
      *
      * @return String
      */
@@ -803,7 +809,7 @@ public class Protein {
      * <p>
      * {@link Indexed} {@link IndexNames#INTACT_ID}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#INTACT_ID} {@link BioFields#INTACT_ID}
+     * {@link Taxonomy} {@link TaxonomyTypes#INTACT_ID} {@link BioFields#INTACT_ID}
      *
      * @param intactId
      */
@@ -816,7 +822,7 @@ public class Protein {
      * <p>
      * {@link Indexed} {@link IndexNames#INTERACTOR_ID}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#INTERACTOR_ID} {@link BioFields#INTERACTOR_ID}
+     * {@link Taxonomy} {@link TaxonomyTypes#INTERACTOR_ID} {@link BioFields#INTERACTOR_ID}
      *
      * @return String
      */
@@ -829,7 +835,7 @@ public class Protein {
      * <p>
      * {@link Indexed} {@link IndexNames#INTERACTOR_ID}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#INTERACTOR_ID} {@link BioFields#INTERACTOR_ID}
+     * {@link Taxonomy} {@link TaxonomyTypes#INTERACTOR_ID} {@link BioFields#INTERACTOR_ID}
      *
      * @param interactorId
      */
@@ -894,7 +900,7 @@ public class Protein {
     /**
      * {@link Indexed} {@link IndexNames#INTERACTOR_ID}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#NCBI_TAX_ID} {@link BioFields#NCBI_TAX_ID}
+     * {@link Taxonomy} {@link TaxonomyTypes#NCBI_TAX_ID} {@link BioFields#NCBI_TAX_ID}
      *
      * @return String
      */
@@ -905,7 +911,7 @@ public class Protein {
     /**
      * {@link Indexed} {@link IndexNames#INTERACTOR_ID}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#NCBI_TAX_ID} {@link BioFields#NCBI_TAX_ID}
+     * {@link Taxonomy} {@link TaxonomyTypes#NCBI_TAX_ID} {@link BioFields#NCBI_TAX_ID}
      *
      * @param ncbiTaxId
      */
@@ -917,7 +923,7 @@ public class Protein {
      * In the following, <code>this<code> Protein object is related to other Protein objects
      * with an outgoing relationship called <code>IntactInteraction</code>.
      * <p>
-     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction.BOTH}
+     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction}
      * <DL>
      * <LI>
      * startNodeBioType {@link BioTypes#PROTEIN}
@@ -942,7 +948,7 @@ public class Protein {
      * In the following, <code>NamedProtein<code> Protein object is related to <code>this<code> object
      * with an outgoing relationship called <code>memberOfProteinFamily</code>.
      * <p>
-     * {@link RelatedTo} {@link org.neo4j.graphdb.Direction.OUTGOING}
+     * {@link RelatedTo} {@link org.neo4j.graphdb.Direction}
      * <DL>
      * <LI>
      * startNodeBioType {@link BioTypes#NAMED_PROTEIN}
@@ -971,7 +977,7 @@ public class Protein {
      * In the following, <code>NamedProtein<code> Protein object is related to <code>this<code> object
      * with an outgoing relationship called <code>memberOfProteinFamily</code>.
      * <p>
-     * {@link RelatedTo} {@link org.neo4j.graphdb.Direction.OUTGOING}
+     * {@link RelatedTo} {@link org.neo4j.graphdb.Direction}
      * <DL>
      * <LI>
      * startNodeBioType {@link BioTypes#NAMED_PROTEIN} or
@@ -1005,7 +1011,7 @@ public class Protein {
      * <code>nciPtmExpressionRelation</code>
      *
      * <p>
-     * {@link RelatedTo} {@link org.neo4j.graphdb.Direction.OUTGOING}
+     * {@link RelatedTo} {@link org.neo4j.graphdb.Direction}
      * <DL>
      * <LI>
      * startNodeBioType {@link BioTypes#PROTEIN}
@@ -1047,7 +1053,7 @@ public class Protein {
     /**
      * {@link UniquelyIndexed} {@link IndexNames#UNIPROT_ID}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#UNIPROT_ID} {@link BioFields#UNIPROT_ID}
+     * {@link Taxonomy} {@link TaxonomyTypes#UNIPROT_ID} {@link BioFields#UNIPROT_ID}
      *
      * @param uniprot
      */
@@ -1058,7 +1064,7 @@ public class Protein {
     /**
      * {@link Indexed} {@link IndexNames#PROTEIN_ORGANISM_SHORT_LABEL}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#ORGANISM_SHORT_LABEL} {@link BioFields#ORGANISM_SHORT_LABEL}
+     * {@link Taxonomy} {@link TaxonomyTypes#ORGANISM_SHORT_LABEL} {@link BioFields#ORGANISM_SHORT_LABEL}
      *
      * @return String
      */
@@ -1069,7 +1075,7 @@ public class Protein {
     /**
      * {@link Indexed} {@link IndexNames#PROTEIN_ORGANISM_SHORT_LABEL}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#ORGANISM_SHORT_LABEL} {@link BioFields#ORGANISM_SHORT_LABEL}
+     * {@link Taxonomy} {@link TaxonomyTypes#ORGANISM_SHORT_LABEL} {@link BioFields#ORGANISM_SHORT_LABEL}
      *
      * @param organismShortLabel
      */
@@ -1080,7 +1086,7 @@ public class Protein {
     /**
      * {@link Indexed} {@link IndexNames#PROTEIN_ORGANISM_FULL_NAME}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#ORGANISM_FULL_NAME} {@link BioFields#ORGANISM_FULL_NAME}
+     * {@link Taxonomy} {@link TaxonomyTypes#ORGANISM_FULL_NAME} {@link BioFields#ORGANISM_FULL_NAME}
      *
      * @return String
      */
@@ -1091,7 +1097,7 @@ public class Protein {
     /**
      * {@link Indexed} {@link IndexNames#PROTEIN_ORGANISM_FULL_NAME}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#ORGANISM_FULL_NAME} {@link BioFields#ORGANISM_FULL_NAME}
+     * {@link Taxonomy} {@link TaxonomyTypes#ORGANISM_FULL_NAME} {@link BioFields#ORGANISM_FULL_NAME}
      *
      * @param organismFullName
      */
@@ -1103,7 +1109,7 @@ public class Protein {
      * In the following, <code>this<code> Protein object is related to other Protein objects
      * with an outgoing relationship called <code>IntactInteraction</code>.
      * <p>
-     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction.BOTH}
+     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction}
      * <DL>
      * <LI>
      * startNodeBioType {@link BioTypes#PROTEIN}
@@ -1127,7 +1133,7 @@ public class Protein {
      * In the following, <code>this<code> Protein object is related to other Protein objects
      * with an outgoing relationship called <code>IntactInteraction</code>.
      * <p>
-     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction.BOTH}
+     * {@link RelatedToVia} {@link org.neo4j.graphdb.Direction}
      * <DL>
      * <LI>
      * startNodeBioType {@link BioTypes#PROTEIN}
@@ -1162,7 +1168,7 @@ public class Protein {
      *
      * "Part" : { "@whole_molecule_idref" : "200436", "@part_molecule_idref" :
      * "202926", "@start" : "701", "@end" : "882" }
-     * {@link BioFields} {@link NciOntology#Start} {@link NciOntology#End}
+     * {@link BioFields}
      *
      * @param partProtein
      * @param start
@@ -1238,7 +1244,7 @@ public class Protein {
      * <p>
      * {@link Indexed} {@link IndexNames#MOLECULE_IDREF}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#MOLECULE_IDREF} {@link BioFields#MOLECULE_IDREF}
+     * {@link Taxonomy} {@link TaxonomyTypes#MOLECULE_IDREF} {@link BioFields#MOLECULE_IDREF}
      *
      * @return String
      */
@@ -1251,7 +1257,7 @@ public class Protein {
      * <p>
      * {@link Indexed} {@link IndexNames#MOLECULE_IDREF}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#MOLECULE_IDREF} {@link BioFields#MOLECULE_IDREF}
+     * {@link Taxonomy} {@link TaxonomyTypes} {@link BioFields#MOLECULE_IDREF}
      *
      * @param moleculeIdRef
      */
@@ -1267,6 +1273,10 @@ public class Protein {
         if (rel != null) {
             authorRelations.add(rel);
         }
+    }
+
+    public void setNcbiTaxonomyRelation(NcbiTaxonomy ncbiTaxonomy) {
+        ncbiTaxonomyRelation = new BioRelation(this, ncbiTaxonomy, BioRelTypes.IN_ORGANISM);
     }
     
     public Iterable<BioRelation> getAuthorRelations() {
@@ -1286,7 +1296,7 @@ public class Protein {
     /**
      * Creates a new protein
      *
-     * @return Protein {@link BioEntity#PROTEIN}
+     * @return Protein {@link BioEntity}
      */
     public Protein Protein() {
         Protein protein = new Protein();
@@ -1333,7 +1343,7 @@ public class Protein {
     /**
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_PREFERRED_SYMBOL}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#PROTEIN_PREFERRED_SYMBOL} {@link BioFields#PROTEIN_PREFERRED_SYMBOL}
+     * {@link Taxonomy} {@link TaxonomyTypes#PROTEIN_PREFERRED_SYMBOL} {@link BioFields#PROTEIN_PREFERRED_SYMBOL}
      *
      * @return String
      */
@@ -1344,7 +1354,7 @@ public class Protein {
     /**
      * {@link FullTextIndexed} {@link IndexNames#PROTEIN_PREFERRED_SYMBOL}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#PROTEIN_PREFERRED_SYMBOL} {@link BioFields#PROTEIN_PREFERRED_SYMBOL}
+     * {@link Taxonomy} {@link TaxonomyTypes#PROTEIN_PREFERRED_SYMBOL} {@link BioFields#PROTEIN_PREFERRED_SYMBOL}
      *
      * @param preferredSymbol
      */
@@ -1355,7 +1365,7 @@ public class Protein {
     /**
      * {@link FullTextIndexed} {@link IndexNames#LOCATION}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#LOCATION} {@link BioFields#LOCATION}
+     * {@link Taxonomy} {@link TaxonomyTypes#LOCATION} {@link BioFields#LOCATION}
      *
      * @return String proteinLocation
      */
@@ -1366,7 +1376,7 @@ public class Protein {
     /**
      * {@link FullTextIndexed} {@link IndexNames#LOCATION}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#LOCATION} {@link BioFields#LOCATION}
+     * {@link Taxonomy} {@link TaxonomyTypes#LOCATION} {@link BioFields#LOCATION}
      *
      * @param proteinLocation
      */
@@ -1377,7 +1387,7 @@ public class Protein {
     /**
      * {@link FullTextIndexed} {@link IndexNames#ACTIVITY_STATE}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#ACTIVITY_STATE} {@link BioFields#ACTIVITY_STATE}
+     * {@link Taxonomy} {@link TaxonomyTypes#ACTIVITY_STATE} {@link BioFields#ACTIVITY_STATE}
      *
      * @param activityState
      */
@@ -1388,7 +1398,7 @@ public class Protein {
     /**
      * {@link FullTextIndexed} {@link IndexNames#ACTIVITY_STATE}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#ACTIVITY_STATE} {@link BioFields#ACTIVITY_STATE}
+     * {@link Taxonomy} {@link TaxonomyTypes#ACTIVITY_STATE} {@link BioFields#ACTIVITY_STATE}
      *
      * @return String
      */
@@ -1399,7 +1409,7 @@ public class Protein {
     /**
      * {@link FullTextIndexed} {@link IndexNames#FUNCTION}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#FUNCTION} {@link BioFields#FUNCTION}
+     * {@link Taxonomy} {@link TaxonomyTypes#FUNCTION} {@link BioFields#FUNCTION}
      *
      * @param function
      */
@@ -1410,7 +1420,7 @@ public class Protein {
     /**
      * {@link FullTextIndexed} {@link IndexNames#FUNCTION}
      * <p>
-     * {@link Taxonomy} {@link org.atgc.bio.meta.TaxonomyTypes#FUNCTION} {@link BioFields#FUNCTION}
+     * {@link Taxonomy} {@link TaxonomyTypes#FUNCTION} {@link BioFields#FUNCTION}
      *
      * @return String
      */
@@ -1433,6 +1443,12 @@ public class Protein {
 
     public void setUniprotKeywords(String keywords) {
         this.uniprotKeywords = keywords;
+    }
+
+    public void addProteinRelation(Protein protein) {
+        if (proteinRelations == null)
+            proteinRelations = new HashSet<>();
+        proteinRelations.add(new BioRelation(this, protein, BioRelTypes.HAS_A_PROTEIN));
     }
     
     /**
