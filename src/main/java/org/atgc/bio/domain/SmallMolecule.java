@@ -5,6 +5,7 @@
 package org.atgc.bio.domain;
 
 import org.atgc.bio.BioFields;
+import org.atgc.bio.Uniprot;
 import org.atgc.bio.repository.TemplateUtils;
 import java.util.Collection;
 import java.util.HashSet;
@@ -74,9 +75,6 @@ import org.neo4j.graphdb.Direction;
 @BioEntity(bioType = BioTypes.SMALL_MOLECULE)
 public class SmallMolecule {
 
-    /**
-     *
-     */
     protected static Logger log = LogManager.getLogger(SmallMolecule.class);
 
     @GraphId
@@ -205,6 +203,12 @@ public class SmallMolecule {
      */
     @RelatedToVia(direction=Direction.BOTH, elementClass=BioRelation.class)
     private Collection<BioRelation> intactInteractions = new HashSet<BioRelation>();
+
+    @RelatedTo(direction=Direction.INCOMING, relType=BioRelTypes.IN_ORGANISM, elementClass=BioRelation.class)
+    private BioRelation ncbiTaxonomyRelation;
+
+    @RelatedToVia(direction=Direction.OUTGOING, relType=BioRelTypes.HAS_A_PROTEIN, elementClass=BioRelation.class)
+    private Collection<BioRelation> proteinRelations;
 
     /**
      *
@@ -749,7 +753,7 @@ public class SmallMolecule {
 
     /**
      *
-     * @return Lnng
+     * @return Long
      */
     public Long getId() {
     	return id;
@@ -805,10 +809,20 @@ public class SmallMolecule {
      * Creates a new smallMolecule
      * @return SmallMolecule {@link BioEntity#SMALL_MOLECULE}
      */
-    public SmallMolecule SmallMolecule() {
+    public SmallMolecule smallMolecule() {
         SmallMolecule smallMolecule = new SmallMolecule();
         smallMolecule.setNodeType(BioTypes.SMALL_MOLECULE);
         return smallMolecule;
+    }
+
+    public void setNcbiTaxonomyRelation(NcbiTaxonomy ncbiTaxonomy) {
+        ncbiTaxonomyRelation = new BioRelation(this, ncbiTaxonomy, BioRelTypes.IN_ORGANISM);
+    }
+
+    public void addProteinRelation(Protein protein) {
+        if (proteinRelations == null)
+            proteinRelations = new HashSet<>();
+        proteinRelations.add(new BioRelation(this, protein, BioRelTypes.HAS_A_PROTEIN));
     }
 
     /**
