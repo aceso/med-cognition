@@ -77,8 +77,19 @@ public class OntologyStrUtil {
     public static String getString(Map map, Enum field) {
         return (String)map.get(field.toString());
     }*/
-    
+
+    /**
+     *
+     * @param map
+     * @param field
+     * @return
+     */
+     public static boolean isString(BasicDBObject map, Enum field) {
+       return map.get(field.toString()).getClass().equals(String.class);
+     }
+
     public static BasicDBList getList(BasicDBObject map, Enum field) {
+        log.info(map.get(field.toString()).getClass().getName());
         return (BasicDBList)map.get(field.toString());
     }
     
