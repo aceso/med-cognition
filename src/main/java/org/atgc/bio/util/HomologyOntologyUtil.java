@@ -44,10 +44,14 @@ public class HomologyOntologyUtil {
                 BasicDBObject result = (BasicDBObject)dbCursor.next();
                 String ontologyId = OntologyStrUtil.getString(result, HomologyOntologyFields.ID);
                 processOntologyDoc(ontologyId, result);
+                log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+                log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
             }
          } finally {
             dbCursor.close();
-         }   
+         }
+        log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+        log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
     }
     
     /**
@@ -56,7 +60,9 @@ public class HomologyOntologyUtil {
      * @param result 
      */
     public static void processOntologyDoc(String id, BasicDBObject result) throws UnknownHostException {
-          if (OntologyStrUtil.isHumanDiseaseOntology(id)) { 
+        log.info("enter processOntologyDoc");
+        if (OntologyStrUtil.isHOM(id)) {
+            log.info("isHOM");
               if (!StatusUtil.idExists(BioTypes.HOMOLOGY_ONTOLOGY.toString(), BioFields.HOMOLOGY_ONTOLOGY_ID.toString(), id)) {
                     log.info("******* Homology ontology id =" + id);
                     try {
@@ -147,23 +153,24 @@ public class HomologyOntologyUtil {
         return str.split(pattern)[0].replaceAll("'\'", "").trim();
     }
    
-   
-     /**
-      * Does not have NARROW 
+
+    /**
+     * Does not have NARROW
      * <pre>
      * "synonymList" : [
-		{
-			"synonym" : "\"correspondence\" RELATED [DOI:10.1007/BF02814479 \"Richter S (2005) Homologies in phylogenetic analyses?concept and tests. Theory in Biosciences 124, 2: 105-120\"]"
-		},
-		{
-			"synonym" : "\"resemblance\" RELATED []"
-		},
-		{
-			"synonym" : "\"sameness\" EXACT []"
-		}
+     {
+     "synonym" : "\"correspondence\" RELATED [DOI:10.1007/BF02814479 \"Richter S (2005) Homologies in phylogenetic analyses?concept and tests. Theory in Biosciences 124, 2: 105-120\"]"
+     },
+     {
+     "synonym" : "\"resemblance\" RELATED []"
+     },
+     {
+     "synonym" : "\"sameness\" EXACT []"
+     }
      * </pre>
-     * @param obj
-     * @return 
+     * @param list
+     * @param enumField
+     * @return
      */
     public static String getSynonym(BasicDBList list, HomologyOntologyFields enumField) {
         List synList = new ArrayList();
@@ -188,12 +195,11 @@ public class HomologyOntologyUtil {
             return synList.toString();
         }
     }
-    
+
     /**
-     * 
-     * setSynonyms
-     * @param HumanDO
-     * @param obj 
+     *
+     * @param onto
+     * @param dbObj
      */
     public static void setSynonyms(HomologyOntology onto, BasicDBObject dbObj) {
         BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HomologyOntologyFields.SYNONYM_LIST);
@@ -222,7 +228,7 @@ public class HomologyOntologyUtil {
      *
      *
      * setIsARelationship
-     * @param HOM
+     * @param onto
      * @param dbObj
      * @param subGraph
      * @throws NoSuchFieldException
@@ -265,7 +271,8 @@ public class HomologyOntologyUtil {
     * @throws InvocationTargetException 
     */
     public static void setDisjointRelationship(HomologyOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-         if (OntologyStrUtil.listExists(dbObj, HomologyOntologyFields.DISJOINT_FROM)) {
+        log.info("dbObj = " + dbObj.toString());
+        if (OntologyStrUtil.isString(dbObj, HomologyOntologyFields.DISJOINT_FROM)) {
             String str = OntologyStrUtil.getString((BasicDBObject)dbObj, HomologyOntologyFields.DISJOINT_FROM);
             if (OntologyStrUtil.isHOM(str)) {
                 String id = getId(str, OntologyStrUtil.HOMPattern); 
@@ -295,6 +302,7 @@ public class HomologyOntologyUtil {
      * @throws Exception 
      */
      public static void processHomologyOntology(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+         log.info("Enter process");
          Subgraph subGraph = new Subgraph();
          HomologyOntology HO = getHomologyOntology(ontologyId, subGraph);
          if (OntologyStrUtil.objectExists(obj, HomologyOntologyFields.NAME)) { 
