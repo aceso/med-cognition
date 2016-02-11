@@ -204,7 +204,7 @@ public class SmallMolecule {
     @RelatedToVia(direction=Direction.BOTH, elementClass=BioRelation.class)
     private Collection<BioRelation> intactInteractions = new HashSet<BioRelation>();
 
-    @RelatedTo(direction=Direction.INCOMING, relType=BioRelTypes.IN_ORGANISM, elementClass=BioRelation.class)
+    @RelatedTo(direction=Direction.OUTGOING, relType=BioRelTypes.IN_ORGANISM, elementClass=BioRelation.class)
     private BioRelation ncbiTaxonomyRelation;
 
     @RelatedToVia(direction=Direction.OUTGOING, relType=BioRelTypes.HAS_A_PROTEIN, elementClass=BioRelation.class)
