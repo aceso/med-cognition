@@ -616,6 +616,10 @@ public enum IndexNames {
      */
     SMALL_MOLECULE_UNIPROT_SECONDARY_REFS("SmallMoleculeUniprotSecondaryRefs"),
     /**
+     * Full text index for secondary pubmed references for a dna
+     */
+    DNA_PUBMED_SECONDARY_REFS("DnaPubmedSecondaryRefs"),
+    /**
      * Full text index for secondary interpro references for a protein
      */
     PROTEIN_INTERPRO_SECONDARY_REFS("ProteinInterproSecondaryRefs"),
