@@ -4,6 +4,8 @@
  */
 package org.atgc.bio.repository;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.atgc.bio.domain.IndexNames;
 import org.atgc.bio.meta.AnnotationTypes;
 import org.atgc.bio.meta.UniquelyIndexed;
@@ -25,6 +27,7 @@ public class PrimaryKey {
     private final IndexNames indexName;
     private final String key;
     private final String value;
+    protected static Logger log = LogManager.getLogger(PrimaryKey.class);
 
     /**
      * We scan the bioentity and extract the key, value and indexName of the
@@ -32,7 +35,7 @@ public class PrimaryKey {
      *
      * @param indexName
      * @param key
-     * @param value
+     * @param val
      */
     PrimaryKey(IndexNames indexName, String key, String val) {
         this.indexName = indexName;
@@ -56,6 +59,15 @@ public class PrimaryKey {
         return (anno.toString().startsWith(type.toString()));
     }
 
+    /**
+     *
+     * @param t
+     * @param <T>
+     * @return
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws URISyntaxException
+     */
     public static <T> PrimaryKey getPrimaryKey(T t) throws IllegalArgumentException, IllegalAccessException, URISyntaxException {
         String key;
         String value;
@@ -67,6 +79,7 @@ public class PrimaryKey {
             Annotation anno = field.getAnnotation(UniquelyIndexed.class);
             if (anno != null) {
                 key = field.getName();
+                if (field.get(t) == null) return null;
                 value = field.get(t).toString();
                 indexName = ((UniquelyIndexed)anno).indexName();
                 return new PrimaryKey(indexName, key, value);
