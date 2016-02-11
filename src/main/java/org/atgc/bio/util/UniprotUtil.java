@@ -33,16 +33,12 @@ public class UniprotUtil {
     protected static Logger log = LogManager.getLogger(UniprotUtil.class);
     private static String NcbiTaxonPrefix = "NCBITaxon:";
 
-    public static Protein getProtein(String id, Subgraph subGraph) throws Exception {
-        if (id != null) {
-            return createProtein(id, subGraph);
-        } else {
-            return null;
-        }
+    public static Protein getProtein(String id) throws Exception {
+        return getProtein(id, new Subgraph());
     }
 
-
-    public static Protein createProtein(String id, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+    public static Protein getProtein(String id, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+        if (id == null) return null;
         Protein protein = (Protein) subGraph.search(BioTypes.PROTEIN, BioFields.UNIPROT_ID, id);
         if (protein == null) {
             protein = new Protein();
@@ -50,7 +46,7 @@ public class UniprotUtil {
             subGraph.add(protein);
             processProtein(protein, id, subGraph);
         }
-        return null;
+        return protein;
     }
 
     /**
