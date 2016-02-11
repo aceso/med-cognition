@@ -312,7 +312,7 @@ public class IntactImport {
         return getString(getDBObject(interactor, IntactFields.ORGANISM), IntactFields.NCBI_TAX_ID);
     }
 
-    private static Protein getProtein(DBObject interactor) {
+    private static Protein getProtein(DBObject interactor) throws Exception {
         Protein protein = new Protein();
         protein.setIntactId(getIntactId(interactor));
         protein.setInteractorId(getInteractorId(interactor));
@@ -324,7 +324,13 @@ public class IntactImport {
         protein.setMessage(fullName);
         protein.setFullName(getFullName(interactor));
         protein.setAliases(getAliases(interactor));
-        protein.setUniprotSecondaryRefs(getSecondaryRefs(interactor, IntactSources.UNIPROT));
+        String uniprotIds = getSecondaryRefs(interactor, IntactSources.UNIPROT);
+        protein.setUniprotSecondaryRefs(uniprotIds);
+        String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
+        for (String proteinId : uniprotIdArray) {
+            Protein p = UniprotUtil.getProtein(proteinId);
+            protein.addProteinRelation(p);
+        }
         protein.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
         protein.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
         protein.setGoSecondaryRefs(getSecondaryRefs(interactor, IntactSources.GO));
@@ -334,22 +340,33 @@ public class IntactImport {
         protein.setRefseqSecondaryRefs(getSecondaryRefs(interactor, IntactSources.REFSEQ));
         protein.setOrganismFullName(getOrganismFullName(interactor));
         protein.setOrganismShortLabel(getOrganismShortLabel(interactor));
-        protein.setNcbiTaxId(getNcbiTaxId(interactor));
+        String taxId = getNcbiTaxId(interactor);
+        protein.setNcbiTaxId(taxId);
+        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(new Subgraph(), taxId);
+        protein.setNcbiTaxonomyRelation(ncbiTaxonomy);
         return protein;
     }
 
-    private static Peptide getPeptide(DBObject interactor) {
+    private static Peptide getPeptide(DBObject interactor) throws Exception {
         Peptide peptide = new Peptide();
         peptide.setIntactId(getIntactId(interactor));
         peptide.setInteractorId(getInteractorId(interactor));
         peptide.setNodeType(BioTypes.PEPTIDE);
-        peptide.setUniprot(getUniprot(interactor));
+        String uniprotId = getUniprot(interactor);
+        peptide.setUniprot(uniprotId);
+        peptide.setProteinRelation(UniprotUtil.getProtein(uniprotId));
         peptide.setShortLabel(getShortLabel(interactor));
         String fullName = getFullName(interactor);
         peptide.setMessage(fullName);
         peptide.setFullName(getFullName(interactor));
         peptide.setAliases(getAliases(interactor));
-        peptide.setUniprotSecondaryRefs(getSecondaryRefs(interactor, IntactSources.UNIPROT));
+        String uniprotIds = getSecondaryRefs(interactor, IntactSources.UNIPROT);
+        peptide.setUniprotSecondaryRefs(uniprotIds);
+        String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
+        for (String proteinId : uniprotIdArray) {
+            Protein protein = UniprotUtil.getProtein(proteinId);
+            peptide.addProteinRelation(protein);
+        }
         peptide.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
         peptide.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
         peptide.setGoSecondaryRefs(getSecondaryRefs(interactor, IntactSources.GO));
@@ -359,7 +376,10 @@ public class IntactImport {
         peptide.setRefseqSecondaryRefs(getSecondaryRefs(interactor, IntactSources.REFSEQ));
         peptide.setOrganismFullName(getOrganismFullName(interactor));
         peptide.setOrganismShortLabel(getOrganismShortLabel(interactor));
-        peptide.setNcbiTaxId(getNcbiTaxId(interactor));
+        String taxId = getNcbiTaxId(interactor);
+        peptide.setNcbiTaxId(taxId);
+        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(new Subgraph(), taxId);
+        peptide.setNcbiTaxonomyRelation(ncbiTaxonomy);
         return peptide;
     }
 
@@ -378,7 +398,7 @@ public class IntactImport {
         smallMolecule.setUniprotSecondaryRefs(uniprotIds);
         String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
         for (String uniprotId : uniprotIdArray) {
-            Protein protein = UniprotUtil.getProtein(uniprotId, new Subgraph());
+            Protein protein = UniprotUtil.getProtein(uniprotId);
             smallMolecule.addProteinRelation(protein);
         }
         smallMolecule.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
