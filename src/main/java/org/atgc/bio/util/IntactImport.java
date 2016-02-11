@@ -8,38 +8,14 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+import org.apache.velocity.util.StringUtils;
 import org.atgc.bio.*;
-import org.atgc.bio.domain.BioRelTypes;
-import org.atgc.bio.domain.BioRelation;
-import org.atgc.bio.domain.BioTypes;
-import org.atgc.bio.domain.BiologicalRole;
-import org.atgc.bio.domain.EndStatus;
-import org.atgc.bio.domain.ExperimentAttributes;
-import org.atgc.bio.domain.ExperimentComment;
-import org.atgc.bio.domain.ExperimentDataProcessing;
-import org.atgc.bio.domain.ExperimentDataset;
-import org.atgc.bio.domain.ExperimentLibrary;
-import org.atgc.bio.domain.ExperimentUrl;
-import org.atgc.bio.domain.ExperimentalRole;
-import org.atgc.bio.domain.Feature;
-import org.atgc.bio.domain.FeatureRange;
-import org.atgc.bio.domain.FeatureType;
-import org.atgc.bio.domain.Intact;
-import org.atgc.bio.domain.IntactExperiment;
-import org.atgc.bio.domain.IntactInteraction;
-import org.atgc.bio.domain.InteractionDetectionMethod;
-import org.atgc.bio.domain.Organism;
-import org.atgc.bio.domain.Participant;
-import org.atgc.bio.domain.ParticipantIdentificationMethod;
-import org.atgc.bio.domain.Peptide;
-import org.atgc.bio.domain.Protein;
-import org.atgc.bio.domain.PubMed;
-import org.atgc.bio.domain.SmallMolecule;
-import org.atgc.bio.domain.StartStatus;
+import org.atgc.bio.domain.*;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.json.JsonChars;
 import org.atgc.mongod.MongoObjects;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -50,6 +26,7 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
@@ -86,7 +63,7 @@ public class IntactImport {
     private static RestGraphDatabase graphDb;
     private static RestIndex<Node> rbidIndex;
 
-    private static final String DB_PATH= "neo4j-shortest-path";
+    private static final String DB_PATH = "neo4j-shortest-path";
     public static final String NCI_ID = "@id";
     public static final String NCI_VALUE = "@value";
     public static final String MESSAGE = "message";
@@ -95,19 +72,19 @@ public class IntactImport {
 
     private static void setup() throws URISyntaxException {
         graphDb = new RestGraphDatabase(BioEntityType.DB_URL.toString());
-        registerShutdownHook( graphDb );
+        registerShutdownHook(graphDb);
     }
 
-    private static void registerShutdownHook( RestGraphDatabase graphDb1) {
-    // Registers a shutdown hook for the Neo4j instance so that it
-    // shuts down nicely when the VM exits (even if you "Ctrl-C" the
-    // running example before it's completed)
-        Runtime.getRuntime().addShutdownHook( new Thread() {
-        @Override
-        public void run() {
-            graphDb.shutdown();
-        }
-    } );
+    private static void registerShutdownHook(RestGraphDatabase graphDb1) {
+        // Registers a shutdown hook for the Neo4j instance so that it
+        // shuts down nicely when the VM exits (even if you "Ctrl-C" the
+        // running example before it's completed)
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                graphDb.shutdown();
+            }
+        });
     }
 
     /**
@@ -130,7 +107,7 @@ public class IntactImport {
         if (!obj.getClass().equals(String.class)) {
             throw new RuntimeException("Expected String object but found " + obj.getClass().getName());
         }
-        return (String)obj;
+        return (String) obj;
     }
 
     /**
@@ -156,7 +133,7 @@ public class IntactImport {
                 MongoClasses.DBObject.equals(obj.getClass())) {
             throw new RuntimeException("Expected a BasicDBObject " + obj.getClass().getName());
         } else if (MongoClasses.BasicDBObject.equals(obj.getClass())) {
-            return (BasicDBObject)dbObject.get(field.toString());
+            return (BasicDBObject) dbObject.get(field.toString());
         }
         throw new RuntimeException("Unknown class found " + obj.getClass().getName());
     }
@@ -170,7 +147,7 @@ public class IntactImport {
      * are not found, that does not mean there is an error.
      *
      * @param dbObject must not be null
-     * @param field must be a valid IntactFields field
+     * @param field    must be a valid IntactFields field
      * @return BasicDBList always returns a BasicDBList or null if field not found
      */
     private static BasicDBList getBasicDBList(DBObject dbObject, IntactFields field) {
@@ -187,7 +164,7 @@ public class IntactImport {
     private static BioTypes getBioType(DBObject interactor) {
         DBObject interactorType = getDBObject(interactor, IntactFields.INTERACTOR_TYPE);
         String shortLabel = getString(getDBObject(interactorType, IntactFields.NAMES), IntactFields.SHORT_LABEL);
-        //log.info("shortLabel = " + shortLabel);
+        log.info("shortLabel = " + shortLabel);
         if (IntactFields.PROTEIN_SHORT_LABEL.equals(shortLabel)) {
             return BioTypes.PROTEIN;
         } else {
@@ -195,9 +172,11 @@ public class IntactImport {
                 return BioTypes.PEPTIDE;
             } else {
                 if (IntactFields.SMALL_MOLECULE.equals(shortLabel)) {
-                   return BioTypes.SMALL_MOLECULE;
+                    return BioTypes.SMALL_MOLECULE;
                 } else {
-                   throw new RuntimeException("Couldn't map bioType to " + shortLabel);
+                    if (IntactFields.DNA.equals(shortLabel))
+                        return BioTypes.DNA;
+                    else throw new RuntimeException("Couldn't map bioType to " + shortLabel);
                 }
             }
         }
@@ -240,9 +219,9 @@ public class IntactImport {
         }
         for (String alias : aliasArray.keySet()) {
             if (sb.length() == 0) {
-               sb.append(alias);
+                sb.append(alias);
             } else {
-               sb.append(" ").append(alias);
+                sb.append(" ").append(alias);
             }
         }
         return sb.toString();
@@ -266,14 +245,14 @@ public class IntactImport {
         }
         StringBuilder sb = new StringBuilder();
         for (Object v : secRefArray) {
-            BasicDBObject value = (BasicDBObject)v;
+            BasicDBObject value = (BasicDBObject) v;
             String source = getString(value, IntactFields.DB);
             if (intactSource.equals(source)) {
                 String proteinName = getString(value, IntactFields.INTACT_ID);
                 if (sb.length() == 0) {
-                   sb.append(proteinName);
+                    sb.append(proteinName);
                 } else {
-                   sb.append(" ").append(proteinName);
+                    sb.append(" ").append(proteinName);
                 }
             }
         }
@@ -334,100 +313,135 @@ public class IntactImport {
     }
 
     private static Protein getProtein(DBObject interactor) {
-       Protein protein = new Protein();
-       protein.setIntactId(getIntactId(interactor));
-       protein.setInteractorId(getInteractorId(interactor));
-       //protein.setInteractionId(getInteractionId(interactor));
-       protein.setNodeType(BioTypes.PROTEIN);
-       protein.setUniprot(getUniprot(interactor));
-       protein.setShortLabel(getShortLabel(interactor));
-       String fullName = getFullName(interactor);
-       protein.setMessage(fullName);
-       protein.setFullName(getFullName(interactor));
-       protein.setAliases(getAliases(interactor));
-       protein.setUniprotSecondaryRefs(getSecondaryRefs(interactor, IntactSources.UNIPROT));
-       protein.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
-       protein.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
-       protein.setGoSecondaryRefs(getSecondaryRefs(interactor, IntactSources.GO));
-       protein.setEnsemblSecondaryRefs(getSecondaryRefs(interactor, IntactSources.ENSEMBL));
-       protein.setIntactSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTACT));
-       protein.setOrganismShortLabel(getOrganismShortLabel(interactor));
-       protein.setRefseqSecondaryRefs(getSecondaryRefs(interactor, IntactSources.REFSEQ));
-       protein.setOrganismFullName(getOrganismFullName(interactor));
-       protein.setOrganismShortLabel(getOrganismShortLabel(interactor));
-       protein.setNcbiTaxId(getNcbiTaxId(interactor));
-       return protein;
+        Protein protein = new Protein();
+        protein.setIntactId(getIntactId(interactor));
+        protein.setInteractorId(getInteractorId(interactor));
+        //protein.setInteractionId(getInteractionId(interactor));
+        protein.setNodeType(BioTypes.PROTEIN);
+        protein.setUniprot(getUniprot(interactor));
+        protein.setShortLabel(getShortLabel(interactor));
+        String fullName = getFullName(interactor);
+        protein.setMessage(fullName);
+        protein.setFullName(getFullName(interactor));
+        protein.setAliases(getAliases(interactor));
+        protein.setUniprotSecondaryRefs(getSecondaryRefs(interactor, IntactSources.UNIPROT));
+        protein.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
+        protein.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
+        protein.setGoSecondaryRefs(getSecondaryRefs(interactor, IntactSources.GO));
+        protein.setEnsemblSecondaryRefs(getSecondaryRefs(interactor, IntactSources.ENSEMBL));
+        protein.setIntactSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTACT));
+        protein.setOrganismShortLabel(getOrganismShortLabel(interactor));
+        protein.setRefseqSecondaryRefs(getSecondaryRefs(interactor, IntactSources.REFSEQ));
+        protein.setOrganismFullName(getOrganismFullName(interactor));
+        protein.setOrganismShortLabel(getOrganismShortLabel(interactor));
+        protein.setNcbiTaxId(getNcbiTaxId(interactor));
+        return protein;
     }
 
     private static Peptide getPeptide(DBObject interactor) {
-       Peptide peptide = new Peptide();
-       peptide.setIntactId(getIntactId(interactor));
-       peptide.setInteractorId(getInteractorId(interactor));
-       peptide.setNodeType(BioTypes.PEPTIDE);
-       peptide.setUniprot(getUniprot(interactor));
-       peptide.setShortLabel(getShortLabel(interactor));
-       String fullName = getFullName(interactor);
-       peptide.setMessage(fullName);
-       peptide.setFullName(getFullName(interactor));
-       peptide.setAliases(getAliases(interactor));
-       peptide.setUniprotSecondaryRefs(getSecondaryRefs(interactor, IntactSources.UNIPROT));
-       peptide.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
-       peptide.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
-       peptide.setGoSecondaryRefs(getSecondaryRefs(interactor, IntactSources.GO));
-       peptide.setEnsemblSecondaryRefs(getSecondaryRefs(interactor, IntactSources.ENSEMBL));
-       peptide.setIntactSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTACT));
-       peptide.setOrganismShortLabel(getOrganismShortLabel(interactor));
-       peptide.setRefseqSecondaryRefs(getSecondaryRefs(interactor, IntactSources.REFSEQ));
-       peptide.setOrganismFullName(getOrganismFullName(interactor));
-       peptide.setOrganismShortLabel(getOrganismShortLabel(interactor));
-       peptide.setNcbiTaxId(getNcbiTaxId(interactor));
-       return peptide;
+        Peptide peptide = new Peptide();
+        peptide.setIntactId(getIntactId(interactor));
+        peptide.setInteractorId(getInteractorId(interactor));
+        peptide.setNodeType(BioTypes.PEPTIDE);
+        peptide.setUniprot(getUniprot(interactor));
+        peptide.setShortLabel(getShortLabel(interactor));
+        String fullName = getFullName(interactor);
+        peptide.setMessage(fullName);
+        peptide.setFullName(getFullName(interactor));
+        peptide.setAliases(getAliases(interactor));
+        peptide.setUniprotSecondaryRefs(getSecondaryRefs(interactor, IntactSources.UNIPROT));
+        peptide.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
+        peptide.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
+        peptide.setGoSecondaryRefs(getSecondaryRefs(interactor, IntactSources.GO));
+        peptide.setEnsemblSecondaryRefs(getSecondaryRefs(interactor, IntactSources.ENSEMBL));
+        peptide.setIntactSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTACT));
+        peptide.setOrganismShortLabel(getOrganismShortLabel(interactor));
+        peptide.setRefseqSecondaryRefs(getSecondaryRefs(interactor, IntactSources.REFSEQ));
+        peptide.setOrganismFullName(getOrganismFullName(interactor));
+        peptide.setOrganismShortLabel(getOrganismShortLabel(interactor));
+        peptide.setNcbiTaxId(getNcbiTaxId(interactor));
+        return peptide;
     }
 
-    private static SmallMolecule getSmallMolecule(DBObject interactor) {
-       SmallMolecule smallMolecule = new SmallMolecule();
-       smallMolecule.setIntactId(getIntactId(interactor));
-       smallMolecule.setInteractorId(getInteractorId(interactor));
-       smallMolecule.setNodeType(BioTypes.SMALL_MOLECULE);
-       smallMolecule.setUniprot(getUniprot(interactor));
-       smallMolecule.setShortLabel(getShortLabel(interactor));
-       String fullName = getFullName(interactor);
-       smallMolecule.setMessage(fullName);
-       smallMolecule.setFullName(getFullName(interactor));
-       smallMolecule.setAliases(getAliases(interactor));
-       smallMolecule.setUniprotSecondaryRefs(getSecondaryRefs(interactor, IntactSources.UNIPROT));
-       smallMolecule.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
-       smallMolecule.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
-       smallMolecule.setGoSecondaryRefs(getSecondaryRefs(interactor, IntactSources.GO));
-       smallMolecule.setEnsemblSecondaryRefs(getSecondaryRefs(interactor, IntactSources.ENSEMBL));
-       smallMolecule.setIntactSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTACT));
-       smallMolecule.setOrganismShortLabel(getOrganismShortLabel(interactor));
-       smallMolecule.setRefseqSecondaryRefs(getSecondaryRefs(interactor, IntactSources.REFSEQ));
-       smallMolecule.setOrganismFullName(getOrganismFullName(interactor));
-       smallMolecule.setOrganismShortLabel(getOrganismShortLabel(interactor));
-       smallMolecule.setNcbiTaxId(getNcbiTaxId(interactor));
-       return smallMolecule;
+    private static SmallMolecule getSmallMolecule(DBObject interactor) throws Exception {
+        SmallMolecule smallMolecule = new SmallMolecule();
+        smallMolecule.setIntactId(getIntactId(interactor));
+        smallMolecule.setInteractorId(getInteractorId(interactor));
+        smallMolecule.setNodeType(BioTypes.SMALL_MOLECULE);
+        smallMolecule.setUniprot(getUniprot(interactor));
+        smallMolecule.setShortLabel(getShortLabel(interactor));
+        String fullName = getFullName(interactor);
+        smallMolecule.setMessage(fullName);
+        smallMolecule.setFullName(getFullName(interactor));
+        smallMolecule.setAliases(getAliases(interactor));
+        String uniprotIds = getSecondaryRefs(interactor, IntactSources.UNIPROT);
+        smallMolecule.setUniprotSecondaryRefs(uniprotIds);
+        String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
+        for (String uniprotId : uniprotIdArray) {
+            Protein protein = UniprotUtil.getProtein(uniprotId, new Subgraph());
+            smallMolecule.addProteinRelation(protein);
+        }
+        smallMolecule.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
+        smallMolecule.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
+        smallMolecule.setGoSecondaryRefs(getSecondaryRefs(interactor, IntactSources.GO));
+        smallMolecule.setEnsemblSecondaryRefs(getSecondaryRefs(interactor, IntactSources.ENSEMBL));
+        smallMolecule.setIntactSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTACT));
+        smallMolecule.setOrganismShortLabel(getOrganismShortLabel(interactor));
+        smallMolecule.setRefseqSecondaryRefs(getSecondaryRefs(interactor, IntactSources.REFSEQ));
+        smallMolecule.setOrganismFullName(getOrganismFullName(interactor));
+        smallMolecule.setOrganismShortLabel(getOrganismShortLabel(interactor));
+        String taxId = getNcbiTaxId(interactor);
+        smallMolecule.setNcbiTaxId(taxId);
+        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(new Subgraph(), taxId);
+        smallMolecule.setNcbiTaxonomyRelation(ncbiTaxonomy);
+        return smallMolecule;
+    }
+
+    private static Dna getDna(DBObject interactor) throws Exception {
+        Dna dna = new Dna();
+        dna.setIntactId(getIntactId(interactor));
+        dna.setInteractorId(getInteractorId(interactor));
+        dna.setNodeType(BioTypes.DNA);
+        dna.setShortLabel(getShortLabel(interactor));
+        String fullName = getFullName(interactor);
+        dna.setMessage(fullName);
+        dna.setFullName(getFullName(interactor));
+        dna.setAliases(getAliases(interactor));
+        dna.setIntactSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTACT));
+        String pubmedIds = getSecondaryRefs(interactor, IntactSources.PUBMED);
+        dna.setPubmedSecondaryRefs(pubmedIds);
+        String[] pubmedIdArray = StringUtils.split(pubmedIds, " ");
+        for (String pubmedId : pubmedIdArray) {
+            dna.addPubmedRelation(PubMedUtil.loadPubmed(pubmedId));
+        }
+        dna.setOrganismShortLabel(getOrganismShortLabel(interactor));
+        String taxId = getNcbiTaxId(interactor);
+        dna.setNcbiTaxId(taxId);
+        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(new Subgraph(), taxId);
+        dna.setNcbiTaxonomyRelation(ncbiTaxonomy);
+        dna.setOrganismFullName(getOrganismFullName(interactor));;
+        return dna;
     }
 
     public static HashSet<PubMed> getPubMedList(Subgraph subgraph, DBObject method) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-       HashSet<PubMed> pubMedList = new HashSet<PubMed>();
-       DBObject xref = getDBObject(method, IntactFields.XREF);
-       BasicDBList secondaryRef = getBasicDBList(xref, IntactFields.SECONDARY_REF);
-       PubMed pubMed;
-       for (Object element : secondaryRef) {
-           BasicDBObject obj = (BasicDBObject)element;
-           if (getString(obj, IntactFields.DB).equals(IntactFields.PUBMED.toString())) {
-               String id = getString(obj, IntactFields.ID);
-               //log.info("obj = " + obj.toString());
-               //log.info("pubMed id = " + id);
-               pubMed = new PubMed();
-               subgraph.add(pubMed);
-               pubMed.setPubMedId(id);
-               pubMed.setMessage(id);
-               pubMedList.add(pubMed);
-           }
-       }
-       return pubMedList;
+        HashSet<PubMed> pubMedList = new HashSet<PubMed>();
+        DBObject xref = getDBObject(method, IntactFields.XREF);
+        BasicDBList secondaryRef = getBasicDBList(xref, IntactFields.SECONDARY_REF);
+        PubMed pubMed;
+        for (Object element : secondaryRef) {
+            BasicDBObject obj = (BasicDBObject) element;
+            if (getString(obj, IntactFields.DB).equals(IntactFields.PUBMED.toString())) {
+                String id = getString(obj, IntactFields.ID);
+                //log.info("obj = " + obj.toString());
+                //log.info("pubMed id = " + id);
+                pubMed = new PubMed();
+                subgraph.add(pubMed);
+                pubMed.setPubMedId(id);
+                pubMed.setMessage(id);
+                pubMedList.add(pubMed);
+            }
+        }
+        return pubMedList;
     }
 
     public static String getNodeLabel(BioTypes bioType, String indexValue, String shortLabel) {
@@ -435,83 +449,83 @@ public class IntactImport {
     }
 
     public static InteractionDetectionMethod getInteractionDetectionMethod(String experimentId, Subgraph subgraph, DBObject experiment) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-       InteractionDetectionMethod interactionDetectionMethod = new InteractionDetectionMethod();
-       subgraph.add(interactionDetectionMethod);
-       DBObject method = getDBObject(experiment, IntactFields.INTERACTION_DETECTION_METHOD);
-       interactionDetectionMethod.setFullName(getFullName(method));
-       String shortLabel = getShortLabel(method);
-       interactionDetectionMethod.setExperimentId(experimentId);
-       interactionDetectionMethod.setShortLabel(shortLabel);
-       interactionDetectionMethod.setMessage(getNodeLabel(BioTypes.INTERACTION_DETECTION_METHOD, experimentId, shortLabel));
-       //log.info("method = " + method);
-       BasicDBObject names = getDBObject(method, IntactFields.NAMES);
-       BasicDBList aliases = getBasicDBList(names, IntactFields.ALIAS);
-       if (aliases != null) {
-           StringBuilder sb = new StringBuilder();
-           for (Object obj : aliases) {
-               BasicDBObject alias = (BasicDBObject)obj;
-               if (sb.length() > 0) {
-                   sb.append(JsonChars.COMMA);
-               }
-               sb.append(getString(alias, IntactFields.TEXT));
-           }
-           if (sb.length() > 0) {
-               sb.append(JsonChars.COMMA);
-           }
-           interactionDetectionMethod.setAliases(sb.toString());
-       }
-       interactionDetectionMethod.setReferencesPubMed(getPubMedList(subgraph, method));
-       return interactionDetectionMethod;
+        InteractionDetectionMethod interactionDetectionMethod = new InteractionDetectionMethod();
+        subgraph.add(interactionDetectionMethod);
+        DBObject method = getDBObject(experiment, IntactFields.INTERACTION_DETECTION_METHOD);
+        interactionDetectionMethod.setFullName(getFullName(method));
+        String shortLabel = getShortLabel(method);
+        interactionDetectionMethod.setExperimentId(experimentId);
+        interactionDetectionMethod.setShortLabel(shortLabel);
+        interactionDetectionMethod.setMessage(getNodeLabel(BioTypes.INTERACTION_DETECTION_METHOD, experimentId, shortLabel));
+        //log.info("method = " + method);
+        BasicDBObject names = getDBObject(method, IntactFields.NAMES);
+        BasicDBList aliases = getBasicDBList(names, IntactFields.ALIAS);
+        if (aliases != null) {
+            StringBuilder sb = new StringBuilder();
+            for (Object obj : aliases) {
+                BasicDBObject alias = (BasicDBObject) obj;
+                if (sb.length() > 0) {
+                    sb.append(JsonChars.COMMA);
+                }
+                sb.append(getString(alias, IntactFields.TEXT));
+            }
+            if (sb.length() > 0) {
+                sb.append(JsonChars.COMMA);
+            }
+            interactionDetectionMethod.setAliases(sb.toString());
+        }
+        interactionDetectionMethod.setReferencesPubMed(getPubMedList(subgraph, method));
+        return interactionDetectionMethod;
     }
 
     public static ParticipantIdentificationMethod getParticipantIdentificationMethod(Subgraph subgraph, DBObject experiment) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-       ParticipantIdentificationMethod participantIdentificationMethod = new ParticipantIdentificationMethod();
-       subgraph.add(participantIdentificationMethod);
-       DBObject method = getDBObject(experiment, IntactFields.PARTICIPANT_IDENTIFICATION_METHOD);
-       participantIdentificationMethod.setFullName(getFullName(method));
-       participantIdentificationMethod.setShortLabel(getShortLabel(method));
-       //log.info("method = " + method);
-       BasicDBObject names = getDBObject(method, IntactFields.NAMES);
-       BasicDBList aliases = getBasicDBList(names, IntactFields.ALIAS);
-       if (aliases != null) {
-           StringBuilder sb = new StringBuilder();
-           for (Object obj : aliases) {
-               BasicDBObject alias = (BasicDBObject)obj;
-               if (sb.length() > 0) {
-                   sb.append(JsonChars.COMMA);
-               }
-               sb.append(getString(alias, IntactFields.TEXT));
-           }
-           if (sb.length() > 0) {
-               sb.append(JsonChars.COMMA);
-           }
-           participantIdentificationMethod.setAliases(sb.toString());
-       }
-       participantIdentificationMethod.setReferencesPubMed(getPubMedList(subgraph, method));
-       return participantIdentificationMethod;
+        ParticipantIdentificationMethod participantIdentificationMethod = new ParticipantIdentificationMethod();
+        subgraph.add(participantIdentificationMethod);
+        DBObject method = getDBObject(experiment, IntactFields.PARTICIPANT_IDENTIFICATION_METHOD);
+        participantIdentificationMethod.setFullName(getFullName(method));
+        participantIdentificationMethod.setShortLabel(getShortLabel(method));
+        //log.info("method = " + method);
+        BasicDBObject names = getDBObject(method, IntactFields.NAMES);
+        BasicDBList aliases = getBasicDBList(names, IntactFields.ALIAS);
+        if (aliases != null) {
+            StringBuilder sb = new StringBuilder();
+            for (Object obj : aliases) {
+                BasicDBObject alias = (BasicDBObject) obj;
+                if (sb.length() > 0) {
+                    sb.append(JsonChars.COMMA);
+                }
+                sb.append(getString(alias, IntactFields.TEXT));
+            }
+            if (sb.length() > 0) {
+                sb.append(JsonChars.COMMA);
+            }
+            participantIdentificationMethod.setAliases(sb.toString());
+        }
+        participantIdentificationMethod.setReferencesPubMed(getPubMedList(subgraph, method));
+        return participantIdentificationMethod;
     }
 
     public static Collection<Organism> getHostOrganismList(Subgraph subgraph, DBObject experiment) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-       Collection<Organism> organismList = new HashSet<Organism>();
-       //log.info("experiment = " + experiment);
-       BasicDBList list = getBasicDBList(experiment, IntactFields.HOST_ORGANISM_LIST);
-       //log.info("host organism list = " + list.toString());
-       for (Object obj : list) {
-           DBObject element = (DBObject)obj;
-           Organism organism = new Organism();
-           subgraph.add(organism);
-           DBObject hostOrganism = getDBObject(element, IntactFields.HOST_ORGANISM);
-           String fullName = getFullName(hostOrganism);
-           organism.setFullName(fullName);
-           organism.setOrganismShortLabel(getOrganismShortLabel(hostOrganism));
-           organism.setMessage(fullName);
-           organism.setNodeType(BioTypes.ORGANISM);
-           String ncbiTaxId = getString(hostOrganism, IntactFields.NCBI_TAX_ID);
-           organism.setNcbiTaxId(ncbiTaxId);
-           //log.info("ncbiTaxId = " + ncbiTaxId);
-           organismList.add(organism);
-       }
-       return organismList;
+        Collection<Organism> organismList = new HashSet<Organism>();
+        //log.info("experiment = " + experiment);
+        BasicDBList list = getBasicDBList(experiment, IntactFields.HOST_ORGANISM_LIST);
+        //log.info("host organism list = " + list.toString());
+        for (Object obj : list) {
+            DBObject element = (DBObject) obj;
+            Organism organism = new Organism();
+            subgraph.add(organism);
+            DBObject hostOrganism = getDBObject(element, IntactFields.HOST_ORGANISM);
+            String fullName = getFullName(hostOrganism);
+            organism.setFullName(fullName);
+            organism.setOrganismShortLabel(getOrganismShortLabel(hostOrganism));
+            organism.setMessage(fullName);
+            organism.setNodeType(BioTypes.ORGANISM);
+            String ncbiTaxId = getString(hostOrganism, IntactFields.NCBI_TAX_ID);
+            organism.setNcbiTaxId(ncbiTaxId);
+            //log.info("ncbiTaxId = " + ncbiTaxId);
+            organismList.add(organism);
+        }
+        return organismList;
     }
 
     public static PubMed getPubMed(Subgraph subgraph, DBObject experiment) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
@@ -537,7 +551,7 @@ public class IntactImport {
         String journal = null;
         String publicationYear = null;
         for (Object obj : attributeList) {
-            BasicDBObject attribute = (BasicDBObject)obj;
+            BasicDBObject attribute = (BasicDBObject) obj;
             String name = getString(attribute, IntactFields.NAME);
             if (IntactFields.DATASET.equals(name)) {
                 ExperimentDataset experimentDataset = new ExperimentDataset();
@@ -569,7 +583,7 @@ public class IntactImport {
                 subgraph.add(experimentUrl);
                 experimentUrl.setUrl(name);
                 experimentUrlList.add(experimentUrl);
-            }   else if (IntactFields.AUTHOR_LIST.equals(name)) {
+            } else if (IntactFields.AUTHOR_LIST.equals(name)) {
                 authorList = name;
             } else if (IntactFields.JOURNAL.equals(name)) {
                 journal = name;
@@ -673,7 +687,7 @@ public class IntactImport {
                 throw new RuntimeException("BasicDBList does not contain BasicDBObjects. " + obj.getClass().getName());
             }
             //log.info("obj = " + (DBObject)obj);
-            DBObject eRole = getDBObject((DBObject)obj, IntactFields.EXPERIMENTAL_ROLE);
+            DBObject eRole = getDBObject((DBObject) obj, IntactFields.EXPERIMENTAL_ROLE);
             //log.info("eRole = " + eRole);
             ExperimentalRole experimentalRole = getExperimentalRole(eRole, participantId);
             subgraph.add(experimentalRole);
@@ -751,7 +765,7 @@ public class IntactImport {
             if (!MongoClasses.DBObject.equals(obj)) {
                 throw new RuntimeException("BasicDBList does not contain DBObjects. " + obj.getClass().getName());
             }
-            FeatureRange featureRange = getFeatureRange(subgraph, (DBObject)obj, featureId);
+            FeatureRange featureRange = getFeatureRange(subgraph, (DBObject) obj, featureId);
             subgraph.add(featureRange);
             featureRanges.add(featureRange);
         }
@@ -788,7 +802,7 @@ public class IntactImport {
             if (!MongoClasses.DBObject.equals(obj)) {
                 throw new RuntimeException("BasicDBList does not contain DBObjects. " + obj.getClass().getName());
             }
-            Feature feature = getFeature(subgraph, (DBObject)obj);
+            Feature feature = getFeature(subgraph, (DBObject) obj);
             subgraph.add(feature);
             features.add(feature);
         }
@@ -820,7 +834,7 @@ public class IntactImport {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static Subgraph processIntact(String intactId, DBObject intactSource, BasicDBList experiments, BasicDBList interactors, BasicDBList interactions) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException  {
+    public static Subgraph processIntact(String intactId, DBObject intactSource, BasicDBList experiments, BasicDBList interactors, BasicDBList interactions) throws Exception {
 
         //log.info("source = " + intactSource.toString());
         log.info("intactId = " + intactId);
@@ -834,45 +848,127 @@ public class IntactImport {
         HashMap<String, Object> interactorHash = new HashMap<String, Object>();
 
         for (Object intr : interactors) {
-            DBObject interactor = (DBObject)intr;
+            DBObject interactor = (DBObject) intr;
             //log.info("interactor = " + interactor.toString());
             BioTypes bioType = getBioType(interactor);
             //log.info("bioType of interactor = " + bioType);
             if (bioType.equals(BioTypes.PROTEIN)) {
-               Protein protein = getProtein(interactor);
-               //log.info("protein interactorId = " + protein.getInteractorId());
-               interactorHash.put(protein.getInteractorId(), protein);
-               subgraph.add(protein);
+                Protein protein = getProtein(interactor);
+                //log.info("protein interactorId = " + protein.getInteractorId());
+                interactorHash.put(protein.getInteractorId(), protein);
+                subgraph.add(protein);
             } else {
                 if (bioType.equals(BioTypes.PEPTIDE)) {
-                   Peptide peptide = getPeptide(interactor);
-                   //log.info("peptide interactorId = " + peptide.getInteractorId());
-                   interactorHash.put(peptide.getInteractorId(), peptide);
-                   subgraph.add(peptide);
+                    Peptide peptide = getPeptide(interactor);
+                    //log.info("peptide interactorId = " + peptide.getInteractorId());
+                    interactorHash.put(peptide.getInteractorId(), peptide);
+                    subgraph.add(peptide);
                 } else {
-                   if (bioType.equals(BioTypes.SMALL_MOLECULE)) {
-                      SmallMolecule smallMolecule = getSmallMolecule(interactor);
-                      //log.info("peptide interactorId = " + peptide.getInteractorId());
-                       interactorHash.put(smallMolecule.getInteractorId(), smallMolecule);
-                      subgraph.add(smallMolecule);
-                   } else {
-                       throw new RuntimeException("Unrecognized bioType " + bioType);
-                   }
+                    if (bioType.equals(BioTypes.SMALL_MOLECULE)) {
+                        SmallMolecule smallMolecule = getSmallMolecule(interactor);
+                        //log.info("peptide interactorId = " + peptide.getInteractorId());
+                        interactorHash.put(smallMolecule.getInteractorId(), smallMolecule);
+                        subgraph.add(smallMolecule);
+                    } else {
+                       /*  DNA case
+{
+  "_id": {
+    "$oid": "5009e0210364add94f9cc499"
+  },
+  "@id": "358462",
+  "names": {
+    "shortLabel": "telodna",
+    "fullName": "Human telomeric repeat DNA"
+  },
+  "xref": {
+    "primaryRef": {
+      "@refTypeAc": "MI:0356",
+      "@refType": "identity",
+      "@id": "EBI-1005914",
+      "@dbAc": "MI:0469",
+      "@db": "intact"
+    }
+  },
+  "interactorType": {
+    "names": {
+      "shortLabel": "dna",
+      "fullName": "deoxyribonucleic acid",
+      "alias": [
+        {
+          "@typeAc": "MI:0303",
+          "#text": "deoxyribonucleic acid"
+        },
+        {
+          "@typeAc": "MI:0303",
+          "#text": "DNA"
+        }
+      ]
+    },
+    "xref": {
+      "primaryRef": {
+        "@refTypeAc": "MI:0356",
+        "@refType": "identity",
+        "@id": "MI:0319",
+        "@dbAc": "MI:0488",
+        "@db": "psi-mi"
+      },
+      "secondaryRef": [
+        {
+          "@refTypeAc": "MI:0356",
+          "@refType": "identity",
+          "@id": "EBI-619647",
+          "@dbAc": "MI:0469",
+          "@db": "intact"
+        },
+        {
+          "@refTypeAc": "MI:0358",
+          "@refType": "primary-reference",
+          "@id": "14755292",
+          "@dbAc": "MI:0446",
+          "@db": "pubmed"
+        },
+        {
+          "@refTypeAc": "MI:0361",
+          "@refType": "see-also",
+          "@id": "SO:0000352",
+          "@dbAc": "MI:0601",
+          "@db": "so"
+        }
+      ]
+    }
+  },
+  "organism": {
+    "@ncbiTaxId": "9606",
+    "names": {
+      "shortLabel": "human",
+      "fullName": "Homo sapiens"
+    }
+  },
+  "intactId": "9391075.xml",
+  "interactorId": "358462"
+}                        */
+                        if (bioType.equals(BioTypes.DNA)) {
+                            Dna dna = getDna(interactor);
+                            interactorHash.put(dna.getInteractorId(), dna);
+                            subgraph.add(dna);
+                        } else
+                            throw new RuntimeException("Unrecognized bioType " + bioType);
+                    }
                 }
             }
         }
 
         HashMap<String, IntactInteraction> interactionHash = new HashMap<String, IntactInteraction>();
         for (Object intn : interactions) {
-            DBObject interaction = (DBObject)intn;
+            DBObject interaction = (DBObject) intn;
             IntactInteraction intactInteraction = getIntactInteraction(interaction);
             subgraph.add(intactInteraction);
             BasicDBList participantList = getParticipantList(interaction);
             Collection<BioRelation> hasParticipants = new HashSet<BioRelation>();
             for (Object parti : participantList) {
-                DBObject particip = (DBObject)parti;
+                DBObject particip = (DBObject) parti;
                 if (particip.containsField(IntactFields.PARTICIPANT.toString())) {
-                   particip = getDBObject(particip, IntactFields.PARTICIPANT);
+                    particip = getDBObject(particip, IntactFields.PARTICIPANT);
                 }
                 Participant participant = getParticipant(particip);
                 subgraph.add(participant);
@@ -897,7 +993,7 @@ public class IntactImport {
 
         HashMap<String, IntactExperiment> experimentHash = new HashMap<String, IntactExperiment>();
         for (Object exp : experiments) {
-            DBObject experiment = (DBObject)exp;
+            DBObject experiment = (DBObject) exp;
             IntactExperiment intactExperiment = getIntactExperiment(subgraph, experiment);
             subgraph.add(intactExperiment);
             String experimentId = intactExperiment.getExperimentRef();
@@ -928,14 +1024,13 @@ public class IntactImport {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static Subgraph processIntact(DBObject e) throws UnknownHostException, NoSuchFieldException, IllegalAccessException, InvocationTargetException  {
-        String intactId = (String)e.get(InTactUtil.INTACT_ID);
+    public static Subgraph processIntact(DBObject e) throws Exception {
+        String intactId = (String) e.get(InTactUtil.INTACT_ID);
         DBObject intactSource = InTactUtil.getSource(intactId);
         BasicDBList experiments = InTactUtil.getSections(InTactUtil.EXPERIMENT_INTACT_COLLECTION, intactId);
         BasicDBList interactors = InTactUtil.getSections(InTactUtil.INTERACTOR_INTACT_COLLECTION, intactId);
         BasicDBList interactions = InTactUtil.getSections(InTactUtil.INTERACTION_INTACT_COLLECTION, intactId);
-        Subgraph subgraph = processIntact(intactId, intactSource, experiments, interactors, interactions);
-        return subgraph;
+        return processIntact(intactId, intactSource, experiments, interactors, interactions);
     }
 
     /**
@@ -954,15 +1049,15 @@ public class IntactImport {
      * @throws IOException
      * @throws HttpException
      */
-    public static void loadInNeo4J() throws UnknownHostException, NoSuchFieldException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException {
+    public static void loadInNeo4J() throws Exception {
         BasicDBList intactList = InTactUtil.getIntactList(); // return all that are DUE
         log.info("intactList.length = " + intactList.size());
         Subgraph subgraph;
         PersistenceTemplate template = new PersistenceTemplate();
         for (Object e : intactList) {
-            String intactId = (String)((DBObject)e).get(InTactUtil.INTACT_ID);
+            String intactId = (String) ((DBObject) e).get(InTactUtil.INTACT_ID);
             try {
-                subgraph = processIntact((DBObject)e);
+                subgraph = processIntact((DBObject) e);
                 PersistenceTemplate.saveSubgraph(subgraph);
                 InTactUtil.updateImportStatus(intactId, BioEntityType.DONE.toString());
             } catch (UnknownHostException ex) {
@@ -974,6 +1069,7 @@ public class IntactImport {
         }
         log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
         log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+        log.info("Completed successfully!");
     }
 
     /**
@@ -982,7 +1078,7 @@ public class IntactImport {
      * INTACT_DIR. This directory contains several sub-directories, each typically for
      * a disease or a category. Each of these sub-directories contains a flat list of
      * intact XML files.
-     *
+     * <p>
      * Some of these intact XML files are big enough to break the net.sf parser.
      * It is not clear at the time of writing this code, what exact threshold size
      * breaks the parser. But the idea of the IntactSplitter is to split the
@@ -999,18 +1095,18 @@ public class IntactImport {
      * @throws URISyntaxException
      */
     public static void loadInMongo() throws IOException, URISyntaxException {
-       File dir = new File(InTactUtil.INTACT_DIR);
+        File dir = new File(InTactUtil.INTACT_DIR);
         //File[] diseases = dir.listFiles(new ExtFilter("xml"));
         File[] intacts = dir.listFiles();
         IntactSplitter intactSplitter = new IntactSplitter();
         for (File intact : intacts) {
             File[] intactFiles = intact.listFiles();
-           for (File intactFile1 : intactFiles) {
-               String file = intact + "/" + intactFile1.getName();
-               log.info("file = " + file);
-               IntactFile intactFile = intactSplitter.splitFile(file);
-               InTactUtil.addIntactFile(intactFile1.getName(), intactFile);
-           }
+            for (File intactFile1 : intactFiles) {
+                String file = intact + "/" + intactFile1.getName();
+                log.info("file = " + file);
+                IntactFile intactFile = intactSplitter.splitFile(file);
+                InTactUtil.addIntactFile(intactFile1.getName(), intactFile);
+            }
         }
     }
 
@@ -1023,16 +1119,8 @@ public class IntactImport {
      *
      * @param args
      * @throws java.io.IOException
-     * @throws URISyntaxException
-     * @throws UnknownHostException
-     * @throws NoSuchFieldException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     * @throws UnsupportedEncodingException
-     * @throws MalformedURLException
-     * @throws HttpException
      */
-    public static void main(String[] args) throws java.io.IOException, URISyntaxException, UnknownHostException, UnknownHostException, NoSuchFieldException, IllegalAccessException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException, MalformedURLException, HttpException {
+    public static void main(String[] args) throws Exception {
         //loadInMongo();
         loadInNeo4J();
     }
