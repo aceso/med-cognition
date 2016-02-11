@@ -93,6 +93,10 @@ public class LuceneTemplate<T> {
             }
         } else {
             PrimaryKey primaryKey = PrimaryKey.getPrimaryKey(t);
+            if (null == primaryKey) {
+                log.error("Could not get primary key!");
+                return false;
+            }
             log.info("pkey = " + primaryKey.getKey() + ", pval = " + primaryKey.getValue());
             List<Document> docs = lookupTerm(primaryKey.getKey(), primaryKey.getValue());
             if (docs.size() > 0) {
