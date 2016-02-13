@@ -1215,17 +1215,16 @@ public class PubMed {
 
     /**
      * {@link NciPathway} uses this
-     * @param endEntity
-     * @throws java.lang.Exception
+     * @param endEntitysing 
      */
-    public void setPubMedRelation(Object endEntity) throws Exception {
+    public void setPubMedRelation(Object endEntity) {
         final BioRelation relation = new BioRelation();
         relation.setEndNode(endEntity);
         relation.setStartNode(this);
         relation.setRelType(BioRelTypes.REFERENCES_PUBMED);
         relation.setMessage(relation.getRelType().toString());
         if (!pubMedRelation.add(relation)) {
-            throw new Exception("could not add," + endEntity.toString() + "relation to pubmed " + this.toString());
+            throw new RuntimeException("could not add," + endEntity.toString() + "relation to pubmed " + this.toString());
         }
     }
 
