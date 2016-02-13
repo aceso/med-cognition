@@ -48,10 +48,17 @@ import org.neo4j.graphdb.NotFoundException;
  * 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class GeneGraphDBImportUtil {
 
     protected static Logger log = LogManager.getLogger(GeneGraphDBImportUtil.class);
 
+    /**
+     *
+     * @param coll
+     * @return
+     * @throws UnknownHostException
+     */
     private static MongoCollection getCollection(ImportCollectionNames coll) throws UnknownHostException {
         MongoUtil mongoUtil = MongoUtil.getInstance();
         return mongoUtil.getCollection(coll.toString());
@@ -70,92 +77,131 @@ public class GeneGraphDBImportUtil {
         return queryMap;
     }
 
+    /**
+     *
+     * @param taxId
+     * @return
+     */
     public static BasicDBObject getTaxonomyQuery(String taxId) {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(TaxonomyMongoFields.ID.toString(), taxId);
         return queryMap;
     }
 
+    /**
+     *
+     * @param geneId
+     * @return
+     */
     public static BasicDBObject getGene2GoQuery(String geneId) {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(GeneMongoFields.GENE_ID.toString(), geneId);
         return queryMap;
     }
 
+    /**
+     *
+     * @param geneId
+     * @return
+     */
     public static BasicDBObject getGeneIdQuery(String geneId)  {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(GeneMongoFields.GENE_ID.toString(), geneId);
         return queryMap;
     }
 
+    /**
+     *
+     * @param geneId
+     * @return
+     */
     public static BasicDBObject getNeighborsQuery(String geneId)  {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(GeneMongoFields.GENE_ID.toString(), geneId);
         return queryMap;
     }
 
+    /**
+     *
+     * @param geneId
+     * @return
+     */
     public static BasicDBObject getPubmedQuery(String geneId) {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(GeneMongoFields.GENE_ID.toString(), geneId);
         return queryMap;
     }
 
-    public static BasicDBList getResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
+    /**
+     *
+     * @param coll
+     * @param geneId
+     * @return
+     * @throws UnknownHostException
+     */
+    private static BasicDBList getResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getGeneQuery(geneId));
     }
 
+    /**
+     *
+     * @param coll
+     * @param geneId
+     * @return
+     * @throws UnknownHostException
+     */
     public static BasicDBList getGeneIdResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getGeneIdQuery(geneId));
     }
 
+    /**
+     *
+     * @param coll
+     * @param geneId
+     * @return
+     * @throws UnknownHostException
+     */
     public static BasicDBList getGene2GoResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getGene2GoQuery(geneId));
     }
 
+    /**
+     *
+     * @param coll
+     * @param taxId
+     * @return
+     * @throws UnknownHostException
+     */
     public static BasicDBList getTaxonomyResult(ImportCollectionNames coll, String taxId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getTaxonomyQuery(taxId));
     }
 
+    /**
+     *
+     * @param coll
+     * @param geneId
+     * @return
+     * @throws UnknownHostException
+     */
     public static BasicDBList getNeighborsResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getNeighborsQuery(geneId));
     }
 
+    /**
+     *
+     * @param coll
+     * @param geneId
+     * @return
+     * @throws UnknownHostException
+     */
     public static BasicDBList getPubmedResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getPubmedQuery(geneId));
-    }
-
-    /**
-     * Gets a empty placeholder Gene object with just the geneId
-     * loaded. It gets it from the mongo collection ncbigeneinfo.
-     *
-     * @param geneId
-     * @return
-     * @throws Exception
-     */
-    public static Gene getGeneKey(String geneId) throws UnknownHostException {
-        DBCursor dbCursor = getCollection(
-                ImportCollectionNames.NCBI_GENE_INFO).findDBCursor(
-                "{" +
-                GeneMongoFields.GENE_ID +
-                ": \"" + geneId + "\"}");
-        Gene gene = new Gene();
-        try {
-            // we expect only one document match
-            while (dbCursor.hasNext()) {
-                BasicDBObject result = (BasicDBObject)dbCursor.next();
-                //log.info("pubmed");
-                gene.setNcbiGeneId(geneId);
-            }
-        } finally {
-            dbCursor.close();
-        }
-        return gene;
     }
 
     /**
@@ -192,35 +238,6 @@ public class GeneGraphDBImportUtil {
     }
 
     /**
-     * This method looks up a field and returns a DBObject if it exists,
-     * otherwise, it returns null. Users who use this method must not pass
-     * a null, as that will generate an exception. If the object is found
-     * but it's class is not a BasicDBObject then we throw an exception.
-     *
-     * @param dbObject
-     * @param field
-     * @return
-     */
-    private static BasicDBObject getDBObject(DBObject dbObject, GeneMongoFields field) {
-        if ((dbObject == null) || field == null) {
-            log.error("dbObject is null for field ");
-            return null;
-        }
-        Object obj = dbObject.get(field.toString());
-        if (obj == null) {
-            return null;
-        }
-        if (MongoClasses.BasicDBList.equals(obj.getClass()) ||
-                MongoClasses.DBObject.equals(obj.getClass())) {
-            log.error("Expected a BasicDBObject, but got " + obj.getClass().getName() + ", field = " + field.toString());
-            return null;
-        } else if (MongoClasses.BasicDBObject.equals(obj.getClass())) {
-            return (BasicDBObject)dbObject.get(field.toString());
-        }
-        throw new RuntimeException("Unknown class found " + obj.getClass().getName());
-    }
-
-    /**
      * This method returns a BasicDBList even if the result is a DBObject.
      * This is because the import data sometimes stores them as DBObject if
      * there is only one element. Users of this method must not pass a null
@@ -251,30 +268,17 @@ public class GeneGraphDBImportUtil {
         return getBasicDBList(dbObject, field.toString());
     }
 
-    private static boolean isList(DBObject dbObject, GeneMongoFields field) {
-        if (dbObject == null || field == null) {
-            throw new RuntimeException("dbObject is null for field ");
-        }
-        Object obj = dbObject.get(field.toString());
-        if (obj == null) {
-            log.error("content is null for field " + field.toString());
-            return false;
-        }
-        return MongoClasses.BasicDBList.equals(obj.getClass());
-    }
-
-    private static boolean isList(BasicDBList list, int cntr) {
-        if (list == null) {
-            throw new RuntimeException("list is null");
-        }
-        Object obj = list.get(cntr);
-        if (obj == null) {
-            log.error("content is null for list element " + cntr);
-            return false;
-        }
-        return MongoClasses.BasicDBList.equals(obj.getClass());
-    }
-
+    /**
+     *
+     * @param subgraph
+     * @param taxId
+     * @return
+     * @throws NotFoundException
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
     public static NcbiTaxonomy getLightNcbiTaxonomy(Subgraph subgraph, String taxId) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         NcbiTaxonomy ncbiTaxonomy = new NcbiTaxonomy();
         ncbiTaxonomy.setNcbiTaxId(taxId);
@@ -286,14 +290,37 @@ public class GeneGraphDBImportUtil {
      * This method is used ProteinOntologyImport when NcbiTaxon document is found
      * in the ontology document.
      * @param taxId
-     * @param result 
+     * @param result
+     * @throws NotFoundException
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws URISyntaxException
+     * @throws UnsupportedEncodingException
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws UnknownHostException
+     * @throws HttpException
      */
+    /*
     public static void processOntologyDoc(String taxId, BasicDBObject result) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException {
          Subgraph subGraph = new Subgraph();
          NcbiTaxonomy ncbiTaxonomy = getNcbiTaxonomy(subGraph, taxId, result); 
          PersistenceTemplate.saveSubgraph(subGraph);
     }
-    
+    */
+
+    /**
+     *
+     * @param subgraph
+     * @param taxId
+     * @return
+     * @throws UnknownHostException
+     * @throws IllegalAccessException
+     * @throws NoSuchFieldException
+     * @throws InvocationTargetException
+     */
     public static NcbiTaxonomy getNcbiTaxonomy(Subgraph subgraph, String taxId) throws UnknownHostException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         BasicDBList result = getTaxonomyResult(ImportCollectionNames.NCBI_TAXONOMY, taxId);
         BasicDBObject obj;
@@ -302,7 +329,19 @@ public class GeneGraphDBImportUtil {
             return getNcbiTaxonomy(subgraph, taxId, obj);
         } else return null;
     }
-    
+
+    /**
+     *
+     * @param subgraph
+     * @param taxid
+     * @param obj
+     * @return
+     * @throws NotFoundException
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
     public static NcbiTaxonomy getNcbiTaxonomy(Subgraph subgraph, String taxid, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         NcbiTaxonomy ncbiTaxonomy = new NcbiTaxonomy();
         //log.info("the ncbiTaxId = " + getString(obj, TaxonomyMongoFields.ID));
@@ -349,6 +388,16 @@ public class GeneGraphDBImportUtil {
         return ncbiTaxonomy;
     }
 
+    /**
+     *
+     * @param subgraph
+     * @param result
+     * @return
+     * @throws InvocationTargetException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     * @throws UnknownHostException
+     */
     public static Gene getGene(Subgraph subgraph, BasicDBObject result) throws InvocationTargetException, NoSuchFieldException, IllegalAccessException, UnknownHostException {
         String symbol = getString(result, GeneMongoFields.SYMBOL);
         //log.info("getGene() =" + symbol);
@@ -356,7 +405,6 @@ public class GeneGraphDBImportUtil {
         gene.setGeneSymbol(symbol);
         String ncbiGeneId = getString(result, GeneMongoFields.GENE_ID);
         gene.setNcbiGeneId(ncbiGeneId);
-        String taxIdNum = getString(result, GeneMongoFields.TAX_ID);
         String taxId = GeneMongoFields.NCBI_TAXON.toString() + TaxonomyMongoFields.COLON + getString(result, GeneMongoFields.TAX_ID);
         log.info("taxId = " + taxId);
         gene.setNcbiTaxonomy(getNcbiTaxonomy(subgraph, taxId)); 
@@ -440,7 +488,13 @@ public class GeneGraphDBImportUtil {
      * @param subgraph
      * @param gene
      * @return
-     * @throws Exception
+     * @throws IOException
+     * @throws IllegalAccessException
+     * @throws InterruptedException
+     * @throws HttpException
+     * @throws URISyntaxException
+     * @throws InvocationTargetException
+     * @throws NoSuchFieldException
      */
     public static GeneToGo updateGene2Go(Subgraph subgraph, Gene gene) throws IOException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         String geneId = gene.getNcbiGeneId();
@@ -458,7 +512,7 @@ public class GeneGraphDBImportUtil {
         if (goList == null || goList.isEmpty()) {
             return null;
         }
-        HashSet<GeneToGoOntology> ontologies = new HashSet<GeneToGoOntology>();
+        HashSet<GeneToGoOntology> ontologies = new HashSet<>();
         for (Object obj : goList) {
             BasicDBObject goEntry = (BasicDBObject)obj;
             GeneToGoOntology geneToGoOntology = new GeneToGoOntology();
@@ -485,7 +539,7 @@ public class GeneGraphDBImportUtil {
             GeneOntology geneOntology = GeneOntologyObo.getGeneOntology(goId, subgraph);
             geneToGoOntology.setGeneOntology(geneOntology);
             subgraph.add(geneToGoOntology);
-            CompoundKey compoundKey = CompoundKey.getCompoundKey(geneToGoOntology);
+            //CompoundKey compoundKey = CompoundKey.getCompoundKey(geneToGoOntology);
             //StatusUtil.idInsert(BioTypes.GENE_TO_GO_ONTOLOGY.toString(), compoundKey.getKey(), compoundKey.getValue());
             ontologies.add(geneToGoOntology);
             
@@ -493,7 +547,7 @@ public class GeneGraphDBImportUtil {
         geneToGo.setOntologies(ontologies);
         geneToGo.setGene(gene);
         subgraph.add(geneToGo);
-        CompoundKey compoundKey = CompoundKey.getCompoundKey(geneToGo);
+        //CompoundKey compoundKey = CompoundKey.getCompoundKey(geneToGo);
         //StatusUtil.idInsert(BioTypes.GENE_TO_GO.toString(), compoundKey.getKey(), compoundKey.getValue());
         return geneToGo;
     }
@@ -510,7 +564,7 @@ public class GeneGraphDBImportUtil {
         }
     }
 
-    public static void updateGeneGroup(Subgraph subgraph, Gene gene) throws Exception {
+    public static void updateGeneGroup(Subgraph subgraph, Gene gene) throws UnknownHostException {
         BasicDBList geneGroupList = getResult(ImportCollectionNames.NCBI_GENEGROUP, gene.getNcbiGeneId());
         if (geneGroupList == null || geneGroupList.isEmpty()) {
             return;
@@ -523,7 +577,7 @@ public class GeneGraphDBImportUtil {
         gene.setOtherTaxTd(getString(obj, GeneMongoFields.OTHER_TAX_ID));
     }
 
-    public static void updateGeneNeighbors(Subgraph subgraph, Gene gene) throws Exception {
+    public static void updateGeneNeighbors(Subgraph subgraph, Gene gene) throws UnknownHostException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         BasicDBList geneNeighbors = getNeighborsResult(ImportCollectionNames.NCBI_GENE_NEIGHBORS, gene.getNcbiGeneId());
         if (geneNeighbors == null || geneNeighbors.isEmpty()) {
             return;
@@ -541,7 +595,7 @@ public class GeneGraphDBImportUtil {
 
         BasicDBList leftGeneList = getBasicDBList(geneNeighbor, GeneMongoFields.GENE_IDS_ON_LEFT);
         if (leftGeneList != null) {
-            HashSet<Gene> leftGenes = new HashSet<Gene>();
+            HashSet<Gene> leftGenes = new HashSet<>();
             for (Object obj : leftGeneList) {
                 addLightGene((String)obj, subgraph, leftGenes);
                 /*
@@ -566,7 +620,7 @@ public class GeneGraphDBImportUtil {
 
         BasicDBList rightGeneList = getBasicDBList(geneNeighbor, GeneMongoFields.GENE_IDS_ON_RIGHT);
         if (rightGeneList != null) {
-            HashSet<Gene> rightGenes = new HashSet<Gene>();
+            HashSet<Gene> rightGenes = new HashSet<>();
             for (Object obj : rightGeneList) {
                 addLightGene((String)obj, subgraph, rightGenes);
                 /*
@@ -591,7 +645,7 @@ public class GeneGraphDBImportUtil {
 
         BasicDBList overlappingGeneList = getBasicDBList(geneNeighbor, GeneMongoFields.OVERLAPPING_GENE_IDS);
         if (overlappingGeneList != null) {
-            HashSet<Gene> overlappingGenes = new HashSet<Gene>();
+            HashSet<Gene> overlappingGenes = new HashSet<>();
             for (Object obj : overlappingGeneList) {
                 addLightGene((String)obj, subgraph, overlappingGenes);
                 /*
@@ -618,27 +672,35 @@ public class GeneGraphDBImportUtil {
             gene.setOverlappingGenes(overlappingGenes);
         }
     }
-    
-    public static void addLightGene(String geneId, Subgraph subgraph, HashSet geneSet) throws Exception {
+
+    /**
+     *
+     * @param geneId
+     * @param subgraph
+     * @param geneSet
+     * @throws UnknownHostException
+     * @throws IllegalAccessException
+     * @throws NoSuchFieldException
+     * @throws InvocationTargetException
+     */
+    public static void addLightGene(String geneId, Subgraph subgraph, HashSet geneSet) throws UnknownHostException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
          Gene aGene = new Gene();
-         if (aGene != null && geneId != null) { 
+         if (geneId != null) {
                 aGene.setNcbiGeneId(geneId);
                 if (geneId.equals("118")) {
                     log.info("overlappingGenes, geneId is 118 =" + geneId);
                 }
                 BasicDBList result = getGeneIdResult(ImportCollectionNames.NCBI_GENE_INFO, geneId);
-                if (result == null || result.isEmpty()) {
-                   return;
-                } else { 
-                    BasicDBObject geneResult = (BasicDBObject)result.get(0);
-                    aGene.setGeneSymbol(getString(geneResult, GeneMongoFields.SYMBOL));
-                    String taxId = GeneMongoFields.NCBI_TAXON.toString() + TaxonomyMongoFields.COLON + getString(geneResult, GeneMongoFields.TAX_ID);
-                    //log.info("taxId = " + taxId);
-                    aGene.setNcbiTaxonomy(getNcbiTaxonomy(subgraph, taxId));
-                    subgraph.add(aGene);
-                    geneSet.add(aGene);
-                }
-           }
+             if (result != null && !result.isEmpty()) {
+                 BasicDBObject geneResult = (BasicDBObject)result.get(0);
+                 aGene.setGeneSymbol(getString(geneResult, GeneMongoFields.SYMBOL));
+                 String taxId = GeneMongoFields.NCBI_TAXON.toString() + TaxonomyMongoFields.COLON + getString(geneResult, GeneMongoFields.TAX_ID);
+                 //log.info("taxId = " + taxId);
+                 aGene.setNcbiTaxonomy(getNcbiTaxonomy(subgraph, taxId));
+                 subgraph.add(aGene);
+                 geneSet.add(aGene);
+             }
+         }
     }
 
     /**
@@ -658,14 +720,14 @@ public class GeneGraphDBImportUtil {
      * @return
      * @throws Exception
      */
-    public static HashSet<Gene> getGene(String symbol, Subgraph subgraph) throws Exception {
+    public static HashSet<Gene> getGene(String symbol, Subgraph subgraph) throws IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException, InterruptedException, HttpException, URISyntaxException {
         BasicDBList geneList = getResult(ImportCollectionNames.NCBI_GENE_INFO, symbol);
-        HashSet<Gene> genes = new HashSet<Gene>();
+        HashSet<Gene> genes = new HashSet<>();
         for (Object obj : geneList) {
             BasicDBObject result = (BasicDBObject)obj;
             Gene gene = getGene(subgraph, result);
             subgraph.add(gene);
-            GeneToGo geneToGo = updateGene2Go(subgraph, gene);
+            updateGene2Go(subgraph, gene);
             //BasicDBList gene2Pubmed = getResult(ImportCollectionNames.NCBI_GENE2PUBMED, gene.getNcbiGeneId());
             updatePubMed(subgraph, gene);
             updateGeneGroup(subgraph, gene);
@@ -729,7 +791,7 @@ public class GeneGraphDBImportUtil {
             log.info("ncbiGeneId=" + ncbiGeneId + " Gene=" + gene.toString());
         }
         subgraph.add(gene);
-        CompoundKey compoundKey = CompoundKey.getCompoundKey(gene);
+        //CompoundKey compoundKey = CompoundKey.getCompoundKey(gene);
         //StatusUtil.idInsert(BioTypes.GENE.toString(), compoundKey.getKey(), compoundKey.getValue());
         updateGene2Go(subgraph, gene);
         //BasicDBList gene2Pubmed = getResult(ImportCollectionNames.NCBI_GENE2PUBMED, gene.getNcbiGeneId());
@@ -748,27 +810,26 @@ public class GeneGraphDBImportUtil {
      *
      * @throws UnknownHostException
      */
-    public static void loadGenes() throws UnknownHostException, Exception {
-        DBCursor dbCursor = getCollection(ImportCollectionNames.NCBI_GENE_INFO).findDBCursor("{}" );
+    public static void loadGenes() throws IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException, URISyntaxException, InterruptedException, HttpException {
 
         Subgraph subgraph = new Subgraph();
 
         int cntr = 0;
 
-        try {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.NCBI_GENE_INFO).findDBCursor("{}")) {
             // we expect only one document match
             while (dbCursor.hasNext()) {
 
                 if (cntr++ > 500) break;
                 //start = System.currentTimeMillis();
-                BasicDBObject result = (BasicDBObject)dbCursor.next();
+                BasicDBObject result = (BasicDBObject) dbCursor.next();
                 //end = System.currentTimeMillis();
                 //System.out.printf("%s completed in %dms%n", "dbCursor.next()", end - start);
                 String symbol = getString(result, GeneMongoFields.SYMBOL);
                 if (GeneMongoFields.NEWENTRY.equals(symbol)) {
                     continue;
                 }
-                Gene gene = getGene(subgraph, result);   
+                Gene gene = getGene(subgraph, result);
                 subgraph.add(gene);
                 CompoundKey compoundKey = CompoundKey.getCompoundKey(gene);
                 //StatusUtil.idInsert(BioTypes.GENE.toString(), compoundKey.getKey(), compoundKey.getValue());
@@ -782,8 +843,6 @@ public class GeneGraphDBImportUtil {
                 log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
                 log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
             }
-        } finally {
-            dbCursor.close();
         }
         log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
         log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
