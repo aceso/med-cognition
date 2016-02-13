@@ -2,13 +2,16 @@ package org.atgc.bio.util;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.CellTypeOntologyFields;
 import org.atgc.bio.domain.*;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +27,7 @@ import org.neo4j.graphdb.NotFoundException;
  * 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class CytoplasmOntologyUtil {
 
     private static final Logger log = LogManager.getLogger(CytoplasmOntologyUtil.class);
@@ -83,7 +87,7 @@ public class CytoplasmOntologyUtil {
      * @return 
      */
     public static String getSynonym(BasicDBList list, CellTypeOntologyFields enumField) {
-        List synList = new ArrayList();
+        List<String> synList = new ArrayList<>();
         for (Object obj : list) {
             String str = OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.SYNONYM);
             if (str != null && str.contains(enumField.toString())) {
@@ -97,9 +101,7 @@ public class CytoplasmOntologyUtil {
                     case NARROW:
                         synList.add(OntologyStrUtil.getCleanSyn(str," NARROW"));
                 }                  
-            } else {
-               continue;
-            } 
+            }
         } 
         if (synList.isEmpty()) {
             return null;
@@ -113,19 +115,20 @@ public class CytoplasmOntologyUtil {
      * 
      * "is_a" : "GO:0005737 ! cytoplasm"
      * setIsARelationship between CytoplasmOntology <->GO
-     * @param CytoplasmOntology
+     * @param onto
      * @param dbObj
      * @param subGraph
      * @throws NoSuchFieldException
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      * @throws NotFoundException
-     * @throws InvocationTargetException 
+     * @throws InvocationTargetException
+     * @throws UnknownHostException
      */
-    public static void setIsARelationship(CytoplasmOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIsARelationship(CytoplasmOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, IOException, RuntimeException, InterruptedException, HttpException, URISyntaxException {
          if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.IS_LIST)) {
              //log.info("createIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.IS_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.IS_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.IS_A);
                 if (OntologyStrUtil.isGeneOntology(str)) {
@@ -153,7 +156,11 @@ public class CytoplasmOntologyUtil {
      * @param str
      * @param onto
      * @param subGraph
-     * @param relType 
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws NotFoundException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
      */
     public static void setPATOIntersectionRelationship(String str, CytoplasmOntology onto, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, NotFoundException, IllegalAccessException, InvocationTargetException {
         String id = getId(str);
@@ -211,7 +218,7 @@ public class CytoplasmOntologyUtil {
      * @throws NotFoundException
      * @throws InvocationTargetException 
      */
-    public static void setGOIsARelationship(String str, CytoplasmOntology onto, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setGOIsARelationship(String str, CytoplasmOntology onto, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, IOException, InterruptedException, HttpException, URISyntaxException {
         String id = OntologyStrUtil.getId(str, OntologyStrUtil.goIdPattern);
         //log.info("id = " + goId + ", name = " + name);
         if (id != null) {
@@ -222,7 +229,7 @@ public class CytoplasmOntologyUtil {
         }
     }
     
-     public static void setGOIntersectionRelationship(String str, CytoplasmOntology onto, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void setGOIntersectionRelationship(String str, CytoplasmOntology onto, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, IOException, InterruptedException, HttpException, URISyntaxException {
         String id = OntologyStrUtil.getId(str, OntologyStrUtil.goIdPattern);
         if (id != null) {
             GeneOntology entity = GeneOntologyObo.getGeneOntology(id, subGraph);
@@ -245,19 +252,20 @@ public class CytoplasmOntologyUtil {
 	],
      * </pre>
      * 
-     * @param CytoplasmOntology
+     * @param onto
      * @param dbObj
      * @param subGraph
      * @throws NoSuchFieldException
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      * @throws NotFoundException
-     * @throws InvocationTargetException 
+     * @throws InvocationTargetException
+     * @throws UnknownHostException
      */
-    public static void setIntersectionRelationship(CytoplasmOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIntersectionRelationship(CytoplasmOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, IOException, InterruptedException, HttpException, URISyntaxException {
          if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.INTERSECTION_OF_LIST)) {
              //log.info("createIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.INTERSECTION_OF_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.INTERSECTION_OF_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.INTERSECTION_OF);
                 if (str != null) { 
@@ -312,7 +320,7 @@ public class CytoplasmOntologyUtil {
      * @param dbObj 
      */
     public static void setSynonyms(CytoplasmOntology onto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, CellTypeOntologyFields.NARROW)) != null) {
            onto.setCytoplasmNarrowSynonyms(synStr);
@@ -330,7 +338,7 @@ public class CytoplasmOntologyUtil {
      * @return String
      */ 
     public static String getNamespace(BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.NAMESPACE_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.NAMESPACE_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.NAMESPACE));
@@ -344,7 +352,7 @@ public class CytoplasmOntologyUtil {
     }
    
     
-    /**
+    /*
      * "subsetList" : [
      *      {
      *          "subset" : "ubprop:upper_level"
@@ -353,23 +361,29 @@ public class CytoplasmOntologyUtil {
      * @param dbObj
      * @return 
      */
+    /*
     public static String getSubsets(BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SUBSET_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SUBSET_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.SUBSET));
             str.append(" ");       
         }
         return str.toString();
-    }
+    }*/
     
     
     /**
      * @param ontologyId
-     * @param SubGraph
-     * @return 
+     * @param obj
+     * @param subGraph
+     * @return
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws Exception
      */
-    public static CytoplasmOntology processOntology(String ontologyId, BasicDBObject obj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+    public static CytoplasmOntology processOntology(String ontologyId, BasicDBObject obj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, IOException, InterruptedException, HttpException, URISyntaxException {
          CytoplasmOntology onto = getCytoplasmOntology(ontologyId, subGraph);
         
          if (OntologyStrUtil.objectExists(obj, CellTypeOntologyFields.NAME)) { 
@@ -405,13 +419,22 @@ public class CytoplasmOntologyUtil {
     
     /**
      * relationship: bearer_of PATO:0001979 ! lobed
-     * @param str
-     * @return {@link BioRelTypes} 
+     * @param onto
+     * @param dbObj
+     * @param subGraph
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws NotFoundException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws UnknownHostException
+     * @throws RuntimeException
+     * @throws Exception
      */
-    public static void processRelationshipList(CytoplasmOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, NotFoundException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void processRelationshipList(CytoplasmOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, NotFoundException, IllegalAccessException, InvocationTargetException, UnknownHostException {
         if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.RELATIONSHIP_LIST)) {
              //log.info("createIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.RELATIONSHIP_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.RELATIONSHIP_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.RELATIONSHIP);
                 if (OntologyStrUtil.isPATO(str)) {
@@ -435,7 +458,7 @@ public class CytoplasmOntologyUtil {
     
     public static void processCytoplasmOntology(String ontologyId, BasicDBObject result) throws Exception {
           Subgraph subGraph = new Subgraph();
-          CytoplasmOntology entity = processOntology(ontologyId, result, subGraph);
+          processOntology(ontologyId, result, subGraph);
           PersistenceTemplate.saveSubgraph(subGraph);
     }
    
