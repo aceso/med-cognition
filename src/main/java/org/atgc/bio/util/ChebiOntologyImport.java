@@ -79,7 +79,7 @@ public class ChebiOntologyImport {
     }
     
     public static String getNamespace(BasicDBObject dbObj) {
-        return OntologyStrUtil.getString((BasicDBObject)dbObj, ChebiOntologyFields.NAME_SPACE);   
+        return OntologyStrUtil.getString(dbObj, ChebiOntologyFields.NAME_SPACE);
     }
     
     /**
@@ -97,7 +97,7 @@ public class ChebiOntologyImport {
      * @return 
      */
     public static String getAlternateIds(BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, ChebiOntologyFields.ALT_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, ChebiOntologyFields.ALT_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject)obj, ChebiOntologyFields.ALT_ID));
@@ -121,9 +121,7 @@ public class ChebiOntologyImport {
                     case NARROW:
                         synList.add(OntologyStrUtil.getCleanSyn(str," NARROW"));
                 }                  
-            } else {
-               continue;
-            } 
+            }
         } 
         if (synList.isEmpty()) {
             return null;
@@ -139,7 +137,7 @@ public class ChebiOntologyImport {
      * @param dbObj 
      */
     public static void setSynonyms(ChebiOntology chebi, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, ChebiOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, ChebiOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, ChebiOntologyFields.EXACT)) != null) {
             chebi.setChebiExactSynonyms(synStr);
@@ -259,7 +257,7 @@ public class ChebiOntologyImport {
     public static void processRelationshipList(ChebiOntology chebiOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, NotFoundException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
         if (OntologyStrUtil.listExists(dbObj, ChebiOntologyFields.RELATIONSHIP_LIST)) {
              //log.info("createIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, ChebiOntologyFields.RELATIONSHIP_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, ChebiOntologyFields.RELATIONSHIP_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, ChebiOntologyFields.RELATIONSHIP);
                 if (OntologyStrUtil.isProteinOntology(str)) {
@@ -274,19 +272,20 @@ public class ChebiOntologyImport {
     /**
      * 
      * setIsARelationship between CellTypeOntology <->CellTypeOntology
-     * @param CellTypeOntology
+     * @param chebiOnto
      * @param dbObj
      * @param subGraph
      * @throws NoSuchFieldException
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      * @throws NotFoundException
-     * @throws InvocationTargetException 
+     * @throws InvocationTargetException
+     * @throws UnknownHostException
      */
-    public static void setIsARelationship(ChebiOntology chebiOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIsARelationship(ChebiOntology chebiOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException {
          if (OntologyStrUtil.listExists(dbObj, ChebiOntologyFields.IS_LIST)) {
              //log.info("createIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, ChebiOntologyFields.IS_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, ChebiOntologyFields.IS_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, ChebiOntologyFields.IS_A);
                 if (OntologyStrUtil.isChebiOntology(str)) { 
@@ -325,7 +324,20 @@ public class ChebiOntologyImport {
      * No pubmed relationships in Chebi
      * processChebiOntology
      * @param id
-     * @param result 
+     * @param obj
+     * @throws IllegalAccessException
+     * @throws URISyntaxException
+     * @throws UnsupportedEncodingException
+     * @throws MalformedURLException
+     * @throws IOException
+     * @throws HttpException
+     * @throws UnknownHostException
+     * @throws IllegalArgumentException
+     * @throws NoSuchFieldException
+     * @throws NotFoundException
+     * @throws InvocationTargetException
+     * @throws RuntimeException
+     * @throws Exception
      */
     public static void processChebiOntology(String id, BasicDBObject obj) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, UnknownHostException, IllegalArgumentException, NoSuchFieldException, NotFoundException, InvocationTargetException, RuntimeException, Exception {          
         Subgraph subGraph  = new Subgraph();
