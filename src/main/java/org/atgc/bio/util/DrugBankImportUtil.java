@@ -25,6 +25,56 @@ import java.util.*;
  *
  * uses Compound bio entity
  *
+ * unique drugs
+ * Aspergillis, Candida and other fungi
+ Bacteria and protozoa
+ Bacteria
+ Candida albicans and other yeasts
+ Condyloma acuminatum
+ Dermatophytic fungi including Trichophyton, Microsporum and Epidermophyton
+ Enteric bacteria and other eubacteria
+ Enteric gram-negative rods
+ Fungi, yeast and protozoans
+ Fungi
+ Gram negative and gram positive bacteria
+ Gram negative, positive bacteria and plasmodium
+ Gram-negative Bacteria
+ Gram-negative bacilli
+ Gram-positive Bacteria
+ Head lice
+ Helminthic Microorganisms
+ Hepatitis B virus
+ Hepatitis C virus, RSV and other RNA/DNA viruses
+ Herpes simplex virus
+ Human Herpes Virus
+ Human Immunodeficiency Virus
+ Human Influenza A Virus
+ Humans and other mammals
+ Influenza A virus
+ Influenza B virus
+ Influenza Virus
+ Microbes (bacteria, parasites)
+ Mycobacteria
+ Mycobacterium tuberculosis
+ Mycobacterium
+ Parasitic nematodes and other roundworms
+ Parasitic protozoa and helminths
+ Plasmodium
+ Pneumocystis carinii
+ Protozoa
+ Roundworms, hookworms, and other helminth species
+ Sarcoptes scabiei
+ Scabies (Sarcoptes scabei) and other insects
+ Schistosoma mansoni
+ Trichomonas vaginalis, Giardia duodenalis, and Entamoeba histolytica
+ Various Fungus Species
+ Various aerobic and anaerobic microorganisms
+ Various gram-negative and gram-positive eubacteria
+ Various viruses
+ Yeast and other Trichophyton or Microsporum fungi
+ Yeast and other fungi
+ Yeast, Molds, Trypanosomes
+ *
  */
 public class DrugBankImportUtil {
 
