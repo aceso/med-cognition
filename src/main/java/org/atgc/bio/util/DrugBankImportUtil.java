@@ -7,6 +7,7 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.DrugBankFields;
 import org.atgc.bio.DrugBankSplitter;
@@ -18,6 +19,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.atgc.bio.ImportCollectionNames;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.*;
 
 
@@ -84,10 +89,10 @@ public class DrugBankImportUtil {
      * This method uses compound collection and adds genesymbol, importstatus
      * and date to Druglistcollection importstatus - due is by default.
      *
-     * @@throws UnknownHostException
+     * @throws UnknownHostException
      */
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException, IllegalAccessException, HttpException, InstantiationException, NoSuchFieldException, URISyntaxException, InvocationTargetException, ClassNotFoundException {
 
         DBCursor dbCursor = DrugBankSplitter.getCollection(ImportCollectionNames.DRUGBANK).findDBCursor("{}");
         try {
@@ -110,7 +115,13 @@ public class DrugBankImportUtil {
     }
 
 
-    private static void setDrug(BasicDBObject obj, String drugName) throws Exception {
+    /**
+     *
+     * @param obj
+     * @param drugName
+     * @throws Exception
+     */
+    private static void setDrug(BasicDBObject obj, String drugName) throws ClassNotFoundException, URISyntaxException, InstantiationException, IllegalAccessException, NoSuchFieldException, InvocationTargetException, IOException, HttpException {
         if (drugName == null || obj == null) {
             return;
         }
@@ -260,6 +271,11 @@ public class DrugBankImportUtil {
         return OntologyStrUtil.getString(dbObj, DrugBankFields.DTYPE);
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getCasId(BasicDBObject dbObj) {
         if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.CAS_NUMBER)) {
             return OntologyStrUtil.getString(dbObj, DrugBankFields.CAS_NUMBER);
@@ -267,6 +283,11 @@ public class DrugBankImportUtil {
         return OntologyStrUtil.getList(dbObj, DrugBankFields.CAS_NUMBER).toString();
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getDrugDescription(BasicDBObject dbObj) {
         if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.DESCRIPTION)) {
             return OntologyStrUtil.getString(dbObj, DrugBankFields.DESCRIPTION);
@@ -274,22 +295,47 @@ public class DrugBankImportUtil {
         return OntologyStrUtil.getList(dbObj, DrugBankFields.DESCRIPTION).toString();
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getDrugBankId(BasicDBObject dbObj) {
         return OntologyStrUtil.getString(dbObj, DrugBankFields.DRUGBANK_ID);
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getDateCreated(BasicDBObject dbObj) {
         return OntologyStrUtil.getString(dbObj, DrugBankFields.CREATED);
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getDateUpdated(BasicDBObject dbObj) {
         return OntologyStrUtil.getString(dbObj, DrugBankFields.UPDATED);
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getVersion(BasicDBObject dbObj) {
         return OntologyStrUtil.getString(dbObj, DrugBankFields.VERSION);
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getIndication(BasicDBObject dbObj) {
         if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.INDICATION)) {
             return OntologyStrUtil.getString(dbObj, DrugBankFields.INDICATION);
@@ -298,6 +344,11 @@ public class DrugBankImportUtil {
         return OntologyStrUtil.getList(dbObj, DrugBankFields.INDICATION).toString();
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getMechanismOfAction(BasicDBObject dbObj) {
         if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.MECHANISM_OF_ACTION)) {
             return OntologyStrUtil.getString(dbObj, DrugBankFields.MECHANISM_OF_ACTION);
@@ -305,6 +356,11 @@ public class DrugBankImportUtil {
         return OntologyStrUtil.getList(dbObj, DrugBankFields.MECHANISM_OF_ACTION).toString();
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getPharmcology(BasicDBObject dbObj) {
         if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.PHARMACOLOGY)) {
             return OntologyStrUtil.getString(dbObj, DrugBankFields.PHARMACOLOGY);
@@ -312,10 +368,21 @@ public class DrugBankImportUtil {
         return OntologyStrUtil.getList(dbObj, DrugBankFields.PHARMACOLOGY).toString();
     }
 
+    /**
+     *
+     * @param dbObj
+     * @param key
+     * @return
+     */
     private static String getValue(BasicDBObject dbObj, DrugBankFields key) {
         return OntologyStrUtil.getString(dbObj, key);
     }
 
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     */
     private static void addAccessionNumbers(BasicDBObject dbObj, Drug drug) {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.SECONDARY_ACCESSION_NUMBERS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.SECONDARY_ACCESSION_NUMBERS);
@@ -325,6 +392,11 @@ public class DrugBankImportUtil {
         }
     }
 
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     */
     private static void addStatusGroups(BasicDBObject dbObj, Drug drug) {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.GROUPS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.GROUPS);
@@ -334,6 +406,11 @@ public class DrugBankImportUtil {
         }
     }
 
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     */
     private static void addSynonyms(BasicDBObject dbObj, Drug drug) {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.SYNONYMS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.SYNONYMS);
@@ -347,6 +424,12 @@ public class DrugBankImportUtil {
         }
     }
 
+    /**
+     *
+     * @param dbObj
+     * @param name
+     * @return
+     */
     private static List<String> getList(BasicDBObject dbObj, DrugBankFields name) {
         if (OntologyStrUtil.isObjectNull(dbObj, name)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, name);
@@ -361,6 +444,11 @@ public class DrugBankImportUtil {
         return null;
     }
 
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     */
     private static void setSubstructures(BasicDBObject dbObj, Drug drug) {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.SUB_STRUCTURES)) {
             List<String> subStructures = getList(dbObj, DrugBankFields.SUB_STRUCTURES);
@@ -370,6 +458,11 @@ public class DrugBankImportUtil {
         }
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getIngredients(BasicDBObject dbObj) {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.INGREDIENTS)) {
             if (OntologyStrUtil.isObjectString(dbObj, DrugBankFields.INGREDIENTS)) {
@@ -380,11 +473,21 @@ public class DrugBankImportUtil {
         return null;
     }
 
+    /**
+     *
+     * @param dbObj
+     * @return
+     */
     private static String getKingdom(BasicDBObject dbObj) {
         return getList(dbObj, DrugBankFields.KINGDOM).toString();
     }
 
 
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     */
     private static void setMixtures(BasicDBObject dbObj, Drug drug) {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.MIXTURES)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.MIXTURES);
@@ -402,7 +505,14 @@ public class DrugBankImportUtil {
         }
     }
 
-    private static void setDrugPackagers(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     * @param subGraph
+     * @throws Exception
+     */
+    private static void setDrugPackagers(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws ClassNotFoundException, URISyntaxException, InstantiationException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.PACKAGERS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.PACKAGERS);
             if (dbList != null) {
@@ -437,7 +547,14 @@ public class DrugBankImportUtil {
         }
     }
 
-    private static void setDrugManufacturers(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     * @param subGraph
+     * @throws Exception
+     */
+    private static void setDrugManufacturers(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws ClassNotFoundException, URISyntaxException, InstantiationException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.MANUFACTURERS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.MANUFACTURERS);
             if (dbList != null) {
@@ -471,7 +588,14 @@ public class DrugBankImportUtil {
         }
     }
 
-    private static void setDrugPrices(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     * @param subGraph
+     * @throws Exception
+     */
+    private static void setDrugPrices(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws IllegalAccessException, NoSuchFieldException, URISyntaxException, InstantiationException, ClassNotFoundException, InvocationTargetException {
         if (drug.getCasId() == null) {
             return;
         }
@@ -525,6 +649,11 @@ public class DrugBankImportUtil {
         }
     }
 
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     */
     private static void addCategories(BasicDBObject dbObj, Drug drug) {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.CATEGORIES)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.CATEGORIES);
@@ -534,6 +663,14 @@ public class DrugBankImportUtil {
         }
     }
 
+    /**
+     * The ncbiTaxId is not available, so we cannot relate to the NcbiTaxonomy.
+     *
+     * @param dbObj
+     * @param drug
+     * @param subGraph
+     * @throws Exception
+     */
     private static void setOrganismRelation(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.AFFECTED_ORGANISMS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.AFFECTED_ORGANISMS);
@@ -559,7 +696,14 @@ public class DrugBankImportUtil {
         }
     }
 
-    private static void setDosages(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     * @param subGraph
+     * @throws Exception
+     */
+    private static void setDosages(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws IllegalAccessException, NoSuchFieldException, URISyntaxException, InstantiationException, ClassNotFoundException, InvocationTargetException {
         String casId = drug.getCasId();
         if (casId == null) {
             return;
@@ -612,7 +756,7 @@ public class DrugBankImportUtil {
      * @param subGraph
      * @throws Exception
      */
-    private static void setDrugPatents(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
+    private static void setDrugPatents(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws ClassNotFoundException, URISyntaxException, InstantiationException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.PATENTS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.PATENTS);
             if (dbList != null) {
@@ -655,7 +799,7 @@ public class DrugBankImportUtil {
      * @param subGraph
      * @throws Exception
      */
-    private static void setDrugInteractions(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
+    private static void setDrugInteractions(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws ClassNotFoundException, URISyntaxException, InstantiationException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.DRUG_INTERACTIONS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.DRUG_INTERACTIONS);
             if (dbList != null) {
@@ -688,6 +832,11 @@ public class DrugBankImportUtil {
         }
     }
 
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     */
     private static void setFoodInteractions(BasicDBObject dbObj, Drug drug) {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.FOOD_INTERACTIONS)) {
             List<String> foodInteractions = getList(dbObj, DrugBankFields.FOOD_INTERACTIONS);
@@ -697,7 +846,14 @@ public class DrugBankImportUtil {
         }
     }
 
-    private static void setProteinRelation(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws Exception {
+    /**
+     *
+     * @param dbObj
+     * @param drug
+     * @param subGraph
+     * @throws Exception
+     */
+    private static void setProteinRelation(BasicDBObject dbObj, Drug drug, Subgraph subGraph) throws ClassNotFoundException, URISyntaxException, InstantiationException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         if (OntologyStrUtil.isObjectNull(dbObj, DrugBankFields.EXTERNAL_IDENTIFIERS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, DrugBankFields.EXTERNAL_IDENTIFIERS);
             if (dbList != null) {
