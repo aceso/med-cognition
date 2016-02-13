@@ -3,12 +3,15 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.OBOGeneOntologyFields;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
+
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -226,7 +229,7 @@ public class GeneOntologyObo {
      * @param dbObj
      * @param subGraph
      */
-    public static void setPubMedRelationship(GeneOntology geneOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+    public static void setPubMedRelationship(GeneOntology geneOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, HttpException, IOException, InvocationTargetException, InterruptedException, URISyntaxException {
         List<String> pList = getPubMedList(dbObj);
         if (!pList.isEmpty()) { 
             for (String pmid : pList) {
@@ -254,7 +257,7 @@ public class GeneOntologyObo {
      * @throws IllegalAccessException
      * @throws Exception 
      */
-    public static PubMed getPubMed(String pubMedId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+    public static PubMed getPubMed(String pubMedId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, URISyntaxException, IOException, HttpException, InterruptedException, InvocationTargetException {
           PubMed pubMed = (PubMed)subGraph.search(BioTypes.PUBMED, BioFields.PUBMED_ID, pubMedId);
           if (pubMed == null) {
              pubMed = PubMedUtil.getPubmed(pubMedId, subGraph);
@@ -865,7 +868,7 @@ public class GeneOntologyObo {
      * @throws InvocationTargetException
      * @throws Exception
      */
-    public static GeneOntology createGeneOntology(String id, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, Exception {
+    public static GeneOntology createGeneOntology(String id, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, HttpException, URISyntaxException, InterruptedException, IOException {
          GeneOntology geneOntology = (GeneOntology)subGraph.search(BioTypes.GENE_ONTOLOGY, BioFields.GENE_ONTOLOGY_OBO_ID, id);
          if (geneOntology == null) {
              geneOntology  = new GeneOntology();
@@ -990,7 +993,7 @@ public class GeneOntologyObo {
        * @param subGraph
        * @return GeneOntology
        */
-      public static GeneOntology fetchGeneOntology(String ontologyId, Subgraph subGraph) throws /* UnknownHostException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, */Exception {
+      public static GeneOntology fetchGeneOntology(String ontologyId, Subgraph subGraph) throws IOException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException  {
             log.info("fetchGeneOntology()" + ontologyId);
             GeneOntology geneOntology = null;
             BasicDBObject basicDBObject = new BasicDBObject();
@@ -1019,7 +1022,7 @@ public class GeneOntologyObo {
        * @throws RuntimeException
        * @throws Exception
        */
-      public static GeneOntology getGeneOntology(String ontologyId, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
+      public static GeneOntology getGeneOntology(String ontologyId, Subgraph subGraph) throws IOException, RuntimeException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
           log.info("getGeneOntology()");
           return fetchGeneOntology(ontologyId, subGraph);
       }
