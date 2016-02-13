@@ -3,6 +3,7 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.domain.*;
 import org.atgc.bio.repository.PersistenceTemplate;
@@ -10,7 +11,9 @@ import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
@@ -32,10 +35,11 @@ import org.neo4j.graphdb.NotFoundException;
  * 
  * Relationships: http://www.geneontology.org/GO.ontology-ext.relations.shtml
  * These three reltypes are transitive
- * {@link BioRelTypes#HAS_PART} {@link BIORELTYPES#PART_OF} {@link BioRelTypes#DEVELOPS_FROM}
+ * {@link BioRelTypes#HAS_PART} {@link BioRelTypes} {@link BioRelTypes#DEVELOPS_FROM}
  * Uses 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class AnatomicalEntityOntologyUtil {
     
     protected static Logger log = LogManager.getLogger(AnatomicalEntityOntologyUtil.class);
@@ -45,18 +49,15 @@ public class AnatomicalEntityOntologyUtil {
         return mongoUtil.getCollection(coll.toString());
     }
     
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
-        DBCursor dbCursor = getCollection(ImportCollectionNames.HUMANDEVANAT_ONTOLOGY).findDBCursor("{}" );
-        try {
+    public static void main(String[] args) throws IOException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.HUMANDEVANAT_ONTOLOGY).findDBCursor("{}")) {
             // we expect only one document match
             while (dbCursor.hasNext()) {
-                BasicDBObject result = (BasicDBObject)dbCursor.next();
+                BasicDBObject result = (BasicDBObject) dbCursor.next();
                 String ontologyId = OntologyStrUtil.getString(result, HumanDevAnatOntologyFields.ID);
                 processOntologyDoc(ontologyId, result);
             }
-         } finally {
-            dbCursor.close();
-         }   
+        }
     }
     
     /**
@@ -69,7 +70,7 @@ public class AnatomicalEntityOntologyUtil {
      * @param id
      * @param result 
      */
-    public static void processOntologyDoc(String id, BasicDBObject result) throws UnknownHostException, Exception {
+    public static void processOntologyDoc(String id, BasicDBObject result) throws IOException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
           if (OntologyStrUtil.isAEOntology(id)) { 
               if (!StatusUtil.idExists(BioTypes.ANATOMICAL_ENTITY_ONTOLOGY.toString(), BioFields.ANATOMICAL_ENTITY_ONTOLOGY_ID.toString(), id)) {
                     log.info("******* anatomical entity ontology id =" + id);
@@ -137,10 +138,6 @@ public class AnatomicalEntityOntologyUtil {
         return OntologyStrUtil.getString(obj, HumanDevAnatOntologyFields.DEF);
     }
     
-    public static String getNameSpace(BasicDBObject dbObj) {
-        return OntologyStrUtil.getString(dbObj, HumanDevAnatOntologyFields.NAMESPACE);
-    }
-    
     public static String getIsObsolete(BasicDBObject dbObj) {
         return OntologyStrUtil.getString(dbObj, HumanDevAnatOntologyFields.IS_OBSOLETE);
     }
@@ -159,8 +156,9 @@ public class AnatomicalEntityOntologyUtil {
      * 
      * "synonym" : "\"FHOD3/iso:3\" EXACT PRO-short-label [PRO:DNx]"
      *  synonym: "GPT" RELATED [PMID:1931970]
-     * @param obj
-     * @return 
+     * @param list
+      * @param enumField
+      * @return
      */
     public static String getSynonym(BasicDBList list, HumanDevAnatOntologyFields enumField) {
         List synList = new ArrayList();
@@ -192,11 +190,11 @@ public class AnatomicalEntityOntologyUtil {
      * synonym: "reaction rate constant" []
      * There are RELATED, EXACT and NARROW in synonym in this.
      * setSynonyms
-     * @param cellOnto
-     * @param obj 
+     * @param onto
+     * @param dbObj
      */
     public static void setSynonyms(AnatomicalEntityOntology onto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, HumanDevAnatOntologyFields.EXACT)) != null) {
             onto.setAnatomicalEntityOntologyExactSynonyms(synStr);
@@ -208,15 +206,6 @@ public class AnatomicalEntityOntologyUtil {
            onto.setAnatomicalEntityOntologyNarrowSynonyms(synStr);
         }
         
-    }
-    
-     /**
-     * 
-     * @param str
-     * @return
-     */
-    public static String getIdFromIsList(String str) {
-        return OntologyStrUtil.getId(str, OntologyStrUtil.aeoPattern);
     }
  
     /**
@@ -262,7 +251,7 @@ public class AnatomicalEntityOntologyUtil {
     public static void setIsARelationship(AnatomicalEntityOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
          if (OntologyStrUtil.listExists(dbObj, HumanDevAnatOntologyFields.IS_A_LIST)) {
              log.info("setIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.IS_A_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.IS_A_LIST);
              for (Object obj : list) {
                  setAEOIsARelationship((BasicDBObject)obj, onto, subGraph);
              }
@@ -270,9 +259,9 @@ public class AnatomicalEntityOntologyUtil {
     }
     
     public static void setAEOIsARelationship(BasicDBObject obj, AnatomicalEntityOntology onto, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-         String str = OntologyStrUtil.getString((BasicDBObject)obj, HumanDevAnatOntologyFields.IS_A);
+         String str = OntologyStrUtil.getString(obj, HumanDevAnatOntologyFields.IS_A);
          if (OntologyStrUtil.isAEOntology(str)) {
-            AnatomicalEntityOntology entity = getAEOntology(getId(str, OntologyStrUtil.aeoPattern), subGraph); 
+            getAEOntology(getId(str, OntologyStrUtil.aeoPattern), subGraph);
             onto.setIsARelationship(onto, BioRelTypes.IS_A);
          }
     }
@@ -299,7 +288,7 @@ public class AnatomicalEntityOntologyUtil {
     public static void setRelationshipList(AnatomicalEntityOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if (OntologyStrUtil.listExists(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST)) {
              //log.info("createIsARelationship()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST);
              for (Object obj : list) {
                  String str = OntologyStrUtil.getString((BasicDBObject)obj, HumanDevAnatOntologyFields.RELATIONSHIP);
                  if (OntologyStrUtil.isAEOntology(str)) {
@@ -433,31 +422,56 @@ public class AnatomicalEntityOntologyUtil {
      * synonym: "reaction rate constant" []
      * There are only RELATED, synonym in this.
      * setSynonyms
-     * @param cellOnto
-     * @param obj 
-     */
+      * @param onto
+      * @param dbObj
+      */
     public static void setCAROSynonyms(CARO onto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, HumanDevAnatOntologyFields.RELATED)) != null) {
             onto.setCARORelatedSynonyms(synStr);
         } 
     }
-    
-    public static void setCAROIsListRelationship(CARO onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+
+    /**
+     *
+     * @param onto
+     * @param dbObj
+     * @param subGraph
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws NotFoundException
+     * @throws InvocationTargetException
+     * @throws UnknownHostException
+     * @throws RuntimeException
+     * @throws Exception
+     */
+    public static void setCAROIsListRelationship(CARO onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException {
          if (OntologyStrUtil.listExists(dbObj, HumanDevAnatOntologyFields.IS_A_LIST)) {
              log.info("setCAROIsListRelationship()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.IS_A_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.IS_A_LIST);
              for (Object obj : list) {
                  setCAROIsARelationship((BasicDBObject)obj, onto, subGraph);
              }
          }
     }
-    
+
+    /**
+     *
+     * @param obj
+     * @param onto
+     * @param subGraph
+     * @throws NotFoundException
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
     public static void setCAROIsARelationship(BasicDBObject obj, CARO onto, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-         String str = OntologyStrUtil.getString((BasicDBObject)obj, HumanDevAnatOntologyFields.IS_A);
+         String str = OntologyStrUtil.getString(obj, HumanDevAnatOntologyFields.IS_A);
          if (OntologyStrUtil.isCARO(str)) {
-            CARO entity = getCARO(getId(str, OntologyStrUtil.caroPattern), subGraph); 
+            getCARO(getId(str, OntologyStrUtil.caroPattern), subGraph);
             onto.setIsARelationship(onto, BioRelTypes.IS_A);
          }
     }
@@ -529,7 +543,7 @@ public class AnatomicalEntityOntologyUtil {
      public static void setCARORelationshipList(CARO onto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if (OntologyStrUtil.listExists(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST)) {
              //log.info("createIsARelationship()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST);
              for (Object obj : list) {
                  String str = OntologyStrUtil.getString((BasicDBObject)obj, HumanDevAnatOntologyFields.RELATIONSHIP);
                  if (OntologyStrUtil.isCARO(str)) {
@@ -620,7 +634,7 @@ public class AnatomicalEntityOntologyUtil {
       * synonym: "urogenital sinus superior part" EXACT []
       */
       public static void setAHDASynonyms(AHDA onto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, HumanDevAnatOntologyFields.EXACT)) != null) {
             onto.setAhdaExactSynonyms(synStr);
@@ -724,7 +738,7 @@ public class AnatomicalEntityOntologyUtil {
       public static void setAHDARelationshipList(AHDA onto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if (OntologyStrUtil.listExists(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST)) {
              //log.info("createIsARelationship()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST);
              for (Object obj : list) {
                  String str = OntologyStrUtil.getString((BasicDBObject)obj, HumanDevAnatOntologyFields.RELATIONSHIP);
                  if (OntologyStrUtil.isEHDAA2(str)) {
@@ -738,10 +752,10 @@ public class AnatomicalEntityOntologyUtil {
          }
      }
      
-     public static void setAHDAIsListRelationship(AHDA onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void setAHDAIsListRelationship(AHDA onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException {
          if (OntologyStrUtil.listExists(dbObj, HumanDevAnatOntologyFields.IS_A_LIST)) {
              log.info("setAHDAIsListRelationship()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.IS_A_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.IS_A_LIST);
              for (Object obj : list) {
                  setAHDAIsARelationship((BasicDBObject)obj, onto, subGraph);
              }
@@ -754,15 +768,15 @@ public class AnatomicalEntityOntologyUtil {
      *  "is_a" : "EHDAA2:0000000 ! Abstract human developmental anatomy"
      */
     public static void setAHDAIsARelationship(BasicDBObject obj, AHDA onto, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-         String str = OntologyStrUtil.getString((BasicDBObject)obj, HumanDevAnatOntologyFields.IS_A);
+         String str = OntologyStrUtil.getString(obj, HumanDevAnatOntologyFields.IS_A);
          if (OntologyStrUtil.isEHDAA2(str)) {
-            AHDA entity = getAHDA(getId(str, OntologyStrUtil.ehdaa2Pattern), subGraph); 
+            getAHDA(getId(str, OntologyStrUtil.ehdaa2Pattern), subGraph);
             onto.setIsARelationship(onto, BioRelTypes.IS_A);
          } else if (OntologyStrUtil.isAEOntology(str)) {
              AnatomicalEntityOntology entity = getAEOntology(getId(str, OntologyStrUtil.aeoPattern), subGraph);
              onto.setIsARelationship(entity, BioRelTypes.IS_A);
          } else if (OntologyStrUtil.isCARO(str)) {
-             CARO entity = getCARO(getId(str, OntologyStrUtil.caroPattern), subGraph);
+             getCARO(getId(str, OntologyStrUtil.caroPattern), subGraph);
              onto.setIsARelationship(onto, BioRelTypes.IS_A);
          }
      }
@@ -781,7 +795,7 @@ public class AnatomicalEntityOntologyUtil {
       * @throws RuntimeException
       * @throws Exception 
       */
-     public static void processAHDA(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void processAHDA(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, IOException, RuntimeException, HttpException, URISyntaxException {
         
          Subgraph subGraph = new Subgraph();
          AHDA onto = getAHDA(ontologyId, subGraph);
@@ -851,10 +865,10 @@ public class AnatomicalEntityOntologyUtil {
       * @throws RuntimeException
       * @throws Exception 
       */
-     public static void setCSIsListRelationship(CS onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void setCSIsListRelationship(CS onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException {
          if (OntologyStrUtil.listExists(dbObj, HumanDevAnatOntologyFields.IS_A_LIST)) {
              log.info("setCSIsListRelationship()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.IS_A_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.IS_A_LIST);
              for (Object obj : list) {
                  setCSIsARelationship((BasicDBObject)obj, onto, subGraph);
              }
@@ -865,9 +879,9 @@ public class AnatomicalEntityOntologyUtil {
      * 	
      */
     public static void setCSIsARelationship(BasicDBObject obj, CS onto, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-         String str = OntologyStrUtil.getString((BasicDBObject)obj, HumanDevAnatOntologyFields.IS_A);
+         String str = OntologyStrUtil.getString(obj, HumanDevAnatOntologyFields.IS_A);
          if (OntologyStrUtil.isCS(str)) {
-            CS entity = getCS(getId(str, OntologyStrUtil.csPattern), subGraph); 
+            getCS(getId(str, OntologyStrUtil.csPattern), subGraph);
             onto.setIsARelationship(onto, BioRelTypes.IS_A);
          } 
      }
@@ -887,7 +901,7 @@ public class AnatomicalEntityOntologyUtil {
     public static void setCSRelationshipList(CS onto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if (OntologyStrUtil.listExists(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST)) {
              //log.info("createIsARelationship()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDevAnatOntologyFields.RELATIONSHIP_LIST);
              for (Object obj : list) {
                  String str = OntologyStrUtil.getString((BasicDBObject)obj, HumanDevAnatOntologyFields.RELATIONSHIP);
                  if (OntologyStrUtil.isCS(str)) {
@@ -923,7 +937,7 @@ public class AnatomicalEntityOntologyUtil {
       * @throws RuntimeException
       * @throws Exception 
       */
-     public static void processCS(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void processCS(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, IOException, RuntimeException, HttpException, URISyntaxException {
         
          Subgraph subGraph = new Subgraph();
          CS onto = getCS(ontologyId, subGraph);
