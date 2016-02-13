@@ -52,7 +52,7 @@ public enum AnnotationTypes {
 
     /**
      * @UniquelyIndexed annotation, must be at least 1 uniquely indexed field in an
-     * @BioEntity annotated object such as Protein, Gene, Disease.
+     * BioEntity annotated object such as Protein, Gene, Disease.
      */
     UNIQUELY_INDEXED(PackagePath.META + "UniquelyIndexed"),
 
@@ -90,7 +90,7 @@ public enum AnnotationTypes {
 
     private final String value;
 
-    private static final Map<String, AnnotationTypes> stringToEnum = new HashMap<String, AnnotationTypes>();
+    private static final Map<String, AnnotationTypes> stringToEnum = new HashMap<>();
 
     static { // init map from constant name to enum constant
         for (AnnotationTypes en : values()) {
