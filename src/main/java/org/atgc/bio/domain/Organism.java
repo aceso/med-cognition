@@ -25,6 +25,7 @@ import org.neo4j.graphdb.Direction;
  * @see UniquelyIndexed
  */
 @BioEntity(bioType = BioTypes.ORGANISM)
+@SuppressWarnings("javadoc")
 public class Organism {
     protected static Logger log = LogManager.getLogger(Organism.class);
 
