@@ -312,13 +312,16 @@ public class IntactImport {
         return getString(getDBObject(interactor, IntactFields.ORGANISM), IntactFields.NCBI_TAX_ID);
     }
 
-    private static Protein getProtein(DBObject interactor) throws Exception {
+    private static Protein getProtein(Subgraph subgraph, DBObject interactor) throws Exception {
         Protein protein = new Protein();
         protein.setIntactId(getIntactId(interactor));
         protein.setInteractorId(getInteractorId(interactor));
         //protein.setInteractionId(getInteractionId(interactor));
         protein.setNodeType(BioTypes.PROTEIN);
-        protein.setUniprot(getUniprot(interactor));
+        String uniprotId = getUniprot(interactor);
+        protein.setUniprot(uniprotId);
+        Protein uniprotProtein = UniprotUtil.getProtein(uniprotId);
+        protein.addProteinRelation(uniprotProtein);
         protein.setShortLabel(getShortLabel(interactor));
         String fullName = getFullName(interactor);
         protein.setMessage(fullName);
@@ -328,7 +331,7 @@ public class IntactImport {
         protein.setUniprotSecondaryRefs(uniprotIds);
         String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
         for (String proteinId : uniprotIdArray) {
-            Protein p = UniprotUtil.getProtein(proteinId);
+            Protein p = UniprotUtil.getProtein(proteinId, subgraph);
             protein.addProteinRelation(p);
         }
         protein.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
@@ -342,12 +345,12 @@ public class IntactImport {
         protein.setOrganismShortLabel(getOrganismShortLabel(interactor));
         String taxId = getNcbiTaxId(interactor);
         protein.setNcbiTaxId(taxId);
-        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(new Subgraph(), taxId);
+        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(subgraph, taxId);
         protein.setNcbiTaxonomyRelation(ncbiTaxonomy);
         return protein;
     }
 
-    private static Peptide getPeptide(DBObject interactor) throws Exception {
+    private static Peptide getPeptide(Subgraph subgraph, DBObject interactor) throws Exception {
         Peptide peptide = new Peptide();
         peptide.setIntactId(getIntactId(interactor));
         peptide.setInteractorId(getInteractorId(interactor));
@@ -364,7 +367,7 @@ public class IntactImport {
         peptide.setUniprotSecondaryRefs(uniprotIds);
         String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
         for (String proteinId : uniprotIdArray) {
-            Protein protein = UniprotUtil.getProtein(proteinId);
+            Protein protein = UniprotUtil.getProtein(proteinId, subgraph);
             peptide.addProteinRelation(protein);
         }
         peptide.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
@@ -378,12 +381,12 @@ public class IntactImport {
         peptide.setOrganismShortLabel(getOrganismShortLabel(interactor));
         String taxId = getNcbiTaxId(interactor);
         peptide.setNcbiTaxId(taxId);
-        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(new Subgraph(), taxId);
+        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(subgraph, taxId);
         peptide.setNcbiTaxonomyRelation(ncbiTaxonomy);
         return peptide;
     }
 
-    private static SmallMolecule getSmallMolecule(DBObject interactor) throws Exception {
+    private static SmallMolecule getSmallMolecule(Subgraph subgraph, DBObject interactor) throws Exception {
         SmallMolecule smallMolecule = new SmallMolecule();
         smallMolecule.setIntactId(getIntactId(interactor));
         smallMolecule.setInteractorId(getInteractorId(interactor));
@@ -398,7 +401,7 @@ public class IntactImport {
         smallMolecule.setUniprotSecondaryRefs(uniprotIds);
         String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
         for (String uniprotId : uniprotIdArray) {
-            Protein protein = UniprotUtil.getProtein(uniprotId);
+            Protein protein = UniprotUtil.getProtein(uniprotId, subgraph);
             smallMolecule.addProteinRelation(protein);
         }
         smallMolecule.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
@@ -412,12 +415,12 @@ public class IntactImport {
         smallMolecule.setOrganismShortLabel(getOrganismShortLabel(interactor));
         String taxId = getNcbiTaxId(interactor);
         smallMolecule.setNcbiTaxId(taxId);
-        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(new Subgraph(), taxId);
+        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(subgraph, taxId);
         smallMolecule.setNcbiTaxonomyRelation(ncbiTaxonomy);
         return smallMolecule;
     }
 
-    private static Dna getDna(DBObject interactor) throws Exception {
+    private static Dna getDna(Subgraph subgraph, DBObject interactor) throws Exception {
         Dna dna = new Dna();
         dna.setIntactId(getIntactId(interactor));
         dna.setInteractorId(getInteractorId(interactor));
@@ -432,12 +435,12 @@ public class IntactImport {
         dna.setPubmedSecondaryRefs(pubmedIds);
         String[] pubmedIdArray = StringUtils.split(pubmedIds, " ");
         for (String pubmedId : pubmedIdArray) {
-            dna.addPubmedRelation(PubMedUtil.loadPubmed(pubmedId));
+            dna.addPubmedRelation(PubMedUtil.getPubmed(pubmedId, subgraph));
         }
         dna.setOrganismShortLabel(getOrganismShortLabel(interactor));
         String taxId = getNcbiTaxId(interactor);
         dna.setNcbiTaxId(taxId);
-        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(new Subgraph(), taxId);
+        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(subgraph, taxId);
         dna.setNcbiTaxonomyRelation(ncbiTaxonomy);
         dna.setOrganismFullName(getOrganismFullName(interactor));;
         return dna;
@@ -525,7 +528,7 @@ public class IntactImport {
         return participantIdentificationMethod;
     }
 
-    public static Collection<Organism> getHostOrganismList(Subgraph subgraph, DBObject experiment) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    public static Collection<Organism> getHostOrganismList(Subgraph subgraph, DBObject experiment) throws IllegalAccessException, NoSuchFieldException, InvocationTargetException, UnknownHostException {
         Collection<Organism> organismList = new HashSet<Organism>();
         //log.info("experiment = " + experiment);
         BasicDBList list = getBasicDBList(experiment, IntactFields.HOST_ORGANISM_LIST);
@@ -542,6 +545,8 @@ public class IntactImport {
             organism.setNodeType(BioTypes.ORGANISM);
             String ncbiTaxId = getString(hostOrganism, IntactFields.NCBI_TAX_ID);
             organism.setNcbiTaxId(ncbiTaxId);
+            NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(subgraph, ncbiTaxId);
+            organism.setNcbiTaxonomyRelation(ncbiTaxonomy);
             //log.info("ncbiTaxId = " + ncbiTaxId);
             organismList.add(organism);
         }
@@ -622,7 +627,7 @@ public class IntactImport {
         return experimentAttributes;
     }
 
-    public static IntactExperiment getIntactExperiment(Subgraph subgraph, DBObject experiment) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+    public static IntactExperiment getIntactExperiment(Subgraph subgraph, DBObject experiment) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException {
         IntactExperiment intactExperiment = new IntactExperiment();
         String experimentId = getExperimentId(experiment);
         intactExperiment.setExperimentRef(experimentId);
@@ -873,19 +878,19 @@ public class IntactImport {
             BioTypes bioType = getBioType(interactor);
             //log.info("bioType of interactor = " + bioType);
             if (bioType.equals(BioTypes.PROTEIN)) {
-                Protein protein = getProtein(interactor);
+                Protein protein = getProtein(subgraph, interactor);
                 //log.info("protein interactorId = " + protein.getInteractorId());
                 interactorHash.put(protein.getInteractorId(), protein);
                 subgraph.add(protein);
             } else {
                 if (bioType.equals(BioTypes.PEPTIDE)) {
-                    Peptide peptide = getPeptide(interactor);
+                    Peptide peptide = getPeptide(subgraph, interactor);
                     //log.info("peptide interactorId = " + peptide.getInteractorId());
                     interactorHash.put(peptide.getInteractorId(), peptide);
                     subgraph.add(peptide);
                 } else {
                     if (bioType.equals(BioTypes.SMALL_MOLECULE)) {
-                        SmallMolecule smallMolecule = getSmallMolecule(interactor);
+                        SmallMolecule smallMolecule = getSmallMolecule(subgraph, interactor);
                         //log.info("peptide interactorId = " + peptide.getInteractorId());
                         interactorHash.put(smallMolecule.getInteractorId(), smallMolecule);
                         subgraph.add(smallMolecule);
@@ -968,7 +973,7 @@ public class IntactImport {
   "interactorId": "358462"
 }                        */
                         if (bioType.equals(BioTypes.DNA)) {
-                            Dna dna = getDna(interactor);
+                            Dna dna = getDna(subgraph, interactor);
                             interactorHash.put(dna.getInteractorId(), dna);
                             subgraph.add(dna);
                         } else
