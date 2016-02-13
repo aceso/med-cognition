@@ -64,68 +64,68 @@ public class GeneGraphDBImportUtil {
      * @return
      * @throws Exception
      */
-    public static BasicDBObject getGeneQuery(String symbol) throws Exception {
+    public static BasicDBObject getGeneQuery(String symbol) {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(GeneMongoFields.SYMBOL.toString(), symbol);
         return queryMap;
     }
 
-    public static BasicDBObject getTaxonomyQuery(String taxId) throws Exception {
+    public static BasicDBObject getTaxonomyQuery(String taxId) {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(TaxonomyMongoFields.ID.toString(), taxId);
         return queryMap;
     }
 
-    public static BasicDBObject getGene2GoQuery(String geneId) throws Exception {
+    public static BasicDBObject getGene2GoQuery(String geneId) {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(GeneMongoFields.GENE_ID.toString(), geneId);
         return queryMap;
     }
 
-    public static BasicDBObject getGeneIdQuery(String geneId) throws Exception {
+    public static BasicDBObject getGeneIdQuery(String geneId)  {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(GeneMongoFields.GENE_ID.toString(), geneId);
         return queryMap;
     }
 
-    public static BasicDBObject getNeighborsQuery(String geneId) throws Exception {
+    public static BasicDBObject getNeighborsQuery(String geneId)  {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(GeneMongoFields.GENE_ID.toString(), geneId);
         return queryMap;
     }
 
-    public static BasicDBObject getPubmedQuery(String geneId) throws Exception {
+    public static BasicDBObject getPubmedQuery(String geneId) {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(GeneMongoFields.GENE_ID.toString(), geneId);
         return queryMap;
     }
 
-    public static BasicDBList getResult(ImportCollectionNames coll, String geneId) throws Exception {
+    public static BasicDBList getResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getGeneQuery(geneId));
     }
 
-    public static BasicDBList getGeneIdResult(ImportCollectionNames coll, String geneId) throws Exception {
+    public static BasicDBList getGeneIdResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getGeneIdQuery(geneId));
     }
 
-    public static BasicDBList getGene2GoResult(ImportCollectionNames coll, String geneId) throws Exception {
+    public static BasicDBList getGene2GoResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getGene2GoQuery(geneId));
     }
 
-    public static BasicDBList getTaxonomyResult(ImportCollectionNames coll, String taxId) throws Exception {
+    public static BasicDBList getTaxonomyResult(ImportCollectionNames coll, String taxId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getTaxonomyQuery(taxId));
     }
 
-    public static BasicDBList getNeighborsResult(ImportCollectionNames coll, String geneId) throws Exception {
+    public static BasicDBList getNeighborsResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getNeighborsQuery(geneId));
     }
 
-    public static BasicDBList getPubmedResult(ImportCollectionNames coll, String geneId) throws Exception {
+    public static BasicDBList getPubmedResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getPubmedQuery(geneId));
     }
@@ -138,7 +138,7 @@ public class GeneGraphDBImportUtil {
      * @return
      * @throws Exception
      */
-    public static Gene getGeneKey(String geneId) throws Exception {
+    public static Gene getGeneKey(String geneId) throws UnknownHostException {
         DBCursor dbCursor = getCollection(
                 ImportCollectionNames.NCBI_GENE_INFO).findDBCursor(
                 "{" +
@@ -294,7 +294,7 @@ public class GeneGraphDBImportUtil {
          PersistenceTemplate.saveSubgraph(subGraph);
     }
     
-    public static NcbiTaxonomy getNcbiTaxonomy(Subgraph subgraph, String taxId) throws Exception {
+    public static NcbiTaxonomy getNcbiTaxonomy(Subgraph subgraph, String taxId) throws UnknownHostException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         BasicDBList result = getTaxonomyResult(ImportCollectionNames.NCBI_TAXONOMY, taxId);
         BasicDBObject obj;
         if (!result.isEmpty()) {
@@ -349,7 +349,7 @@ public class GeneGraphDBImportUtil {
         return ncbiTaxonomy;
     }
 
-    public static Gene getGene(Subgraph subgraph, BasicDBObject result) throws Exception {
+    public static Gene getGene(Subgraph subgraph, BasicDBObject result) throws InvocationTargetException, NoSuchFieldException, IllegalAccessException, UnknownHostException {
         String symbol = getString(result, GeneMongoFields.SYMBOL);
         //log.info("getGene() =" + symbol);
         Gene gene = new Gene();
@@ -442,7 +442,7 @@ public class GeneGraphDBImportUtil {
      * @return
      * @throws Exception
      */
-    public static GeneToGo updateGene2Go(Subgraph subgraph, Gene gene) throws Exception {
+    public static GeneToGo updateGene2Go(Subgraph subgraph, Gene gene) throws IOException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         String geneId = gene.getNcbiGeneId();
         log.info("geneId = " + geneId);
         BasicDBList result = getGene2GoResult(ImportCollectionNames.NCBI_GENE2GO, geneId);
@@ -498,7 +498,7 @@ public class GeneGraphDBImportUtil {
         return geneToGo;
     }
 
-    public static void updatePubMed(Subgraph subgraph, Gene gene) throws Exception {
+    public static void updatePubMed(Subgraph subgraph, Gene gene) throws IOException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         BasicDBList gene2PubmedList = getPubmedResult(ImportCollectionNames.NCBI_GENE2PUBMED, gene.getNcbiGeneId());
         for (Object obj : gene2PubmedList) {
             BasicDBObject gene2Pubmed = (BasicDBObject)obj;
