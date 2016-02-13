@@ -1215,7 +1215,7 @@ public class PubMed {
 
     /**
      * {@link NciPathway} uses this
-     * @param endEntitysing 
+     * @param endEntity
      */
     public void setPubMedRelation(Object endEntity) {
         final BioRelation relation = new BioRelation();
