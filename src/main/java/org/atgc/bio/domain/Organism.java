@@ -74,6 +74,9 @@ public class Organism {
     @Taxonomy (rbClass=TaxonomyTypes.ORGANISM_LABEL, rbField=BioFields.SHORT_LABEL)  // this is value
     private String shortLabel;
 
+    @RelatedTo(direction=Direction.OUTGOING, relType=BioRelTypes.IN_ORGANISM, elementClass=BioRelation.class)
+    private BioRelation ncbiTaxonomyRelation;
+
     public Organism() {
     }
 
@@ -239,5 +242,13 @@ public class Organism {
         }
 
         return true;
+    }
+
+    /**
+     *
+     * @param ncbiTaxonomy
+     */
+    public void setNcbiTaxonomyRelation(NcbiTaxonomy ncbiTaxonomy) {
+        ncbiTaxonomyRelation = new BioRelation(this, ncbiTaxonomy, BioRelTypes.IN_ORGANISM);
     }
 }
