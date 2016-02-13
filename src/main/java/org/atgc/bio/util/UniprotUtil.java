@@ -22,22 +22,23 @@ import org.apache.http.HttpException;
 import org.atgc.bio.UniprotFields;
 import org.atgc.bio.domain.*;
 import org.neo4j.graphdb.NotFoundException;
+import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
 
 /**
  * Uniprot entries are mapped to BioEntity
  *
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class UniprotUtil {
 
     protected static Logger log = LogManager.getLogger(UniprotUtil.class);
-    private static String NcbiTaxonPrefix = "NCBITaxon:";
 
     public static Protein getProtein(String id) throws Exception {
         return getProtein(id, new Subgraph());
     }
 
-    public static Protein getProtein(String id, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+    public static Protein getProtein(String id, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, ServiceException, IOException, InterruptedException, HttpException, URISyntaxException {
         if (id == null) return null;
         Protein protein = (Protein) subGraph.search(BioTypes.PROTEIN, BioFields.UNIPROT_ID, id);
         if (protein == null) {
@@ -58,9 +59,13 @@ public class UniprotUtil {
      * @throws NoSuchFieldException
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
-     * @throws Exception
+     * @throws URISyntaxException
+     * @throws IOException
+     * @throws HttpException
+     * @throws InterruptedException
+     * @throws InvocationTargetException
      */
-    public static PubMed getPubMed(String pubMedId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+    public static PubMed getPubMed(String pubMedId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, URISyntaxException, IOException, HttpException, InterruptedException, InvocationTargetException {
         PubMed pubMed = (PubMed) subGraph.search(BioTypes.PUBMED, BioFields.PUBMED_ID, pubMedId);
         if (pubMed == null) {
             pubMed = PubMedUtil.getPubmed(pubMedId, subGraph);
@@ -68,7 +73,12 @@ public class UniprotUtil {
         return pubMed;
     }
 
-    public static void createPubMedRelation(PubMed pubMed, Protein protein) throws Exception {
+    /**
+     *
+     * @param pubMed
+     * @param protein
+     */
+    public static void createPubMedRelation(PubMed pubMed, Protein protein) {
         // log.info("createPubMedRelation");
         pubMed.setPubMedRelation(protein);
     }
@@ -82,9 +92,15 @@ public class UniprotUtil {
      * @param protein
      * @param obj
      * @param subGraph
-     * @throws Exception
+     * @throws IllegalAccessException
+     * @throws InterruptedException
+     * @throws HttpException
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws InvocationTargetException
+     * @throws NoSuchFieldException
      */
-    public static void setCitationPubMedRelation(Protein protein, BasicDBObject obj, Subgraph subGraph) throws Exception {
+    public static void setCitationPubMedRelation(Protein protein, BasicDBObject obj, Subgraph subGraph) throws IllegalAccessException, InterruptedException, HttpException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         if (obj != null) {
             if (OntologyStrUtil.objectExists(obj, UniprotFields.CITATIONXREF)) {
                 BasicDBObject citationObj = OntologyStrUtil.getDBObject(obj, UniprotFields.CITATIONXREF);
@@ -145,7 +161,7 @@ public class UniprotUtil {
                 }
             }
             if (exists) {
-                sb.toString();
+                return sb.toString();
             }
         }
         return null;
@@ -204,7 +220,7 @@ public class UniprotUtil {
      */
     public static BasicDBList getFieldsFromAlternativeNames(BasicDBObject obj) {
         if (OntologyStrUtil.objectExists(obj, UniprotFields.ALTERNATIVE_NAMES)) {
-            BasicDBObject dbObj = (BasicDBObject) obj.get(UniprotFields.ALTERNATIVE_NAMES);
+            BasicDBObject dbObj = (BasicDBObject) obj.get(UniprotFields.ALTERNATIVE_NAMES.toString());
             if (dbObj != null) {
                 return getFieldListFromAlternativeName(dbObj);
             }
@@ -225,9 +241,8 @@ public class UniprotUtil {
                     String nameType = OntologyStrUtil.getString(dbObj, UniprotFields.NAME_TYPE);
                     if (nameType != null && nameType.equals(UniprotFields.ALTNAME.toString())) {
                         for (Object obj : list) {
-                            if (OntologyStrUtil.objectExists(dbObj, UniprotFields.FIELDS)) {
-                                BasicDBList fieldList = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.FIELDS);
-                                return fieldList;
+                            if (OntologyStrUtil.objectExists((BasicDBObject)obj, UniprotFields.FIELDS)) {
+                                return OntologyStrUtil.getBasicDBList((BasicDBObject)obj, UniprotFields.FIELDS);
                             }
                         }
                     }
@@ -331,9 +346,8 @@ public class UniprotUtil {
             BasicDBList list = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.SUBNAMES);
             if (list != null) {
                 for (Object obj : list) {
-                    if (OntologyStrUtil.objectExists(dbObj, UniprotFields.FIELDS)) {
-                        BasicDBList fieldList = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.FIELDS);
-                        return fieldList;
+                    if (OntologyStrUtil.objectExists((BasicDBObject)obj, UniprotFields.FIELDS)) {
+                        return OntologyStrUtil.getBasicDBList((BasicDBObject)obj, UniprotFields.FIELDS);
                     }
                 }
             }
@@ -365,8 +379,7 @@ public class UniprotUtil {
                         if (nameList != null) {
                             for (Object nameObj : nameList) {
                                 if (OntologyStrUtil.objectExists((BasicDBObject) nameObj, UniprotFields.FIELDS)) {
-                                    BasicDBList fieldList = OntologyStrUtil.getBasicDBList((BasicDBObject) nameObj, UniprotFields.FIELDS);
-                                    return fieldList;
+                                    return OntologyStrUtil.getBasicDBList((BasicDBObject) nameObj, UniprotFields.FIELDS);
                                 }
                             }
                         }
@@ -385,7 +398,7 @@ public class UniprotUtil {
      */
     public static BasicDBList getFieldsFromRecommendedName(BasicDBObject obj) {
         if (OntologyStrUtil.objectExists(obj, UniprotFields.RECOMMENDED_NAME)) {
-            BasicDBObject dbObj = (BasicDBObject) obj.get(UniprotFields.RECOMMENDED_NAME);
+            BasicDBObject dbObj = (BasicDBObject) obj.get(UniprotFields.RECOMMENDED_NAME.toString());
             if (dbObj != null) {
                 return getFieldListFromRecommendedName(dbObj);
             }
@@ -429,6 +442,8 @@ public class UniprotUtil {
      * "Q9H682"
      * ]
      * </pre>
+     * @param dbObj
+     * @return
      */
     public static String getSecondaryUniProtAccessions(BasicDBObject dbObj) {
         return getListAsString(dbObj, UniprotFields.SECONDARY_UNIPROT_ACCESSIONS);
@@ -452,20 +467,27 @@ public class UniprotUtil {
      */
     public static String getListAsString(BasicDBObject dbObj, Enum field) {
         if (OntologyStrUtil.objectExists(dbObj, field)) {
-            BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, field);
+            BasicDBList list = OntologyStrUtil.getList(dbObj, field);
             if (list != null && list.size() > 0) {
                 StringBuilder str = new StringBuilder();
-                for (Object obj : list) {
-                    if (obj != null) {
-                        str.append(obj.toString());
-                        str.append(" ");
-                    }
-                }
+                list.stream().filter(obj -> obj != null).forEach(obj -> {
+                    str.append(obj.toString());
+                    str.append(" ");
+                });
                 return str.toString();
             }
         }
         return null;
     }
+
+    /*
+    for (Object obj : list) {
+                    if (obj != null) {
+                        str.append(obj.toString());
+                        str.append(" ");
+                    }
+                }
+     */
 
     /**
      * <pre>
@@ -476,24 +498,28 @@ public class UniprotUtil {
      * ],
      *
      * </pre>
-     *
      * @param protein
      * @param dbObj
      * @param subGraph
+     * @throws InvocationTargetException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
+     * @throws UnknownHostException
      */
-    public static void setNcbiTaxonmyRelationship(Protein protein, BasicDBObject dbObj, Subgraph subGraph) throws Exception {
+    public static void setNcbiTaxonmyRelationship(Protein protein, BasicDBObject dbObj, Subgraph subGraph) throws InvocationTargetException, NoSuchFieldException, IllegalAccessException, UnknownHostException {
         BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.NCBI_TAXONOMY_IDS);
         // log.info("ncbitaxid list =" + dbList.toString());
-        for (Object id : dbList) {
+        for (Object id : Objects.requireNonNull(dbList)) {
             BasicDBObject obj = (BasicDBObject) id;
             if (OntologyStrUtil.objectExists(obj, UniprotFields.NCBI_TAX_ID)) {
-                String ncbiTaxId = OntologyStrUtil.getString((BasicDBObject) obj, UniprotFields.NCBI_TAX_ID);
+                String ncbiTaxId = OntologyStrUtil.getString(obj, UniprotFields.NCBI_TAX_ID);
                 if (ncbiTaxId != null) {
                     //log.info("ncbiTaxId " + ncbiTaxId);
                     if (ncbiTaxId.equals("118")) {
                         log.info("ncbiTaxId is 118");
                     }
-                    NcbiTaxonomy entity = GeneGraphDBImportUtil.getNcbiTaxonomy(subGraph, NcbiTaxonPrefix + ncbiTaxId);
+                    String ncbiTaxonPrefix = "NCBITaxon:";
+                    NcbiTaxonomy entity = GeneGraphDBImportUtil.getNcbiTaxonomy(subGraph, ncbiTaxonPrefix + ncbiTaxId);
                     if (entity != null) {
                         protein.setNcbiTaxonomyRelations(entity);
                     }
@@ -516,8 +542,8 @@ public class UniprotUtil {
      * }
      *
      * </pre>
-     * @param dbObj
      * @param protein
+     * @param dbObj
      * @param subGraph
      */
     public static void setOrganismNames(Protein protein, BasicDBObject dbObj, Subgraph subGraph) {
@@ -539,6 +565,7 @@ public class UniprotUtil {
      * </pre>
      * keywords
      * @param dbObj
+     * @return
      */
     public static String getKeywords(BasicDBObject dbObj) {
         BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.KEYWORDS);
@@ -577,7 +604,7 @@ public class UniprotUtil {
      * @param dbObj
      * @param subGraph
      */
-    public static void setGeneRelationship(Protein protein, BasicDBObject dbObj, Subgraph subGraph) throws Exception {
+    public static void setGeneRelationship(Protein protein, BasicDBObject dbObj, Subgraph subGraph) throws IllegalAccessException, InterruptedException, HttpException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.GENES);
         if (dbList != null && dbList.size() > 0) {
             for (Object obj : dbList) {
@@ -588,11 +615,14 @@ public class UniprotUtil {
                         if (geneSymbol != null) {
                             HashSet<Gene> entitySet = GeneGraphDBImportUtil.getGene(geneSymbol, subGraph);
                             if (!entitySet.isEmpty()) {
+                                entitySet.stream().filter(gene -> gene != null).forEach(protein::setGeneRelations);
+                                /*
                                 for (Gene gene : entitySet) {
                                     if (gene != null) {
                                         protein.setGeneRelations(gene);
                                     }
                                 }
+                                 */
                             }
                         }
                     }
@@ -616,7 +646,7 @@ public class UniprotUtil {
      * </pre>
      * GeneOntologyRelations
      */
-    public static void setGeneOntologyRelationship(Protein protein, BasicDBObject dbObj, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
+    public static void setGeneOntologyRelationship(Protein protein, BasicDBObject dbObj, Subgraph subGraph) throws IOException, RuntimeException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.GO_TERM_LIST);
         if (dbList != null && dbList.size() > 0) {
             for (Object obj : dbList) {
@@ -634,11 +664,16 @@ public class UniprotUtil {
      * @param obj
      * @param subGraph
      * @return
-     * @throws UnknownHostException
+     * @throws IOException
      * @throws RuntimeException
-     * @throws Exception
+     * @throws IllegalAccessException
+     * @throws InterruptedException
+     * @throws HttpException
+     * @throws URISyntaxException
+     * @throws InvocationTargetException
+     * @throws NoSuchFieldException
      */
-    public static GeneOntology getGeneOntology(BasicDBObject obj, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
+    public static GeneOntology getGeneOntology(BasicDBObject obj, Subgraph subGraph) throws IOException, RuntimeException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         if (obj != null) {
             String goStr = OntologyStrUtil.getString(obj, UniprotFields.GO_ID);
             if (goStr != null) {
@@ -665,10 +700,14 @@ public class UniprotUtil {
      * },
      *
      * </pre>
-     *
      * @param seq
      * @param dbObj
      * @param subGraph
+     * @throws NotFoundException
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
      */
     public static void setFeature(ProteinSequence seq, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         String sequenceCheckSum = seq.getSequenceSum();
@@ -712,33 +751,31 @@ public class UniprotUtil {
         log.info("featureObj =" + featureObj);
         BasicDBObject locationObj = OntologyStrUtil.getDBObject(featureObj, UniprotFields.FEATURE_LOCATION);
 
-        if (feature != null) {
-            feature.setSequenceId(seqId);
+        feature.setSequenceId(seqId);
 
-            String val = getIntegerVal(locationObj, UniprotFields.LOCATION_END);
-            if (val != null) {
-                feature.setEndPosition(val);
-            }
-            log.info("locationEnd =" + val);
+        String val = getIntegerVal(locationObj, UniprotFields.LOCATION_END);
+        if (val != null) {
+            feature.setEndPosition(val);
+        }
+        log.info("locationEnd =" + val);
 
-            val = getIntegerVal(locationObj, UniprotFields.LOCATION_START);
-            if (val != null) {
-                feature.setStartPosition(val);
-            }
-            log.info("locationStart =" + val);
+        val = getIntegerVal(locationObj, UniprotFields.LOCATION_START);
+        if (val != null) {
+            feature.setStartPosition(val);
+        }
+        log.info("locationStart =" + val);
 
-            val = getString(featureObj, UniprotFields.FEATURE_STATUS);
-            if (val != null) {
-                feature.setFeatureStatus(val);
-            }
-            val = getString(featureObj, UniprotFields.FEATURE_DESCRIPTION);
-            if (val != null) {
-                feature.setFeatureDescription(val);
-            }
-            val = getString(featureObj, UniprotFields.FEATURE_TYPE);
-            if (val != null) {
-                feature.setFeatureType(val);
-            }
+        val = getString(featureObj, UniprotFields.FEATURE_STATUS);
+        if (val != null) {
+            feature.setFeatureStatus(val);
+        }
+        val = getString(featureObj, UniprotFields.FEATURE_DESCRIPTION);
+        if (val != null) {
+            feature.setFeatureDescription(val);
+        }
+        val = getString(featureObj, UniprotFields.FEATURE_TYPE);
+        if (val != null) {
+            feature.setFeatureType(val);
         }
         return feature;
     }
@@ -764,13 +801,11 @@ public class UniprotUtil {
      */
     public static void setSequence(Protein protein, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         ProteinSequence sequence = createSequence();
-        if (sequence != null) {
-            sequence.setUniprot(protein.getUniprot());
-            setSequenceInfo(sequence, dbObj);
-            setFeature(sequence, dbObj, subGraph);
-            protein.setProteinSequenceRelations(sequence);
-            subGraph.add(sequence);
-        }
+        sequence.setUniprot(protein.getUniprot());
+        setSequenceInfo(sequence, dbObj);
+        setFeature(sequence, dbObj, subGraph);
+        protein.setProteinSequenceRelations(sequence);
+        subGraph.add(sequence);
     }
 
     /**
@@ -808,9 +843,7 @@ public class UniprotUtil {
      */
     public static String getIntegerVal(BasicDBObject dbObj, Enum field) {
         Object obj = dbObj.get(field.toString());
-        if (obj != null) {
-            return (String) obj.toString();
-        }
+        if (obj != null) return obj.toString();
         return null;
     }
 
@@ -828,7 +861,7 @@ public class UniprotUtil {
      */
     public static void setSequenceInfo(ProteinSequence seq, BasicDBObject obj) {
         if (seq != null) {
-            String val = null;
+            String val;
             if (OntologyStrUtil.objectExists(obj, UniprotFields.SEQUENCE)) {
                 BasicDBObject dbObj = OntologyStrUtil.getDBObject(obj, UniprotFields.SEQUENCE);
             
@@ -905,8 +938,12 @@ public class UniprotUtil {
      * @param protein
      * @param dbObj
      * @param subgraph
+     * @throws InvocationTargetException
+     * @throws URISyntaxException
+     * @throws NoSuchFieldException
+     * @throws IllegalAccessException
      */
-    public static void setCitations(Protein protein, BasicDBObject dbObj, Subgraph subgraph) throws Exception {
+    public static void setCitations(Protein protein, BasicDBObject dbObj, Subgraph subgraph) throws InvocationTargetException, URISyntaxException, NoSuchFieldException, IllegalAccessException {
         if (OntologyStrUtil.objectExists(dbObj, UniprotFields.CITATIONS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.CITATIONS);
             int cntr = 0;
@@ -927,7 +964,7 @@ public class UniprotUtil {
      *
      * @param obj
      */
-    public static void setCitationInfo(Protein protein, BasicDBObject obj, int cntr, Subgraph subGraph) throws Exception {
+    public static void setCitationInfo(Protein protein, BasicDBObject obj, int cntr, Subgraph subGraph) throws IllegalAccessException, NoSuchFieldException, InvocationTargetException, URISyntaxException {
         Citation citation = new Citation();
         String val = getString(obj, UniprotFields.CITATION_TYPE);
         if (val != null) {
@@ -951,13 +988,11 @@ public class UniprotUtil {
         }
 
         citation.setUniprot(protein.getUniprot());
-        citation.setCntr(new Integer(cntr).toString());
+        citation.setCntr(Integer.toString(cntr));
         setSummaryList(citation, obj);
         setSampleSources(obj, citation.getPublicationDate());
         BasicDBObject dbObj = getCitationXRefs(obj);
-        if (dbObj != null) {
-            setDOI(citation, obj);
-        }
+        if (dbObj != null) setDOI(citation, obj);
         subGraph.add(citation);
         createAuthors(protein, citation, obj, subGraph);
     }
@@ -1025,7 +1060,7 @@ public class UniprotUtil {
      * @return List<String>
      */
     public static List<String> getName(String str) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         // firstname or forename
         list.add("");
         if (str != null) {
@@ -1033,19 +1068,11 @@ public class UniprotUtil {
             //log.info("index dot =" + new Integer(index).toString());
             if (index > 0) {
                 String lname = (str.substring(0, index - 1).trim());
-                if (lname != null) {
-                    list.add(lname);
-                } else {
-                    list.add("");
-                }
+                list.add(lname);
             }
 
             String initials = (str.substring(index - 1, str.length()).trim());
-            if (initials != null) {
-                list.add(initials);
-            } else {
-                list.add("");
-            }
+            list.add(initials);
         }
         return list;
     }
@@ -1059,7 +1086,6 @@ public class UniprotUtil {
      *
      * @param obj
      * @param author
-     * @return
      */
     public static void setName(String obj, Author author) {
         List<String> list = getName(obj);
@@ -1091,7 +1117,7 @@ public class UniprotUtil {
         if (OntologyStrUtil.objectExists(obj, UniprotFields.AUTHORS)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(obj, UniprotFields.AUTHORS);
             if (dbList != null) {
-                if (dbList != null && dbList.size() > 0) {
+                if (dbList.size() > 0) {
                     setAuthor(protein, dbList, subGraph);
                 }
             }
@@ -1245,17 +1271,15 @@ public class UniprotUtil {
         String commentStatus = OntologyStrUtil.getString(commentObj, UniprotFields.COMMENT_STATUS);
         List<String> evidenceIds = getEvidenceIds(commentObj);
         ProteinAnnotationComment prComment = new ProteinAnnotationComment();
-        if (prComment != null) {
-            prComment.setUniprot(protein.getUniprot());
-            prComment.setComment(comment);
-            prComment.setCommentType(commentType);
-            prComment.setCommentStatus(commentStatus);
-            if (evidenceIds != null) {
-                prComment.setEvidenceId(evidenceIds);
-            }
-            subGraph.add(prComment);
-
+        prComment.setUniprot(protein.getUniprot());
+        prComment.setComment(comment);
+        prComment.setCommentType(commentType);
+        prComment.setCommentStatus(commentStatus);
+        if (evidenceIds != null) {
+            prComment.setEvidenceId(evidenceIds);
         }
+        subGraph.add(prComment);
+
         return prComment;
     }
 
@@ -1271,10 +1295,9 @@ public class UniprotUtil {
      */
     public static List<String> getEvidenceIds(BasicDBObject dbObj) {
         if (OntologyStrUtil.listExists(dbObj, UniprotFields.EVIDENCE_IDS)) {
-            StringBuilder sb = new StringBuilder();
             BasicDBList ids = OntologyStrUtil.getList(dbObj, UniprotFields.EVIDENCE_IDS);
             if (ids != null) {
-                List<String> list = new ArrayList<String>();
+                List<String> list = new ArrayList<>();
                 for (Object obj : ids) {
                     String value = (String) obj;
                     if (value != null) {
@@ -1302,14 +1325,14 @@ public class UniprotUtil {
      * @param dbObj
      * @param publicationDate
      */
-    public static void setSampleSources(BasicDBObject dbObj, String publicationDate) throws Exception {
+    public static void setSampleSources(BasicDBObject dbObj, String publicationDate)  {
         //StringBuilder typeVal = new StringBuilder();
         if (OntologyStrUtil.objectExists(dbObj, UniprotFields.SAMPLE_SOURCES)) {
             BasicDBList objList = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.SAMPLE_SOURCES);
             if (objList != null && objList.size() > 0) {
-                if (objList.size() > 1) {
+                //if (objList.size() > 1) {
                     // throw new Exception("SampleSource objList > 1 " + objList.size());
-                }
+                //}
                 for (Object sample : objList) {
                     SampleSource sampleSource = new SampleSource();
                     sampleSource.setPublicationDate(publicationDate);
@@ -1364,12 +1387,12 @@ public class UniprotUtil {
 
     }
 
-    public static void setEvidence(Protein protein, BasicDBObject dbObj, Subgraph subgraph) throws UnknownHostException, NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException, Exception {
+    public static void setEvidence(Protein protein, BasicDBObject dbObj, Subgraph subgraph) throws UnknownHostException, NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException, ServiceException {
         if (OntologyStrUtil.objectExists(dbObj, UniprotFields.EVIDENCE_LIST)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.EVIDENCE_LIST);
             if (dbList != null) {
                 for (Object obj : dbList) {
-                    setEvidenceAttributeRelation(protein, dbObj, subgraph);
+                    setEvidenceAttributeRelation(protein, (BasicDBObject)obj, subgraph);
                 }
             }
         }
@@ -1392,9 +1415,8 @@ public class UniprotUtil {
      * @throws IOException
      * @throws HttpException
      * @throws InterruptedException
-     * @throws Exception
      */
-    public static void setPubMedRelation(String pubMedId, Protein protein, Subgraph subgraph) throws UnknownHostException, NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException, Exception {
+    public static void setPubMedRelation(String pubMedId, Protein protein, Subgraph subgraph) throws UnknownHostException, NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException {
         if (pubMedId != null) {
             PubMed pubmed = PubMedUtil.getPubmed(pubMedId, subgraph);
             pubmed.setPubMedRelation(protein);
@@ -1406,9 +1428,8 @@ public class UniprotUtil {
      *
      * @param code
      * @return
-     * @throws Exception
      */
-    public static BioRelTypes getEvidenceCode(String code) throws Exception {
+    public static BioRelTypes getEvidenceCode(String code)  {
 
         String assertion = "automatic assertion";
         String experiment = "experimental evidence";
@@ -1430,7 +1451,7 @@ public class UniprotUtil {
                 return BioRelTypes.AUTOMATIC_ASSERTION;
             } else {
                 //log.info("Code is not found =" + code);
-                throw new Exception("EvidenceList, evidenceCode not found =" + code);
+                throw new RuntimeException("EvidenceList, evidenceCode not found =" + code);
             }
         }
         return BioRelTypes.FOUND_EVIDENCE_IN;
@@ -1441,9 +1462,16 @@ public class UniprotUtil {
      * @param obj
      * @param protein
      * @param subgraph
-     * @throws Exception
+     * @throws IllegalAccessException
+     * @throws InterruptedException
+     * @throws HttpException
+     * @throws ServiceException
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws InvocationTargetException
+     * @throws NoSuchFieldException
      */
-    public static void setProteinEvidenceRelation(BasicDBObject obj, Protein protein, Subgraph subgraph) throws Exception {
+    public static void setProteinEvidenceRelation(BasicDBObject obj, Protein protein, Subgraph subgraph) throws IllegalAccessException, InterruptedException, HttpException, ServiceException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         String attribute = OntologyStrUtil.getString(obj, UniprotFields.EVIDENCE_ATTRIBUTE);
         String code = OntologyStrUtil.getString(obj, UniprotFields.EVIDENCE_CODE);
         if (attribute != null) {
@@ -1495,9 +1523,8 @@ public class UniprotUtil {
      * @throws IOException
      * @throws HttpException
      * @throws InterruptedException
-     * @throws Exception
      */
-    public static void setEvidenceAttributeRelation(Protein protein, BasicDBObject obj, Subgraph subgraph) throws UnknownHostException, NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException, Exception {
+    public static void setEvidenceAttributeRelation(Protein protein, BasicDBObject obj, Subgraph subgraph) throws UnknownHostException, NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException, ServiceException {
         String attribute = OntologyStrUtil.getString(obj, UniprotFields.EVIDENCE_ATTRIBUTE);
         String pubMedId = getPubMedId(attribute);
         if (pubMedId != null) {
@@ -1515,9 +1542,16 @@ public class UniprotUtil {
      * @param id
      * @param subGraph
      * @return
-     * @throws Exception
+     * @throws ServiceException
+     * @throws IOException
+     * @throws IllegalAccessException
+     * @throws NoSuchFieldException
+     * @throws InvocationTargetException
+     * @throws InterruptedException
+     * @throws HttpException
+     * @throws URISyntaxException
      */
-    public static Protein processProtein(Protein protein, String id, Subgraph subGraph) throws Exception {
+    public static Protein processProtein(Protein protein, String id, Subgraph subGraph) throws ServiceException, IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException, InterruptedException, HttpException, URISyntaxException {
         log.info("processProtein(), id = " + id);
         BasicDBObject obj = UniProtAccess.getProteinObj(id);
 
