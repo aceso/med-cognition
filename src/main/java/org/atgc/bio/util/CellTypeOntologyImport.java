@@ -3,6 +3,7 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.CellTypeOntologyFields;
 import org.atgc.bio.domain.*;
@@ -11,6 +12,7 @@ import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
@@ -26,15 +28,12 @@ import org.neo4j.graphdb.NotFoundException;
  *
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class CellTypeOntologyImport {
 
     private static final Logger log = LogManager.getLogger(CellTypeOntologyImport.class);
     private static String cellIdPattern = "CL:";
     private static String goIdPattern = "GO:";
-    private static String prIdPattern = "PR:";
-    private static String modIdPattern = "MOD:";
-    private static String exclamationPattern = "!";
-    private static String spacePattern = " ";
 
     /**
      * @param coll
@@ -52,11 +51,10 @@ public class CellTypeOntologyImport {
      * @throws UnknownHostException
      * @throws Exception
      */
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
+    public static void main(String[] args) throws UnknownHostException {
         // gives CellTypeOntology documents whose importstatus is due. 
 
-        DBCursor dbCursor = getCollection(ImportCollectionNames.CELL_TYPE_ONTOLOGY).findDBCursor("{}");
-        try {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.CELL_TYPE_ONTOLOGY).findDBCursor("{}")) {
             // we expect only one document match
             while (dbCursor.hasNext()) {
                 BasicDBObject result = (BasicDBObject) dbCursor.next();
@@ -66,8 +64,6 @@ public class CellTypeOntologyImport {
                 log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
                 log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
             }
-        } finally {
-            dbCursor.close();
         }
         log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
         log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
@@ -141,8 +137,6 @@ public class CellTypeOntologyImport {
                     case NARROW:
                         synList.add(OntologyStrUtil.getCleanSyn(str, " NARROW"));
                 }
-            } else {
-                continue;
             }
         }
         if (synList.isEmpty()) {
@@ -174,7 +168,7 @@ public class CellTypeOntologyImport {
      * @param pList
      */
     public static void getPubmedFromSynonymList(BasicDBObject dbObj, List pList) {
-        BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SYNONYM_LIST);
         for (Object obj : list) {
             String str = OntologyStrUtil.getString((BasicDBObject) obj, CellTypeOntologyFields.SYNONYM);
             extractPubMedId(str, pList);
@@ -189,8 +183,8 @@ public class CellTypeOntologyImport {
      * @param subGraph
      * @throws Exception
      */
-    public static void setPubmedRelationship(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws Exception {
-        List<String> pList = getAllPubMeds(cellOnto, dbObj);
+    public static void setPubmedRelationship(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws IllegalAccessException, InterruptedException, HttpException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
+        List<String> pList = getAllPubMeds(dbObj);
         for (String pubMedId : pList) {
             log.info("pubmedId =" + pubMedId);
             PubMed pubMed = getPubMed(pubMedId, subGraph);
@@ -211,7 +205,7 @@ public class CellTypeOntologyImport {
      * @throws IllegalAccessException
      * @throws Exception
      */
-    public static PubMed getPubMed(String pubMedId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+    public static PubMed getPubMed(String pubMedId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, URISyntaxException, IOException, HttpException, InterruptedException, InvocationTargetException {
         PubMed pubMed = (PubMed) subGraph.search(BioTypes.PUBMED, BioFields.PUBMED_ID, pubMedId);
         if (pubMed == null) {
             log.info("getPubMed(), pubMedId =" + pubMedId);
@@ -222,12 +216,11 @@ public class CellTypeOntologyImport {
 
     /**
      *
-     * @param cellOnto
      * @param dbObj
      * @return
      */
-    public static List<String> getAllPubMeds(CellTypeOntology cellOnto, BasicDBObject dbObj) {
-        List<String> pList = new ArrayList();
+    public static List<String> getAllPubMeds(BasicDBObject dbObj) {
+        List<String> pList = new ArrayList<>();
         if (OntologyStrUtil.objectExists(dbObj, CellTypeOntologyFields.COMMENT)) {
             String comment = getComment(dbObj);
             extractPubMedId(comment, pList);
@@ -276,10 +269,10 @@ public class CellTypeOntologyImport {
      * @throws RuntimeException
      * @throws Exception
      */
-    public static void setIsARelationship(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIsARelationship(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, IOException, RuntimeException, InterruptedException, HttpException, URISyntaxException {
         if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.IS_LIST)) {
             //log.info("createIsARelationships()");
-            BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.IS_LIST);
+            BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.IS_LIST);
             for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject) obj, CellTypeOntologyFields.IS_A);
                 if (OntologyStrUtil.isCellTypeOntology(str)) {
@@ -307,9 +300,9 @@ public class CellTypeOntologyImport {
      * @throws RuntimeException
      * @throws Exception
      */
-    public static void setDisjointRelationship(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setDisjointRelationship(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, IOException, RuntimeException, InterruptedException, HttpException, URISyntaxException {
         if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.DISJOINT_FROM_LIST)) {
-            BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.DISJOINT_FROM_LIST);
+            BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.DISJOINT_FROM_LIST);
             for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject) obj, CellTypeOntologyFields.DISJOINT_FROM);
                 if (OntologyStrUtil.isCellTypeOntology(str)) {
@@ -324,14 +317,13 @@ public class CellTypeOntologyImport {
     /**
      * If BioRelationType is not specified, set BioRelTypes to EQUIVALENT_TERM
      * @param str
-     * @param cellOnto
      * @param subGraph
      * @return
      * @throws UnknownHostException
      * @throws RuntimeException
      * @throws Exception
      */
-    public static GeneOntology getGeneOntology(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
+    public static GeneOntology getGeneOntology(String str, Subgraph subGraph) throws IOException, RuntimeException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         String goId = getGoId(str);
         //log.info("id = " + goId + ", name = " + name);
         if (goId != null) {
@@ -351,8 +343,8 @@ public class CellTypeOntologyImport {
      * @throws RuntimeException
      * @throws Exception
      */
-    public static void setGoIsARelationship(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
-        GeneOntology go = getGeneOntology(str, cellOnto, subGraph);
+    public static void setGoIsARelationship(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws IOException, RuntimeException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
+        GeneOntology go = getGeneOntology(str, subGraph);
         cellOnto.setIsARelationship(go, BioRelTypes.IS_A);
     }
 
@@ -368,8 +360,8 @@ public class CellTypeOntologyImport {
      * @throws RuntimeException
      * @throws Exception
      */
-    public static void setGoIntersectionRelationship(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
-        GeneOntology go = getGeneOntology(str, cellOnto, subGraph);
+    public static void setGoIntersectionRelationship(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws IOException, RuntimeException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
+        GeneOntology go = getGeneOntology(str, subGraph);
         if (go != null) {
             BioRelTypes relType = getBioRelationType(str, goIdPattern);
             if (relType != null) {
@@ -391,8 +383,8 @@ public class CellTypeOntologyImport {
      * @throws RuntimeException
      * @throws Exception
      */
-    public static void setGoRelationship(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
-        GeneOntology go = getGeneOntology(str, cellOnto, subGraph);
+    public static void setGoRelationship(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws IOException, RuntimeException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
+        GeneOntology go = getGeneOntology(str, subGraph);
         if (go != null) {
             BioRelTypes relType = getBioRelationType(str, goIdPattern);
             if (relType != null) {
@@ -412,8 +404,8 @@ public class CellTypeOntologyImport {
      * @throws RuntimeException
      * @throws Exception
      */
-    public static void setGoDisjointRelationship(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
-        GeneOntology go = getGeneOntology(str, cellOnto, subGraph);
+    public static void setGoDisjointRelationship(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws IOException, RuntimeException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
+        GeneOntology go = getGeneOntology(str, subGraph);
         if (go != null) {
             BioRelTypes relType = getBioRelationType(str, goIdPattern);
             if (relType != null) {
@@ -505,7 +497,7 @@ public class CellTypeOntologyImport {
      * @throws RuntimeException
      * @throws Exception
      */
-    public static void setProteinRelationship(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
+    public static void setProteinRelationship(String str, CellTypeOntology cellOnto, Subgraph subGraph) throws UnknownHostException, RuntimeException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         ProteinOntology entity = ProteinOntologyImport.getProteinOntology(str, subGraph);
         if (entity != null) {
             BioRelTypes relType = getBioRelationType(str, OntologyStrUtil.prIdPattern);
@@ -599,10 +591,10 @@ public class CellTypeOntologyImport {
      * @throws NotFoundException
      * @throws InvocationTargetException
      */
-    public static void setIntersectionRelationship(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIntersectionRelationship(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, IOException, InterruptedException, HttpException, URISyntaxException {
         if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.INTERSECTION_OF_LIST)) {
             //log.info("createIsARelationships()");
-            BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.INTERSECTION_OF_LIST);
+            BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.INTERSECTION_OF_LIST);
             for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject) obj, CellTypeOntologyFields.INTERSECTION_OF);
                 if (str != null) {
@@ -632,15 +624,13 @@ public class CellTypeOntologyImport {
      */
     public static void setConsiderRelationship(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, URISyntaxException, UnknownHostException {
         if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.CONSIDER_LIST)) {
-            BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.CONSIDER_LIST);
+            BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.CONSIDER_LIST);
             for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject) obj, CellTypeOntologyFields.CONSIDER);
                 String cellId = getIdFromConsiderList(str);
-                if (cellId != null) {
-                    CellTypeOntology cellEntity = getCellTypeOntology(cellId, subGraph);
-                    if (cellEntity != null) {
-                        cellOnto.setConsiderRelationships(cellEntity);
-                    }
+                CellTypeOntology cellEntity = getCellTypeOntology(cellId, subGraph);
+                if (cellEntity != null) {
+                    cellOnto.setConsiderRelationships(cellEntity);
                 }
             }
         }
@@ -680,7 +670,7 @@ public class CellTypeOntologyImport {
      * @param dbObj
      */
     public static void setSynonyms(CellTypeOntology cellOnto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, CellTypeOntologyFields.EXACT)) != null) {
             cellOnto.setCellTypeExactSynonyms(synStr);
@@ -694,32 +684,13 @@ public class CellTypeOntologyImport {
     }
 
     /**
-     *
-     * @param dbObj
-     * @param field
-     * @param objField
-     * @return
-     */
-    public static String getBasicDBListAsString(BasicDBObject dbObj, Enum field, Enum objField) {
-        BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, field);
-        StringBuilder str = new StringBuilder();
-        for (Object obj : list) {
-            String val = OntologyStrUtil.getString((BasicDBObject) obj, objField);
-            str.append(StrUtil.goodText(OntologyStrUtil.getString((BasicDBObject) obj, objField)));
-            str.append(" ");
-
-        }
-        return str.toString();
-    }
-
-    /**
      * "namespace" : "cell",
      *
      * @param dbObj
      * @return String
      */
     public static String getNamespace(BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.NAMESPACE_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.NAMESPACE_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject) obj, CellTypeOntologyFields.NAMESPACE));
@@ -733,7 +704,7 @@ public class CellTypeOntologyImport {
      * @return
      */
     public static String getAlternateIds(BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.ALT_ID_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.ALT_ID_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject) obj, CellTypeOntologyFields.ALT_ID));
@@ -780,7 +751,7 @@ public class CellTypeOntologyImport {
      * @return
      */
     public static String getSubsets(BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SUBSET_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SUBSET_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject) obj, CellTypeOntologyFields.SUBSET));
@@ -799,7 +770,7 @@ public class CellTypeOntologyImport {
      * @throws IllegalAccessException
      * @throws Exception
      */
-    public static CellTypeOntology processOntology(String ontologyId, BasicDBObject obj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+    public static CellTypeOntology processOntology(String ontologyId, BasicDBObject obj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, IOException, URISyntaxException, InterruptedException, HttpException {
         CellTypeOntology cellOnto = getCellTypeOntology(ontologyId, subGraph);
 
         if (OntologyStrUtil.objectExists(obj, CellTypeOntologyFields.NAME)) {
@@ -865,10 +836,10 @@ public class CellTypeOntologyImport {
      * @throws RuntimeException
      * @throws Exception
      */
-    public static void processRelationshipList(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, NotFoundException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void processRelationshipList(CellTypeOntology cellOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, NotFoundException, IllegalAccessException, InvocationTargetException, IOException, InterruptedException, HttpException, URISyntaxException {
         if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.RELATIONSHIP_LIST)) {
             //log.info("createIsARelationships()");
-            BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.RELATIONSHIP_LIST);
+            BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.RELATIONSHIP_LIST);
             for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject) obj, CellTypeOntologyFields.RELATIONSHIP);
                 if (OntologyStrUtil.isCellTypeOntology(str)) {
@@ -910,9 +881,9 @@ public class CellTypeOntologyImport {
      * @param result
      * @throws Exception
      */
-    public static void processCellTypeOntology(String ontologyId, BasicDBObject result) throws Exception {
+    public static void processCellTypeOntology(String ontologyId, BasicDBObject result) throws IllegalAccessException, InterruptedException, HttpException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         Subgraph subGraph = new Subgraph();
-        CellTypeOntology cellOntoEntity = processOntology(ontologyId, result, subGraph);
+        processOntology(ontologyId, result, subGraph);
         PersistenceTemplate.saveSubgraph(subGraph);
     }
 
