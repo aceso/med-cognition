@@ -469,7 +469,7 @@ public class NCIBioCartaPathway {
      * @throws ClassNotFoundException
      * @throws InstantiationException
      */
-    private static void createCompound(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, UnsupportedEncodingException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, NotFoundException, InvocationTargetException {
+    private static void createCompound(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException, NotFoundException, InvocationTargetException {
         String casId = getCasId(molecule);
         if (casId == null) {
             log.info("casId missing, compound not created, moleculeId=" + getId(molecule));
@@ -733,7 +733,7 @@ public class NCIBioCartaPathway {
     </ComplexComponentList>
     </Molecule>
      */
-    private static void setComplexComponentList(Complex complex, BasicDBObject dbObj, Subgraph subGraph) throws IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IllegalArgumentException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, NotFoundException, InvocationTargetException {
+    private static void setComplexComponentList(Complex complex, BasicDBObject dbObj, Subgraph subGraph) throws IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IllegalArgumentException, IOException, HttpException, NoSuchFieldException, NotFoundException, InvocationTargetException {
         log.info("setComplexComponentList()");
         log.info("complexComponentList(), " + dbObj.toString());
         BasicDBList complexComponentList = getDBList(dbObj, NciPathwayFields.COMPLEX_COMPONENT_LIST);
@@ -1085,7 +1085,7 @@ public class NCIBioCartaPathway {
      </Molecule>
 
      */
-    private static BioEntity getPTMMolecule(String bioPTMMoleculeId, BioTypes bioType, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, NotFoundException, InvocationTargetException {
+    private static BioEntity getPTMMolecule(String bioPTMMoleculeId, BioTypes bioType, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException, NotFoundException, InvocationTargetException {
         if (bioPTMMoleculeId != null) {
             log.info("ptmMoleculeId =" + bioPTMMoleculeId);
             return (BioEntity) getBioEntityFromBioType(subGraph, bioType, BioFields.MOLECULE_IDREF, bioPTMMoleculeId);
@@ -1147,7 +1147,7 @@ public class NCIBioCartaPathway {
      * FamilyMemberList: {@link NciPathwayFields#MEMBER_MOLECULE_IDREF}
      *
      */
-    private static void setFamilyMemberList(BasicDBObject dbObj, NamedProtein startEntity, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException {
+    private static void setFamilyMemberList(BasicDBObject dbObj, NamedProtein startEntity, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException, URISyntaxException, IOException, HttpException, NoSuchFieldException {
         log.info("setFamilyMemberList()");
         BasicDBList moleculeList = getBasicDBList(dbObj, NciPathwayFields.FAMILY_MEMBER_LIST);
         if (moleculeList != null && moleculeList.size() > 0) {
@@ -1262,7 +1262,7 @@ public class NCIBioCartaPathway {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    private static Object getBioEntityFromIndex(IndexNames indexName, BioFields key, String value, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException {
+    private static Object getBioEntityFromIndex(BioFields key, String value, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException {
         //Object obj = template.getBioEntityFromIndex(key, value, indexName);
         //if (obj == null) {
         return subGraph.search(key, value);
@@ -1306,7 +1306,7 @@ public class NCIBioCartaPathway {
     * 
     */
     private static Object getBioMolecule(String value, BioFields key, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NotFoundException, InvocationTargetException {
-        Object entity = getBioEntityFromIndex(IndexNames.MOLECULE_IDREF, key, value, subGraph);
+        Object entity = getBioEntityFromIndex(key, value, subGraph);
         if (entity == null) {
             entity = getBioEntity(key, value, subGraph);
         }
@@ -1314,7 +1314,7 @@ public class NCIBioCartaPathway {
     }
 
     private static Object getProtein(String moleculeIdRef, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NotFoundException, InvocationTargetException {
-        return (Protein) getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.MOLECULE_IDREF, moleculeIdRef);
+        return getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.MOLECULE_IDREF, moleculeIdRef);
         /*
         if (protein == null) {
             log.info("protein does not exist, createProtein(), moleculeIdRef " + moleculeIdRef);
@@ -1447,7 +1447,7 @@ public class NCIBioCartaPathway {
      * creates {@link Complex} BioEntity
      *
      */
-    public static void createComplex(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, UnsupportedEncodingException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, NotFoundException, InvocationTargetException {
+    public static void createComplex(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException, NotFoundException, InvocationTargetException {
         log.info("createComplex()");
         String preferredSymbol = getPreferredSymbolFromName(molecule);
         boolean created = false;
@@ -1605,7 +1605,7 @@ public class NCIBioCartaPathway {
      * @throws IllegalAccessException
      */
     private static void checkAndSetComplexNames(BasicDBObject molecule, Complex complex, PersistenceTemplate template) throws IllegalAccessException, URISyntaxException {
-        BasicDBList dbList = getBasicDBList((DBObject) molecule, NciPathwayFields.NAME);
+        BasicDBList dbList = getBasicDBList(molecule, NciPathwayFields.NAME);
         if (dbList != null) {
             for (Object obj : dbList) {
                 BasicDBObject dbObj = (BasicDBObject) obj;
@@ -1678,36 +1678,34 @@ public class NCIBioCartaPathway {
             created = true;
         }
 
-        if (entity != null) {
-            if (exists(interactionObj, NciPathwayFields.CONDITION_TYPE)) {
-                entity.setConditionType(getString(interactionObj, NciPathwayFields.CONDITION_TYPE));
-            }
-            if (exists(interactionObj, NciPathwayFields.POSITIVE_CONDITION)) {
-                entity.setIsConditionPositive(getStringFromEnum(BioFields.DEFAULT_POSITIVE_CONDITION_VAL));
-            } else {
-                if (exists(interactionObj, NciPathwayFields.NEGATIVE_CONDITON)) {
-                    entity.setIsConditionPositive(getStringFromEnum(BioFields.DEFAULT_NEGATIVE_CONDITION_VAL));
-                }
-            }
-            if (exists(interactionObj, NciPathwayFields.EVIDENCE_LIST)) {
-                entity.setEvidenceList(getListAsString(getBasicDBList(interactionObj, NciPathwayFields.EVIDENCE_LIST), NciPathwayFields.NCI_VALUE));
-                //log.info("setEvidenceList");
-            }
-            entity.setSourceId(getString(interactionObj, NciPathwayFields.SOURCE_ID));
-            entity.setSourceText(getString(interactionObj, NciPathwayFields.SOURCE_TEXT));
-            entity.setConditionText(getString(interactionObj, NciPathwayFields.TEXT));
-            if (exists(interactionObj, NciPathwayFields.REFERENCE_LIST)) {
-                //String reference = getListAsString(
-                setPubMedRelation(entity, interactionObj, subGraph);
-                //getBasicDBList(interactionObj, NciPathwayFields.REFERENCE_LIST), NciPathwayFields.PMID);
-                //entity.setReferenceList(reference);
-
-            }
-            if (exists(interactionObj, NciPathwayFields.INTERACTION_TYPE)) {
-                entity.setInteractionType(getString(interactionObj, NciPathwayFields.INTERACTION_TYPE));
-            }
-            processInteractionComponentList(pathwayEntity, entity, interactionObj, subGraph);
+        if (exists(interactionObj, NciPathwayFields.CONDITION_TYPE)) {
+            entity.setConditionType(getString(interactionObj, NciPathwayFields.CONDITION_TYPE));
         }
+        if (exists(interactionObj, NciPathwayFields.POSITIVE_CONDITION)) {
+            entity.setIsConditionPositive(getStringFromEnum(BioFields.DEFAULT_POSITIVE_CONDITION_VAL));
+        } else {
+            if (exists(interactionObj, NciPathwayFields.NEGATIVE_CONDITON)) {
+                entity.setIsConditionPositive(getStringFromEnum(BioFields.DEFAULT_NEGATIVE_CONDITION_VAL));
+            }
+        }
+        if (exists(interactionObj, NciPathwayFields.EVIDENCE_LIST)) {
+            entity.setEvidenceList(getListAsString(getBasicDBList(interactionObj, NciPathwayFields.EVIDENCE_LIST), NciPathwayFields.NCI_VALUE));
+            //log.info("setEvidenceList");
+        }
+        entity.setSourceId(getString(interactionObj, NciPathwayFields.SOURCE_ID));
+        entity.setSourceText(getString(interactionObj, NciPathwayFields.SOURCE_TEXT));
+        entity.setConditionText(getString(interactionObj, NciPathwayFields.TEXT));
+        if (exists(interactionObj, NciPathwayFields.REFERENCE_LIST)) {
+            //String reference = getListAsString(
+            setPubMedRelation(entity, interactionObj, subGraph);
+            //getBasicDBList(interactionObj, NciPathwayFields.REFERENCE_LIST), NciPathwayFields.PMID);
+            //entity.setReferenceList(reference);
+
+        }
+        if (exists(interactionObj, NciPathwayFields.INTERACTION_TYPE)) {
+            entity.setInteractionType(getString(interactionObj, NciPathwayFields.INTERACTION_TYPE));
+        }
+        processInteractionComponentList(pathwayEntity, entity, interactionObj, subGraph);
         
         /* add it only once */
         if (created) {
@@ -1740,12 +1738,12 @@ public class NCIBioCartaPathway {
      *       }
      *     ]
     */
-    private static void setPubMedRelation(NciPathwayInteraction entity, BasicDBObject interactionObj, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException, NotFoundException, IllegalArgumentException, InvocationTargetException, Exception {
+    private static void setPubMedRelation(NciPathwayInteraction entity, BasicDBObject interactionObj, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException, NotFoundException, IllegalArgumentException, InvocationTargetException {
         BasicDBList dbList = getBasicDBList(interactionObj, NciPathwayFields.REFERENCE_LIST);
         if (null != dbList)
             for (Object obj : dbList) {
                 String pmid = getString((BasicDBObject) obj, NciPathwayFields.PMID);
-                PubMed pubMed = (PubMed) getBioEntityFromIndex(IndexNames.PUBMED_ID, BioFields.PUBMED_ID, pmid, subGraph);
+                PubMed pubMed = (PubMed) getBioEntityFromIndex(BioFields.PUBMED_ID, pmid, subGraph);
                 if (pubMed == null) {
                     pubMed = createPubMed(pmid, subGraph);
                 }
@@ -2174,7 +2172,6 @@ public class NCIBioCartaPathway {
             log.info("moleculeId =" + moleculeId);
             if (moleculeId != null) {
                 Object bioEntity = getBioEntityFromIndex(
-                        IndexNames.MOLECULE_IDREF,
                         BioFields.MOLECULE_IDREF,
                         moleculeId,
                         subGraph);
@@ -2326,7 +2323,7 @@ public class NCIBioCartaPathway {
     private static Organism createOrganism(BasicDBObject molecule, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException, NotFoundException, IllegalArgumentException, InvocationTargetException {
         log.info("createOrganism()");
         String taxId = getNcbiTaxId(molecule);
-        Object bio = getBioEntityFromIndex(IndexNames.NCBI_TAX_ID, BioFields.NCBI_TAX_ID, taxId, subGraph);
+        Object bio = getBioEntityFromIndex(BioFields.NCBI_TAX_ID, taxId, subGraph);
 
         boolean created = false;
         Organism organism = (Organism) bio;
