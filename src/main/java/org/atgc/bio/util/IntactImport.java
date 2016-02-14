@@ -40,32 +40,33 @@ import org.neo4j.rest.graphdb.index.RestIndex;
  *
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class IntactImport {
 
     //relationships
-    private static final String IS_INHIBITOR_OF = "inhibits";
-    private static final String IS_PART_OF = "is a part of";
-    private static final String IS_PART_OF_PATHWAY = "is a part of pathway";
-    private static final String IS_OUTPUT_OF = "produces";
-    private static final String IS_INTERACTION_OF = "belongs to this interacion";
-    private static final String IS_INPUT_OF = "produces";
-    private static final String IS_AGENT_OF = "if agent present";
-    private static final String IS_EDGETYPE_OF = "if edge type present";
-    private static final String IS_INCOMING_EDGE_OF = "is incoming edge present";
-    private static final String IS_OUTGOING_EDGE_OF = "is outgoing edge present";
-    private static final String IS_MEMBER_OF = "is a member of";
-    private static final String IS_COMPLEX_COMPONENT_OF = "is complex component of";
-    private static final String IS_MODIFICATION_OF = "is a modification of";
-    private static final String IS_PART_OF_COMPLEX = "is part of complex";
-    private static final String IS_IN_FAMILY_OF = "is in family of";
+    //private static final String IS_INHIBITOR_OF = "inhibits";
+    //private static final String IS_PART_OF = "is a part of";
+    //private static final String IS_PART_OF_PATHWAY = "is a part of pathway";
+    //private static final String IS_OUTPUT_OF = "produces";
+    //private static final String IS_INTERACTION_OF = "belongs to this interacion";
+    //private static final String IS_INPUT_OF = "produces";
+    //private static final String IS_AGENT_OF = "if agent present";
+    //private static final String IS_EDGETYPE_OF = "if edge type present";
+    //private static final String IS_INCOMING_EDGE_OF = "is incoming edge present";
+    //private static final String IS_OUTGOING_EDGE_OF = "is outgoing edge present";
+    //private static final String IS_MEMBER_OF = "is a member of";
+    //private static final String IS_COMPLEX_COMPONENT_OF = "is complex component of";
+    //private static final String IS_MODIFICATION_OF = "is a modification of";
+    //private static final String IS_PART_OF_COMPLEX = "is part of complex";
+    //private static final String IS_IN_FAMILY_OF = "is in family of";
 
     // indexes
     private static RestGraphDatabase graphDb;
-    private static RestIndex<Node> rbidIndex;
+    //private static RestIndex<Node> rbidIndex;
 
-    private static final String DB_PATH = "neo4j-shortest-path";
-    public static final String NCI_ID = "@id";
-    public static final String NCI_VALUE = "@value";
+    //private static final String DB_PATH = "neo4j-shortest-path";
+    //public static final String NCI_ID = "@id";
+    //public static final String NCI_VALUE = "@value";
     public static final String MESSAGE = "message";
 
     protected static Logger log = LogManager.getLogger(IntactImport.class);
@@ -122,7 +123,7 @@ public class IntactImport {
      */
     private static BasicDBObject getDBObject(DBObject dbObject, IntactFields field) {
         if ((dbObject == null) || field == null) {
-            log.error("dbObject is null for field " + field.toString());
+            log.error("dbObject is null for field ");
             return null;
         }
         Object obj = dbObject.get(field.toString());
@@ -152,7 +153,7 @@ public class IntactImport {
      */
     private static BasicDBList getBasicDBList(DBObject dbObject, IntactFields field) {
         if (dbObject == null || field == null) {
-            throw new RuntimeException("dbObject is null for field " + field.toString());
+            throw new RuntimeException("dbObject is null for field ");
         }
         Object obj = dbObject.get(field.toString());
         if (obj == null) {
@@ -274,7 +275,10 @@ public class IntactImport {
         BasicDBObject primaryRef = getDBObject(xref, IntactFields.PRIMARY_REF);
         //log.info("primaryRef = " + primaryRef);
         //log.info("intactSource = " + intactSource.toString());
-        if (getString(primaryRef, IntactFields.DB).equals(intactSource.toString())) {
+        if (null == intactSource) return "";
+        String str = getString(primaryRef, IntactFields.DB);
+        if (null == str) return "";
+        if (str.equals(intactSource.toString())) {
             return getString(primaryRef, IntactFields.ID);
         }
         return "";
@@ -329,10 +333,12 @@ public class IntactImport {
         protein.setAliases(getAliases(interactor));
         String uniprotIds = getSecondaryRefs(interactor, IntactSources.UNIPROT);
         protein.setUniprotSecondaryRefs(uniprotIds);
-        String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
-        for (String proteinId : uniprotIdArray) {
-            Protein p = UniprotUtil.getProtein(proteinId, subgraph);
-            protein.addProteinRelation(p);
+        if (null != uniprotIds) {
+            String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
+            for (String proteinId : uniprotIdArray) {
+                Protein p = UniprotUtil.getProtein(proteinId, subgraph);
+                protein.addProteinRelation(p);
+            }
         }
         protein.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
         protein.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
@@ -365,10 +371,12 @@ public class IntactImport {
         peptide.setAliases(getAliases(interactor));
         String uniprotIds = getSecondaryRefs(interactor, IntactSources.UNIPROT);
         peptide.setUniprotSecondaryRefs(uniprotIds);
-        String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
-        for (String proteinId : uniprotIdArray) {
-            Protein protein = UniprotUtil.getProtein(proteinId, subgraph);
-            peptide.addProteinRelation(protein);
+        if (null != uniprotIds) {
+            String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
+            for (String proteinId : uniprotIdArray) {
+                Protein protein = UniprotUtil.getProtein(proteinId, subgraph);
+                peptide.addProteinRelation(protein);
+            }
         }
         peptide.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
         peptide.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
@@ -399,10 +407,12 @@ public class IntactImport {
         smallMolecule.setAliases(getAliases(interactor));
         String uniprotIds = getSecondaryRefs(interactor, IntactSources.UNIPROT);
         smallMolecule.setUniprotSecondaryRefs(uniprotIds);
-        String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
-        for (String uniprotId : uniprotIdArray) {
-            Protein protein = UniprotUtil.getProtein(uniprotId, subgraph);
-            smallMolecule.addProteinRelation(protein);
+        if (null != uniprotIds) {
+            String[] uniprotIdArray = StringUtils.split(uniprotIds, " ");
+            for (String uniprotId : uniprotIdArray) {
+                Protein protein = UniprotUtil.getProtein(uniprotId, subgraph);
+                smallMolecule.addProteinRelation(protein);
+            }
         }
         smallMolecule.setIpiSecondaryRefs(getSecondaryRefs(interactor, IntactSources.IPI));
         smallMolecule.setInterproSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTERPRO));
@@ -433,37 +443,40 @@ public class IntactImport {
         dna.setIntactSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTACT));
         String pubmedIds = getSecondaryRefs(interactor, IntactSources.PUBMED);
         dna.setPubmedSecondaryRefs(pubmedIds);
-        String[] pubmedIdArray = StringUtils.split(pubmedIds, " ");
-        for (String pubmedId : pubmedIdArray) {
-            dna.addPubmedRelation(PubMedUtil.getPubmed(pubmedId, subgraph));
+        if (null != pubmedIds) {
+            String[] pubmedIdArray = StringUtils.split(pubmedIds, " ");
+            for (String pubmedId : pubmedIdArray) {
+                dna.addPubmedRelation(PubMedUtil.getPubmed(pubmedId, subgraph));
+            }
         }
         dna.setOrganismShortLabel(getOrganismShortLabel(interactor));
         String taxId = getNcbiTaxId(interactor);
         dna.setNcbiTaxId(taxId);
         NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(subgraph, taxId);
         dna.setNcbiTaxonomyRelation(ncbiTaxonomy);
-        dna.setOrganismFullName(getOrganismFullName(interactor));;
+        dna.setOrganismFullName(getOrganismFullName(interactor));
         return dna;
     }
 
     public static HashSet<PubMed> getPubMedList(Subgraph subgraph, DBObject method) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        HashSet<PubMed> pubMedList = new HashSet<PubMed>();
+        HashSet<PubMed> pubMedList = new HashSet<>();
         DBObject xref = getDBObject(method, IntactFields.XREF);
         BasicDBList secondaryRef = getBasicDBList(xref, IntactFields.SECONDARY_REF);
         PubMed pubMed;
-        for (Object element : secondaryRef) {
-            BasicDBObject obj = (BasicDBObject) element;
-            if (getString(obj, IntactFields.DB).equals(IntactFields.PUBMED.toString())) {
-                String id = getString(obj, IntactFields.ID);
-                //log.info("obj = " + obj.toString());
-                //log.info("pubMed id = " + id);
-                pubMed = new PubMed();
-                subgraph.add(pubMed);
-                pubMed.setPubMedId(id);
-                pubMed.setMessage(id);
-                pubMedList.add(pubMed);
+        if (null != secondaryRef)
+            for (Object element : secondaryRef) {
+                BasicDBObject obj = (BasicDBObject) element;
+                if (getString(obj, IntactFields.DB).equals(IntactFields.PUBMED.toString())) {
+                    String id = getString(obj, IntactFields.ID);
+                    //log.info("obj = " + obj.toString());
+                    //log.info("pubMed id = " + id);
+                    pubMed = new PubMed();
+                    subgraph.add(pubMed);
+                    pubMed.setPubMedId(id);
+                    pubMed.setMessage(id);
+                    pubMedList.add(pubMed);
+                }
             }
-        }
         return pubMedList;
     }
 
@@ -529,7 +542,7 @@ public class IntactImport {
     }
 
     public static Collection<Organism> getHostOrganismList(Subgraph subgraph, DBObject experiment) throws IllegalAccessException, NoSuchFieldException, InvocationTargetException, UnknownHostException {
-        Collection<Organism> organismList = new HashSet<Organism>();
+        Collection<Organism> organismList = new HashSet<>();
         //log.info("experiment = " + experiment);
         BasicDBList list = getBasicDBList(experiment, IntactFields.HOST_ORGANISM_LIST);
         //log.info("host organism list = " + list.toString());
@@ -557,7 +570,9 @@ public class IntactImport {
         PubMed pubMed = new PubMed();
         subgraph.add(pubMed);
         BasicDBObject primaryRef = getDBObject(getDBObject(getDBObject(experiment, IntactFields.BIBREF), IntactFields.XREF), IntactFields.PRIMARY_REF);
-        if (getString(primaryRef, IntactFields.DB).equals(IntactFields.PUBMED.toString())) {
+        String pmed = getString(primaryRef, IntactFields.DB);
+        if (null == pmed) return null;
+        if (pmed.equals(IntactFields.PUBMED.toString())) {
             pubMed.setPubMedId(getString(primaryRef, IntactFields.ID));
         }
         return pubMed;
@@ -565,65 +580,66 @@ public class IntactImport {
 
     public static ExperimentAttributes getExperimentAttributes(String experimentRef, Subgraph subgraph, DBObject experiment) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         BasicDBList attributeList = getBasicDBList(experiment, IntactFields.ATTRIBUTE_LIST);
-        HashSet<ExperimentDataset> experimentDatasetList = new HashSet<ExperimentDataset>();
-        HashSet<ExperimentComment> experimentCommentList = new HashSet<ExperimentComment>();
-        HashSet<ExperimentLibrary> experimentLibraryList = new HashSet<ExperimentLibrary>();
-        HashSet<ExperimentDataProcessing> experimentDataProcessingList = new HashSet<ExperimentDataProcessing>();
-        HashSet<ExperimentUrl> experimentUrlList = new HashSet<ExperimentUrl>();
+        HashSet<ExperimentDataset> experimentDatasetList = new HashSet<>();
+        HashSet<ExperimentComment> experimentCommentList = new HashSet<>();
+        HashSet<ExperimentLibrary> experimentLibraryList = new HashSet<>();
+        HashSet<ExperimentDataProcessing> experimentDataProcessingList = new HashSet<>();
+        HashSet<ExperimentUrl> experimentUrlList = new HashSet<>();
         ExperimentAttributes experimentAttributes = new ExperimentAttributes();
         subgraph.add(experimentAttributes);
         String authorList = null;
         String journal = null;
         String publicationYear = null;
-        for (Object obj : attributeList) {
-            BasicDBObject attribute = (BasicDBObject) obj;
-            String name = getString(attribute, IntactFields.NAME);
-            if (IntactFields.DATASET.equals(name)) {
-                ExperimentDataset experimentDataset = new ExperimentDataset();
-                subgraph.add(experimentDataset);
-                experimentDataset.setExperimentRef(experimentRef);
-                experimentDataset.setDataset(name);
-                experimentDatasetList.add(experimentDataset);
-            } else if (IntactFields.COMMENT.equals(name)) {
-                ExperimentComment experimentComment = new ExperimentComment();
-                subgraph.add(experimentComment);
-                experimentComment.setExperimentRef(experimentRef);
-                experimentComment.setComment(name);
-                experimentCommentList.add(experimentComment);
-            } else if (IntactFields.LIBRARY_USED.equals(name)) {
-                ExperimentLibrary experimentLibrary = new ExperimentLibrary();
-                experimentLibrary.setExperimentRef(experimentRef);
-                subgraph.add(experimentLibrary);
-                experimentLibrary.setLibrary(name);
-                experimentLibraryList.add(experimentLibrary);
-            } else if (IntactFields.DATA_PROCESSING.equals(name)) {
-                ExperimentDataProcessing experimentDataProcessing = new ExperimentDataProcessing();
-                experimentDataProcessing.setExperimentRef(experimentRef);
-                subgraph.add(experimentDataProcessing);
-                experimentDataProcessing.setDataProcessing(name);
-                experimentDataProcessingList.add(experimentDataProcessing);
-            } else if (IntactFields.URL.equals(name)) {
-                ExperimentUrl experimentUrl = new ExperimentUrl();
-                experimentUrl.setExperimentRef(experimentRef);
-                subgraph.add(experimentUrl);
-                experimentUrl.setUrl(name);
-                experimentUrlList.add(experimentUrl);
-            } else if (IntactFields.AUTHOR_LIST.equals(name)) {
-                authorList = name;
-            } else if (IntactFields.JOURNAL.equals(name)) {
-                journal = name;
-            } else if (IntactFields.PUBLICATION_YEAR.equals(name)) {
-                publicationYear = name;
+        if (null != attributeList)
+            for (Object obj : attributeList) {
+                BasicDBObject attribute = (BasicDBObject) obj;
+                String name = getString(attribute, IntactFields.NAME);
+                if (IntactFields.DATASET.equals(name)) {
+                    ExperimentDataset experimentDataset = new ExperimentDataset();
+                    subgraph.add(experimentDataset);
+                    experimentDataset.setExperimentRef(experimentRef);
+                    experimentDataset.setDataset(name);
+                    experimentDatasetList.add(experimentDataset);
+                } else if (IntactFields.COMMENT.equals(name)) {
+                    ExperimentComment experimentComment = new ExperimentComment();
+                    subgraph.add(experimentComment);
+                    experimentComment.setExperimentRef(experimentRef);
+                    experimentComment.setComment(name);
+                    experimentCommentList.add(experimentComment);
+                } else if (IntactFields.LIBRARY_USED.equals(name)) {
+                    ExperimentLibrary experimentLibrary = new ExperimentLibrary();
+                    experimentLibrary.setExperimentRef(experimentRef);
+                    subgraph.add(experimentLibrary);
+                    experimentLibrary.setLibrary(name);
+                    experimentLibraryList.add(experimentLibrary);
+                } else if (IntactFields.DATA_PROCESSING.equals(name)) {
+                    ExperimentDataProcessing experimentDataProcessing = new ExperimentDataProcessing();
+                    experimentDataProcessing.setExperimentRef(experimentRef);
+                    subgraph.add(experimentDataProcessing);
+                    experimentDataProcessing.setDataProcessing(name);
+                    experimentDataProcessingList.add(experimentDataProcessing);
+                } else if (IntactFields.URL.equals(name)) {
+                    ExperimentUrl experimentUrl = new ExperimentUrl();
+                    experimentUrl.setExperimentRef(experimentRef);
+                    subgraph.add(experimentUrl);
+                    experimentUrl.setUrl(name);
+                    experimentUrlList.add(experimentUrl);
+                } else if (IntactFields.AUTHOR_LIST.equals(name)) {
+                    authorList = name;
+                } else if (IntactFields.JOURNAL.equals(name)) {
+                    journal = name;
+                } else if (IntactFields.PUBLICATION_YEAR.equals(name)) {
+                    publicationYear = name;
+                }
+                experimentAttributes.setHasDataset(experimentDatasetList);
+                experimentAttributes.setHasComments(experimentCommentList);
+                experimentAttributes.setHasDataProcessing(experimentDataProcessingList);
+                experimentAttributes.setUsesLibrary(experimentLibraryList);
+                experimentAttributes.setHasUrl(experimentUrlList);
+                experimentAttributes.setJournal(journal);
+                experimentAttributes.setPublicationYear(publicationYear);
+                experimentAttributes.setAuthorList(authorList);
             }
-            experimentAttributes.setHasDataset(experimentDatasetList);
-            experimentAttributes.setHasComments(experimentCommentList);
-            experimentAttributes.setHasDataProcessing(experimentDataProcessingList);
-            experimentAttributes.setUsesLibrary(experimentLibraryList);
-            experimentAttributes.setHasUrl(experimentUrlList);
-            experimentAttributes.setJournal(journal);
-            experimentAttributes.setPublicationYear(publicationYear);
-            experimentAttributes.setAuthorList(authorList);
-        }
         return experimentAttributes;
     }
 
@@ -706,18 +722,19 @@ public class IntactImport {
 
     public static Collection<ExperimentalRole> getExperimentalRoles(Subgraph subgraph, DBObject expRole, String participantId) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         BasicDBList expRoles = getBasicDBList(expRole, IntactFields.EXPERIMENTAL_ROLE_LIST);
-        Collection<ExperimentalRole> experimentalRoles = new HashSet<ExperimentalRole>();
-        for (Object obj : expRoles) {
-            if (!MongoClasses.BasicDBObject.equals(obj.getClass())) {
-                throw new RuntimeException("BasicDBList does not contain BasicDBObjects. " + obj.getClass().getName());
+        Collection<ExperimentalRole> experimentalRoles = new HashSet<>();
+        if (null != expRoles)
+            for (Object obj : expRoles) {
+                if (!MongoClasses.BasicDBObject.equals(obj.getClass())) {
+                    throw new RuntimeException("BasicDBList does not contain BasicDBObjects. " + obj.getClass().getName());
+                }
+                //log.info("obj = " + (DBObject)obj);
+                DBObject eRole = getDBObject((DBObject) obj, IntactFields.EXPERIMENTAL_ROLE);
+                //log.info("eRole = " + eRole);
+                ExperimentalRole experimentalRole = getExperimentalRole(eRole, participantId);
+                subgraph.add(experimentalRole);
+                experimentalRoles.add(experimentalRole);
             }
-            //log.info("obj = " + (DBObject)obj);
-            DBObject eRole = getDBObject((DBObject) obj, IntactFields.EXPERIMENTAL_ROLE);
-            //log.info("eRole = " + eRole);
-            ExperimentalRole experimentalRole = getExperimentalRole(eRole, participantId);
-            subgraph.add(experimentalRole);
-            experimentalRoles.add(experimentalRole);
-        }
         return experimentalRoles;
     }
 
@@ -785,15 +802,16 @@ public class IntactImport {
 
     public static Collection<FeatureRange> getFeatureRanges(Subgraph subgraph, DBObject fea, String featureId) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         BasicDBList feats = getBasicDBList(fea, IntactFields.FEATURE_RANGE_LIST);
-        Collection<FeatureRange> featureRanges = new HashSet<FeatureRange>();
-        for (Object obj : feats) {
-            if (!MongoClasses.DBObject.equals(obj)) {
-                throw new RuntimeException("BasicDBList does not contain DBObjects. " + obj.getClass().getName());
+        Collection<FeatureRange> featureRanges = new HashSet<>();
+        if (null != feats)
+            for (Object obj : feats) {
+                if (!MongoClasses.DBObject.equals(obj)) {
+                    throw new RuntimeException("BasicDBList does not contain DBObjects. " + obj.getClass().getName());
+                }
+                FeatureRange featureRange = getFeatureRange(subgraph, (DBObject) obj, featureId);
+                subgraph.add(featureRange);
+                featureRanges.add(featureRange);
             }
-            FeatureRange featureRange = getFeatureRange(subgraph, (DBObject) obj, featureId);
-            subgraph.add(featureRange);
-            featureRanges.add(featureRange);
-        }
         return featureRanges;
     }
 
@@ -811,7 +829,7 @@ public class IntactImport {
         BioRelation relation = new BioRelation(feature, featureType, BioRelTypes.HAS_FEATURE_TYPE);
         feature.setHasFeatureType(relation);
         Collection<FeatureRange> featureRanges = getFeatureRanges(subgraph, feat, featureId);
-        Collection<BioRelation> relations = new HashSet<BioRelation>();
+        Collection<BioRelation> relations = new HashSet<>();
         for (FeatureRange featureRange : featureRanges) {
             relation = new BioRelation(feature, featureRange, BioRelTypes.HAS_FEATURE_RANGE);
             relations.add(relation);
@@ -822,20 +840,21 @@ public class IntactImport {
 
     public static Collection<Feature> getFeatures(Subgraph subgraph, DBObject fea) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         BasicDBList feats = getBasicDBList(fea, IntactFields.FEATURE_LIST);
-        Collection<Feature> features = new HashSet<Feature>();
-        for (Object obj : feats) {
-            if (!MongoClasses.DBObject.equals(obj)) {
-                throw new RuntimeException("BasicDBList does not contain DBObjects. " + obj.getClass().getName());
+        Collection<Feature> features = new HashSet<>();
+        if (null != feats)
+            for (Object obj : feats) {
+                if (!MongoClasses.DBObject.equals(obj)) {
+                    throw new RuntimeException("BasicDBList does not contain DBObjects. " + obj.getClass().getName());
+                }
+                Feature feature = getFeature(subgraph, (DBObject) obj);
+                subgraph.add(feature);
+                features.add(feature);
             }
-            Feature feature = getFeature(subgraph, (DBObject) obj);
-            subgraph.add(feature);
-            features.add(feature);
-        }
         return features;
     }
 
     public static Collection<BioRelation> getHasExperimentalRoles(Participant participant, Collection<ExperimentalRole> roles) {
-        Collection<BioRelation> relations = new HashSet<BioRelation>();
+        Collection<BioRelation> relations = new HashSet<>();
         for (ExperimentalRole role : roles) {
             BioRelation relation = new BioRelation(participant, role, BioRelTypes.HAS_EXPERIMENTAL_ROLE);
             relations.add(relation);
@@ -870,7 +889,7 @@ public class IntactImport {
         intact.setIntactId(intactId);
         subgraph.add(intact);
 
-        HashMap<String, Object> interactorHash = new HashMap<String, Object>();
+        HashMap<String, Object> interactorHash = new HashMap<>();
 
         for (Object intr : interactors) {
             DBObject interactor = (DBObject) intr;
@@ -983,13 +1002,13 @@ public class IntactImport {
             }
         }
 
-        HashMap<String, IntactInteraction> interactionHash = new HashMap<String, IntactInteraction>();
+        HashMap<String, IntactInteraction> interactionHash = new HashMap<>();
         for (Object intn : interactions) {
             DBObject interaction = (DBObject) intn;
             IntactInteraction intactInteraction = getIntactInteraction(interaction);
             subgraph.add(intactInteraction);
             BasicDBList participantList = getParticipantList(interaction);
-            Collection<BioRelation> hasParticipants = new HashSet<BioRelation>();
+            Collection<BioRelation> hasParticipants = new HashSet<>();
             for (Object parti : participantList) {
                 DBObject particip = (DBObject) parti;
                 if (particip.containsField(IntactFields.PARTICIPANT.toString())) {
@@ -1078,7 +1097,7 @@ public class IntactImport {
         BasicDBList intactList = InTactUtil.getIntactList(); // return all that are DUE
         log.info("intactList.length = " + intactList.size());
         Subgraph subgraph;
-        PersistenceTemplate template = new PersistenceTemplate();
+        //PersistenceTemplate template = new PersistenceTemplate();
         for (Object e : intactList) {
             String intactId = (String) ((DBObject) e).get(InTactUtil.INTACT_ID);
             try {
@@ -1124,15 +1143,16 @@ public class IntactImport {
         //File[] diseases = dir.listFiles(new ExtFilter("xml"));
         File[] intacts = dir.listFiles();
         IntactSplitter intactSplitter = new IntactSplitter();
-        for (File intact : intacts) {
-            File[] intactFiles = intact.listFiles();
-            for (File intactFile1 : intactFiles) {
-                String file = intact + "/" + intactFile1.getName();
-                log.info("file = " + file);
-                IntactFile intactFile = intactSplitter.splitFile(file);
-                InTactUtil.addIntactFile(intactFile1.getName(), intactFile);
+        if (null != intacts)
+            for (File intact : intacts) {
+                File[] intactFiles = intact.listFiles();
+                for (File intactFile1 : intactFiles) {
+                    String file = intact + "/" + intactFile1.getName();
+                    log.info("file = " + file);
+                    IntactFile intactFile = intactSplitter.splitFile(file);
+                    InTactUtil.addIntactFile(intactFile1.getName(), intactFile);
+                }
             }
-        }
     }
 
     /**
