@@ -40,12 +40,13 @@ public class CompoundKey {
      * not null and additionally non-empty. In other words, a compound must have
      * a minimum of two non-null key components. key3 however is optional and we check
      * for null and emptiness. We consider val3 only if key3 is non-null and non-empty.
-     *
      * @param indexName
      * @param key1
      * @param key2
      * @param key3
-     * @param value
+     * @param val1
+     * @param val2
+     * @param val3
      */
     public CompoundKey(IndexNames indexName, BioFields key1, BioFields key2, BioFields key3, String val1, String val2, String val3) {
         this.indexName = indexName;
