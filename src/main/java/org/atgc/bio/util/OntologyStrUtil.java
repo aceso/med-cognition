@@ -64,7 +64,9 @@ public class OntologyStrUtil {
      * @return 
      */
     public static String getString(BasicDBObject map,  Enum field) {
-        return (String)map.get(getStringFromEnum(field));
+        Object basicDBObject = map.get(getStringFromEnum(field));
+        if (null != basicDBObject) return basicDBObject.toString();
+        return "";
     }
      
      /**
@@ -137,7 +139,7 @@ public class OntologyStrUtil {
             throw new RuntimeException("dbObject is null, field= " + getStringFromEnum(field));
         }
         Object obj = dbObject.get(getStringFromEnum(field));
-        if (obj == null) return null;
+        if (obj == null) return new BasicDBList();
         return MongoObjects.getBasicDBList(obj);
    }
    
