@@ -559,7 +559,7 @@ public class GeneGraphDBImportUtil {
             BasicDBList pubmedList = getBasicDBList(gene2Pubmed, GeneMongoFields.PUBMED_LIST);
             for (Object obj1 : pubmedList) {
                 BasicDBObject pubMedObj = (BasicDBObject)obj1;
-                PubMed pubMed = PubMedUtil.getPubmed(getString(pubMedObj, GeneMongoFields.PUBMED_ID), subgraph);
+                PubMedUtil.getPubmed(getString(pubMedObj, GeneMongoFields.PUBMED_ID), subgraph);
             }
         }
     }
@@ -831,9 +831,8 @@ public class GeneGraphDBImportUtil {
                 }
                 Gene gene = getGene(subgraph, result);
                 subgraph.add(gene);
-                CompoundKey compoundKey = CompoundKey.getCompoundKey(gene);
                 //StatusUtil.idInsert(BioTypes.GENE.toString(), compoundKey.getKey(), compoundKey.getValue());
-                GeneToGo geneToGo = updateGene2Go(subgraph, gene);
+                updateGene2Go(subgraph, gene);
                 //BasicDBList gene2Pubmed = getResult(ImportCollectionNames.NCBI_GENE2PUBMED, gene.getNcbiGeneId());
                 updatePubMed(subgraph, gene);
                 updateGeneGroup(subgraph, gene);
