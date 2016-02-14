@@ -13,19 +13,18 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Smitha Gudur
  */
+@SuppressWarnings("javadoc")
 public class MathUtil {
 
     /** Logger for this class and subclasses */
     protected static final Logger logger = LogManager.getLogger(MathUtil.class);
-
-    private volatile StrUtil strUtil;
 
     /**
      * Return 2 digit prec floating point.
      * @param obj send a Float obj 
      */
     public static Float twoDigitPrec(Float obj) {
-        return new Float(((float)(Math.floor(((Float)obj).floatValue()*100)))/(float)100);
+        return (float) Math.floor(obj * 100) / (float) 100;
     }
 
     /**
@@ -33,7 +32,7 @@ public class MathUtil {
      * @param obj send a Double obj 
      */
     public static Double twoDigitPrec(Double obj) {
-        return new Double(((double)(Math.floor(((Double)obj).doubleValue()*100)))/(double)100);
+        return Math.floor(obj * 100) / (double) 100;
     }
 
     /**
@@ -53,12 +52,12 @@ public class MathUtil {
      *
      * @param num the number to be padded
      * @param digits the number of total digits after the padding
-     * @param String return the padded number as a string
+     * @return
      */
     public static String leftPadding(int num, int digits) {
-       String numStr = new Integer(num).toString();
+       String numStr = Integer.toString(num);
        if (numStr.length() == digits) return numStr;
-       StringBuffer sb = new StringBuffer();
+       StringBuilder sb = new StringBuilder();
        for (int i = 0; i < (digits - numStr.length()); i++) {
            sb.append("0"); 
        }
