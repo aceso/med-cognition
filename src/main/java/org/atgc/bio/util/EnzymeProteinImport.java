@@ -3,13 +3,16 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.*;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +22,7 @@ import org.atgc.bio.domain.BioTypes;
 import org.atgc.bio.domain.Enzyme;
 import org.atgc.bio.domain.Protein;
 import org.neo4j.graphdb.NotFoundException;
+import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
 
 /**
  * Uses: enzymeprotein mongo collection
@@ -35,6 +39,7 @@ import org.neo4j.graphdb.NotFoundException;
  * 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class EnzymeProteinImport {
     
      protected static Logger log = LogManager.getLogger(EnzymeProteinImport.class);
@@ -44,12 +49,11 @@ public class EnzymeProteinImport {
         return mongoUtil.getCollection(coll.toString());
     }
      
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
-        DBCursor dbCursor = getCollection(ImportCollectionNames.ENZYME_PROTEIN).findDBCursor("{}" );
-        try {
+    public static void main(String[] args) throws java.io.IOException {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.ENZYME_PROTEIN).findDBCursor("{}")) {
             // we expect only one document match
             while (dbCursor.hasNext()) {
-                BasicDBObject result = (BasicDBObject)dbCursor.next();
+                BasicDBObject result = (BasicDBObject) dbCursor.next();
                 //String ecNum = (String)result.get(EnzymeFields.EC_NUM.toString());
                 String ecNum = getEnzymeId(result);
                 if (!StatusUtil.idExists(ImportCollectionNames.ENZYME_PROTEIN.toString(), BioFields.ENZYME_ID.toString(), ecNum)) {
@@ -61,17 +65,18 @@ public class EnzymeProteinImport {
                     }
                 }
             }
-        } finally {
-            dbCursor.close();
         }   
     }
    
     /**
      * processOntologyDoc
-     * @param str
-     * @param dbObj 
+     * @param id
+     * @param doc
+     * @throws UnknownHostException
+     * @throws RuntimeException
+     * @throws Exception
      */
-    public static void processOntologyDoc(String id, BasicDBObject doc) throws UnknownHostException, RuntimeException, Exception {
+    public static void processOntologyDoc(String id, BasicDBObject doc) throws IOException, RuntimeException, HttpException, URISyntaxException, NoSuchFieldException, IllegalAccessException {
          if (!StatusUtil.idExists(BioTypes.ENZYME.toString(), BioFields.ENZYME_ID.toString(), id)) {
               processEnzyme(id, doc);
          }
@@ -101,17 +106,18 @@ public class EnzymeProteinImport {
      * @return 
      */
     public static String getCatalyticActivity(BasicDBObject obj) {
-         return getListAsString(obj, EnzymeProteinListFields.CA_LIST, EnzymeProteinFields.CA);
+         return getListAsString(obj, EnzymeProteinFields.CA);
     }
     
-    /**
+    /*
      * 
      * @param obj
      * @return 
      */
+    /*
     public static String getAlterateName(BasicDBObject obj) {
          return getListAsString(obj, EnzymeProteinListFields.AN_LIST, EnzymeProteinFields.AN);    
-    }
+    } */
     
     /**
      * <pre>
@@ -123,15 +129,15 @@ public class EnzymeProteinImport {
      * </pre>
      */
     public static String getCofactor(BasicDBObject obj) {
-        return getListAsString(obj, EnzymeProteinListFields.CF_LIST, EnzymeProteinFields.CF);
+        return getListAsString(obj, EnzymeProteinFields.CF);
     }
     
     public static String getComments(BasicDBObject obj) {
-        return getListAsString(obj, EnzymeProteinListFields.CC_LIST, EnzymeProteinFields.CC);
+        return getListAsString(obj, EnzymeProteinFields.CC);
     }
     
     
-    public static Protein getProtein(String id, Subgraph subGraph) throws Exception {
+    public static Protein getProtein(String id, Subgraph subGraph) throws IllegalAccessException, InterruptedException, HttpException, ServiceException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         Protein protein = UniprotUtil.getProtein(id, subGraph);
         return protein;
     }
@@ -157,7 +163,7 @@ public class EnzymeProteinImport {
     
     public static String getAlternateName(BasicDBObject dbObj) {
         if (dbObj != null) {
-            return getListAsString(dbObj, EnzymeProteinListFields.AN_LIST, EnzymeProteinFields.AN);
+            return getListAsString(dbObj, EnzymeProteinFields.AN);
         } else {
             return null;
         }
@@ -165,7 +171,7 @@ public class EnzymeProteinImport {
     
     public static String getName(BasicDBObject dbObj) {
         if (dbObj != null) {
-            return getListAsString(dbObj, EnzymeProteinListFields.DE_LIST, EnzymeProteinFields.DE);
+            return getListAsString(dbObj, EnzymeProteinFields.DE);
         } else {
             return null;
         }
@@ -186,8 +192,8 @@ public class EnzymeProteinImport {
     }
     
     
-    public static String getListAsString(BasicDBObject dbObj, Enum fieldList, Enum field) {
-         BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, field);
+    public static String getListAsString(BasicDBObject dbObj, Enum field) {
+         BasicDBList list = OntologyStrUtil.getList(dbObj, field);
          StringBuilder str = new StringBuilder();
          for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject)obj, field));
@@ -227,14 +233,13 @@ public class EnzymeProteinImport {
                 }
             }
         }
-        
-        if (enzyme != null) {
-            subGraph.add(enzyme);
-        }
+
+        subGraph.add(enzyme);
         return enzyme;
         
     }
-  
+
+    /*
     public static void setEnzymeProperties(Enzyme enzyme, BasicDBObject dbObj, Subgraph subGraph) throws Exception {
         if (OntologyStrUtil.objectExists(dbObj, EnzymeProteinListFields.DE_LIST)) {
             enzyme.setEnzymeAcceptedNames(getName(dbObj));
@@ -248,9 +253,9 @@ public class EnzymeProteinImport {
             enzyme.setEnzymeReaction(getCatalyticActivity(dbObj));
         }
         
-        /**
+
          * cofactor - A nonprotein component of enzymes is called the cofactor.
-         */
+
         if (OntologyStrUtil.objectExists(dbObj, EnzymeProteinListFields.CF_LIST)) {
             enzyme.setEnzymeCofactor(getCofactor(dbObj));
         }
@@ -263,7 +268,7 @@ public class EnzymeProteinImport {
             setProteinRelationship(enzyme, dbObj, subGraph);
         }
            
-    } 
+    } */
     
    
     /**
@@ -273,7 +278,7 @@ public class EnzymeProteinImport {
      * @throws RuntimeException
      * @throws Exception 
      */
-    public static void processEnzyme(String ecNum, BasicDBObject result) throws UnknownHostException, RuntimeException, Exception {    
+    public static void processEnzyme(String ecNum, BasicDBObject result) throws IOException, RuntimeException, NoSuchFieldException, IllegalAccessException, HttpException, URISyntaxException {
         Subgraph subGraph = new Subgraph();
         Enzyme enzyme = getEnzyme(ecNum, subGraph);
       /*  
