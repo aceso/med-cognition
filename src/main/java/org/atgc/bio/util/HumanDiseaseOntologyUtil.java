@@ -3,6 +3,7 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.HumanDOFields;
 import org.atgc.bio.domain.BioTypes;
@@ -12,7 +13,9 @@ import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
 
@@ -30,6 +33,7 @@ import org.neo4j.graphdb.NotFoundException;
  *
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class HumanDiseaseOntologyUtil {
 
     protected static Logger log = LogManager.getLogger(HumanDiseaseOntologyUtil.class);
@@ -39,9 +43,8 @@ public class HumanDiseaseOntologyUtil {
         return mongoUtil.getCollection(coll.toString());
     }
 
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
-        DBCursor dbCursor = getCollection(ImportCollectionNames.HUMAN_DISEASE_ONTOLOGY).findDBCursor("{}");
-        try {
+    public static void main(String[] args) throws java.io.IOException {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.HUMAN_DISEASE_ONTOLOGY).findDBCursor("{}")) {
             // we expect only one document match
             while (dbCursor.hasNext()) {
                 BasicDBObject result = (BasicDBObject) dbCursor.next();
@@ -50,8 +53,6 @@ public class HumanDiseaseOntologyUtil {
                 log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
                 log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
             }
-        } finally {
-            dbCursor.close();
         }
         log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
         log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
@@ -185,7 +186,7 @@ public class HumanDiseaseOntologyUtil {
      * @return
      */
     public static String getSynonym(BasicDBList list, HumanDOFields enumField) {
-        List synList = new ArrayList();
+        List<String> synList = new ArrayList<>();
         for (Object obj : list) {
             String str = OntologyStrUtil.getString((BasicDBObject) obj, HumanDOFields.SYNONYM);
             if (str != null && str.contains(enumField.toString())) {
@@ -200,8 +201,6 @@ public class HumanDiseaseOntologyUtil {
                         synList.add(getCleanSyn(str, " NARROW"));
                         break;
                 }
-            } else {
-                continue;
             }
         }
         if (synList.isEmpty()) {
@@ -216,7 +215,7 @@ public class HumanDiseaseOntologyUtil {
      * @param dbObj
      */
     public static void setSynonyms(HumanDiseaseOntology HDO, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, HumanDOFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDOFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, HumanDOFields.EXACT)) != null) {
             HDO.setHumanDiseaseExactSynonyms(synStr);
@@ -263,11 +262,10 @@ public class HumanDiseaseOntologyUtil {
      * @throws InvocationTargetException
      * @throws UnknownHostException
      * @throws RuntimeException
-     * @throws Exception
      */
-    public static void setIsListRelationship(HumanDiseaseOntology HDO, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIsListRelationship(HumanDiseaseOntology HDO, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException {
         if (OntologyStrUtil.listExists(dbObj, HumanDOFields.IS_A_LIST)) {
-            BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, HumanDOFields.IS_A_LIST);
+            BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDOFields.IS_A_LIST);
             for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject) obj, HumanDOFields.IS_A);
                 if (OntologyStrUtil.isHumanDiseaseOntology(str)) {
@@ -306,7 +304,7 @@ public class HumanDiseaseOntologyUtil {
      */
     public static String getSubsets(BasicDBObject dbObj) {
         log.info("dbObj = " + dbObj);
-        BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, HumanDOFields.SUBSET);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDOFields.SUBSET);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject) obj, HumanDOFields.SUBSET));
@@ -337,7 +335,7 @@ public class HumanDiseaseOntologyUtil {
      */
     public static void setAltIdRelationships(HumanDiseaseOntology HDO, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         if (OntologyStrUtil.listExists(dbObj, HumanDOFields.ALT_ID_LIST)) {
-            BasicDBList list = (BasicDBList) OntologyStrUtil.getList(dbObj, HumanDOFields.ALT_ID_LIST);
+            BasicDBList list = OntologyStrUtil.getList(dbObj, HumanDOFields.ALT_ID_LIST);
             for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject) obj, HumanDOFields.ALT_ID);
                 if (OntologyStrUtil.isHumanDiseaseOntology(str)) {
@@ -366,9 +364,10 @@ public class HumanDiseaseOntologyUtil {
      * @throws InvocationTargetException
      * @throws UnknownHostException
      * @throws RuntimeException
-     * @throws Exception
+     * @throws HttpException
+     * @throws URISyntaxException
      */
-    public static void processHumanDO(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void processHumanDO(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, IOException, RuntimeException, HttpException, URISyntaxException {
         Subgraph subGraph = new Subgraph();
         HumanDiseaseOntology HDO = getHumanDO(ontologyId, subGraph);
         if (OntologyStrUtil.objectExists(obj, HumanDOFields.NAME)) {
