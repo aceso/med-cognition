@@ -3,6 +3,7 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.ImportCollectionNames;
 import org.atgc.bio.domain.BioEntityClasses;
@@ -13,7 +14,9 @@ import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import org.apache.logging.log4j.LogManager;
@@ -25,6 +28,7 @@ import org.neo4j.graphdb.NotFoundException;
  *
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class EnzymeImport {
     
      protected static Logger log = LogManager.getLogger(EnzymeImport.class);
@@ -34,12 +38,11 @@ public class EnzymeImport {
         return mongoUtil.getCollection(coll.toString());
     }
      
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
-        DBCursor dbCursor = getCollection(ImportCollectionNames.ENZYME).findDBCursor("{}" );
-        try {
+    public static void main(String[] args) throws java.io.IOException {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.ENZYME).findDBCursor("{}")) {
             // we expect only one document match
             while (dbCursor.hasNext()) {
-                BasicDBObject result = (BasicDBObject)dbCursor.next();
+                BasicDBObject result = (BasicDBObject) dbCursor.next();
                 //String ecNum = (String)result.get(EnzymeFields.EC_NUM.toString());
                 String ecNum = getEnzymeId(result);
                 if (!StatusUtil.idExists(BioTypes.ENZYME.toString(), BioFields.ENZYME_ID.toString(), ecNum)) {
@@ -51,17 +54,18 @@ public class EnzymeImport {
                     }
                 }
             }
-        } finally {
-            dbCursor.close();
         }   
     }
    
     /**
      * processOntologyDoc
-     * @param str
-     * @param dbObj 
+     * @param id
+     * @param doc
+     * @throws UnknownHostException
+     * @throws RuntimeException
+     * @throws Exception
      */
-    public static void processOntologyDoc(String id, BasicDBObject doc) throws UnknownHostException, RuntimeException, Exception {
+    public static void processOntologyDoc(String id, BasicDBObject doc) throws IOException, RuntimeException, IllegalAccessException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
          if (!StatusUtil.idExists(BioTypes.ENZYME.toString(), BioFields.ENZYME_ID.toString(), id)) {
               processEnzyme(id, doc);
          }
@@ -141,9 +145,7 @@ public class EnzymeImport {
                 }
             }
         }
-        if (enzyme != null) {
-            subGraph.add(enzyme);
-        }
+        subGraph.add(enzyme);
         return enzyme;
     }
     
@@ -152,19 +154,16 @@ public class EnzymeImport {
      * @param ecNum
      * @return enzyme document (row)
      */
-    public static Enzyme fetchEnzymeFromObject(String ecNum, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
+    public static Enzyme fetchEnzymeFromObject(String ecNum, Subgraph subGraph) throws UnknownHostException, RuntimeException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         BasicDBObject basicDBObject = new BasicDBObject();
         basicDBObject.put(EnzymeFields.EC_NUM.toString(), ecNum);
-        DBCursor dbCursor = getCollection(ImportCollectionNames.ENZYME).findDBCursor(basicDBObject);
         Enzyme enzyme = null;
-        try {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.ENZYME).findDBCursor(basicDBObject)) {
             if (dbCursor.hasNext()) {
-                BasicDBObject result = (BasicDBObject)dbCursor.next();
+                BasicDBObject result = (BasicDBObject) dbCursor.next();
                 String enzymeId = getEnzymeId(result);
-                enzyme = getEnzyme(ecNum, getRow(result) , subGraph);
-            } 
-        } finally {
-            dbCursor.close();
+                enzyme = getEnzyme(ecNum, getRow(result), subGraph);
+            }
         }
         return enzyme;
     }
@@ -180,7 +179,7 @@ public class EnzymeImport {
      * @throws RuntimeException
      * @throws Exception 
      */
-    public static void processEnzyme(String ecNum, BasicDBObject result) throws UnknownHostException, RuntimeException, Exception {
+    public static void processEnzyme(String ecNum, BasicDBObject result) throws IOException, RuntimeException, IllegalAccessException, NoSuchFieldException, InvocationTargetException, HttpException, URISyntaxException {
         BasicDBList row = getRow(result);      
         Subgraph subGraph = new Subgraph();
         Enzyme enzyme = getEnzyme(ecNum, row, subGraph);
@@ -199,13 +198,15 @@ public class EnzymeImport {
     
     
     /**
-     * Given enzymeid or ec_num, return {@link ENZYME} {@link BioEntityClasses#ENZYME}
+     * Given enzymeid or ec_num, return {@link Enzyme} {@link BioEntityClasses#ENZYME}
      * Fetch information from enzyme collection and create enzyme, if it does not exist
      * @param ecNum
      * @param subGraph
-     * @return 
+     * @return
+     * @throws UnknownHostException
+     * @throws RuntimeException
      */
-   public static Enzyme getEnzyme(String ecNum, Subgraph subGraph) throws UnknownHostException, RuntimeException, Exception {
+   public static Enzyme getEnzyme(String ecNum, Subgraph subGraph) throws UnknownHostException, RuntimeException, IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         return fetchEnzymeFromObject(ecNum, subGraph);
     }
     
