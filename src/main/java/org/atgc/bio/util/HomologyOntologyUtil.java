@@ -3,13 +3,17 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.domain.HomologyOntology;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
+
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +31,7 @@ import org.neo4j.graphdb.NotFoundException;
  * Uses 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class HomologyOntologyUtil {
     
     protected static Logger log = LogManager.getLogger(HomologyOntologyUtil.class);
@@ -36,20 +41,17 @@ public class HomologyOntologyUtil {
         return mongoUtil.getCollection(coll.toString());
     }
     
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
-        DBCursor dbCursor = getCollection(ImportCollectionNames.HOMOLOGY_ONTOLOGY).findDBCursor("{}" );
-        try {
+    public static void main(String[] args) throws java.io.IOException {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.HOMOLOGY_ONTOLOGY).findDBCursor("{}")) {
             // we expect only one document match
             while (dbCursor.hasNext()) {
-                BasicDBObject result = (BasicDBObject)dbCursor.next();
+                BasicDBObject result = (BasicDBObject) dbCursor.next();
                 String ontologyId = OntologyStrUtil.getString(result, HomologyOntologyFields.ID);
                 processOntologyDoc(ontologyId, result);
                 log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
                 log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
             }
-         } finally {
-            dbCursor.close();
-         }
+        }
         log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
         log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
     }
@@ -185,9 +187,7 @@ public class HomologyOntologyUtil {
                         synList.add(getCleanSyn(str, " RELATED"));
                         break;
                 }                  
-            } else {
-               continue;
-            } 
+            }
         } 
         if (synList.isEmpty()) {
             return null;
@@ -202,7 +202,7 @@ public class HomologyOntologyUtil {
      * @param dbObj
      */
     public static void setSynonyms(HomologyOntology onto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HomologyOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, HomologyOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, HomologyOntologyFields.EXACT)) != null) {
             onto.setHomologyOntologyExactSynonyms(synStr);
@@ -238,11 +238,10 @@ public class HomologyOntologyUtil {
      * @throws InvocationTargetException
      * @throws UnknownHostException
      * @throws RuntimeException
-     * @throws Exception 
      */
-    public static void setIsListRelationship(HomologyOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIsListRelationship(HomologyOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException {
          if (OntologyStrUtil.listExists(dbObj, HomologyOntologyFields.IS_A_LIST)) {
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, HomologyOntologyFields.IS_A_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, HomologyOntologyFields.IS_A_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, HomologyOntologyFields.IS_A);
                 if (OntologyStrUtil.isHumanDiseaseOntology(str)) {
@@ -273,7 +272,7 @@ public class HomologyOntologyUtil {
     public static void setDisjointRelationship(HomologyOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         log.info("dbObj = " + dbObj.toString());
         if (OntologyStrUtil.isString(dbObj, HomologyOntologyFields.DISJOINT_FROM)) {
-            String str = OntologyStrUtil.getString((BasicDBObject)dbObj, HomologyOntologyFields.DISJOINT_FROM);
+            String str = OntologyStrUtil.getString(dbObj, HomologyOntologyFields.DISJOINT_FROM);
             if (OntologyStrUtil.isHOM(str)) {
                 String id = getId(str, OntologyStrUtil.HOMPattern); 
                 if (id != null) {
@@ -301,7 +300,7 @@ public class HomologyOntologyUtil {
      * @throws RuntimeException
      * @throws Exception 
      */
-     public static void processHomologyOntology(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void processHomologyOntology(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, IOException, RuntimeException, HttpException, URISyntaxException {
          log.info("Enter process");
          Subgraph subGraph = new Subgraph();
          HomologyOntology HO = getHomologyOntology(ontologyId, subGraph);
