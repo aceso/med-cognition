@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Smitha Gudur
  */
+@SuppressWarnings("javadoc")
 public class OntologyStrUtil {
 
     /** Logger for this class and subclasses */
@@ -34,15 +35,15 @@ public class OntologyStrUtil {
     public static String prIdPattern = "PR:";
     public static String goIdPattern = "GO:";
     public static String enzymePattern = "EC:";
-    public static String exclamationPattern = "!";
-    public static String spacePattern = " ";
+    //public static String exclamationPattern = "!";
+    //public static String spacePattern = " ";
     public static String NCBITaxonPattern = "NCBITaxon:";
-    public static String uberonIdPattern = "UBERON:";
+    //public static String uberonIdPattern = "UBERON:";
     public static String chebiIdPattern = "CHEBI:";
     public static String patoIdPattern = "PATO:";
     public static String cpIdPattern = "CP:";
-    public static String obiIdPattern = "OBI:";
-    public static String soIdPattern = "SO:";
+    //public static String obiIdPattern = "OBI:";
+    //public static String soIdPattern = "SO:";
     public static String modIdPattern = "MOD:";
     public static String sboIdPattern = "SBO:";
     public static String taxRankIdPattern = "TAXRANK:";
@@ -100,7 +101,7 @@ public class OntologyStrUtil {
     }
     
     public static String getString(BasicDBObject molecule, BioFields field) {
-        return (String)molecule.getString(getStringFromEnum(field));
+        return molecule.getString(getStringFromEnum(field));
     }
     
     public static BasicDBObject getDBObject(BasicDBObject map, Enum field) {
@@ -109,13 +110,13 @@ public class OntologyStrUtil {
    
     public static BasicDBList getDBList(BasicDBObject dbObject, Enum field) {
         if (dbObject == null || field == null) {
-            throw new RuntimeException("dbObject is null for field " + field.toString());
+            throw new RuntimeException("dbObject is null for field " + field);
         }
         Object obj = dbObject.get(field.toString());
         if (obj == null) return null;
-        if (obj.getClass().equals(MongoClasses.BasicDBList)) {
+        if (obj.getClass().equals(MongoClasses.BasicDBList.toClass())) {
             log.info("basicDBList");
-            return (BasicDBList)((BasicDBObject)dbObject).get(getStringFromEnum(field));
+            return (BasicDBList) dbObject.get(getStringFromEnum(field));
         } else {
             return null;
         }
@@ -146,30 +147,18 @@ public class OntologyStrUtil {
    
    
    public static boolean isObjectString(Object obj) {
-       if (String.class.equals(obj.getClass())) {
-           return true;
-       } else {
-           return false;
-       }
+       return String.class.equals(obj.getClass());
    }
 
    // object is null return false, else return true
    public static boolean isObjectNull(BasicDBObject dbObject, Enum field) {
        //if (dbObject == null || dbObject.toString() == null) 
-       if (dbObject.get(field.toString()) == null) {
-           return false;
-       } else {
-           return true;
-       }
+       return dbObject.get(field.toString()) != null;
    }
    
    public static boolean isObjectString(BasicDBObject dbObject, Enum field) {
         Object obj = dbObject.get(field.toString());
-        if (String.class.equals(obj.getClass())) {
-            return true;
-        } else {
-            return false;
-        }
+       return String.class.equals(obj.getClass());
     }
    
    /**
@@ -180,19 +169,11 @@ public class OntologyStrUtil {
      */
     public static boolean objectExists(Map map, Enum field) {
        //log.info(map.get(field.toString()));
-       if (map.get(field.toString()) == null) {
-           return false;
-       } else {
-           return true;
-       }
+        return map.get(field.toString()) != null;
     }
     
     public static boolean objectContains(BasicDBObject dbObj, Enum field) {
-        if (dbObj.containsField(field.toString())) {
-            return true;
-        } else {
-            return false;
-        }
+        return dbObj.containsField(field.toString());
     }
     
    /**
@@ -205,13 +186,9 @@ public class OntologyStrUtil {
         log.info("list exists");
         if (objectExists(map, field)) {
             log.info("listExists(), non null, " + field.toString());
-            BasicDBList list = (BasicDBList)getList(map, field);
+            BasicDBList list = getList(map, field);
             log.info("list size=" + list.size() + list.toString());
-            if (list == null || list.size() <= 0) {
-                return false;
-            } else {
-                return true;
-            }
+            return list.size() > 0;
         } else {
             return false;
         } 
@@ -219,19 +196,13 @@ public class OntologyStrUtil {
    
     
     public static String removeComma(String s) {
-        if (s.contains(",")) {
-            return s.split(",")[0].trim();
-        } else {
-            return s;
-        }
+        if (s.contains(",")) return s.split(",")[0].trim();
+        else return s;
     }
     
     public static String removeHalfBracket(String s) {
-        if (s.contains("]")) {
-            return s.split("]")[0].trim();
-        } else {
-            return s;
-        }
+        if (s.contains("]")) return s.split("]")[0].trim();
+        else return s;
     }
     
     public static boolean hasDigits(String body) {
@@ -322,10 +293,8 @@ public class OntologyStrUtil {
         if (str.contains(pattern)) { 
             String str1 = str.split(pattern)[0].toUpperCase().trim();
             log.info("str1 =" + str1);
-            if (str1 != null) { 
-                return BioRelTypes.getEnum(str1);
-            } 
-        } 
+            return BioRelTypes.getEnum(str1);
+        }
         return null;
     }
     
@@ -341,11 +310,7 @@ public class OntologyStrUtil {
     }
     
     public static boolean patternExists(String str, String pattern) {
-          if (str.contains(pattern)) {
-              return true;
-          } else {
-              return false;
-          }
+        return str.contains(pattern);
     }
     
     /**
