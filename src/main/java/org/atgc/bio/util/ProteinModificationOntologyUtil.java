@@ -3,12 +3,16 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.ProteinModificationOntologyFields;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
+
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +30,7 @@ import org.neo4j.graphdb.NotFoundException;
  * Uses 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class ProteinModificationOntologyUtil {
     
     
@@ -47,18 +52,15 @@ public class ProteinModificationOntologyUtil {
         return mongoUtil.getCollection(coll.toString());
     }
     
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
-        DBCursor dbCursor = getCollection(ImportCollectionNames.PROTEIN_MODIFICATION_ONTOLOGY).findDBCursor("{}" );
-        try {
+    public static void main(String[] args) throws java.io.IOException {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.PROTEIN_MODIFICATION_ONTOLOGY).findDBCursor("{}")) {
             // we expect only one document match
             while (dbCursor.hasNext()) {
-                BasicDBObject result = (BasicDBObject)dbCursor.next();
+                BasicDBObject result = (BasicDBObject) dbCursor.next();
                 String ontologyId = OntologyStrUtil.getString(result, ProteinModificationOntologyFields.ID);
                 processOntologyDoc(ontologyId, result);
             }
-         } finally {
-            dbCursor.close();
-         }   
+        }
     }
     
     /**
@@ -196,11 +198,12 @@ public class ProteinModificationOntologyUtil {
      /**
      * "synonym" : "\"2-azanyl-3-methylpentanoic acid\" EXACT RESID-alternate []"
      * "synonym" : "\"3-methyl-norvaline\" EXACT RESID-alternate []"
-     * @param obj
-     * @return 
+     * @param list
+      * @param enumField
+      * @return
      */
     public static String getSynonym(BasicDBList list, ProteinModificationOntologyFields enumField) {
-        List synList = new ArrayList();
+        List<String> synList = new ArrayList<>();
         for (Object obj : list) {
             String str = OntologyStrUtil.getString((BasicDBObject)obj, ProteinModificationOntologyFields.SYNONYM);
             if (str != null && str.contains(enumField.toString())) {
@@ -212,9 +215,7 @@ public class ProteinModificationOntologyUtil {
                         synList.add(getCleanSyn(str, " RELATED"));
                         break;
                 }                  
-            } else {
-               continue;
-            } 
+            }
         } 
         if (synList.isEmpty()) {
             return null;
@@ -225,11 +226,11 @@ public class ProteinModificationOntologyUtil {
     
     /**
      * setSynonyms
-     * @param cellOnto
-     * @param obj 
+     * @param mod
+     * @param dbObj
      */
     public static void setSynonyms(ProteinModificationOntology mod, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, ProteinModificationOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, ProteinModificationOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, ProteinModificationOntologyFields.EXACT)) != null) {
             mod.setProteinModOntologyExactSynonyms(synStr);
@@ -292,7 +293,7 @@ public class ProteinModificationOntologyUtil {
      * All IS_A relationships are MOD entities
      * is_a: MOD:01659 ! Uniblue A derivatized residue
      * setModIsARelationship
-     * @param string
+     * @param str
      * @param onto {@link ProteinModificationOntology}
      * @param subGraph
      * @throws NotFoundException
@@ -326,9 +327,9 @@ public class ProteinModificationOntologyUtil {
      * @throws RuntimeException
      * @throws Exception 
      */
-    public static void setIsARelationship(ProteinModificationOntology mod, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIsARelationship(ProteinModificationOntology mod, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException {
          if (OntologyStrUtil.listExists(dbObj, ProteinModificationOntologyFields.IS_A_LIST)) {
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, ProteinModificationOntologyFields.IS_A_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, ProteinModificationOntologyFields.IS_A_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, ProteinModificationOntologyFields.IS_A);
                 if (OntologyStrUtil.isModOntology(str)) {
@@ -398,9 +399,9 @@ public class ProteinModificationOntologyUtil {
      * "relationshipList" : [
      *         
      */
-     public static void setRelationshipList(ProteinModificationOntology mod, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, Exception {
+     public static void setRelationshipList(ProteinModificationOntology mod, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
          if (OntologyStrUtil.listExists(dbObj, ProteinModificationOntologyFields.RELATIONSHIP_LIST)) {
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, ProteinModificationOntologyFields.RELATIONSHIP_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, ProteinModificationOntologyFields.RELATIONSHIP_LIST);
              for (Object obj : list) {
                  String str = OntologyStrUtil.getString((BasicDBObject)obj, ProteinModificationOntologyFields.RELATIONSHIP);
                  if (OntologyStrUtil.isModOntology(str)) {
@@ -414,12 +415,11 @@ public class ProteinModificationOntologyUtil {
       * 
       * @param mod
       * @param dbObj
-      * @param subGraph 
       */
      public static void setXRefPropertyList(ProteinModificationOntology mod, BasicDBObject dbObj) {
          if (OntologyStrUtil.listExists(dbObj, ProteinModificationOntologyFields.XREF_LIST)) {
              log.info("xRefList exists");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, ProteinModificationOntologyFields.XREF_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, ProteinModificationOntologyFields.XREF_LIST);
              for (Object obj : list) {
                  String str = OntologyStrUtil.getString((BasicDBObject)obj, ProteinModificationOntologyFields.XREF);
                  if (str != null) {
@@ -434,7 +434,6 @@ public class ProteinModificationOntologyUtil {
       *   "xref" : "DiffFormula: \"C 0 H 0 N 0 O 0\""
       * @param str
       * @param mod
-      * @param subGraph 
       */
      public static void setXRefPropertyRelationship(String str, ProteinModificationOntology mod) {
          if (isDiffAvg(str)) {
@@ -481,7 +480,7 @@ public class ProteinModificationOntologyUtil {
       * @throws IllegalAccessException
       * @throws Exception 
       */
-     public static PubMed getPubMed(String pubMedId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+     public static PubMed getPubMed(String pubMedId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, URISyntaxException, IOException, HttpException, InterruptedException, InvocationTargetException {
             PubMed pubMed = (PubMed)subGraph.search(BioTypes.PUBMED, BioFields.PUBMED_ID, pubMedId);
             if (pubMed == null) { 
                 log.info("getPubMed(), pubMedId =" + pubMedId);
@@ -498,8 +497,8 @@ public class ProteinModificationOntologyUtil {
       * @param obj
       * @param subGraph 
       */
-     public static void setPubMedRelationship(ProteinModificationOntology mod, BasicDBObject obj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
-         List<String> pList = new ArrayList();
+     public static void setPubMedRelationship(ProteinModificationOntology mod, BasicDBObject obj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, HttpException, IOException, InvocationTargetException, InterruptedException, URISyntaxException {
+         List<String> pList = new ArrayList<>();
          getPubmedFromDef(obj, pList);
          for (String pubMedId : pList) {
              PubMed pubMed = getPubMed(pubMedId, subGraph);
@@ -523,7 +522,7 @@ public class ProteinModificationOntologyUtil {
      * @throws RuntimeException
      * @throws Exception 
      */
-     public static void processModOntology(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void processModOntology(String ontologyId, BasicDBObject obj) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException, RuntimeException, HttpException, URISyntaxException, InterruptedException {
          Subgraph subGraph = new Subgraph();
          ProteinModificationOntology mod = getModOntology(ontologyId, subGraph);
          if (OntologyStrUtil.objectExists(obj, ProteinModificationOntologyFields.NAME)) { 
