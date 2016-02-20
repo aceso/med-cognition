@@ -26,6 +26,7 @@ import org.neo4j.graphdb.NotFoundException;
  * 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class PhenotypicOntologyUtil {
     
     protected static Logger log = LogManager.getLogger(PhenotypicOntology.class);
@@ -86,7 +87,7 @@ public class PhenotypicOntologyUtil {
      * @return 
      */
     public static String getSynonym(BasicDBList list, CellTypeOntologyFields enumField) {
-        List synList = new ArrayList();
+        List<String> synList = new ArrayList<>();
         for (Object obj : list) {
             String str = OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.SYNONYM);
             if (str != null && str.contains(enumField.toString())) {
@@ -100,9 +101,7 @@ public class PhenotypicOntologyUtil {
                     case NARROW:
                         synList.add(OntologyStrUtil.getCleanSyn(str," NARROW"));
                 }                  
-            } else {
-               continue;
-            } 
+            }
         } 
         if (synList.isEmpty()) {
             return null;
@@ -118,7 +117,6 @@ public class PhenotypicOntologyUtil {
 		}
 	],
      * setIsARelationship between PhenotypicOntology <->PhenotypicOntology
-     * @param PhenotypicOntology
      * @param dbObj
      * @param subGraph
      * @throws NoSuchFieldException
@@ -127,10 +125,10 @@ public class PhenotypicOntologyUtil {
      * @throws NotFoundException
      * @throws InvocationTargetException 
      */
-    public static void setIsARelationship(PhenotypicOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIsARelationship(PhenotypicOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException {
          if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.IS_LIST)) {
              //log.info("createIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.IS_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.IS_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.IS_A);
                 if (OntologyStrUtil.isPATO(str)) {
@@ -158,7 +156,11 @@ public class PhenotypicOntologyUtil {
      * @param str
      * @param onto
      * @param subGraph
-     * @param relType 
+     * @throws NoSuchFieldException
+     * @throws IllegalArgumentException
+     * @throws NotFoundException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
      */
     public static void setPATOIntersectionRelationship(String str, PhenotypicOntology onto, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, NotFoundException, IllegalAccessException, InvocationTargetException {
         String id = getId(str);
@@ -243,7 +245,6 @@ public class PhenotypicOntologyUtil {
      * intersection_of: PATO:0001241 ! physical object quality
      * intersection_of: increased_in_magnitude_relative_to PATO:0000461 ! normal
      * 
-     * @param PhenotypicOntology
      * @param dbObj
      * @param subGraph
      * @throws NoSuchFieldException
@@ -252,10 +253,10 @@ public class PhenotypicOntologyUtil {
      * @throws NotFoundException
      * @throws InvocationTargetException 
      */
-    public static void setIntersectionRelationship(PhenotypicOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIntersectionRelationship(PhenotypicOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException {
          if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.INTERSECTION_OF_LIST)) {
              //log.info("createIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.INTERSECTION_OF_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.INTERSECTION_OF_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.INTERSECTION_OF);
                 if (str != null) { 
@@ -307,7 +308,7 @@ public class PhenotypicOntologyUtil {
      * @param dbObj 
      */
     public static void setSynonyms(PhenotypicOntology onto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, CellTypeOntologyFields.EXACT)) != null) {
             onto.setPhenotypicExactSynonyms(synStr);
@@ -321,10 +322,10 @@ public class PhenotypicOntologyUtil {
     }
     
     public static String getBasicDBListAsString(BasicDBObject dbObj, Enum field, Enum objField) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, field);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, field);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
-            String val = OntologyStrUtil.getString((BasicDBObject)obj, objField);
+            OntologyStrUtil.getString((BasicDBObject)obj, objField);
             str.append(StrUtil.goodText(OntologyStrUtil.getString((BasicDBObject)obj, objField)));
             str.append(" ");   
 
@@ -343,7 +344,7 @@ public class PhenotypicOntologyUtil {
      * @return String
      */ 
     public static String getNamespace(BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.NAMESPACE_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.NAMESPACE_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.NAMESPACE));
@@ -353,7 +354,7 @@ public class PhenotypicOntologyUtil {
     }
     
     public static String getAlternateIds(BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.ALT_ID_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.ALT_ID_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.ALT_ID));
@@ -369,8 +370,7 @@ public class PhenotypicOntologyUtil {
     /**
      * "comment" : "This term was made obsolete because it refers to a class
      * of gene products and a biological process rather than a molecular function."
-     * @param dbObj
-     * @return 
+     * @return
      */
     public static String getComment(BasicDBObject obj) {
         return OntologyStrUtil.getString(obj, CellTypeOntologyFields.COMMENT);
@@ -390,7 +390,7 @@ public class PhenotypicOntologyUtil {
      * @return 
      */
     public static String getSubsets(BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SUBSET_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.SUBSET_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.SUBSET));
@@ -407,10 +407,9 @@ public class PhenotypicOntologyUtil {
 		}
 	],
      * @param ontologyId
-     * @param SubGraph
-     * @return 
+     * @return
      */
-    public static PhenotypicOntology processOntology(String ontologyId, BasicDBObject obj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, Exception {
+    public static PhenotypicOntology processOntology(String ontologyId, BasicDBObject obj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException {
          PhenotypicOntology onto = getPhenotypicOntology(ontologyId, subGraph);
         
          if (OntologyStrUtil.objectExists(obj, CellTypeOntologyFields.NAME)) { 
@@ -458,13 +457,11 @@ public class PhenotypicOntologyUtil {
      * relationship: has_part PATO:0001857 ! concave
      * relationship: increased_in_magnitude_relative_to PATO:0000461 ! normal
      * relationship: decreased_in_magnitude_relative_to PATO:0000461 ! normal
-     * @param str
-     * @return {@link BioRelTypes} 
      */
-    public static void processRelationshipList(PhenotypicOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, NotFoundException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void processRelationshipList(PhenotypicOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException {
         if (OntologyStrUtil.listExists(dbObj, CellTypeOntologyFields.RELATIONSHIP_LIST)) {
              //log.info("createIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.RELATIONSHIP_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, CellTypeOntologyFields.RELATIONSHIP_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, CellTypeOntologyFields.RELATIONSHIP);
                 if (OntologyStrUtil.isPATO(str)) {
@@ -498,7 +495,7 @@ public class PhenotypicOntologyUtil {
     
     public static void processPhenotypicOntology(String ontologyId, BasicDBObject result) throws Exception {
           Subgraph subGraph = new Subgraph();
-          PhenotypicOntology entity = processOntology(ontologyId, result, subGraph);
+          processOntology(ontologyId, result, subGraph);
           PersistenceTemplate.saveSubgraph(subGraph);
     }
    
