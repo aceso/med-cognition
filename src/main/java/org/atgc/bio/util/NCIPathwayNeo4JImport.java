@@ -25,7 +25,7 @@ import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
-
+import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
 
 
 /**
@@ -69,16 +69,16 @@ import org.apache.http.HttpException;
  * 
  * @author jtanisha-ee
  */
-
+@SuppressWarnings("javadoc")
 public class NCIPathwayNeo4JImport {
     
    // public static final String DB_URL = "http://saibaba.local:7474/db/data";
    
     //private static final RedbasinTemplate template = new RedbasinTemplate();
     private static final NciPathwayTemplate npt = new NciPathwayTemplate();
-    private static final Map<String, GeneOntology> locationMap = new HashMap<String, GeneOntology>();
-    private static final Map<String, GeneOntology> processMap = new HashMap<String, GeneOntology>();
-    private static final Map<String, GeneOntology> functionMap = new HashMap<String, GeneOntology>();
+    private static final Map<String, GeneOntology> locationMap = new HashMap<>();
+    private static final Map<String, GeneOntology> processMap = new HashMap<>();
+    private static final Map<String, GeneOntology> functionMap = new HashMap<>();
     // private static ArrayList<RelQueue> foundList, notFoundList;  
     protected static Logger log = LogManager.getLogger(NCIPathwayNeo4JImport.class);
     private static ArrayList <RelQueue>relGraph;
@@ -96,7 +96,7 @@ public class NCIPathwayNeo4JImport {
      * @throws NoSuchMethodException
      * @throws InvocationTargetException 
      */  
-    public static void main(String[] args) throws java.io.IOException, java.net.URISyntaxException, UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NoSuchMethodException, InvocationTargetException, MalformedURLException, UnknownHostException, HttpException, NoSuchFieldException, RuntimeException, Exception {
+    public static void main(String[] args) throws java.io.IOException, java.net.URISyntaxException, IllegalAccessException, ClassNotFoundException, InstantiationException, NoSuchMethodException, InvocationTargetException, HttpException, NoSuchFieldException, RuntimeException, InterruptedException {
         List<Map> pathwayList = NCIPathwayUtil.getPathwayList(); // return all that are DUE
         Iterator<Map> pathwayIter = pathwayList.iterator();
         NCIPathwayNeo4JImport nciPathwayNeo4JImport = new NCIPathwayNeo4JImport();
@@ -107,7 +107,7 @@ public class NCIPathwayNeo4JImport {
             String shortName = (String)map.get(getStringFromEnum(NciPathwayFields.SHORT_NAME));
             log.info("********** shortName " + shortName);
             try {
-                NciPathway pathwayNode = nciPathwayNeo4JImport.createPathwayNode(shortName);
+                nciPathwayNeo4JImport.createPathwayNode(shortName);
             } catch (java.io.IOException e) {
                 throw new RuntimeException(e);
             }
@@ -137,18 +137,20 @@ public class NCIPathwayNeo4JImport {
      * @param molecule
      * @return None
      */
-    public static void createProtein(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, UnsupportedEncodingException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, InvocationTargetException, Exception {
+    public static void createProtein(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException, InvocationTargetException, ServiceException, InterruptedException {
         log.info("createProtein(BasicDBObject, subGraph)");
         String proteinId = getUniProtIdentifier(molecule);
         getId(molecule);
-        Object bio = getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, proteinId);
+        getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, proteinId);
         Protein protein = UniprotUtil.getProtein(proteinId, subGraph);
         /** 
          * important to set moleculeIdRef as this is used to search protein in
          * a subgraph
          * 
          */
-        protein.setMoleculeIdRef(getId(molecule));
+        String moleculeId = getId(molecule);
+        if (null != moleculeId && null != protein)
+           protein.setMoleculeIdRef(moleculeId);
         
         
          /*
@@ -374,11 +376,7 @@ public class NCIPathwayNeo4JImport {
    */
    private static boolean isPreferredSymbol(BasicDBObject obj) {
        String pf = getString(obj, NciPathwayFields.NAME_TYPE);
-       if ((pf != null && pf.equals(getStringFromEnum(NciPathwayFields.PF)))) {
-          return true;
-       } else {
-          return false;
-      }
+       return (pf != null && pf.equals(getStringFromEnum(NciPathwayFields.PF)));
    }
    
    /**
@@ -485,7 +483,7 @@ public class NCIPathwayNeo4JImport {
     * @throws ClassNotFoundException
     * @throws InstantiationException 
     */
-   private static void createCompound(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, UnsupportedEncodingException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, InvocationTargetException {
+   private static void createCompound(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException, InvocationTargetException {
         String casId = getCasId(molecule);
         if (casId == null) {
             log.info("casId missing, compound not created, moleculeId=" + getId(molecule));
@@ -568,11 +566,7 @@ public class NCIPathwayNeo4JImport {
     * @return 
     */
    private static boolean isString(Object obj) {
-        if (obj.getClass().getName().equals("java.lang.String")) {
-            return true;
-        } else {
-            return false;
-        }
+       return obj.getClass().getName().equals("java.lang.String");
    }
    
    /**
@@ -624,7 +618,7 @@ public class NCIPathwayNeo4JImport {
     * @throws IllegalArgumentException
     * @throws UnsupportedEncodingException 
     */
-   private static void createNamedProtein(BasicDBObject molecule, Subgraph subGraph) throws IllegalAccessException, ClassNotFoundException, InstantiationException, IllegalArgumentException, UnsupportedEncodingException, NoSuchMethodException, InvocationTargetException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException {
+   private static void createNamedProtein(BasicDBObject molecule, Subgraph subGraph) throws IllegalAccessException, ClassNotFoundException, InstantiationException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException, URISyntaxException, IOException, HttpException, NoSuchFieldException {
         log.info("createNamedProtein()");
         String preferredName = getPreferredSymbolFromName(molecule);
         boolean created = false;
@@ -648,7 +642,7 @@ public class NCIPathwayNeo4JImport {
         } */
 
         log.info("setting Label");
-        setLabel(molecule, (Object)nProtein); 
+        setLabel(molecule, nProtein);
         if (created) {
            subGraph.add(nProtein);
         }
@@ -678,7 +672,7 @@ public class NCIPathwayNeo4JImport {
     * @throws ClassNotFoundException
     * @throws InstantiationException 
     */
-   private static void setProteinPTMValues(Protein protein, BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, InvocationTargetException {
+   private static void setProteinPTMValues(Protein protein, BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException, InvocationTargetException {
      
        Protein proteinMolecule = (Protein)getPTMMolecule(getString(molecule, NciPathwayFields.MEMBER_MOLECULE_IDREF), BioTypes.PROTEIN, subGraph);
        if (proteinMolecule != null) { 
@@ -701,7 +695,7 @@ public class NCIPathwayNeo4JImport {
     * @throws ClassNotFoundException
     * @throws InstantiationException 
     */
-   private static void setPartProteinPTMValues(PartProtein partProtein, BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException,InvocationTargetException {
+   private static void setPartProteinPTMValues(PartProtein partProtein, BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException,InvocationTargetException {
        Protein proteinMolecule = (Protein)getPTMMolecule(getString(molecule, NciPathwayFields.MEMBER_MOLECULE_IDREF), BioTypes.PROTEIN, subGraph);
        if (proteinMolecule != null) { 
             partProtein.setPartPtmExpressionRelation(proteinMolecule,
@@ -720,12 +714,8 @@ public class NCIPathwayNeo4JImport {
    private static boolean complexComponentListExists(BasicDBObject dbObj) {
        log.info("complexComponentListExists()");
        Object obj = dbObj.get(NciPathwayFields.COMPLEX_COMPONENT_LIST.toString());
-       if (obj != null) {
-          return true;
-       } else {
-           //log.info("complexcomponentlist does not exist");
-          return false;
-       }
+       //log.info("complexcomponentlist does not exist");
+       return obj != null;
    }
    
    /**
@@ -769,7 +759,7 @@ public class NCIPathwayNeo4JImport {
                      * These values are set in both Complex and EndNode relationships
                      */
                    setLabelValues(complex, endEntity, molecule);
-                   createComplexPTMRelationships(complex, endEntity, molecule, subGraph);   
+                   createComplexPTMRelationships(complex, endEntity, molecule);
                 } else {
                     /* late relationship */
                     //ComplexComponentRelation.class
@@ -789,7 +779,7 @@ public class NCIPathwayNeo4JImport {
                 * These values are set in both Complex and EndNode relationships
                 */
             setLabelValues(complex, endEntity, molecule);
-            createComplexPTMRelationships(complex, endEntity, molecule, subGraph);   
+            createComplexPTMRelationships(complex, endEntity, molecule);
         }
    }
    
@@ -827,26 +817,19 @@ public class NCIPathwayNeo4JImport {
        log.info("createComplexComponentLabelRelationship()");
        complex.setComplexComponentLabels(endEntity, labelMap); 
        BioTypes bioType = endEntity.bioType();
-       if (isPartProtein(endEntity, bioType)) {
+       if (isPartProtein(bioType)) {
            ((PartProtein)endEntity).setComplexComponentLabels(complex, labelMap);
-       } else if (isProtein(endEntity, bioType)) {
+       } else if (isProtein(bioType)) {
            ((Protein)endEntity).setComplexComponentLabels(complex, labelMap);
        }
    }
    
-   private static boolean isPartProtein(BioEntity entity, BioTypes bioType) {
-       if (bioType.equals(BioTypes.PART_PROTEIN)) {
-           return true;
-       } 
-       return false;
+   private static boolean isPartProtein(BioTypes bioType) {
+       return bioType.equals(BioTypes.PART_PROTEIN);
    }
    
-   private static boolean isProtein(BioEntity entity, BioTypes bioType) {
-       if (bioType.equals(BioTypes.PROTEIN)) {
-           return true;
-       } else {
-           return false;
-       }
+   private static boolean isProtein(BioTypes bioType) {
+       return bioType.equals(BioTypes.PROTEIN);
    }
   
    /**
@@ -947,9 +930,9 @@ public class NCIPathwayNeo4JImport {
        BioTypes bioType = endEntity.bioType();
        //setGeneOntologyRelationship(complex);
        //setGeneOntologyRelationship(endEntity);
-       if (isPartProtein(endEntity, bioType)) {
+       if (isPartProtein(bioType)) {
           ((PartProtein)endEntity).setComplexComponentRelations(complex);
-       } else if (isProtein(endEntity, bioType)) {
+       } else if (isProtein(bioType)) {
           ((Protein)endEntity).setComplexComponentRelations(complex);
        }
    } 
@@ -965,7 +948,7 @@ public class NCIPathwayNeo4JImport {
     * @throws ClassNotFoundException
     * @throws InstantiationException 
     */
-   private static void createComplexPTMRelationships(Complex complex, Object endEntity, BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException,InvocationTargetException {
+   private static void createComplexPTMRelationships(Complex complex, Object endEntity, BasicDBObject molecule) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException,InvocationTargetException {
        log.info("createComplexPTMRelationships()");
        if (ptmExists(molecule)) {
             BasicDBList ptmList = getDBList(molecule, NciPathwayFields.PTM_EXPRESSION);
@@ -1010,7 +993,7 @@ public class NCIPathwayNeo4JImport {
     * @throws ClassNotFoundException
     * @throws InstantiationException 
     */
-   private static void setPartValues(PartProtein partProtein, BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NoSuchFieldException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, InvocationTargetException {
+   private static void setPartValues(PartProtein partProtein, BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NoSuchFieldException, IOException, HttpException, InvocationTargetException {
          if (partExists(molecule)) {
             BasicDBList partList = getBasicDBList(molecule, NciPathwayFields.PART);
             if (partList != null) {
@@ -1020,8 +1003,8 @@ public class NCIPathwayNeo4JImport {
                     if (wholeMolecule != null) {
                         String startPos = getStartOfPartMolecule(part);
                         String endPos = getEndOfPartMolecule(part);  
-                        partProtein.setPartOfMolecule((Object)wholeMolecule, startPos, endPos);
-                        wholeMolecule.setNciPartOfMolecule((Object)partProtein, startPos, endPos);
+                        partProtein.setPartOfMolecule(wholeMolecule, startPos, endPos);
+                        wholeMolecule.setNciPartOfMolecule(partProtein, startPos, endPos);
                     } else {
                         String wholeMoleculeIdRef = getString(part, NciPathwayFields.WHOLE_MOLECULE_IDREF);
                         createRelGraph(partProtein, wholeMoleculeIdRef, BioFields.MOLECULE_IDREF, part, BioRelationClasses.PART_MOLECULE_RELATION.getAnnotationClass());
@@ -1066,11 +1049,7 @@ public class NCIPathwayNeo4JImport {
    private static boolean ptmExists(BasicDBObject molecule) {
        log.info("ptmExists()"); 
        Object obj = molecule.get(NciPathwayFields.PTM_EXPRESSION.toString());
-       if (obj != null) {
-          return true;
-       } else {
-          return false;
-       }
+       return obj != null;
    }
   
    
@@ -1108,7 +1087,7 @@ public class NCIPathwayNeo4JImport {
     * getWholeMolecule BioEntity
     * We have to create {@link BioEntity} {@link BioTypes#PROTEIN} ??
     */
-   private static Protein getWholeMoleculeEntity(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NoSuchFieldException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException,InvocationTargetException {
+   private static Protein getWholeMoleculeEntity(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NoSuchFieldException, IOException, HttpException,InvocationTargetException {
        String wholeMoleculeId = getWholeMoleculeId(molecule);
        if (wholeMoleculeId != null) {
            return (Protein)getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.MOLECULE_IDREF, wholeMoleculeId);         
@@ -1162,7 +1141,7 @@ public class NCIPathwayNeo4JImport {
       </Molecule>
 
     */
-   private static BioEntity getPTMMolecule(String bioPTMMoleculeId, BioTypes bioType, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException,InvocationTargetException {
+   private static BioEntity getPTMMolecule(String bioPTMMoleculeId, BioTypes bioType, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException,InvocationTargetException {
        if (bioPTMMoleculeId != null) {
            log.info("ptmMoleculeId =" + bioPTMMoleculeId);
            return (BioEntity)getBioEntityFromBioType(subGraph, bioType, BioFields.MOLECULE_IDREF, bioPTMMoleculeId);
@@ -1224,11 +1203,11 @@ public class NCIPathwayNeo4JImport {
     * FamilyMemberList: {@link NciPathwayFields#MEMBER_MOLECULE_IDREF}
     * 
     */
-   private static void setFamilyMemberList(BasicDBObject dbObj, NamedProtein startEntity, Subgraph subGraph ) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException {
+   private static void setFamilyMemberList(BasicDBObject dbObj, NamedProtein startEntity, Subgraph subGraph ) throws ClassNotFoundException, IllegalAccessException, InstantiationException, IllegalArgumentException, NoSuchMethodException, InvocationTargetException, URISyntaxException, IOException, HttpException, NoSuchFieldException {
        log.info("setFamilyMemberList()");
        BasicDBList moleculeList = getBasicDBList(dbObj, NciPathwayFields.FAMILY_MEMBER_LIST); 
        if (moleculeList != null && moleculeList.size() > 0) {
-        Collection<FamilyMemberRelation> relations = new HashSet<FamilyMemberRelation>();    
+        Collection<FamilyMemberRelation> relations = new HashSet<>();
         for (Object obj : moleculeList) {
                 BasicDBObject molecule = (BasicDBObject)obj;     
                 String moleculeIdRef = getString(molecule, NciPathwayFields.MEMBER_MOLECULE_IDREF);
@@ -1366,7 +1345,7 @@ public class NCIPathwayNeo4JImport {
     * fields and relationships?
     * 
     */
-   private static Object getBioMolecule(String value, BioFields key, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException,InvocationTargetException {
+   private static Object getBioMolecule(String value, BioFields key, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException,InvocationTargetException {
        Object entity = getBioEntityFromIndex(IndexNames.MOLECULE_IDREF, key, value, subGraph);
        if (entity == null) {
            entity = getBioEntity(key, value, subGraph);
@@ -1374,14 +1353,14 @@ public class NCIPathwayNeo4JImport {
        return entity;
    }
    
-   private static Object getProtein(String moleculeIdRef, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException,InvocationTargetException {
+   private static Object getProtein(String moleculeIdRef, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException,InvocationTargetException {
         Protein protein = (Protein)getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.MOLECULE_IDREF, moleculeIdRef);
         /*
         if (protein == null) {
             log.info("protein does not exist, createProtein(), moleculeIdRef " + moleculeIdRef);
             protein = createProtein(moleculeIdRef, subGraph);
         } */
-        return (Object)protein;
+        return protein;
    }
    
    /**
@@ -1425,12 +1404,7 @@ public class NCIPathwayNeo4JImport {
     */
    private static Object getBioEntityFromBioType(Subgraph subGraph, BioTypes bioType, BioFields key, String value) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException {
        log.info("getBioEntityFromBioType()," + bioType.toString() + "," + key.toString() + "=" + value);
-       
-       //Object bioEntity = getBioEntityFromGraph(bioType, key, value);
-       //if (bioEntity == null) {
-           Object bioEntity = subGraph.search(bioType, key, value);
-       //}
-       return bioEntity;
+       return subGraph.search(bioType, key, value);
    }
        
    /**
@@ -1442,7 +1416,7 @@ public class NCIPathwayNeo4JImport {
     * @param subGraph
     * @throws UnsupportedEncodingException 
     */
-   private static void processMoleculeList(NciPathway pathwayEntity, BasicDBList moleculeList, Subgraph subGraph) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NoSuchMethodException, InvocationTargetException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, Exception {       
+   private static void processMoleculeList(NciPathway pathwayEntity, BasicDBList moleculeList, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NoSuchMethodException, InvocationTargetException, URISyntaxException, MalformedURLException, IOException, HttpException, NoSuchFieldException, ServiceException, InterruptedException {
         for (Object obj : moleculeList) {
             BasicDBObject molecule = (BasicDBObject)obj;
             log.info("molecule = " + molecule);
@@ -1511,7 +1485,7 @@ public class NCIPathwayNeo4JImport {
     * creates {@link Complex} BioEntity
     *
     */
-   public static void createComplex(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, UnsupportedEncodingException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, InvocationTargetException {     
+   public static void createComplex(BasicDBObject molecule, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException, InvocationTargetException {
         log.info("createComplex()");
         String preferredSymbol = getPreferredSymbolFromName(molecule);
         boolean created = false;
@@ -1620,9 +1594,7 @@ public class NCIPathwayNeo4JImport {
               */
              goEntity.setGoIsAComplexRelationship(bioEntity);
              log.info("created goEntity=" + goId);
-             if (created) {
-                 subGraph.add(goEntity);
-             }
+             subGraph.add(goEntity);
              return goEntity;
          } else {
             return null;
@@ -1631,9 +1603,9 @@ public class NCIPathwayNeo4JImport {
    
    
    
-   public static void processGeneOntologies(BasicDBObject dbObj, Subgraph subGraph) {
+   //public static void processGeneOntologies(BasicDBObject dbObj, Subgraph subGraph) {
        
-   }
+   //}
    
    
    
@@ -1645,14 +1617,14 @@ public class NCIPathwayNeo4JImport {
     */
    private static void setComplexNames(BasicDBObject molecule, Complex complex, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, InvocationTargetException {
        log.info("setComplexNames()");
-       BasicDBList dbList = getBasicDBList((DBObject)molecule, NciPathwayFields.NAME); 
+       BasicDBList dbList = getBasicDBList(molecule, NciPathwayFields.NAME);
        //log.info("dbList.size() " + dbList.size());
        if (dbList != null) {
           for (Object obj : dbList) { 
                log.info("obj =" + obj.toString());
                 BasicDBObject dbObj = (BasicDBObject)obj;
                 if (isGeneOntology(dbObj)) {
-                    GeneOntology geneOntology = getGeneOntology(dbObj, complex, subGraph);
+                    getGeneOntology(dbObj, complex, subGraph);
                 }
                 if (isPreferredSymbol(dbObj)) {
                     String preferredSymbol = getPreferredSymbolValue(dbObj);
@@ -1680,7 +1652,7 @@ public class NCIPathwayNeo4JImport {
        log.info("getPreferredSymbolFromName");
        if (molecule != null) {
           log.info("molecule is not null");
-          BasicDBList dbList = getBasicDBList((DBObject)molecule, NciPathwayFields.NAME);  
+          BasicDBList dbList = getBasicDBList(molecule, NciPathwayFields.NAME);
           if (dbList != null) {
               log.info("dbList =" + dbList.toString());
               for (Object obj : dbList) { 
@@ -1786,7 +1758,7 @@ public class NCIPathwayNeo4JImport {
      * @throws InvocationTargetException
      * @throws Exception
      */
-    public static NciPathwayInteraction createInteractionEntity(NciPathway pathwayEntity, BasicDBObject interactionObj, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException,InvocationTargetException, Exception {
+    public static NciPathwayInteraction createInteractionEntity(NciPathway pathwayEntity, BasicDBObject interactionObj, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException, InvocationTargetException, InterruptedException {
         log.info("createInteractionEntity()");
         String interactionId = getString(interactionObj, NciPathwayFields.ID);
         NciPathwayInteraction entity = (NciPathwayInteraction)getBioEntityFromBioType(subGraph, BioTypes.NCI_PATHWAY_INTERACTION, BioFields.INTERACTION_ID, interactionId);
@@ -1797,37 +1769,35 @@ public class NCIPathwayNeo4JImport {
                             getString(interactionObj, NciPathwayFields.INTERACTION_TYPE));
             created = true;
         }
-        
-        if (entity != null) {
-            if (exists(interactionObj, NciPathwayFields.CONDITION_TYPE)) {
-            entity.setConditionType(getString(interactionObj, NciPathwayFields.CONDITION_TYPE));
-            }      
-            if (exists(interactionObj, NciPathwayFields.POSITIVE_CONDITION)) {
-                entity.setIsConditionPositive(getStringFromEnum(BioFields.DEFAULT_POSITIVE_CONDITION_VAL));
-            } else {
-                if (exists(interactionObj, NciPathwayFields.NEGATIVE_CONDITON)) {
-                    entity.setIsConditionPositive(getStringFromEnum(BioFields.DEFAULT_NEGATIVE_CONDITION_VAL));
-                }
-            }
-            if (exists(interactionObj, NciPathwayFields.EVIDENCE_LIST)) {
-                entity.setEvidenceList(getListAsString(getBasicDBList(interactionObj, NciPathwayFields.EVIDENCE_LIST), NciPathwayFields.NCI_VALUE));
-                //log.info("setEvidenceList");
-            }
-            entity.setSourceId(getString(interactionObj, NciPathwayFields.SOURCE_ID));
-            entity.setSourceText(getString(interactionObj, NciPathwayFields.SOURCE_TEXT));
-            entity.setConditionText(getString(interactionObj, NciPathwayFields.TEXT));
-            if (exists(interactionObj, NciPathwayFields.REFERENCE_LIST)) {
-                //String reference = getListAsString(
-                setPubMedRelation(entity, interactionObj, subGraph); 
-                //getBasicDBList(interactionObj, NciPathwayFields.REFERENCE_LIST), NciPathwayFields.PMID);
-                //entity.setReferenceList(reference);
-               
-            }  
-            if (exists(interactionObj, NciPathwayFields.INTERACTION_TYPE)) {
-                entity.setInteractionType(getString(interactionObj, NciPathwayFields.INTERACTION_TYPE));
-            }  
-            processInteractionComponentList(pathwayEntity, entity, interactionObj, subGraph);
+
+        if (exists(interactionObj, NciPathwayFields.CONDITION_TYPE)) {
+        entity.setConditionType(getString(interactionObj, NciPathwayFields.CONDITION_TYPE));
         }
+        if (exists(interactionObj, NciPathwayFields.POSITIVE_CONDITION)) {
+            entity.setIsConditionPositive(getStringFromEnum(BioFields.DEFAULT_POSITIVE_CONDITION_VAL));
+        } else {
+            if (exists(interactionObj, NciPathwayFields.NEGATIVE_CONDITON)) {
+                entity.setIsConditionPositive(getStringFromEnum(BioFields.DEFAULT_NEGATIVE_CONDITION_VAL));
+            }
+        }
+        if (exists(interactionObj, NciPathwayFields.EVIDENCE_LIST)) {
+            entity.setEvidenceList(getListAsString(getBasicDBList(interactionObj, NciPathwayFields.EVIDENCE_LIST), NciPathwayFields.NCI_VALUE));
+            //log.info("setEvidenceList");
+        }
+        entity.setSourceId(getString(interactionObj, NciPathwayFields.SOURCE_ID));
+        entity.setSourceText(getString(interactionObj, NciPathwayFields.SOURCE_TEXT));
+        entity.setConditionText(getString(interactionObj, NciPathwayFields.TEXT));
+        if (exists(interactionObj, NciPathwayFields.REFERENCE_LIST)) {
+            //String reference = getListAsString(
+            setPubMedRelation(entity, interactionObj, subGraph);
+            //getBasicDBList(interactionObj, NciPathwayFields.REFERENCE_LIST), NciPathwayFields.PMID);
+            //entity.setReferenceList(reference);
+
+        }
+        if (exists(interactionObj, NciPathwayFields.INTERACTION_TYPE)) {
+            entity.setInteractionType(getString(interactionObj, NciPathwayFields.INTERACTION_TYPE));
+        }
+        processInteractionComponentList(pathwayEntity, entity, interactionObj, subGraph);
         
         /* add it only once */
         if (created) {
@@ -1849,9 +1819,10 @@ public class NCIPathwayNeo4JImport {
      *       }
      *     ]
     */
-    private static void setPubMedRelation(NciPathwayInteraction entity, BasicDBObject interactionObj, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException,IllegalArgumentException, InvocationTargetException, Exception {
+    private static void setPubMedRelation(NciPathwayInteraction entity, BasicDBObject interactionObj, Subgraph subGraph) throws ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException, IllegalArgumentException, InvocationTargetException, InterruptedException, IOException, HttpException {
          BasicDBList dbList = getBasicDBList(interactionObj, NciPathwayFields.REFERENCE_LIST);
-         for (Object obj : dbList) {
+        if (null == dbList) return;
+        for (Object obj : dbList) {
              String pubMedId = getString((BasicDBObject)obj, NciPathwayFields.PMID);
              PubMed pubMed = (PubMed)subGraph.search(BioTypes.PUBMED, BioFields.PUBMED_ID, pubMedId);
              if (pubMed == null) { 
@@ -1892,7 +1863,7 @@ public class NCIPathwayNeo4JImport {
      * @param pathwayEntity 
      * @param interactionList 
      */
-    public static void processInteractionList(NciPathway pathwayEntity, BasicDBList interactionList, Subgraph subGraph) throws UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, MalformedURLException, IOException, UnknownHostException, HttpException, NoSuchFieldException, InvocationTargetException, Exception {
+    public static void processInteractionList(NciPathway pathwayEntity, BasicDBList interactionList, Subgraph subGraph) throws IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException, NoSuchFieldException, InvocationTargetException, InterruptedException {
         //BasicDBList interactionList = (BasicDBList)pathwayInfo.get((Object)INTERACTION_LIST);
         if (interactionList != null && interactionList.size() > 0) {
             Iterator iter = interactionList.iterator();
@@ -1966,11 +1937,7 @@ public class NCIPathwayNeo4JImport {
      * @return true if it exists or false if not does exist
      */
     private static boolean labelExists(BasicDBObject obj) {
-        if (obj.get(getStringFromEnum(NciPathwayFields.LABEL)) != null) { 
-            return true;
-        } else {
-            return false;
-        }
+        return obj.get(getStringFromEnum(NciPathwayFields.LABEL)) != null;
     }
     
     
@@ -1984,7 +1951,7 @@ public class NCIPathwayNeo4JImport {
        * set the properties of this entity for label
        */
       if (map != null && map.size() > 0) {
-         setProperties((Object)entity, map);
+         setProperties(entity, map);
          setGeneOntologyRelationship(entity, map);
       } 
   }
@@ -2011,15 +1978,15 @@ public class NCIPathwayNeo4JImport {
                     } else if ((activityState = getActivityState(labelBson, labelType)) == null) {
                     } else function = getFunction(labelBson, labelType);                                                 
                 }
-                Map map = new HashMap();
+                Map<String, String> map = new HashMap<>();
                 if (location != null) {
-                    map.put(BioFields.LOCATION, location);
+                    map.put(BioFields.LOCATION.toString(), location);
                 }
                 if (activityState != null) {
-                    map.put(BioFields.ACTIVITY_STATE, activityState);
+                    map.put(BioFields.ACTIVITY_STATE.toString(), activityState);
                 }
                 if (function != null) {
-                    map.put(BioFields.FUNCTION, function);
+                    map.put(BioFields.FUNCTION.toString(), function);
                 } 
                 return map;               
             }
@@ -2038,13 +2005,13 @@ public class NCIPathwayNeo4JImport {
     private static void checkAndSetLabel(BasicDBObject molecule, BioEntity entity) throws IllegalAccessException, URISyntaxException {  
         if (labelExists(molecule)) {
             BasicDBObject labelObj = getLabel(molecule);
-            Map map = new HashMap();
+            Map<String, String> map = new HashMap<>();
             String location = getLocation(labelObj, getStringFromEnum(NciPathwayFields.LOCATION));
             String function = getFunction(labelObj, getStringFromEnum(NciPathwayFields.FUNCTION));
             String activityState = getActivityState(labelObj, getStringFromEnum(NciPathwayFields.ACTIVITY_STATE));
-            map.put(BioFields.LOCATION, location);
-            map.put(BioFields.ACTIVITY_STATE, activityState);
-            map.put(BioFields.FUNCTION, function); 
+            map.put(BioFields.LOCATION.toString(), location);
+            map.put(BioFields.ACTIVITY_STATE.toString(), activityState);
+            map.put(BioFields.FUNCTION.toString(), function);
             setProperties(entity, map);
          }
      }
@@ -2118,12 +2085,13 @@ public class NCIPathwayNeo4JImport {
         Object interactionObj = interactionDbObj.get(getStringFromEnum(NciPathwayFields.INTERACTION_COMPONENT_LIST));
         if (!isString(interactionObj)) {
             BasicDBList interactionComponentList = getBasicDBList(interactionDbObj, NciPathwayFields.INTERACTION_COMPONENT_LIST);
+            if (interactionComponentList == null) return;
             Iterator interactionComponentIter = interactionComponentList.iterator();
-            List moleculeList = new ArrayList();
-            List outputMoleculeList = new ArrayList();
+            List<Map<String, String>> moleculeList = new ArrayList();
+            List<Map> outputMoleculeList = new ArrayList();
             while (interactionComponentIter.hasNext()) {
-                Map outputMap = new HashMap();
-                Map roleMap = new HashMap();
+                Map<String, String> outputMap = new HashMap<>();
+                Map<String, String> roleMap = new HashMap<>();
                 BasicDBObject interactionComponent = (BasicDBObject)interactionComponentIter.next();   
                 String roleType = getString(interactionComponent, NciPathwayFields.ROLE_TYPE);
                 String moleculeIdref = getString(interactionComponent, NciPathwayFields.MOLECULE_IDREF);                                       
@@ -2136,46 +2104,48 @@ public class NCIPathwayNeo4JImport {
                     Iterator labelIter = labelBsonList.iterator();                                                       
                     while (labelIter.hasNext()) {
                         labelBson = (BasicDBObject)labelIter.next();
-                            String labelType = getString(labelBson, NciPathwayFields.LABEL_TYPE); 
-                            if ((location = getLocation(labelBson, labelType)) == null) {
-                            } else if ((activityState = getActivityState(labelBson, labelType)) == null) {
-                            } else function = getFunction(labelBson, labelType);                                                 
+                            String labelType = getString(labelBson, NciPathwayFields.LABEL_TYPE);
+                        if (null != (location = getLocation(labelBson, labelType))) {
+                            if ((activityState = getActivityState(labelBson, labelType)) != null) {
+                                function = getFunction(labelBson, labelType);
+                            }
+                        }
                     }                       
                     if (OncologyRoles.isOutput(roleType)) {
                         if (location != null) {
-                            outputMap.put(BioFields.LOCATION, location);
+                            outputMap.put(BioFields.LOCATION.toString(), location);
                         }
                         if (activityState != null) {
-                            outputMap.put(BioFields.ACTIVITY_STATE, activityState);
+                            outputMap.put(BioFields.ACTIVITY_STATE.toString(), activityState);
                         }
                         if (function != null) {
-                            outputMap.put(BioFields.FUNCTION, function);
+                            outputMap.put(BioFields.FUNCTION.toString(), function);
                         }
-                        outputMap.put(BioFields.ROLE_TYPE, roleType);
-                        outputMap.put(BioFields.MOLECULE_IDREF, moleculeIdref);     
+                        outputMap.put(BioFields.ROLE_TYPE.toString(), roleType);
+                        outputMap.put(BioFields.MOLECULE_IDREF.toString(), moleculeIdref);
                         outputMoleculeList.add(outputMap);
                     } else {  
                         if (location != null) {
-                            roleMap.put(BioFields.LOCATION, location);
+                            roleMap.put(BioFields.LOCATION.toString(), location);
                         }
                         if (activityState != null) {
-                            roleMap.put(BioFields.ACTIVITY_STATE, activityState);
+                            roleMap.put(BioFields.ACTIVITY_STATE.toString(), activityState);
                         }
                         if (function != null) {
-                            roleMap.put(BioFields.FUNCTION, function);
+                            roleMap.put(BioFields.FUNCTION.toString(), function);
                         }
-                        roleMap.put(BioFields.ROLE_TYPE, roleType);
-                        roleMap.put(BioFields.MOLECULE_IDREF, moleculeIdref);
+                        roleMap.put(BioFields.ROLE_TYPE.toString(), roleType);
+                        roleMap.put(BioFields.MOLECULE_IDREF.toString(), moleculeIdref);
                         moleculeList.add(roleMap);
                     }                  
                 } else {  // if there is no label for a given molecule
                     if (OncologyRoles.isOutput(roleType)) {
-                        outputMap.put(BioFields.ROLE_TYPE, roleType);
-                        outputMap.put(BioFields.MOLECULE_IDREF, moleculeIdref);     
+                        outputMap.put(BioFields.ROLE_TYPE.toString(), roleType);
+                        outputMap.put(BioFields.MOLECULE_IDREF.toString(), moleculeIdref);
                         outputMoleculeList.add(outputMap);
                     } else {
-                        roleMap.put(BioFields.ROLE_TYPE, roleType);
-                        roleMap.put(BioFields.MOLECULE_IDREF, moleculeIdref);
+                        roleMap.put(BioFields.ROLE_TYPE.toString(), roleType);
+                        roleMap.put(BioFields.MOLECULE_IDREF.toString(), moleculeIdref);
                         moleculeList.add(roleMap);
                     }
                 }
@@ -2202,7 +2172,7 @@ public class NCIPathwayNeo4JImport {
          Iterator iter = keys.iterator();
          while (iter.hasNext()) {
              String key = (String)iter.next();
-             boolean setFieldValue = npt.setFieldValue(entity, getStringFromMap(mapObj, key), key);
+             npt.setFieldValue(entity, getStringFromMap(mapObj, key), key);
          }
     }
 
@@ -2233,7 +2203,7 @@ public class NCIPathwayNeo4JImport {
      */
     public static void createInteractionComponent(NciPathwayInteraction interactionEntity, List moleculeList, List outputMoleculeList, Subgraph subGraph) throws UnsupportedEncodingException, ClassNotFoundException, IllegalAccessException, InstantiationException, URISyntaxException, NoSuchFieldException {
          log.info("createInteractionComponent()");
-         List outputEntityList = new ArrayList();
+         List<BioEntity> outputEntityList = new ArrayList<>();
          if (interactionEntity != null) { 
             String interactionId = interactionEntity.getInteractionId();
             if (interactionId != null) {
@@ -2339,7 +2309,7 @@ public class NCIPathwayNeo4JImport {
                 BioRelTypes.AN_INTERACTION,
                 (BioEntity)startEntity,
                 (BioEntity)interactionEntity,
-                (Map)dbObj);
+                dbObj);
     }
     
     /**
@@ -2361,11 +2331,7 @@ public class NCIPathwayNeo4JImport {
      */
     public static boolean isLocation(BasicDBObject dbObj) {
           String name = getString(dbObj, NciPathwayFields.AT_NAME);
-          if (name.equals(getStringFromEnum(NciPathwayFields.LOCATION))) {
-              return true;
-          } else{
-              return false;
-          }
+        return name.equals(getStringFromEnum(NciPathwayFields.LOCATION));
      }
     
     /**
@@ -2417,7 +2383,7 @@ public class NCIPathwayNeo4JImport {
      * 
      *@param obj 
      */
-    public static GeneOntology getGeneOntology(BasicDBObject obj, Subgraph subGraph) throws NoSuchFieldException, NoSuchFieldException, NoSuchFieldException, NoSuchFieldException, NoSuchFieldException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException,InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static GeneOntology getGeneOntology(BasicDBObject obj, Subgraph subGraph) throws NoSuchFieldException, NoSuchFieldException, NoSuchFieldException, NoSuchFieldException, NoSuchFieldException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, InvocationTargetException, IOException, RuntimeException, InterruptedException, HttpException {
         if (obj != null) {
             String goId = getGeneOntologyIdentifier(obj);
             if (goId != null) {
@@ -2452,7 +2418,7 @@ public class NCIPathwayNeo4JImport {
      * @throws RuntimeException
      * @throws Exception
      */
-    public static void setLocationList(BasicDBList ontologyObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setLocationList(BasicDBList ontologyObj, Subgraph subGraph) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, InvocationTargetException, IOException, RuntimeException, InterruptedException, HttpException {
          for (Object obj : ontologyObj) {
              if (isLocation((BasicDBObject)obj)) {
                 for (Object lObj : ontologyObj) {
@@ -2488,7 +2454,7 @@ public class NCIPathwayNeo4JImport {
      * @throws RuntimeException
      * @throws Exception
      */
-    public static void setProcessList(BasicDBList ontologyObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setProcessList(BasicDBList ontologyObj, Subgraph subGraph) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, InvocationTargetException, IOException, RuntimeException, InterruptedException, HttpException {
           for (Object obj : ontologyObj) {
              if (isLocation((BasicDBObject)obj)) {
                 for (Object lObj : ontologyObj) {
@@ -2510,11 +2476,7 @@ public class NCIPathwayNeo4JImport {
      */
     public static boolean isProcessType(BasicDBObject dbObj) {
         String name = getString(dbObj, NciPathwayFields.AT_NAME);
-        if (name.equals(getStringFromEnum(NciPathwayFields.PROCESS_TYPE))) {
-            return true;
-        } else {
-            return false;
-        }
+        return name.equals(getStringFromEnum(NciPathwayFields.PROCESS_TYPE));
     }
     
     
@@ -2525,11 +2487,7 @@ public class NCIPathwayNeo4JImport {
      * @return 
      */
     private static boolean exists(BasicDBObject map, NciPathwayFields field) {
-          if (map.get(field.toString()) != null) {
-              return true;
-          } else {
-              return false;
-          }
+        return map.get(field.toString()) != null;
     }
 
     /**
@@ -2571,7 +2529,7 @@ public class NCIPathwayNeo4JImport {
    
     private static BasicDBList getDBList(BasicDBObject dbObject, NciPathwayFields field) {
         if (dbObject == null || field == null) {
-            throw new RuntimeException("dbObject is null for field " + field.toString());
+            throw new RuntimeException("dbObject is null for field " + field);
         }
         Object obj = dbObject.get(field.toString());
         if (obj == null) return null;
@@ -2585,12 +2543,7 @@ public class NCIPathwayNeo4JImport {
     
     private static boolean isObjectString(BasicDBObject dbObject, NciPathwayFields field) {
         Object obj = dbObject.get(field.toString());
-        if (String.class.equals(obj.getClass())) {
-            return true;
-        } else {
-            return false;
-        }
-       
+        return String.class.equals(obj.getClass());
     }
     
     /**
@@ -2602,17 +2555,13 @@ public class NCIPathwayNeo4JImport {
     private static String getStringFromList(BasicDBObject map, NciPathwayFields field) {
         BasicDBList dbList = getBasicDBList(map, field);
         if (dbList != null) {
-            String[] list = ((String[])dbList.toArray(new String[0])); 
-            if (list == null) {
-                return null;
-            } else {
-                StringBuilder sb = new StringBuilder();
-                for (String str : list) {
-                    sb.append(str);
-                    sb.append(" ");
-                }    
-                return sb.toString();  
+            String[] list = dbList.toArray(new String[0]);
+            StringBuilder sb = new StringBuilder();
+            for (String str : list) {
+                sb.append(str);
+                sb.append(" ");
             }
+            return sb.toString();
         } else {
             return null;
         }
@@ -2644,8 +2593,7 @@ public class NCIPathwayNeo4JImport {
      * @return
      */
     private static String getNcbiTaxId(BasicDBObject obj) {
-       String NCBI_TAX_ID = "9606";
-       return NCBI_TAX_ID;
+        return "9606";
        //return (String)obj.get(getStringFromEnum(NciPathwayFields.ORGANISM)); 
     }
     
@@ -2667,7 +2615,7 @@ public class NCIPathwayNeo4JImport {
      * @param pathwayObj
      * @param subGraph 
      */
-    private static NciPathway getPathway(BasicDBObject pathwayObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, ClassNotFoundException, InstantiationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException {
+    private static NciPathway getPathway(BasicDBObject pathwayObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, ClassNotFoundException, InstantiationException, URISyntaxException, IOException, HttpException {
         log.info("getPathway()");
         NciPathway pathwayEntity = (NciPathway)getBioEntityFromBioType(subGraph, BioTypes.NCI_PATHWAY, BioFields.PATHWAY_SHORT_NAME, getString(pathwayObj, NciPathwayFields.SHORT_NAME));
         
@@ -2717,10 +2665,8 @@ public class NCIPathwayNeo4JImport {
             if ((cStr = getSourceId(pathwayObj)) != null) {
                 pathwayEntity.setSourceId(cStr);
             }           
-        }  
-        if (created) {
-           subGraph.add(pathwayEntity);
         }
+        subGraph.add(pathwayEntity);
         return pathwayEntity;
     }
     
@@ -2750,7 +2696,7 @@ public class NCIPathwayNeo4JImport {
      * @throws java.io.IOException
      * @throws java.net.URISyntaxException 
      */
-    public <BioEntity> NciPathway createPathwayNode(String name) throws java.io.IOException, java.net.URISyntaxException, UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NoSuchMethodException, InvocationTargetException, MalformedURLException, UnknownHostException, HttpException, NoSuchFieldException, RuntimeException, Exception {
+    public <BioEntity> NciPathway createPathwayNode(String name) throws java.io.IOException, java.net.URISyntaxException, IllegalAccessException, ClassNotFoundException, InstantiationException, NoSuchMethodException, InvocationTargetException, HttpException, NoSuchFieldException, RuntimeException, InterruptedException {
         
         Map map = NCIPathwayUtil.getPathwayObject(name);
         /**
@@ -2762,8 +2708,8 @@ public class NCIPathwayNeo4JImport {
         BasicDBList ontologyList = NCIPathwayUtil.getOntology(map);
         
         Subgraph subGraph = new Subgraph();
-        relGraph = new ArrayList<RelQueue>();
-        NciPathway pathwayEntity = null;
+        relGraph = new ArrayList<>();
+        NciPathway pathwayEntity;
         
         log.info("moleculeList.size() =" + moleculeList.size());
         log.info("moleculeList =" + moleculeList.toString()); 
@@ -2885,7 +2831,7 @@ public class NCIPathwayNeo4JImport {
                       BioTypes bioType = BioTypes.fromString(bioEntity.getClass().getSimpleName());
                       log.info("bioType " + bioType);
                       if (bioType.equals(BioTypes.COMPLEX)) {
-                          createComplexPTMRelationships((Complex)bioEntity, endEntity, (BasicDBObject)dbObj, subGraph);   
+                          createComplexPTMRelationships((Complex)bioEntity, endEntity, (BasicDBObject)dbObj);
                       } else if (bioType.equals(BioTypes.NAMED_PROTEIN)) {
                           setPTMExpression((BasicDBObject)dbObj, bioEntity, endEntity);
                       } 
