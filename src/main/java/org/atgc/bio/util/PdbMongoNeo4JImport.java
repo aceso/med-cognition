@@ -10,6 +10,7 @@ import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import org.apache.http.HttpException;
 import org.atgc.bio.ImportCollectionNames;
 import org.atgc.bio.MongoClasses;
 import org.atgc.bio.PDBFields;
@@ -24,13 +25,17 @@ import org.atgc.ext.BioStructure;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoObjects;
 import org.atgc.mongod.MongoUtil;
+
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.biojava.bio.structure.StructureException;
 import org.neo4j.graphdb.NotFoundException;
+import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
 
 /**
  *
@@ -175,7 +180,7 @@ public class PdbMongoNeo4JImport {
      * @return
      */
     public static HashSet<Author> getAuthors(String authors) {
-        HashSet<Author> authorSet = new HashSet<Author>();
+        HashSet<Author> authorSet = new HashSet<>();
         if (authors == null) {
             return null;
         }
@@ -300,12 +305,11 @@ public class PdbMongoNeo4JImport {
      */
     private static void loadStructureUniprot(Subgraph subgraph, Structure structure, DBObject query)
             throws NotFoundException,
-                   NoSuchFieldException,
-                   IllegalArgumentException,
-                   IllegalAccessException,
-                   InvocationTargetException,
-                   UnknownHostException,
-                   Exception {
+            NoSuchFieldException,
+            IllegalArgumentException,
+            IllegalAccessException,
+            InvocationTargetException,
+            IOException, StructureException, ServiceException {
 
         DBObject uniprotResult = getCollection(ImportCollectionNames.PDB_UNIPROT).findOneDB(query);
         if (uniprotResult == null) {
@@ -348,13 +352,15 @@ public class PdbMongoNeo4JImport {
                 Chain chain = getChain(structure, chainId);
                 DBObject secondItem = (DBObject)segment.get(1);
                 String uniprotId = getString(secondItem, PDBFields.INT_OBJECT_ID);
-                chain.setProtein(uniprotId);
-                String start = getString(secondItem, PDBFields.START);
-                chain.setStart(new Integer(start));
-                String end = getString(secondItem, PDBFields.END);
-                chain.setEnd(new Integer(end));
-                chain.setAtomLength(BioStructure.getAtomLength(structure.getStructureId(), chainId));
-                chain.setAtomSequence(BioStructure.getAtomSequence(structure.getStructureId(), chainId));
+                if (null != chain) {
+                    chain.setProtein(uniprotId);
+                    String start = getString(secondItem, PDBFields.START);
+                    chain.setStart(new Integer(start));
+                    String end = getString(secondItem, PDBFields.END);
+                    chain.setEnd(new Integer(end));
+                    chain.setAtomLength(BioStructure.getAtomLength(structure.getStructureId(), chainId));
+                    chain.setAtomSequence(BioStructure.getAtomSequence(structure.getStructureId(), chainId));
+                }
             }
         }
     }
@@ -373,7 +379,7 @@ public class PdbMongoNeo4JImport {
         String structureId = structure.getStructureId();
         log.info("structureId = " + structureId);
         BasicDBList basicDBList = getBasicDBList(entityResult, PDBFields.ENTITY);
-        HashSet<Chain> structureChains = new HashSet<Chain>();
+        HashSet<Chain> structureChains = new HashSet<>();
         for (Object entityObj : basicDBList) {
             PdbEntity pdbEntity = new PdbEntity();
             String entityId = getString((BasicDBObject)entityObj, PDBFields.PDB_ID);
@@ -450,24 +456,23 @@ public class PdbMongoNeo4JImport {
      *
      * @throws UnknownHostException
      */
-    public static void loadStructures() throws UnknownHostException, Exception {
-        DBCursor dbCursor = getCollection(ImportCollectionNames.PDB_DESC).findDBCursor("{}" );
+    public static void loadStructures() throws IOException, InvocationTargetException, URISyntaxException, IllegalAccessException, NoSuchFieldException, StructureException, HttpException, ServiceException {
 
         Subgraph subgraph = new Subgraph();
 
         int cntr = 0;
 
-        try {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.PDB_DESC).findDBCursor("{}")) {
             // we expect only one document match
             while (dbCursor.hasNext()) {
                 //if (cntr++ > 5) break;
                 //start = System.currentTimeMillis();
-                BasicDBObject result = (BasicDBObject)dbCursor.next();
+                BasicDBObject result = (BasicDBObject) dbCursor.next();
                 //end = System.currentTimeMillis();
                 //System.out.printf("%s completed in %dms%n", "dbCursor.next()", end - start);
                 String structureId = getString(result, PDBFields.STRUCTURE_ID);
                 //if (StatusUtil.idExists(BioTypes.STRUCTURE, BioFields.STRUCTURE_ID, structureId)) {
-                  //  continue;
+                //  continue;
                 //}
                 Structure structure = getStructure(subgraph, result);
                 //CompoundKey compoundKey = CompoundKey.getCompoundKey(structure);
@@ -482,8 +487,6 @@ public class PdbMongoNeo4JImport {
             }
             log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
             log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
-        } finally {
-            dbCursor.close();
         }
     }
 
