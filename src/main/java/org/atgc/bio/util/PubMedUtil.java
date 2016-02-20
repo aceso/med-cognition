@@ -51,6 +51,7 @@ import org.neo4j.graphdb.NotFoundException;
  *
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class PubMedUtil {
 
     protected static Logger log = LogManager.getLogger(PubMedUtil.class);
@@ -67,7 +68,7 @@ public class PubMedUtil {
      * @return
      * @throws Exception
      */
-    public static BasicDBObject getPubMedQuery(String pubmedId) throws Exception {
+    public static BasicDBObject getPubMedQuery(String pubmedId) {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(BioFields.PUBMED_ID.toString(), pubmedId);
         return queryMap;
@@ -81,7 +82,7 @@ public class PubMedUtil {
      * @return
      * @throws Exception
      */
-    public static boolean pubmedExists(ImportCollectionNames coll, String pubmedId) throws Exception {
+    public static boolean pubmedExists(ImportCollectionNames coll, String pubmedId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
 
         BasicDBList result = collection.findDB(getPubMedQuery(pubmedId));
@@ -471,7 +472,7 @@ public class PubMedUtil {
      * @throws UnknownHostException 
      */
     private static List<Author> getAuthors(Subgraph subgraph, DBObject article) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnknownHostException {
-        List<Author> authors = new ArrayList<Author>();
+        List<Author> authors = new ArrayList<>();
         DBObject obj = getDBObject(article, PubmedMongoFields.AUTHOR_LIST);
         if (obj == null) {
             return authors;
@@ -536,7 +537,7 @@ public class PubMedUtil {
         journalIssue.setIssue(getString(journalIssueObj, PubmedMongoFields.ISSUE));
         journalIssue.setIssn(issn);
         StringBuilder sb = new StringBuilder();
-        BasicDBObject pubDate = null;
+        BasicDBObject pubDate;
         if (isList(journalIssueObj, PubmedMongoFields.PUBDATE)) { 
             BasicDBList result = getBasicDBList(journalIssueObj, PubmedMongoFields.PUBDATE);
             if (result != null && !result.isEmpty()) {
@@ -568,7 +569,6 @@ public class PubMedUtil {
      * @param pubMed
      * @param result
      * @param subgraph
-     * @param pubmedId
      * @throws NotFoundException
      * @throws NoSuchFieldException
      * @throws IllegalArgumentException
@@ -581,7 +581,7 @@ public class PubMedUtil {
      * @throws UnknownHostException
      * @throws HttpException
      */
-    private static void loadPubmed(PubMed pubMed, BasicDBObject result, Subgraph subgraph, String pubmedId)
+    private static void loadPubmed(PubMed pubMed, BasicDBObject result, Subgraph subgraph)
         throws
             NotFoundException,
             NoSuchFieldException,
@@ -589,10 +589,7 @@ public class PubMedUtil {
             IllegalAccessException,
             InvocationTargetException,
             URISyntaxException,
-            UnsupportedEncodingException,
-            MalformedURLException,
             IOException,
-            UnknownHostException,
             HttpException {
         BasicDBObject medlineCitation = getMedlineCitation(result);
         pubMed.setOwner(getOwner(medlineCitation));
@@ -660,15 +657,12 @@ public class PubMedUtil {
      * @throws java.lang.InterruptedException
      */
     public static PubMed getPubmed(String pubMedId, Subgraph subgraph) throws
-            UnknownHostException,
             NotFoundException,
             NoSuchFieldException,
             IllegalArgumentException,
             IllegalAccessException,
             InvocationTargetException,
             URISyntaxException,
-            UnsupportedEncodingException,
-            MalformedURLException,
             IOException,
             HttpException,
             InterruptedException {
@@ -684,7 +678,7 @@ public class PubMedUtil {
                 pubMed = new PubMed();
                 pubMed.setPubMedId(pubMedId);
                 try {
-                    loadPubmed(pubMed, result, subgraph, pubmedId);
+                    loadPubmed(pubMed, result, subgraph);
                 } catch (NullPointerException e) {
                     throw new RuntimeException("Null pointer exception. PubmedId: " + pubmedId, e);
                 }
@@ -700,7 +694,7 @@ public class PubMedUtil {
                         pubMed = new PubMed();
                         pubMed.setPubMedId(pubMedId);
                         try {
-                            loadPubmed(pubMed, result, subgraph, pubmedId);
+                            loadPubmed(pubMed, result, subgraph);
                         } catch (NullPointerException e) {
                             throw new RuntimeException("Null pointer exception. PubmedId: " + pubmedId, e);
                         }
@@ -776,7 +770,7 @@ public class PubMedUtil {
      * @throws IOException
      * @throws HttpException
      */
-    public static void loadPubmed() throws UnknownHostException, NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException {
+    public static void loadPubmed() throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, IOException, HttpException {
         DBCursor dbCursor = getCollection(ImportCollectionNames.PUBMED).findDBCursor("{}" );
 
         Subgraph subgraph = new Subgraph();
@@ -790,7 +784,7 @@ public class PubMedUtil {
                     PubMed pubMed = new PubMed();
                     pubMed.setPubMedId(pubmedId);
                     try {
-                        loadPubmed(pubMed, result, subgraph, pubmedId);
+                        loadPubmed(pubMed, result, subgraph);
                         PersistenceTemplate.saveSubgraph(subgraph);
                         //StatusUtil.idInsert(BioTypes.PUBMED.toString(), BioFields.PUBMED_ID.toString(), pubmedId);
                     } catch (NullPointerException e) {
