@@ -18,7 +18,6 @@ import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +27,7 @@ import org.apache.http.HttpException;
  * > db.pubchemligands.ensureIndex({"PC_Compounds.0.id.id.cid" : 1}, {unique : true})
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class PubChemLigandMongoImport {
 
     protected static Logger log = LogManager.getLogger(PubChemLigandMongoImport.class);
@@ -87,14 +87,13 @@ public class PubChemLigandMongoImport {
         return true;
     }
 
-    public static void loadPubChemLigands() throws UnknownHostException, InterruptedException, IOException, UnsupportedEncodingException, HttpException {
-        DBCursor dbCursor = getCollection(ImportCollectionNames.LIGAND).findDBCursor("{}, {\"@chemicalID\" : 1}" );
+    public static void loadPubChemLigands() throws InterruptedException, IOException, HttpException {
         MongoCollection pubchemColl = getCollection(ImportCollectionNames.PUBCHEM_LIGANDS);
 
-        try {
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.LIGAND).findDBCursor("{}, {\"@chemicalID\" : 1}")) {
             // we expect only one document match
             while (dbCursor.hasNext()) {
-                BasicDBObject result = (BasicDBObject)dbCursor.next();
+                BasicDBObject result = (BasicDBObject) dbCursor.next();
                 String chemicalId = getString(result, "@chemicalID");
                 if (!pubchemExists(ImportCollectionNames.PUBCHEM_LIGANDS, chemicalId)) {
                     String myurl = url + chemicalId + JSON;
@@ -107,20 +106,18 @@ public class PubChemLigandMongoImport {
                         log.error(BioTypes.LIGAND + "Could not fetch url " + myurl, e);
                     }
                     if (content != null) {
-                       //log.info(content);
-                       BasicDBObject res = XMLToJson.stringToBasicDBObject(content);
-                       res.put(CHEMICAL_ID, chemicalId);
-                       pubchemColl.insert(res);
+                        //log.info(content);
+                        BasicDBObject res = XMLToJson.stringToBasicDBObject(content);
+                        res.put(CHEMICAL_ID, chemicalId);
+                        pubchemColl.insert(res);
                     }
                     Thread.sleep(100);
                 }
             }
-        } finally {
-            dbCursor.close();
         }
     }
 
-    public static void main(String[] args) throws UnknownHostException, InterruptedException, IOException, UnsupportedEncodingException, HttpException {
+    public static void main(String[] args) throws InterruptedException, IOException, HttpException {
         loadPubChemLigands();
     }
 }
