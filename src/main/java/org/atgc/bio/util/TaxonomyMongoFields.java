@@ -82,7 +82,7 @@ public enum TaxonomyMongoFields {
     
     private final String value;
 
-    private static final Map<String, TaxonomyMongoFields> stringToEnum = new HashMap<String, TaxonomyMongoFields>();
+    private static final Map<String, TaxonomyMongoFields> stringToEnum = new HashMap<>();
 
     static { // init map from constant name to enum constant
         for (TaxonomyMongoFields en : values()) {
