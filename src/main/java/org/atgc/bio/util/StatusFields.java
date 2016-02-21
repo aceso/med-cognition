@@ -29,7 +29,7 @@ public enum StatusFields {
 
     private final String value;
 
-    private static final Map<String, StatusFields> stringToEnum = new HashMap<String, StatusFields>();
+    private static final Map<String, StatusFields> stringToEnum = new HashMap<>();
 
     static { // init map from constant name to enum constant
         for (StatusFields en : values()) {
