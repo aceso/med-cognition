@@ -30,6 +30,7 @@ import org.neo4j.graphdb.NotFoundException;
  * Uses 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class SystemsBiologyOntologyUtil {
     
     protected static Logger log = LogManager.getLogger(SystemsBiologyOntologyUtil.class);
@@ -39,7 +40,7 @@ public class SystemsBiologyOntologyUtil {
         return mongoUtil.getCollection(coll.toString());
     }
     
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
+    public static void main(String[] args) throws java.io.IOException {
         DBCursor dbCursor = getCollection(ImportCollectionNames.SYSTEMS_BIOLOGY_ONTOLOGY).findDBCursor("{}" );
         try {
             // we expect only one document match
@@ -147,7 +148,7 @@ public class SystemsBiologyOntologyUtil {
      * comment: Definition contributed by Denis Thieffry;\nrefer to \[SF req #3125359\];\nsee also \[PMID:4588055\]
      *
      * createPubMedRelationship
-     * @param sboOnto
+     * @param onto
      * @param dbObj
      * @param subGraph
      * @throws NoSuchFieldException
@@ -164,8 +165,8 @@ public class SystemsBiologyOntologyUtil {
      * @throws InterruptedException
      * @throws Exception 
      */
-    public static void createPubMedRelationship(SystemsBiologyOntology onto, BasicDBObject dbObj,  Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, UnknownHostException, NotFoundException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException, Exception {
-        List<String> pList = new ArrayList();
+    public static void createPubMedRelationship(SystemsBiologyOntology onto, BasicDBObject dbObj,  Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, URISyntaxException, IOException, HttpException, InterruptedException {
+        List<String> pList = new ArrayList<>();
         getPubMedFromComment(dbObj, pList);
         for (String pubMedId : pList) {
             PubMed pubMed = (PubMed)subGraph.search(BioTypes.PUBMED, BioFields.PUBMED_ID, pubMedId);
@@ -183,14 +184,14 @@ public class SystemsBiologyOntologyUtil {
      * 
      * "synonym" : "\"FHOD3/iso:3\" EXACT PRO-short-label [PRO:DNx]"
      *  synonym: "GPT" RELATED [PMID:1931970]
-     * @param obj
-     * @return 
+     * @param list
+      * @param enumField
+      * @return
      */
     public static String getSynonym(BasicDBList list, SystemsBiologyOntologyFields enumField) {
         List synList = new ArrayList();
         for (Object obj : list) {
-            String str = OntologyStrUtil.getString((BasicDBObject)obj, SystemsBiologyOntologyFields.SYNONYM);
-            
+            OntologyStrUtil.getString((BasicDBObject)obj, SystemsBiologyOntologyFields.SYNONYM);
         } 
         if (synList.isEmpty()) {
             return null;
@@ -203,11 +204,11 @@ public class SystemsBiologyOntologyUtil {
      * synonym: "reaction rate constant" []
      * There are no RELATED, EXACT and NARROW in synonym in this.
      * setSynonyms
-     * @param cellOnto
-     * @param obj 
+     * @param sboOnto
+     * @param dbObj
      */
     public static void setSynonyms(SystemsBiologyOntology sboOnto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, SystemsBiologyOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, SystemsBiologyOntologyFields.SYNONYM_LIST);
         String synStr;
         
     }
@@ -250,10 +251,10 @@ public class SystemsBiologyOntologyUtil {
      * @throws RuntimeException
      * @throws Exception 
      */
-    public static void setIsARelationship(SystemsBiologyOntology sboOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIsARelationship(SystemsBiologyOntology sboOnto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException {
          if (OntologyStrUtil.listExists(dbObj, SystemsBiologyOntologyFields.IS_A_LIST)) {
              log.info("setIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, SystemsBiologyOntologyFields.IS_A_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, SystemsBiologyOntologyFields.IS_A_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, SystemsBiologyOntologyFields.IS_A);
                 if (OntologyStrUtil.isSBOOntology(str)) {
@@ -283,7 +284,7 @@ public class SystemsBiologyOntologyUtil {
      * @throws RuntimeException
      * @throws Exception 
      */
-     public static void processSystemBiologyOntology(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void processSystemBiologyOntology(String ontologyId, BasicDBObject obj) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException, RuntimeException, HttpException, InterruptedException, URISyntaxException {
          Subgraph subGraph = new Subgraph();
          SystemsBiologyOntology sboOnto = getSystemBiologyOntology(ontologyId, subGraph);
          if (sboOnto != null) {
