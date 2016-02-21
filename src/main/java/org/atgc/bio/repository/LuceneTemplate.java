@@ -43,6 +43,7 @@ import org.apache.lucene.util.Version;
  * @author jtanisha-ee
  * @param <T>
  */
+@SuppressWarnings("javadoc")
 public class LuceneTemplate<T> {
     private static SimpleFSDirectory idx;
     private static IndexWriterConfig indexWriterConfig;
@@ -121,7 +122,7 @@ public class LuceneTemplate<T> {
      * @throws java.net.URISyntaxException
      * @throws java.lang.NoSuchFieldException
      */
-    public static <T> void addDocument(T t) throws CorruptIndexException, IOException, IllegalAccessException, IllegalArgumentException, URISyntaxException, NoSuchFieldException {
+    public static <T> void addDocument(T t) throws IOException, IllegalAccessException, IllegalArgumentException, URISyntaxException, NoSuchFieldException {
         Document doc = new Document();
 
         // first check if the document exists
@@ -165,7 +166,7 @@ public class LuceneTemplate<T> {
         writer.close();
     }
 
-    private static void addDummyDocument() throws CorruptIndexException, LockObtainFailedException, IOException {
+    private static void addDummyDocument() throws IOException {
         Document doc = new Document();
         indexWriterConfig = new IndexWriterConfig(Version.LUCENE_31, new StandardAnalyzer(Version.LUCENE_31));
         writer = new IndexWriter(idx, indexWriterConfig);
@@ -200,7 +201,7 @@ public class LuceneTemplate<T> {
         return matches;
     }
 
-    public static void main(String[] args) throws CorruptIndexException, IOException, IllegalAccessException, IllegalArgumentException, URISyntaxException, NoSuchFieldException {
+    public static void main(String[] args) throws IOException, IllegalAccessException, IllegalArgumentException, URISyntaxException, NoSuchFieldException {
         StartStatus startStatus = new StartStatus(); // example bioentity
         startStatus.setFeatureId("44:3-422");
         //startStatus.setFeatureId("44:3-422");
