@@ -3,6 +3,7 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.SpatialOntologyFields;
 import org.atgc.bio.repository.PersistenceTemplate;
@@ -10,7 +11,9 @@ import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +29,7 @@ import org.neo4j.graphdb.NotFoundException;
  * Uses 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class SpatialOntologyUtil {
     
     protected static Logger log = LogManager.getLogger(SpatialOntologyUtil.class);
@@ -86,7 +90,7 @@ public class SpatialOntologyUtil {
     
     /**
      * getProteinOntology
-     * @param prId
+     * @param id
      * @param subGraph
      * @return
      * @throws NotFoundException
@@ -173,11 +177,12 @@ public class SpatialOntologyUtil {
      /**
      * 
      *
-     * @param obj
-     * @return 
+     * @param list
+      * @param enumField
+      * @return
      */
     public static String getSynonym(BasicDBList list, SpatialOntologyFields enumField) {
-        List synList = new ArrayList();
+        List<String> synList = new ArrayList<>();
         for (Object obj : list) {
             String str = OntologyStrUtil.getString((BasicDBObject)obj, SpatialOntologyFields.SYNONYM);
             if (str != null && str.contains(enumField.toString())) {
@@ -191,9 +196,7 @@ public class SpatialOntologyUtil {
                     case NARROW:
                         synList.add(getCleanSyn(str," NARROW"));
                 }                  
-            } else {
-               continue;
-            } 
+            }
         } 
         if (synList.isEmpty()) {
             return null;
@@ -217,10 +220,10 @@ public class SpatialOntologyUtil {
      * </pre>
      * setSynonyms
      * @param onto
-     * @param obj 
+     * @param dbObj
      */
     public static void setSynonyms(SpatialOntology onto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, SpatialOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, SpatialOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, SpatialOntologyFields.EXACT)) != null) {
             onto.setSpatialOntologyExactSynonyms(synStr);
@@ -260,7 +263,7 @@ public class SpatialOntologyUtil {
         if (id != null) {
             SpatialOntology entity = getSpatialOntology(id, subGraph);
             if (entity != null) {
-                BioRelTypes relType = getRelationshipType(str, OntologyStrUtil.spatialPattern);
+                BioRelTypes relType = getRelationshipType(str);
                 if (relType == null) {
                     //relType = BioRelTypes.AN_EQUIVALENT_TERM;
                     log.info("relType is null, " + str);
@@ -276,7 +279,7 @@ public class SpatialOntologyUtil {
      * "is_a" : "BSPO:0000400 ! anatomical section"
      * </pre>
      * setIsARelationship
-     * @param prOnto
+     * @param onto
      * @param dbObj
      * @param subGraph
      * @throws NoSuchFieldException
@@ -286,10 +289,9 @@ public class SpatialOntologyUtil {
      * @throws InvocationTargetException
      * @throws UnknownHostException
      * @throws RuntimeException
-     * @throws Exception 
      */
-    public static void setIsARelationship(SpatialOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
-        String str = OntologyStrUtil.getString((BasicDBObject)dbObj, SpatialOntologyFields.IS_A);
+    public static void setIsARelationship(SpatialOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException {
+        String str = OntologyStrUtil.getString(dbObj, SpatialOntologyFields.IS_A);
         if (str != null) {
             String id = getId(str, OntologyStrUtil.spatialPattern);
             if (id != null) {
@@ -309,7 +311,7 @@ public class SpatialOntologyUtil {
      * @param str
      * @return {@link BioRelTypes}
      */
-    public static BioRelTypes getRelationshipType(String str, String pattern) {
+    public static BioRelTypes getRelationshipType(String str) {
         return OntologyStrUtil.getRelationshipType(str, OntologyStrUtil.spatialPattern);
     }
   
@@ -326,10 +328,10 @@ public class SpatialOntologyUtil {
 
      * </pre>
      */
-     public static void setRelationshipList(SpatialOntology prOnto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, Exception {
+     public static void setRelationshipList(SpatialOntology prOnto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
          if (OntologyStrUtil.listExists(dbObj, SpatialOntologyFields.RELATIONSHIP_LIST)) {
              //log.info("createIsARelationship()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, SpatialOntologyFields.RELATIONSHIP_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, SpatialOntologyFields.RELATIONSHIP_LIST);
              for (Object obj : list) {
                  String str = OntologyStrUtil.getString((BasicDBObject)obj, SpatialOntologyFields.RELATIONSHIP);
                  if (OntologyStrUtil.isSpatialOntology(str)) {
@@ -351,9 +353,14 @@ public class SpatialOntologyUtil {
 	]
       * </pre>
       * setIntersectionRelationship
-      * @param prOnto
+      * @param onto
       * @param subGraph
-      * @param str 
+      * @param str
+      * @throws NotFoundException
+      * @throws IllegalArgumentException
+      * @throws NoSuchFieldException
+      * @throws IllegalAccessException
+      * @throws InvocationTargetException
       */
      public static void setIntersectionRelationship(SpatialOntology onto, Subgraph subGraph, String str) throws NotFoundException, IllegalArgumentException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
             String prId = OntologyStrUtil.getId(str, OntologyStrUtil.spatialPattern);
@@ -361,7 +368,7 @@ public class SpatialOntologyUtil {
             if (prId != null) {
                 SpatialOntology entity = getSpatialOntology(prId, subGraph);
                 if (entity != null) {
-                    BioRelTypes relType = getRelationshipType(str, OntologyStrUtil.spatialPattern);
+                    BioRelTypes relType = getRelationshipType(str);
                     if (relType == null) {
                         //relType = BioRelTypes.AN_EQUIVALENT_TERM;
                         log.info("relType is null, " + str);
@@ -385,9 +392,9 @@ public class SpatialOntologyUtil {
       * </pre>
       * 
       */
-     public static void setIntersectionList(SpatialOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, Exception {
+     public static void setIntersectionList(SpatialOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
          if (OntologyStrUtil.listExists(dbObj, SpatialOntologyFields.INTERSECTION_OF_LIST)) {
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, SpatialOntologyFields.INTERSECTION_OF_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, SpatialOntologyFields.INTERSECTION_OF_LIST);
              for (Object obj : list) {
                  String str = OntologyStrUtil.getString((BasicDBObject)obj, SpatialOntologyFields.INTERSECTION_OF);
                  if (OntologyStrUtil.isSpatialOntology(str)) {
@@ -529,7 +536,7 @@ public class SpatialOntologyUtil {
      * @throws RuntimeException
      * @throws Exception 
      */
-     public static void processSpatialOntology(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void processSpatialOntology(String ontologyId, BasicDBObject obj) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException, RuntimeException, HttpException, URISyntaxException {
          Subgraph subGraph = new Subgraph();
          SpatialOntology onto = getSpatialOntology(ontologyId, subGraph);
          if (OntologyStrUtil.objectExists(obj, SpatialOntologyFields.NAME)) { 
