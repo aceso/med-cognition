@@ -67,7 +67,7 @@ public class RelQueue<T> {
         return String.format("%s interacts %s in %s", startNode,  endNodeId);
     }
     
-    public RelQueue() {};
+    public RelQueue() {}
     
     public void add(Object startEntity, String moleculeIdRef, BioFields bioField, Object molecule, Class entityClass) {
        this.startNode = startEntity;
