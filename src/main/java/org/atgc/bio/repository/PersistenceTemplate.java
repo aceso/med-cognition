@@ -38,6 +38,7 @@ import org.neo4j.rest.graphdb.index.RestIndex;
  * @author jtanisha-ee
  *         Use BioFields to fetch BioEntities and Nodes
  */
+@SuppressWarnings("javadoc")
 public class PersistenceTemplate<T> {
 
     protected static final Logger log = LogManager.getLogger(PersistenceTemplate.class);
@@ -172,7 +173,7 @@ public class PersistenceTemplate<T> {
                     //type = ((RelationshipEntity)elementAnno).type();
                     //direction = ((RelationshipEntity)elementAnno).direction();
                 } else if (fieldMatch(elementAnno, AnnotationTypes.REL_TYPE)) {
-                    type = ((BioRelTypes) elementField.get(element)).toString();
+                    type = (elementField.get(element)).toString();
                     log.info("type = " + type);
                 } else if (fieldMatch(elementAnno, AnnotationTypes.REL_PROPERTY)) {
                     Object relElement = elementField.get(element);
@@ -248,17 +249,17 @@ public class PersistenceTemplate<T> {
                 }
             }
         } catch (SecurityException e) {
-            throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with security while saving relations." + e.getMessage(), e);
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with arguments while saving relations." + e.getMessage(), e);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with access while saving relations." + e.getMessage(), e);
         } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with encoding while saving relations." + e.getMessage(), e);
         } catch (URISyntaxException e) {
-            throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with uri while saving relations." + e.getMessage(), e);
         } catch (NoSuchFieldException e) {
-            throw new RuntimeException("Something went wrong while saving relations." + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with fields while saving relations." + e.getMessage(), e);
         }
     }
 
@@ -437,8 +438,6 @@ public class PersistenceTemplate<T> {
             }
             node = pNodeHits.getSingle();
             //log.info("Node exists, propName = " + propName + " Value=  " + propVal + " indexName=" + indexName.toString());
-        } else {
-            //log.info("getNodeFromGraphDb(), node does not exist, " + propName + "=" + propVal + indexName.toString());
         }
         if (pNodeHits != null) {
             pNodeHits.close();
@@ -641,9 +640,7 @@ public class PersistenceTemplate<T> {
                 }
             }
         } else {
-            if (compoundKey != null) {
-                node = getUniquelyIndexedNode(compoundKey.getKey(), compoundKey.getValue(), compoundKey.getIndexName());
-            }
+            node = getUniquelyIndexedNode(compoundKey.getKey(), compoundKey.getValue(), compoundKey.getIndexName());
         }
 
         /**
@@ -759,7 +756,7 @@ public class PersistenceTemplate<T> {
                 RelationshipType relationshipType = rel.getType();
                 String type = relationshipType.name();
                 for (String propKey : rel.getPropertyKeys()) {
-                    R relation = (R) rClass.newInstance();
+                    R relation = rClass.newInstance();
                     for (Field field : relation.getClass().getDeclaredFields()) {
                         if (field.getName().equals(propKey)) {
                             field.setAccessible(true);
@@ -779,8 +776,7 @@ public class PersistenceTemplate<T> {
 
     private static MongoCollection getCollection(String bioType) throws UnknownHostException {
         MongoUtil mongoUtil = MongoUtil.getInstance();
-        MongoCollection bioEntityCollection = mongoUtil.getCollection(bioType);
-        return bioEntityCollection;
+        return mongoUtil.getCollection(bioType);
     }
 
     private static void createIndex(MongoCollection coll, String field, String uniqueKey) {
@@ -838,7 +834,7 @@ public class PersistenceTemplate<T> {
         String nodeType = null;
         String uniqueKey = null;
         BasicDBObject basicDBObject = new BasicDBObject();
-        List<String> indexedFields = new ArrayList<String>();
+        List<String> indexedFields = new ArrayList<>();
         Annotation bioEntityAnno = tClass.getAnnotation(BioEntity.class);
         if (bioEntityAnno == null) {
             throw new RuntimeException("Only saving @BioEntity objects to Mongo are supported.");
@@ -891,16 +887,16 @@ public class PersistenceTemplate<T> {
             saveMongo(indexedFields, basicDBObject, nodeType, uniqueKey);
         } catch (IllegalAccessException e) {
             tx.failure(); //rollback
-            throw new RuntimeException("Something went wrong while saving bioentity.", e);
+            throw new RuntimeException("Something went wrong with access while saving bioentity.", e);
         } catch (IllegalArgumentException e) {
             tx.failure();
-            throw new RuntimeException("Something went wrong while saving bioentity.", e);
+            throw new RuntimeException("Something went wrong with arguments while saving bioentity.", e);
         } catch (SecurityException e) {
             tx.failure();
-            throw new RuntimeException("Something went wrong while saving bioentity.", e);
+            throw new RuntimeException("Something went wrong with security while saving bioentity.", e);
         } catch (UnknownHostException e) {
             tx.failure();
-            throw new RuntimeException("Something went wrong while saving bioentity.", e);
+            throw new RuntimeException("Something went wrong with host while saving bioentity.", e);
         } finally {
             //tx.finish();
             tx.close();
@@ -940,9 +936,7 @@ public class PersistenceTemplate<T> {
                         if (fieldMatch(fieldAnnotation, AnnotationTypes.GRAPH_ID)) {
                             continue; // we skip GraphId as it's an internal field
                         }
-                        if (field.get(t) == null) { // || field.get(t).toString() == null) {
-                            continue;
-                        } else {
+                        if (field.get(t) != null) {
                             /* UniquelyIndexed is saved as property when a node is created */
                             if (fieldMatch(fieldAnnotation, AnnotationTypes.INDEXED)) {
                                 IndexNames indexName = ((Indexed) fieldAnnotation).indexName();
@@ -999,7 +993,7 @@ public class PersistenceTemplate<T> {
      * @throws HttpException
      * @throws java.lang.NoSuchFieldException
      */
-    public static <T> void persistGraph(T t) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, IllegalArgumentException, NoSuchFieldException {
+    public static <T> void persistGraph(T t) throws IllegalAccessException, URISyntaxException, IOException, HttpException, IllegalArgumentException, NoSuchFieldException {
         //log.info("persistGraph()," + t.toString());
 
         Node node = getNode(t);
@@ -1034,7 +1028,7 @@ public class PersistenceTemplate<T> {
      * @throws org.apache.http.HttpException
      * @throws java.lang.NoSuchFieldException
      */
-    public static <T> void save(T t) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, CorruptIndexException, IllegalArgumentException, NoSuchFieldException {
+    public static <T> void save(T t) throws IllegalAccessException, URISyntaxException, IOException, HttpException, IllegalArgumentException, NoSuchFieldException {
         //log.info("save()" + t.toString());
 
         Class tClass = t.getClass();
@@ -1145,9 +1139,7 @@ public class PersistenceTemplate<T> {
                         continue; // we skip GraphId as it's an internal field
                     }
 
-                    if (field.get(t) == null) { // || field.get(t).toString() == null) {
-                        continue;
-                    } else {
+                    if (field.get(t) != null) {
                         if (fieldMatch(fieldAnnotation, AnnotationTypes.INDEXED)) {
                             IndexNames indexName = ((Indexed) fieldAnnotation).indexName();
                             /**
@@ -1171,17 +1163,17 @@ public class PersistenceTemplate<T> {
             }
             log.info("Bioentity saved correctly");
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with access while saving bioentity. " + e.getMessage(), e);
         } catch (URISyntaxException e) {
-            throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with URI while saving bioentity. " + e.getMessage(), e);
         } catch (NoSuchFieldException e) {
-            throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with fields while saving bioentity. " + e.getMessage(), e);
         } catch (RuntimeException e) {
             throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
         } catch (IOException e) {
-            throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with IO while saving bioentity. " + e.getMessage(), e);
         } catch (HttpException e) {
-            throw new RuntimeException("Something went wrong while saving bioentity. " + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with http while saving bioentity. " + e.getMessage(), e);
         }
 
         // save to lucene
@@ -1203,7 +1195,7 @@ public class PersistenceTemplate<T> {
      * @throws UnknownHostException
      * @throws HttpException
      */
-    public static void processFullTextIndex(IndexNames indexName, Long nodeId, String name, String value) throws UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException {
+    public static void processFullTextIndex(IndexNames indexName, Long nodeId, String name, String value) throws IOException, HttpException {
         //log.info("processFulTextIndex(), indexName " + indexName.toString());
 
         //log.info("processFulTextIndex(), indexName " + indexName.toString() + " name=" + name + " value=" + value);
@@ -1280,7 +1272,7 @@ public class PersistenceTemplate<T> {
             //tx.finish();
             tx.close();
         }
-        if (node != null && nodeCreated && nodeIndex != null) {
+        if (node != null && nodeCreated) {
             if (null == nodeIndex.putIfAbsent(node, key, value)) {
                 log.info("ADDED NEW PROPERTY: "  + (++propertyCount));
                 propertyCounts.put(indexName, propertyCounts.getOrDefault(indexName, 0) + 1);
