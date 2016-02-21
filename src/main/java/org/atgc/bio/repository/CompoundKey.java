@@ -6,7 +6,6 @@ package org.atgc.bio.repository;
 
 import org.atgc.bio.BioFields;
 import org.atgc.bio.domain.BioRelation;
-import org.atgc.bio.domain.Complex;
 import org.atgc.bio.domain.IndexNames;
 import org.atgc.bio.meta.AnnotationTypes;
 import org.atgc.bio.meta.PartKey;
@@ -28,6 +27,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class CompoundKey {
 
     private final IndexNames indexName;
@@ -140,7 +140,6 @@ public class CompoundKey {
             return null;
         }
         Field[] fields = t.getClass().getDeclaredFields();
-        StringBuilder sb = new StringBuilder();
         String val1 = null;
         String val2 = null;
         String val3 = null;
