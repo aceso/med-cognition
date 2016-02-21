@@ -51,7 +51,7 @@ public class NCICompound {
         for (int i = 0; i < drugList.size(); i++ ) { 
             Map map = drugIter.next(); 
             //System.out.println("map =" + map.toString());           
-            String geneSymbol = (String)map.get(BioEntityType.HUGO_GENE_SYMBOL);
+            String geneSymbol = (String)map.get(BioEntityType.HUGO_GENE_SYMBOL.toString());
             log.info("******* geneSymbol =" + geneSymbol);
             try {
                 processCompound(geneSymbol);

@@ -199,15 +199,15 @@ public class NCIPathway_Direct {
     
     private static String getNodeType(String moleculeType) {
         
-        if (moleculeType.equals(BioEntityType.RB_COMPLEX)) {
+        if (BioEntityType.RB_COMPLEX.equals(moleculeType)) {
             return BioEntityType.RB_COMPLEX.toString();
-        } else if (moleculeType.equals(BioEntityType.RB_COMPOUND)) {
+        } else if (BioEntityType.RB_COMPOUND.equals(moleculeType)) {
             return BioEntityType.RB_COMPOUND.toString();
-        } else if (moleculeType.equals(BioEntityType.RB_MOLECULE_TYPE)) {
+        } else if (BioEntityType.RB_MOLECULE_TYPE.equals(moleculeType)) {
             return BioEntityType.RB_MOLECULE_TYPE.toString();
-        } else if (moleculeType.equals(BioEntityType.RB_PROTEIN)) {
+        } else if (BioEntityType.RB_PROTEIN.equals(moleculeType)) {
             return BioEntityType.RB_PROTEIN.toString();
-        } else if (moleculeType.equals(BioEntityType.RB_RNA)) {
+        } else if (BioEntityType.RB_RNA.equals(moleculeType)) {
             return BioEntityType.RB_RNA.toString();
         }
         return null;
@@ -1261,7 +1261,7 @@ public class NCIPathway_Direct {
     // Mutating operations go here
                 pathwayNode = graphDb.createNode();
                 //System.out.println("pathwayId = " + pathwayInfo.get((Object)NCI_PATHWAY_ID));
-                pathwayNode.setProperty(PATHWAY_ID, pathwayInfo.get((Object)BioEntityType.NCI_ID) );
+                pathwayNode.setProperty(PATHWAY_ID, pathwayInfo.get((Object)BioEntityType.NCI_ID.toString()) );
                 pathwayNode.setProperty(SUBNET, pathwayInfo.get((Object)SUBNET));
                 pathwayNode.setProperty(ORGANISM, pathwayInfo.get((Object)ORGANISM));
                 if (organismIndex == null) {
@@ -1270,7 +1270,7 @@ public class NCIPathway_Direct {
                 organismIndex.add(pathwayNode, ORGANISM, pathwayInfo.get((Object)ORGANISM));
                 pathwayNode.setProperty(LONG_NAME, pathwayInfo.get((Object)LONG_NAME));
                 pathwayNode.setProperty(SHORT_NAME, pathwayInfo.get((Object)SHORT_NAME));
-                String sourceId = (String)((Map)pathwayInfo.get((Object)SOURCE)).get(BioEntityType.NCI_ID);
+                String sourceId = (String)((Map)pathwayInfo.get((Object)SOURCE)).get(BioEntityType.NCI_ID.toString());
 
                 pathwayNode.setProperty(SOURCE_ID, sourceId);
                 String sourceText = (String)((Map)pathwayInfo.get((Object)SOURCE)).get(NCI_SOURCE_TEXT);

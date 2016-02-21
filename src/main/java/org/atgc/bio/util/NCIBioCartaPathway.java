@@ -2357,7 +2357,7 @@ public class NCIBioCartaPathway {
      * @return
      */
     private static String getSourceId(BasicDBObject pathwayInfo) {
-        return (String) ((BasicDBObject) pathwayInfo.get(getStringFromEnum(NciPathwayFields.SOURCE))).get(BioEntityType.NCI_ID);
+        return (String) ((BasicDBObject) pathwayInfo.get(getStringFromEnum(NciPathwayFields.SOURCE))).get(BioEntityType.NCI_ID.toString());
     }
 
     private static String getSource(BasicDBObject pathwayInfo) {

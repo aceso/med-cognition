@@ -16,6 +16,7 @@ import org.neo4j.rest.graphdb.RestGraphDatabase;
  *
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class XmlPathway {
 /*
     private static JSON xmlUrlToJson(String string) {
