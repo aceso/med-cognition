@@ -2,12 +2,16 @@ package org.atgc.bio.util;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.RNAOntologyFields;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
+
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +32,7 @@ import org.neo4j.graphdb.NotFoundException;
  * Uses 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class RNAOntologyUtil {
     
     protected static Logger log = LogManager.getLogger(RNAOntologyUtil.class);
@@ -37,7 +42,7 @@ public class RNAOntologyUtil {
         return mongoUtil.getCollection(coll.toString());
     }
     
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
+    public static void main(String[] args) throws java.io.IOException {
         DBCursor dbCursor = getCollection(ImportCollectionNames.RNA_ONTOLOGY).findDBCursor("{}" );
         try {
             // we expect only one document match
@@ -144,17 +149,15 @@ public class RNAOntologyUtil {
     /**
      * is_a: CHEBI:25805
      * setIsARelationship
-     * @param HOM
-     * @param dbObj
+     * @param onto
+     * @param obj
      * @param subGraph
      * @throws NoSuchFieldException
      * @throws IllegalArgumentException
      * @throws IllegalAccessException
      * @throws NotFoundException
      * @throws InvocationTargetException
-     * @throws UnknownHostException
      * @throws RuntimeException
-     * @throws Exception 
      */
     /*
     public static void setIsListRelationship(RNAOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
@@ -168,7 +171,7 @@ public class RNAOntologyUtil {
     } */
     
     public static void setIsARelationship(RNAOntology onto, BasicDBObject obj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        String str = OntologyStrUtil.getString((BasicDBObject)obj, RNAOntologyFields.IS_A);
+        String str = OntologyStrUtil.getString(obj, RNAOntologyFields.IS_A);
         if (OntologyStrUtil.isRNAO(str)) {
             String id = getId(str, OntologyStrUtil.RNAOPattern); 
             if (id != null) {
@@ -205,17 +208,12 @@ public class RNAOntologyUtil {
         if (str.contains(OntologyStrUtil.RNAOPattern)) { 
             String str1 = str.split(OntologyStrUtil.RNAOPattern)[0].toUpperCase().trim();
             log.info("str1 =" + str1);
-            if (str1 != null) {
-                if (str1.contains("#")) { 
-                    String str2 = str1.split("#")[1];
-                    return BioRelTypes.getEnum(str2);
-                } else {
-                    log.info("str1 =" + str1);
-                    return BioRelTypes.getEnum(str1);
-                }
+            if (str1.contains("#")) {
+                String str2 = str1.split("#")[1];
+                return BioRelTypes.getEnum(str2);
             } else {
-                log.info("default relationship " + str);
-                return BioRelTypes.IS_RELATIONSHIP;
+                log.info("str1 =" + str1);
+                return BioRelTypes.getEnum(str1);
             }
         } else {
             return null;
@@ -237,7 +235,7 @@ public class RNAOntologyUtil {
     */
     public static void setRelationship(RNAOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
          if (OntologyStrUtil.listExists(dbObj, RNAOntologyFields.RELATIONSHIP)) {
-            String str = OntologyStrUtil.getString((BasicDBObject)dbObj, RNAOntologyFields.RELATIONSHIP);
+            String str = OntologyStrUtil.getString(dbObj, RNAOntologyFields.RELATIONSHIP);
             if (OntologyStrUtil.isHOM(str)) {
                 String id = getId(str, OntologyStrUtil.RNAOPattern); 
                 if (id != null) {
@@ -266,7 +264,7 @@ public class RNAOntologyUtil {
      * @throws RuntimeException
      * @throws Exception 
      */
-     public static void processRNAOntology(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void processRNAOntology(String ontologyId, BasicDBObject obj) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException, RuntimeException, HttpException, URISyntaxException {
          Subgraph subGraph = new Subgraph();
          RNAOntology RNAO = getRNAOntology(ontologyId, subGraph);
          if (OntologyStrUtil.objectExists(obj, RNAOntologyFields.NAME)) { 
