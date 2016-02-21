@@ -3,11 +3,15 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
+
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +28,7 @@ import org.neo4j.graphdb.NotFoundException;
  * Uses 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class TaxonomicRankOntologyUtil {
     
     protected static Logger log = LogManager.getLogger(TaxonomicRankOntologyUtil.class);
@@ -33,7 +38,7 @@ public class TaxonomicRankOntologyUtil {
         return mongoUtil.getCollection(coll.toString());
     }
     
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
+    public static void main(String[] args) throws java.io.IOException {
         DBCursor dbCursor = getCollection(ImportCollectionNames.TAXONOMIC_RANK_ONTOLOGY).findDBCursor("{}" );
         try {
             // we expect only one document match
@@ -122,11 +127,12 @@ public class TaxonomicRankOntologyUtil {
    
      /**
      * 
-     * @param obj
-     * @return 
+     * @param list
+      * @param enumField
+      * @return
      */
     public static String getSynonym(BasicDBList list, TaxonomicRankOntologyFields enumField) {
-        List synList = new ArrayList();
+        List<String> synList = new ArrayList<>();
         for (Object obj : list) {
             String str = OntologyStrUtil.getString((BasicDBObject)obj, TaxonomicRankOntologyFields.SYNONYM);
             if (str != null && str.contains(enumField.toString())) {
@@ -135,9 +141,7 @@ public class TaxonomicRankOntologyUtil {
                         synList.add(getCleanSyn(str, " EXACT"));
                         break;
                 }                  
-            } else {
-               continue;
-            } 
+            }
         } 
         if (synList.isEmpty()) {
             return null;
@@ -150,11 +154,11 @@ public class TaxonomicRankOntologyUtil {
      * 
      * "synonym" : "\"variety\" EXACT []",
      * setSynonyms
-     * @param cellOnto
-     * @param obj 
+     * @param onto
+     * @param dbObj
      */
     public static void setSynonyms(TaxonomicRankOntology onto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, TaxonomicRankOntologyFields.SYNONYM_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, TaxonomicRankOntologyFields.SYNONYM_LIST);
         String synStr;
         if ((synStr = getSynonym(list, TaxonomicRankOntologyFields.EXACT)) != null) {
             onto.setTaxonomicRankOntologyExactSynonyms(synStr);
@@ -175,7 +179,7 @@ public class TaxonomicRankOntologyUtil {
      * xref: http://rs.tdwg.org/ontology/voc/TaxonRank#patho-variety
      */
     public static void setXrefRelationship(TaxonomicRankOntology onto, BasicDBObject dbObj) {
-        BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, TaxonomicRankOntologyFields.XREF_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, TaxonomicRankOntologyFields.XREF_LIST);
         if (list != null && list.size() > 0) {
             for (Object ref : list) {
                 String xRef = getXRef((BasicDBObject)ref);
@@ -224,7 +228,7 @@ public class TaxonomicRankOntologyUtil {
      * All IS_A relationships 
      * is_a: TAXRANK:0000000 ! taxonomic_rank
      * setTaxonIsARelationship
-     * @param string
+     * @param str
      * @param onto {@link TaxonomicRankOntology}
      * @param subGraph
      * @throws NotFoundException
@@ -259,9 +263,9 @@ public class TaxonomicRankOntologyUtil {
      * @throws RuntimeException
      * @throws Exception 
      */
-    public static void setIsARelationship(TaxonomicRankOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIsARelationship(TaxonomicRankOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException {
          if (OntologyStrUtil.listExists(dbObj, TaxonomicRankOntologyFields.IS_A_LIST)) {
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, TaxonomicRankOntologyFields.IS_A_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, TaxonomicRankOntologyFields.IS_A_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, TaxonomicRankOntologyFields.IS_A);
                 if (OntologyStrUtil.isTaxonmicRankOntology(str)) {
@@ -291,7 +295,7 @@ public class TaxonomicRankOntologyUtil {
      * @throws RuntimeException
      * @throws Exception 
      */
-     public static void processTaxRankOntology(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void processTaxRankOntology(String ontologyId, BasicDBObject obj) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException, RuntimeException, HttpException, URISyntaxException {
          Subgraph subGraph = new Subgraph();
          TaxonomicRankOntology onto = getTaxRankOntology(ontologyId, subGraph);
          if (OntologyStrUtil.objectExists(obj, TaxonomicRankOntologyFields.NAME)) { 
