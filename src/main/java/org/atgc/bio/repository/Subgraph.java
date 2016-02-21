@@ -24,12 +24,12 @@ import org.neo4j.graphdb.NotFoundException;
  * @param <T>
  *
  */
+@SuppressWarnings("javadoc")
 public class Subgraph<T> {
 
     protected static Logger log = LogManager.getLogger(Subgraph.class);
-    private static final String BIO_RELATION = "BioRelation";
 
-    private final Map<BioTypes, List> beMap = new EnumMap<BioTypes, List>(BioTypes.class);
+    private final Map<BioTypes, List> beMap = new EnumMap<>(BioTypes.class);
 
     private int cntr = 0;
 
@@ -46,10 +46,7 @@ public class Subgraph<T> {
         Class tClass = t.getClass();
         String bioType = tClass.getSimpleName();
         log.info("add() bioType = " + bioType + "," + (++cntr));
-        if (bioType == null) {
-            throw new RuntimeException("bioType is null" + tClass.getName());
-        }
-        //log.info("bioType = " + bioType);
+       //log.info("bioType = " + bioType);
         BioTypes bt = BioTypes.fromString(bioType);
         if (bt != null) {
             List beList;
@@ -89,18 +86,17 @@ public class Subgraph<T> {
 
     public <T> T fetch(List list, BioFields key, String value) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
         //log.info("fetch() " + key.toString() + "="+ value);
-        String fieldName = key.toString();
         try {
             for (int i = 0; i < list.size(); i++) {
                 Object obj = (Object)list.get(i);
-                if (valueMatch((T)obj, key, value)) {
+                if (valueMatch(obj, key, value)) {
                     return (T)obj;
                 }
             }
         } catch(IllegalArgumentException e) {
-            throw new RuntimeException("Fetch(), error " + e.getMessage(), e);
+            throw new RuntimeException("Fetch(), error with argument " + e.getMessage(), e);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Fetch(), error " + e.getMessage(), e);
+            throw new RuntimeException("Fetch(), error with access " + e.getMessage(), e);
         }
         return null;
     }
@@ -125,11 +121,7 @@ public class Subgraph<T> {
                         Annotation[] fieldAnnotations = field.getAnnotations();
                         for (Annotation fieldAnnotation : fieldAnnotations) {
                             if (fieldMatch(fieldAnnotation, AnnotationTypes.INDEXED)) {
-                                //if (field.getName().equals(BioFields.MOLECULE_IDREF.toString())) {
-                                    if (field.get(t) != null) {
-                                       // log.info(tClass.getSimpleName() + "," + field.getName() + "=" + field.get(t).toString());
-                                    }
-                               // }
+
                             }
                         }
                     }
@@ -210,8 +202,7 @@ public class Subgraph<T> {
      */
     public static Object getBioEntityFromBioType(Subgraph subGraph, BioTypes bioType, BioFields key, String value) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException {
         //log.info("getBioEntityFromBioType()," + bioType.toString() + "," + key.toString() + "=" + value);
-        Object bioEntity = subGraph.search(bioType, key, value);
-        return bioEntity;
+        return subGraph.search(bioType, key, value);
     }
 
 }
