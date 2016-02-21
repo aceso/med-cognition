@@ -3,6 +3,7 @@ package org.atgc.bio.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.domain.SymptomOntology;
 import org.atgc.bio.repository.PersistenceTemplate;
@@ -10,7 +11,9 @@ import org.atgc.bio.repository.Subgraph;
 import org.atgc.mongod.MongoCollection;
 import org.atgc.mongod.MongoUtil;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.*;
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +30,7 @@ import org.neo4j.graphdb.NotFoundException;
  * Uses 
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class SymptomOntologyUtil {
     
     protected static Logger log = LogManager.getLogger(SymptomOntologyUtil.class);
@@ -36,7 +40,7 @@ public class SymptomOntologyUtil {
         return mongoUtil.getCollection(coll.toString());
     }
     
-    public static void main(String[] args) throws java.io.IOException, UnknownHostException, Exception {
+    public static void main(String[] args) throws java.io.IOException {
         DBCursor dbCursor = getCollection(ImportCollectionNames.SYMPTOM_ONTOLOGY).findDBCursor("{}" );
         try {
             // we expect only one document match
@@ -142,11 +146,12 @@ public class SymptomOntologyUtil {
 	],
        </pre>
      * 
-     * @param obj
-     * @return 
+     * @param list
+     * @param enumField
+     * @return
      */
     public static String getSynonym(BasicDBList list, SymptomOntologyFields enumField) {
-        List synList = new ArrayList();
+        List<String> synList = new ArrayList<>();
         for (Object obj : list) {
             String str = OntologyStrUtil.getString((BasicDBObject)obj, SymptomOntologyFields.SYNONYM);
             if (str != null && str.contains(enumField.toString())) {
@@ -158,15 +163,10 @@ public class SymptomOntologyUtil {
                         synList.add(OntologyStrUtil.getCleanSyn(str, " RELATED"));
                         break;
                 }                  
-            } else {
-               continue;
-            } 
+            }
         } 
-        if (synList.isEmpty()) {
-            return null;
-        } else {
-            return synList.toString();
-        } 
+        if (synList.isEmpty()) return null;
+        return synList.toString();
     }
     
     /**
@@ -229,12 +229,11 @@ public class SymptomOntologyUtil {
      * @throws InvocationTargetException
      * @throws UnknownHostException
      * @throws RuntimeException
-     * @throws Exception 
      */
-    public static void setIsARelationship(SymptomOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, NotFoundException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+    public static void setIsARelationship(SymptomOntology onto, BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException {
          if (OntologyStrUtil.listExists(dbObj, SymptomOntologyFields.IS_A_LIST)) {
              log.info("setIsARelationships()");
-             BasicDBList list = (BasicDBList)OntologyStrUtil.getList(dbObj, SymptomOntologyFields.IS_A_LIST);
+             BasicDBList list = OntologyStrUtil.getList(dbObj, SymptomOntologyFields.IS_A_LIST);
              for (Object obj : list) {
                 String str = OntologyStrUtil.getString((BasicDBObject)obj, SymptomOntologyFields.IS_A);
                 if (OntologyStrUtil.isSymptom(str)) {
@@ -264,7 +263,7 @@ public class SymptomOntologyUtil {
      * @throws RuntimeException
      * @throws Exception 
      */
-     public static void processSymptomOntology(String ontologyId, BasicDBObject obj) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, UnknownHostException, RuntimeException, Exception {
+     public static void processSymptomOntology(String ontologyId, BasicDBObject obj) throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException, RuntimeException, HttpException, URISyntaxException {
          Subgraph subGraph = new Subgraph();
          SymptomOntology onto = getSymptomOntology(ontologyId, subGraph);
          if (onto != null) {
