@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * This contains some string functions.
  *
- * @author Smitha Gudur
+ * @author aceso
  */
 @SuppressWarnings("javadoc")
 public class StrUtil {
