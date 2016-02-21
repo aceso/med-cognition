@@ -1013,7 +1013,12 @@ public class GeneOntologyObo {
        * @return
        * @throws UnknownHostException
        * @throws RuntimeException
-       * @throws Exception
+       * @throws IllegalAccessException
+       * @throws InterruptedException
+       * @throws HttpException
+       * @throws URISyntaxException
+       * @throws InvocationTargetException
+       * @throws NoSuchFieldException
        */
       public static GeneOntology getGeneOntology(String ontologyId, Subgraph subGraph) throws IOException, RuntimeException, IllegalAccessException, InterruptedException, HttpException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
           log.info("getGeneOntology()");
