@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
  *
  * @author Smitha Gudur
  */
+@SuppressWarnings("javadoc")
 public class StrUtil {
 
     /** Logger for this class and subclasses */
@@ -115,7 +116,7 @@ public class StrUtil {
      */
     public static String addSlashes(String str){
 	if(str==null) return "";
-	StringBuilder s = new StringBuilder ((String) str);
+	StringBuilder s = new StringBuilder (str);
 	for (int i = 0; i < s.length(); i++)
 	    if (s.charAt (i) == '\'' || s.charAt(i) == '"')
 		s.insert (i++, '\\');
@@ -129,7 +130,7 @@ public class StrUtil {
      * @return String
      */
     public static String getTime(Integer length) {
-	int sec = length.intValue();
+	int sec = length;
 	int min = 0;
 	int hour = 0;
 	String ttr = "";
@@ -176,7 +177,7 @@ public class StrUtil {
 		sec = Integer.parseInt(values[1]);
 	    }
 	    int length = hour*60+min*60+sec;
-	    return new Integer(length);
+	    return length;
 	} else {
 	    return 0;
 	}
