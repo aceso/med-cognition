@@ -36,6 +36,7 @@ import org.apache.logging.log4j.Logger;
  * @author jtanisha-ee
  * @param <T>
  */
+@SuppressWarnings("javadoc")
 public class StatusUtil<T> {
     protected static Logger log = LogManager.getLogger(StatusUtil.class);
 
@@ -133,11 +134,10 @@ public class StatusUtil<T> {
             MongoCollection statusCollection = getCollection(coll);
             statusCollection.ensureIndex(key, key, true);
             //DBObject dbObject = XMLToJson.stringToBasicDBObject("{" + key + ":" + "\'"+ id + "\',"   + StatusFields.DATE + ":" + "\'" +  new Date() + "\'" + "}");
-            BasicDBObject basicDBObject = (BasicDBObject) new BasicDBObject(key, id);
+            BasicDBObject basicDBObject = new BasicDBObject(key, id);
             basicDBObject.put(StatusFields.DATE.toString(), new Date());
             log.info("bioType = " + bioType + ", key = " + key + ", id = " + id);
-            WriteResult writeResult = statusCollection.insert(basicDBObject);
-            return writeResult;
+            return statusCollection.insert(basicDBObject);
         }
         return null;
     }
@@ -183,7 +183,7 @@ public class StatusUtil<T> {
             log.info("coll = " + coll + ", key = " + key + ", value = " + value);
             statusCollection.ensureIndex(key, key, true);
             //DBObject dbObject = XMLToJson.stringToBasicDBObject("{" + key + ":" + "\'"+ id + "\',"   + StatusFields.DATE + ":" + "\'" +  new Date() + "\'" + "}");
-            BasicDBObject basicDBObject = (BasicDBObject) new BasicDBObject(key, value);
+            BasicDBObject basicDBObject = new BasicDBObject(key, value);
             basicDBObject.put(StatusFields.DATE.toString(), new Date());
             WriteResult writeResult = statusCollection.insert(basicDBObject);
             log.info("coll = " + coll + ", key = " + key + ", value = " + value);
