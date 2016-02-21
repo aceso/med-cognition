@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
  *
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class PrimaryKey {
 
     private final IndexNames indexName;
