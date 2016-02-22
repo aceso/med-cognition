@@ -31,9 +31,9 @@ public @interface RelatedToVia {
      * This property is optional, as the default is <code>Direction.BOTH</code>.
      * The way Direction.BOTH works is that it allows both <code>Direction.INCOMING</code>
      * and <code>Direction.OUTGOING</code> directions. So upon saving the
-     * @BioEntity object, two explicit relationships each going in a different
+     * {@link BioEntity} object, two explicit relationships each going in a different
      * direction are saved for each instance of the collection that is linked to
-     * @RelatedToVia.
+     * {@link RelatedToVia}.
      * <p>
      * Although the property is optional, please do exercise caution in using the
      * default, as indiscriminate paired relationships will be created, which besides
@@ -46,7 +46,7 @@ public @interface RelatedToVia {
      *
      * @return
      */
-    public Direction direction() default Direction.BOTH;
+     Direction direction() default Direction.BOTH;
 
     /**
      * This is the relation type. There is also a variable called relType
@@ -59,7 +59,7 @@ public @interface RelatedToVia {
      *
      * @return
      */
-    public BioRelTypes relType() default BioRelTypes.DEFAULT_RELATION;
+     BioRelTypes relType() default BioRelTypes.DEFAULT_RELATION;
 
     /**
      * Even though this field is optional, it is really should not be optional, as the
@@ -71,7 +71,7 @@ public @interface RelatedToVia {
      *
      * @return
      */
-    public Class<?> elementClass() default Object.class;
+     Class<?> elementClass() default Object.class;
 
     /**
      * The endNode bioType of a relationship. In case of bi-directional relationships
