@@ -25,6 +25,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Taxonomy { 
-    public TaxonomyTypes rbClass();
-    public BioFields rbField();
+     TaxonomyTypes rbClass();
+     BioFields rbField();
 }
