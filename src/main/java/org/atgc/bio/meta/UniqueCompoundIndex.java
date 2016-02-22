@@ -35,12 +35,12 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueCompoundIndex {
 
-    public IndexNames indexName();
+     IndexNames indexName();
 
-    public BioFields field1();
+     BioFields field1();
 
-    public BioFields field2();
+     BioFields field2();
 
-    public BioFields field3();
+     BioFields field3();
 
 }
