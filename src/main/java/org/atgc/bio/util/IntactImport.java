@@ -34,6 +34,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.rest.graphdb.RestGraphDatabase;
 import org.neo4j.rest.graphdb.index.RestIndex;
+import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
 
 /**
  * This is IntactFields import system.
@@ -316,7 +317,7 @@ public class IntactImport {
         return getString(getDBObject(interactor, IntactFields.ORGANISM), IntactFields.NCBI_TAX_ID);
     }
 
-    private static Protein getProtein(Subgraph subgraph, DBObject interactor) throws Exception {
+    private static Protein getProtein(Subgraph subgraph, DBObject interactor) throws IllegalAccessException, InterruptedException, HttpException, ServiceException, NoSuchFieldException, URISyntaxException, InvocationTargetException, IOException {
         Protein protein = new Protein();
         protein.setIntactId(getIntactId(interactor));
         protein.setInteractorId(getInteractorId(interactor));
@@ -356,7 +357,7 @@ public class IntactImport {
         return protein;
     }
 
-    private static Peptide getPeptide(Subgraph subgraph, DBObject interactor) throws Exception {
+    private static Peptide getPeptide(Subgraph subgraph, DBObject interactor) throws IllegalAccessException, InterruptedException, HttpException, ServiceException, NoSuchFieldException, URISyntaxException, InvocationTargetException, IOException {
         Peptide peptide = new Peptide();
         peptide.setIntactId(getIntactId(interactor));
         peptide.setInteractorId(getInteractorId(interactor));
@@ -394,7 +395,7 @@ public class IntactImport {
         return peptide;
     }
 
-    private static SmallMolecule getSmallMolecule(Subgraph subgraph, DBObject interactor) throws Exception {
+    private static SmallMolecule getSmallMolecule(Subgraph subgraph, DBObject interactor) throws IllegalAccessException, InterruptedException, HttpException, ServiceException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         SmallMolecule smallMolecule = new SmallMolecule();
         smallMolecule.setIntactId(getIntactId(interactor));
         smallMolecule.setInteractorId(getInteractorId(interactor));
@@ -430,7 +431,7 @@ public class IntactImport {
         return smallMolecule;
     }
 
-    private static Dna getDna(Subgraph subgraph, DBObject interactor) throws Exception {
+    private static Dna getDna(Subgraph subgraph, DBObject interactor) throws IllegalAccessException, InterruptedException, HttpException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         Dna dna = new Dna();
         dna.setIntactId(getIntactId(interactor));
         dna.setInteractorId(getInteractorId(interactor));
@@ -878,7 +879,7 @@ public class IntactImport {
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static Subgraph processIntact(String intactId, DBObject intactSource, BasicDBList experiments, BasicDBList interactors, BasicDBList interactions) throws Exception {
+    public static Subgraph processIntact(String intactId, DBObject intactSource, BasicDBList experiments, BasicDBList interactors, BasicDBList interactions) throws IllegalAccessException, NoSuchFieldException, InvocationTargetException, InterruptedException, HttpException, ServiceException, IOException, URISyntaxException {
 
         //log.info("source = " + intactSource.toString());
         log.info("intactId = " + intactId);
