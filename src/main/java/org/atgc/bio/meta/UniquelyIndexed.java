@@ -17,5 +17,5 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniquelyIndexed {
-    public IndexNames indexName();
+     IndexNames indexName();
 }
