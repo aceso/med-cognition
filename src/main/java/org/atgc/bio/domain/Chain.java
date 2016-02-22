@@ -7,6 +7,7 @@
 package org.atgc.bio.domain;
 
 import com.mongodb.BasicDBObject;
+import org.apache.http.HttpException;
 import org.atgc.bio.BioFields;
 //import org.atgc.bio.UniProtAccess;
 import org.atgc.bio.UniProtAccess;
@@ -24,7 +25,13 @@ import org.atgc.bio.meta.Visual;
 import org.atgc.bio.repository.TemplateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.atgc.bio.util.UniprotUtil;
 import org.neo4j.graphdb.Direction;
+import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 
 /**
  * A structure has chains.
@@ -33,6 +40,7 @@ import org.neo4j.graphdb.Direction;
  */
 @UniqueCompoundIndex(indexName=IndexNames.CHAIN, field1=BioFields.STRUCTURE_ID, field2=BioFields.CHAIN_ID, field3=BioFields.NONE)
 @BioEntity(bioType = BioTypes.CHAIN)
+@SuppressWarnings("javadoc")
 public class Chain {
     protected static Logger log = LogManager.getLogger(Chain.class);
 
@@ -130,8 +138,8 @@ public class Chain {
      * @param uniprotId
      * @throws Exception
      */
-    public void setProtein(String uniprotId) throws Exception {
-        BasicDBObject uniprotObj = UniProtAccess.getUniProt(chainId);
+    public void setProtein(String uniprotId) throws ServiceException, IllegalAccessException, InterruptedException, HttpException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
+        setProtein(UniprotUtil.getProtein(uniprotId));
     }
 
     /**
