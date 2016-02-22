@@ -19,6 +19,7 @@ import org.atgc.bio.meta.*;
  */
 @UniqueCompoundIndex(indexName=IndexNames.SAMPLE_INDEX, field1=BioFields.PUBLICATION_DATE, field2=BioFields.SAMPLE_SOURCE, field3=BioFields.SAMPLE_SOURCE_TYPE)
 @BioEntity(bioType = BioTypes.SAMPLE_SOURCE)
+@SuppressWarnings("javadoc")
 public class SampleSource {
 
     protected static Logger log = LogManager.getLogger(SampleSource.class);
