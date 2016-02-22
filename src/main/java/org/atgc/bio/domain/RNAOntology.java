@@ -21,6 +21,7 @@ import org.neo4j.graphdb.Direction;
  */
 
 @BioEntity(bioType = BioTypes.RNA_ONTOLOGY)
+@SuppressWarnings("javadoc")
 public class RNAOntology {
 
     /**
@@ -234,14 +235,14 @@ public class RNAOntology {
     }
 
     /**
-     * {@link BioRelTypes#RELATIONSHIP}
+     * {@link BioRelTypes}
      * setRelationship
      * @param endNode
      * @param relType
      */
     public void setRelationship(Object endNode, BioRelTypes relType) {
         if (relationship == null) {
-            relationship = new HashSet<BioRelation>();
+            relationship = new HashSet<>();
         }
         BioRelation rel = new BioRelation(this, endNode, relType);
         relationship.add(rel);
