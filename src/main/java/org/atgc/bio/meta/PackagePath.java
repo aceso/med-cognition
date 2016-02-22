@@ -34,7 +34,7 @@ public enum PackagePath {
         return value;
     }
 
-    private static final Map<String, PackagePath> stringToEnum = new HashMap<String, PackagePath>();
+    private static final Map<String, PackagePath> stringToEnum = new HashMap<>();
 
     static { // init map from constant name to enum constant
         for (PackagePath en : values())
