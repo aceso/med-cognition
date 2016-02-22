@@ -20,6 +20,7 @@ import org.neo4j.graphdb.Direction;
  * @author redbjtanisha-eeasin
  */
 @BioEntity(bioType = BioTypes.RNA)
+@SuppressWarnings("javadoc")
 public class Rna {
 
     /**
