@@ -16,5 +16,5 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GloballyIndexed {
-    public IndexNames indexName();
+     IndexNames indexName();
 }
