@@ -176,7 +176,7 @@ public class IntactImport {
                 if (IntactFields.SMALL_MOLECULE.equals(shortLabel)) {
                     return BioTypes.SMALL_MOLECULE;
                 } else {
-                    if (IntactFields.DNA.equals(shortLabel))
+                    if (IntactFields.DNA.equals(shortLabel) || IntactFields.DS_DNA.equals(shortLabel))
                         return BioTypes.DNA;
                     else throw new RuntimeException("Couldn't map bioType to " + shortLabel);
                 }
@@ -894,7 +894,7 @@ public class IntactImport {
 
         for (Object intr : interactors) {
             DBObject interactor = (DBObject) intr;
-            //log.info("interactor = " + interactor.toString());
+            log.info("interactor = " + interactor.toString());
             BioTypes bioType = getBioType(interactor);
             //log.info("bioType of interactor = " + bioType);
             if (bioType.equals(BioTypes.PROTEIN)) {
@@ -992,12 +992,80 @@ public class IntactImport {
   "intactId": "9391075.xml",
   "interactorId": "358462"
 }                        */
+                        /*
+                        Double stranded DNA sample:
+
+                        {
+  "_id": {
+    "$oid": "5009e03c0364add94f9cdc33"
+  },
+  "@id": "435058",
+  "names": {
+    "shortLabel": "a_satellite_hum_dna1",
+    "fullName": "Palindromic DNA fragment derived from human alpha-satellite DNA"
+  },
+  "xref": {
+    "primaryRef": {
+      "@refTypeAc": "MI:0356",
+      "@refType": "identity",
+      "@id": "EBI-1251825",
+      "@dbAc": "MI:0469",
+      "@db": "intact"
+    }
+  },
+  "interactorType": {
+    "names": {
+      "shortLabel": "ds dna",
+      "fullName": "double stranded deoxyribonucleic acid",
+      "alias": {
+        "@typeAc": "MI:0303",
+        "#text": "ds DNA"
+      }
+    },
+    "xref": {
+      "primaryRef": {
+        "@refTypeAc": "MI:0356",
+        "@refType": "identity",
+        "@id": "MI:0681",
+        "@dbAc": "MI:0488",
+        "@db": "psi-mi"
+      },
+      "secondaryRef": [
+        {
+          "@refTypeAc": "MI:0356",
+          "@refType": "identity",
+          "@id": "EBI-967903",
+          "@dbAc": "MI:0469",
+          "@db": "intact"
+        },
+        {
+          "@refTypeAc": "MI:0358",
+          "@refType": "primary-reference",
+          "@id": "14755292",
+          "@dbAc": "MI:0446",
+          "@db": "pubmed"
+        }
+      ]
+    }
+  },
+  "organism": {
+    "@ncbiTaxId": "9606",
+    "names": {
+      "shortLabel": "human",
+      "fullName": "Homo sapiens"
+    }
+  },
+  "intactId": "9305837.xml",
+  "interactorId": "435058"
+}
+                         */
                         if (bioType.equals(BioTypes.DNA)) {
                             Dna dna = getDna(subgraph, interactor);
                             interactorHash.put(dna.getInteractorId(), dna);
                             subgraph.add(dna);
-                        } else
+                        } else {
                             throw new RuntimeException("Unrecognized bioType " + bioType);
+                        }
                     }
                 }
             }
