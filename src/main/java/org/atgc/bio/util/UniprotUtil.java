@@ -34,7 +34,7 @@ public class UniprotUtil {
 
     protected static Logger log = LogManager.getLogger(UniprotUtil.class);
 
-    public static Protein getProtein(String id) throws Exception {
+    public static Protein getProtein(String id) throws IllegalAccessException, InterruptedException, HttpException, ServiceException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         return getProtein(id, new Subgraph());
     }
 
@@ -1387,7 +1387,7 @@ public class UniprotUtil {
 
     }
 
-    public static void setEvidence(Protein protein, BasicDBObject dbObj, Subgraph subgraph) throws UnknownHostException, NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException, ServiceException {
+    public static void setEvidence(Protein protein, BasicDBObject dbObj, Subgraph subgraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, IOException, HttpException, InterruptedException, ServiceException {
         if (OntologyStrUtil.objectExists(dbObj, UniprotFields.EVIDENCE_LIST)) {
             BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, UniprotFields.EVIDENCE_LIST);
             if (dbList != null) {
@@ -1416,7 +1416,7 @@ public class UniprotUtil {
      * @throws HttpException
      * @throws InterruptedException
      */
-    public static void setPubMedRelation(String pubMedId, Protein protein, Subgraph subgraph) throws UnknownHostException, NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException {
+    public static void setPubMedRelation(String pubMedId, Protein protein, Subgraph subgraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, IOException, HttpException, InterruptedException {
         if (pubMedId != null) {
             PubMed pubmed = PubMedUtil.getPubmed(pubMedId, subgraph);
             pubmed.setPubMedRelation(protein);
@@ -1524,7 +1524,7 @@ public class UniprotUtil {
      * @throws HttpException
      * @throws InterruptedException
      */
-    public static void setEvidenceAttributeRelation(Protein protein, BasicDBObject obj, Subgraph subgraph) throws UnknownHostException, NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException, ServiceException {
+    public static void setEvidenceAttributeRelation(Protein protein, BasicDBObject obj, Subgraph subgraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, IOException, HttpException, InterruptedException, ServiceException {
         String attribute = OntologyStrUtil.getString(obj, UniprotFields.EVIDENCE_ATTRIBUTE);
         String pubMedId = getPubMedId(attribute);
         if (pubMedId != null) {
