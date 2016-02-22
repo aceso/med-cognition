@@ -57,13 +57,13 @@ public class PdbMongoNeo4JImport {
      * @return
      * @throws Exception
      */
-    public static BasicDBObject getGeneQuery(String symbol) throws Exception {
+    public static BasicDBObject getGeneQuery(String symbol)  {
         BasicDBObject queryMap = new BasicDBObject();
         queryMap.put(GeneMongoFields.SYMBOL.toString(), symbol);
         return queryMap;
     }
 
-    public static BasicDBList getResult(ImportCollectionNames coll, String geneId) throws Exception {
+    public static BasicDBList getResult(ImportCollectionNames coll, String geneId) throws UnknownHostException {
         MongoCollection collection = getCollection(coll);
         return collection.findDB(getGeneQuery(geneId));
     }
@@ -309,7 +309,7 @@ public class PdbMongoNeo4JImport {
             IllegalArgumentException,
             IllegalAccessException,
             InvocationTargetException,
-            IOException, StructureException, ServiceException {
+            IOException, StructureException, ServiceException, InterruptedException, URISyntaxException, HttpException {
 
         DBObject uniprotResult = getCollection(ImportCollectionNames.PDB_UNIPROT).findOneDB(query);
         if (uniprotResult == null) {
@@ -388,7 +388,7 @@ public class PdbMongoNeo4JImport {
             pdbEntity.setEntityType(StructureEntityTypes.fromString(entityType));
             pdbEntity.setStructureId(structureId);
             subgraph.add(pdbEntity);
-            HashSet<Chain> chains = new HashSet<Chain>();
+            HashSet<Chain> chains = new HashSet<>();
             BasicDBList chainList = getBasicDBList((BasicDBObject)entityObj, PDBFields.CHAIN);
             for (Object chainObj : chainList) {
                 Chain chain = new Chain();
@@ -456,7 +456,7 @@ public class PdbMongoNeo4JImport {
      *
      * @throws UnknownHostException
      */
-    public static void loadStructures() throws IOException, InvocationTargetException, URISyntaxException, IllegalAccessException, NoSuchFieldException, StructureException, HttpException, ServiceException {
+    public static void loadStructures() throws IOException, InvocationTargetException, URISyntaxException, IllegalAccessException, NoSuchFieldException, StructureException, HttpException, ServiceException, InterruptedException {
 
         Subgraph subgraph = new Subgraph();
 
