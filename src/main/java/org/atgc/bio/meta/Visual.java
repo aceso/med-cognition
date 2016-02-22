@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
  * bioType-uniqueIndexId
  * 
  * The uniqueIndexId field is taken from the @UniquelyIndexed field in the
- * @BioEntity. This is mandatory. All BioEntities must have a unique @UniquelyIndexed
+ * {@link BioEntity}. This is mandatory. All BioEntities must have a unique @UniquelyIndexed
  * field.
  * 
  * The bioType is the nodeType or name of the BioEntity. Eg. "Protein", "Peptide".
