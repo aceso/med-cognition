@@ -17,5 +17,5 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BioEntity {
-    public BioTypes bioType();
+    BioTypes bioType();
 }
