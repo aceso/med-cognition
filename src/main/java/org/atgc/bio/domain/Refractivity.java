@@ -18,6 +18,7 @@ import org.atgc.bio.meta.*;
  *
  */
 @BioEntity (bioType = BioTypes.REFRACTIVITY)
+@SuppressWarnings("javadoc")
 public class Refractivity {
     
     protected static Logger log = LogManager.getLogger(Refractivity.class);
