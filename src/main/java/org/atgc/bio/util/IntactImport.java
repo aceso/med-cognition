@@ -178,6 +178,8 @@ public class IntactImport {
                 } else {
                     if (IntactFields.DNA.equals(shortLabel) || IntactFields.DS_DNA.equals(shortLabel))
                         return BioTypes.DNA;
+                    else if (IntactFields.GENE.equals(shortLabel))
+                          return BioTypes.INTACT_GENE;
                     else throw new RuntimeException("Couldn't map bioType to " + shortLabel);
                 }
             }
@@ -1102,7 +1104,7 @@ public class IntactImport {
                             Dna dna = getDna(subgraph, interactor);
                             interactorHash.put(dna.getInteractorId(), dna);
                             subgraph.add(dna);
-                        } else if (bioType.equals(BioTypes.GENE)) {
+                        } else if (bioType.equals(BioTypes.INTACT_GENE)) {
                                /*
 {
   "_id": {
