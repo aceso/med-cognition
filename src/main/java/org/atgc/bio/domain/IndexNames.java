@@ -38,6 +38,11 @@ public enum IndexNames {
      * Compound key index for DrugPrice
      */
     DRUG_PRICE("DrugPrice"),
+
+    /**
+     * This is the EBI id in intact file in the xref section. For eg. "@id": "EBI-2944298",
+     */
+    EBI_ID("EbiId"),
     
     /**
      * Drug patent number
@@ -55,14 +60,29 @@ public enum IndexNames {
     DNA_FULL_NAME("DnaFullName"),
 
     /**
+     * Full name of RNA in Intact
+     */
+    RNA_FULL_NAME("RnaFulllName"),
+
+    /**
      * Aliases for DNA in Intact
      */
     DNA_ALIASES("DnaAliases"),
 
     /**
+     * Aliases for RNA in Intact
+     */
+    RNA_ALIASES("RnaAliases"),
+
+    /**
      * Intact secondary references for Dna
      */
     DNA_INTACT_SECONDARY_REFS("DnaIntactSecondaryRefs"),
+
+    /**
+     * Intact secondary references for Rna
+     */
+    RNA_INTACT_SECONDARY_REFS("RnaIntactSecondaryRefs"),
 
     /**
      * Intact secondary references for Gene
@@ -85,10 +105,19 @@ public enum IndexNames {
     DNA_ORGANISM_SHORT_LABEL("DnaOrganismShortLabel"),
 
     /**
+     * RNA organism short label as in Intact
+     */
+    RNA_ORGANISM_SHORT_LABEL("RnaOrganismShortLabel"),
+
+    /**
      * DNA organism full name as in Intact
      */
     DNA_ORGANISM_FULL_NAME("DnaOrganismFullName"),
 
+    /**
+     * RNA organism full name as in Intact
+     */
+    RNA_ORGANISM_FULL_NAME("RnaOrganismFullName"),
     /**
      * Full name of Gene in Intact
      */
@@ -664,6 +693,12 @@ public enum IndexNames {
      * Full text index for secondary pubmed references for a dna
      */
     DNA_PUBMED_SECONDARY_REFS("DnaPubmedSecondaryRefs"),
+
+    /**
+     * Full text index for secondary pubmed references for rna
+     */
+    RNA_PUBMED_SECONDARY_REFS("RnaPubmedSecondaryRefs"),
+
     /**
      * Full text index for secondary interpro references for a protein
      */
@@ -727,6 +762,7 @@ public enum IndexNames {
     SMALL_MOLECULE_ENSEMBL_SECONDARY_REFS("SmallMoleculeEnsemblSecondaryRefs"),
     SMALL_MOLECULE_SHORT_LABEL("SmallMoleculeShortLabel"),
     DNA_SHORT_LABEL("DnaShortLabel"),
+    RNA_SHORT_LABEL("RnaShortLabel"),
     GENE_SHORT_LABEL("GeneShortLabel"),
     SMALL_MOLECULE_FULL_NAME("SmallMoleculeFullName"),
     /**
