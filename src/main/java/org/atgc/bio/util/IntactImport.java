@@ -459,6 +459,45 @@ public class IntactImport {
         return dna;
     }
 
+    private static IntactGene getIntactGene(Subgraph subgraph, DBObject interactor) throws IllegalAccessException, InterruptedException, HttpException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
+        IntactGene intactGene = new IntactGene();
+        intactGene.setIntactId(getIntactId(interactor));
+        intactGene.setInteractorId(getInteractorId(interactor));
+        intactGene.setNodeType(BioTypes.DNA);
+        String taxId = getNcbiTaxId(interactor);
+        intactGene.setNcbiTaxId(taxId);
+        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(subgraph, taxId);
+        intactGene.setNcbiTaxonomyRelation(ncbiTaxonomy);
+        // shortLabel is always of the form ada10_mouse_gene, so use the underscore as separator and extract the first part to get the gene symbol
+        String shortLabel = getShortLabel(interactor);
+        if (null != shortLabel) {
+            String[] parts = shortLabel.split("_");
+            if (null != parts && parts.length > 0) {
+                HashSet<Gene> genes = GeneGraphDBImportUtil.getGene(parts[0], subgraph);
+                Gene gene = GeneGraphDBImportUtil.getGene(genes, taxId);
+                intactGene.setGeneRelation(gene);
+            }
+            intactGene.setShortLabel(shortLabel);
+        }
+        String fullName = getFullName(interactor);
+        intactGene.setMessage(fullName);
+        intactGene.setFullName(getFullName(interactor));
+        intactGene.setAliases(getAliases(interactor));
+        intactGene.setIntactSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTACT));
+        String pubmedIds = getSecondaryRefs(interactor, IntactSources.PUBMED);
+        intactGene.setPubmedSecondaryRefs(pubmedIds);
+        if (null != pubmedIds) {
+            String[] pubmedIdArray = StringUtils.split(pubmedIds, " ");
+            for (String pubmedId : pubmedIdArray) {
+                intactGene.addPubmedRelation(PubMedUtil.getPubmed(pubmedId, subgraph));
+            }
+        }
+        intactGene.setOrganismShortLabel(getOrganismShortLabel(interactor));
+
+        intactGene.setOrganismFullName(getOrganismFullName(interactor));
+        return intactGene;
+    }
+
     public static HashSet<PubMed> getPubMedList(Subgraph subgraph, DBObject method) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         HashSet<PubMed> pubMedList = new HashSet<>();
         DBObject xref = getDBObject(method, IntactFields.XREF);
@@ -1063,9 +1102,87 @@ public class IntactImport {
                             Dna dna = getDna(subgraph, interactor);
                             interactorHash.put(dna.getInteractorId(), dna);
                             subgraph.add(dna);
-                        } else {
+                        } else if (bioType.equals(BioTypes.GENE)) {
+                               /*
+{
+  "_id": {
+    "$oid": "5009dfed0364add94f9c8b59"
+  },
+  "@id": "761202",
+  "names": {
+    "shortLabel": "ada10_mouse_gene",
+    "fullName": "Mouse Adam10 gene"
+  },
+  "xref": {
+    "primaryRef": {
+      "@refTypeAc": "MI:0356",
+      "@refType": "identity",
+      "@id": "ENSMUSG00000054693",
+      "@dbAc": "MI:0476",
+      "@db": "ensembl"
+    },
+    "secondaryRef": {
+      "@refTypeAc": "MI:0356",
+      "@refType": "identity",
+      "@id": "EBI-2903226",
+      "@dbAc": "MI:0469",
+      "@db": "intact"
+    }
+  },
+  "interactorType": {
+    "names": {
+      "shortLabel": "gene",
+      "fullName": "gene"
+    },
+    "xref": {
+      "primaryRef": {
+        "@refTypeAc": "MI:0356",
+        "@refType": "identity",
+        "@id": "MI:0250",
+        "@dbAc": "MI:0488",
+        "@db": "psi-mi"
+      },
+      "secondaryRef": [
+        {
+          "@refTypeAc": "MI:0361",
+          "@refType": "see-also",
+          "@id": "SO:0000704",
+          "@dbAc": "MI:0601",
+          "@db": "so"
+        },
+        {
+          "@refTypeAc": "MI:0358",
+          "@refType": "primary-reference",
+          "@id": "14755292",
+          "@dbAc": "MI:0446",
+          "@db": "pubmed"
+        },
+        {
+          "@refTypeAc": "MI:0356",
+          "@refType": "identity",
+          "@id": "EBI-706030",
+          "@dbAc": "MI:0469",
+          "@db": "intact"
+        }
+      ]
+    }
+  },
+  "organism": {
+    "@ncbiTaxId": "10090",
+    "names": {
+      "shortLabel": "mouse",
+      "fullName": "Mus musculus"
+    }
+  },
+  "intactId": "20655472.xml",
+  "interactorId": "761202"
+}
+                                */
+                            IntactGene gene = getIntactGene(subgraph, interactor);
+                            interactorHash.put(gene.getInteractorId(), gene);
+                            subgraph.add(gene);
+                        } else
                             throw new RuntimeException("Unrecognized bioType " + bioType);
-                        }
                     }
                 }
             }
