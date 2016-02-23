@@ -48,6 +48,51 @@ public enum IndexNames {
      * Drug patent country
      */
     DRUG_PATENT_COUNTRY("DrugPatentCountry"),
+
+    /**
+     * Full name of DNA in Intact
+     */
+    DNA_FULL_NAME("DnaFullName"),
+
+    /**
+     * Aliases for DNA in Intact
+     */
+    DNA_ALIASES("DnaAliases"),
+
+    /**
+     * Intact secondary references for Dna
+     */
+    DNA_INTACT_SECONDARY_REFS("DnaIntactSecondaryRefs"),
+
+    /**
+     * Intact secondary references for Gene
+     */
+    GENE_INTACT_SECONDARY_REFS("GeneIntactSecondaryRefs"),
+
+    /**
+     * Organism short label for Gene in Intact
+     */
+    GENE_ORGANISM_SHORT_LABEL("GeneOrganismShortLabel"),
+
+    /**
+     * Organism full name for Gene in Intact
+     */
+    GENE_ORGANISM_FULL_NAME("GeneOrganismFullName"),
+
+    /**
+     * DNA organism short label as in Intact
+     */
+    DNA_ORGANISM_SHORT_LABEL("DnaOrganismShortLabel"),
+
+    /**
+     * DNA organism full name as in Intact
+     */
+    DNA_ORGANISM_FULL_NAME("DnaOrganismFullName"),
+
+    /**
+     * Full name of Gene in Intact
+     */
+    GENE_FULL_NAME("GeneFullName"),
     
     /**
      * Drug patent message
@@ -681,6 +726,8 @@ public enum IndexNames {
     PEPTIDE_FULL_NAME("PeptideFullName"),
     SMALL_MOLECULE_ENSEMBL_SECONDARY_REFS("SmallMoleculeEnsemblSecondaryRefs"),
     SMALL_MOLECULE_SHORT_LABEL("SmallMoleculeShortLabel"),
+    DNA_SHORT_LABEL("DnaShortLabel"),
+    GENE_SHORT_LABEL("GeneShortLabel"),
     SMALL_MOLECULE_FULL_NAME("SmallMoleculeFullName"),
     /**
      * Intact interaction ID that uniquely identifies an Intact interaction.
