@@ -53,6 +53,8 @@ public enum BioEntityClasses {
 
     GENE_TO_GO(GeneToGo.class),
 
+    DNA(Dna.class),
+
     LIGAND(Ligand.class),
 
     PDB_COMPOUND(PdbCompound.class),
