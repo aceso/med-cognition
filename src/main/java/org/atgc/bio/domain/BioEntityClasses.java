@@ -65,6 +65,8 @@ public enum BioEntityClasses {
 
     GENE(Gene.class),
 
+    INTACT_GENE(IntactGene.class),
+
     GENE_ONTOLOGY(GeneOntology.class),
 
     GENE_TO_GO_ONTOLOGY(GeneToGoOntology.class),
