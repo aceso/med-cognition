@@ -144,7 +144,7 @@ public enum BioTypes {
     /**
      * The intact interactor.
      */
-    INTACT_GENE("Gene"),
+    INTACT_GENE("IntactGene"),
 
     /**
      *
