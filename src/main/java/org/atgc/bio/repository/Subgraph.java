@@ -45,8 +45,8 @@ public class Subgraph<T> {
    public void add(T t) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         Class tClass = t.getClass();
         String bioType = tClass.getSimpleName();
-        log.info("add() bioType = " + bioType + "," + (++cntr));
-       //log.info("bioType = " + bioType);
+
+        log.info("bioType = " + bioType);
         BioTypes bt = BioTypes.fromString(bioType);
         if (bt != null) {
             List beList;
@@ -58,6 +58,7 @@ public class Subgraph<T> {
             }
             beList.add(t);
             //log.info("add() BioEntity " + bt.toString());
+            log.info("add() bioType = " + bioType + "," + (++cntr));
         } else {
             log.warn("add() failed, missing BioType");
         }
