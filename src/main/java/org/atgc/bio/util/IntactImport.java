@@ -1140,7 +1140,7 @@ public class IntactImport {
                             Dna dna = getDna(subgraph, interactor);
                             interactorHash.put(dna.getInteractorId(), dna);
                             subgraph.add(dna);
-                        } else if (bioType.equals(BioTypes.RNA)) {
+                        } else if (bioType.equals(BioTypes.INTACT_RNA)) {
                             /*
                             {
   "_id": {
