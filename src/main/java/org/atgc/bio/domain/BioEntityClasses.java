@@ -55,6 +55,8 @@ public enum BioEntityClasses {
 
     DNA(Dna.class),
 
+    INTACT_RNA(IntactRna.class),
+
     LIGAND(Ligand.class),
 
     PDB_COMPOUND(PdbCompound.class),
