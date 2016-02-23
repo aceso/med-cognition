@@ -60,7 +60,7 @@ public class Subgraph<T> {
             //log.info("add() BioEntity " + bt.toString());
             log.info("add() bioType = " + bioType + "," + (++cntr));
         } else {
-            throw new RuntimeException("add() failed, missing BioType");
+            throw new RuntimeException("add() failed, missing BioType: " + bioType);
         }
     }
 
