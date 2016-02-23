@@ -456,21 +456,21 @@ public class IntactGene {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        IntactGene dna = (IntactGene) o;
+        IntactGene intactGene = (IntactGene) o;
 
-        if (!id.equals(dna.id)) return false;
-        if (!intactId.equals(dna.intactId)) return false;
-        if (!interactorId.equals(dna.interactorId)) return false;
-        if (!nodeType.equals(dna.nodeType)) return false;
-        if (!shortLabel.equals(dna.shortLabel)) return false;
-        if (!message.equals(dna.message)) return false;
-        if (!fullName.equals(dna.fullName)) return false;
-        if (!aliases.equals(dna.aliases)) return false;
-        if (!intactSecondaryRefs.equals(dna.intactSecondaryRefs)) return false;
-        if (!pubmedSecondaryRefs.equals(dna.pubmedSecondaryRefs)) return false;
-        if (!organismShortLabel.equals(dna.organismShortLabel)) return false;
-        if (!organismFullName.equals(dna.organismFullName)) return false;
-        return ncbiTaxId.equals(dna.ncbiTaxId);
+        if (!id.equals(intactGene.id)) return false;
+        if (!intactId.equals(intactGene.intactId)) return false;
+        if (!interactorId.equals(intactGene.interactorId)) return false;
+        if (!nodeType.equals(intactGene.nodeType)) return false;
+        if (!shortLabel.equals(intactGene.shortLabel)) return false;
+        if (!message.equals(intactGene.message)) return false;
+        if (!fullName.equals(intactGene.fullName)) return false;
+        if (!aliases.equals(intactGene.aliases)) return false;
+        if (!intactSecondaryRefs.equals(intactGene.intactSecondaryRefs)) return false;
+        if (!pubmedSecondaryRefs.equals(intactGene.pubmedSecondaryRefs)) return false;
+        if (!organismShortLabel.equals(intactGene.organismShortLabel)) return false;
+        if (!organismFullName.equals(intactGene.organismFullName)) return false;
+        return ncbiTaxId.equals(intactGene.ncbiTaxId);
 
     }
 
