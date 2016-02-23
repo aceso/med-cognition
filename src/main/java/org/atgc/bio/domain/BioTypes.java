@@ -14,6 +14,7 @@ import java.util.Map;
  * These are all the supported BioEntities or {@link BioEntity} objects.
  * These also are treated as dimensions.
  * These are also sometimes mapped to collection names.
+ * When a BioType is added here, please also add the corresponding Java class to BioEntityClasses enum.
  *
  * @author jtanisha-ee
  */
