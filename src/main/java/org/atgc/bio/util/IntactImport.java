@@ -180,7 +180,10 @@ public class IntactImport {
                         return BioTypes.DNA;
                     else if (IntactFields.GENE.equals(shortLabel))
                           return BioTypes.INTACT_GENE;
-                    else throw new RuntimeException("Couldn't map bioType to " + shortLabel);
+                    else if (IntactFields.RNA.equals(shortLabel))
+                        return BioTypes.INTACT_RNA;
+                    else
+                          throw new RuntimeException("Couldn't map bioType to " + shortLabel);
                 }
             }
         }
@@ -437,6 +440,8 @@ public class IntactImport {
         Dna dna = new Dna();
         dna.setIntactId(getIntactId(interactor));
         dna.setInteractorId(getInteractorId(interactor));
+        String ebiId = getPrimaryRefs(interactor, IntactSources.INTACT);
+        dna.setEbiId(ebiId);  //  "@id": "EBI-1005914"
         dna.setNodeType(BioTypes.DNA);
         dna.setShortLabel(getShortLabel(interactor));
         String fullName = getFullName(interactor);
@@ -459,6 +464,36 @@ public class IntactImport {
         dna.setNcbiTaxonomyRelation(ncbiTaxonomy);
         dna.setOrganismFullName(getOrganismFullName(interactor));
         return dna;
+    }
+
+    private static IntactRna getIntactRna(Subgraph subgraph, DBObject interactor) throws IllegalAccessException, InterruptedException, HttpException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
+        IntactRna intactRna = new IntactRna();
+        intactRna.setIntactId(getIntactId(interactor));
+        intactRna.setInteractorId(getInteractorId(interactor));
+        String ebiId = getPrimaryRefs(interactor, IntactSources.INTACT);
+        intactRna.setEbiId(ebiId);  //  "@id": "EBI-1005914"
+        intactRna.setNodeType(BioTypes.RNA);
+        intactRna.setShortLabel(getShortLabel(interactor));
+        String fullName = getFullName(interactor);
+        intactRna.setMessage(fullName);
+        intactRna.setFullName(getFullName(interactor));
+        intactRna.setAliases(getAliases(interactor));
+        intactRna.setIntactSecondaryRefs(getSecondaryRefs(interactor, IntactSources.INTACT));
+        String pubmedIds = getSecondaryRefs(interactor, IntactSources.PUBMED);
+        intactRna.setPubmedSecondaryRefs(pubmedIds);
+        if (null != pubmedIds) {
+            String[] pubmedIdArray = StringUtils.split(pubmedIds, " ");
+            for (String pubmedId : pubmedIdArray) {
+                intactRna.addPubmedRelation(PubMedUtil.getPubmed(pubmedId, subgraph));
+            }
+        }
+        intactRna.setOrganismShortLabel(getOrganismShortLabel(interactor));
+        String taxId = getNcbiTaxId(interactor);
+        intactRna.setNcbiTaxId(taxId);
+        NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(subgraph, taxId);
+        intactRna.setNcbiTaxonomyRelation(ncbiTaxonomy);
+        intactRna.setOrganismFullName(getOrganismFullName(interactor));
+        return intactRna;
     }
 
     private static IntactGene getIntactGene(Subgraph subgraph, DBObject interactor) throws IllegalAccessException, InterruptedException, HttpException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
@@ -1104,6 +1139,86 @@ public class IntactImport {
                             Dna dna = getDna(subgraph, interactor);
                             interactorHash.put(dna.getInteractorId(), dna);
                             subgraph.add(dna);
+                        } else if (bioType.equals(BioTypes.RNA)) {
+                            /*
+                            {
+  "_id": {
+    "$oid": "5009dfef0364add94f9c8e15"
+  },
+  "@id": "772104",
+  "names": {
+    "shortLabel": "sr8_metja_rna",
+    "fullName": "Methanocaldococcus jannaschii sR8 small RNA"
+  },
+  "xref": {
+    "primaryRef": {
+      "@refTypeAc": "MI:0356",
+      "@refType": "identity",
+      "@id": "EBI-2944298",
+      "@dbAc": "MI:0469",
+      "@db": "intact"
+    }
+  },
+  "interactorType": {
+    "names": {
+      "shortLabel": "rna",
+      "fullName": "ribonucleic acid",
+      "alias": {
+        "@typeAc": "MI:0303",
+        "#text": "RNA"
+      }
+    },
+    "xref": {
+      "primaryRef": {
+        "@refTypeAc": "MI:0356",
+        "@refType": "identity",
+        "@id": "MI:0320",
+        "@dbAc": "MI:0488",
+        "@db": "psi-mi"
+      },
+      "secondaryRef": [
+        {
+          "@refTypeAc": "MI:0361",
+          "@refType": "see-also",
+          "@id": "SO:0000356",
+          "@dbAc": "MI:0601",
+          "@db": "so"
+        },
+        {
+          "@refTypeAc": "MI:0358",
+          "@refType": "primary-reference",
+          "@id": "14755292",
+          "@dbAc": "MI:0446",
+          "@db": "pubmed"
+        },
+        {
+          "@refTypeAc": "MI:0356",
+          "@refType": "identity",
+          "@id": "EBI-619648",
+          "@dbAc": "MI:0469",
+          "@db": "intact"
+        }
+      ]
+    }
+  },
+  "organism": {
+    "@ncbiTaxId": "2190",
+    "names": {
+      "shortLabel": "methanocaldococcus-jannaschii",
+      "fullName": "Methanocaldococcus jannaschii",
+      "alias": {
+        "@typeAc": "MI:1041",
+        "#text": "Methanococcus jannaschii"
+      }
+    }
+  },
+  "intactId": "19745151.xml",
+  "interactorId": "772104"
+}
+                             */
+                            IntactRna intactRna = getIntactRna(subgraph, interactor);
+                            interactorHash.put(intactRna.getInteractorId(), intactRna);
+                            subgraph.add(intactRna);
                         } else if (bioType.equals(BioTypes.INTACT_GENE)) {
                                /*
 {
