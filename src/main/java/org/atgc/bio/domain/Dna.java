@@ -97,15 +97,23 @@ public class Dna {
     private Long id;
 
     /**
-     * Name of the intact XML file. Use Uniprot when null.
+     * Name of the intact XML file. Eg. "intactId": "19745151.xml", Use Uniprot when null.
      */
     @Indexed( indexName=IndexNames.INTACT_ID)
     @Taxonomy(rbClass=TaxonomyTypes.INTACT_ID, rbField= BioFields.INTACT_ID)
     private String intactId;
 
+    /**
+     * "@id": "772104",
+     *  "interactorId": "772104"
+     */
     @Indexed (indexName=IndexNames.INTERACTOR_ID)
     @Taxonomy (rbClass=TaxonomyTypes.INTERACTOR_ID, rbField=BioFields.INTERACTOR_ID)
     private String interactorId;
+
+    @Indexed (indexName=IndexNames.EBI_ID)
+    @Taxonomy (rbClass=TaxonomyTypes.EBI_ID, rbField=BioFields.EBI_ID)
+    private String ebiId;
 
     @Indexed (indexName=IndexNames.NODE_TYPE)
     private String nodeType = TemplateUtils.extractBioType(this).toString();
@@ -164,6 +172,32 @@ public class Dna {
 
     @RelatedTo(direction=Direction.OUTGOING, relType=BioRelTypes.IN_ORGANISM, elementClass=BioRelation.class)
     private BioRelation ncbiTaxonomyRelation;
+
+    /**
+     * Name of the ebi id . Use Uniprot when null.
+     * <p>
+     * {@link Indexed} {@link IndexNames#EBI_ID}
+     * <p>
+     * {@link Taxonomy} {@link TaxonomyTypes#EBI_ID} {@link BioFields#EBI_ID}
+     *
+     * @return  String
+     */
+    public String getEbiId() {
+        return ebiId;
+    }
+
+    /**
+     * Name of the ebi id. Use Uniprot when null.
+     * <p>
+     * {@link Indexed} {@link IndexNames#EBI_ID}
+     * <p>
+     * {@link Taxonomy} {@link TaxonomyTypes#EBI_ID} {@link BioFields#EBI_ID}
+     *
+     * @param ebiId
+     */
+    public void setEbiId(String ebiId) {
+        this.ebiId = ebiId;
+    }
 
     /**
      * Name of the intact XML file. Use Uniprot when null.
