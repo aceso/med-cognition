@@ -111,8 +111,8 @@ public class Dna {
     private String nodeType = TemplateUtils.extractBioType(this).toString();
 
     @Visual
-    @Indexed (indexName=IndexNames.SMALL_MOLECULE_SHORT_LABEL)
-    @Taxonomy (rbClass=TaxonomyTypes.SMALL_MOLECULE_SHORT_LABEL, rbField=BioFields.SHORT_LABEL)  // this is value
+    @Indexed (indexName=IndexNames.DNA_SHORT_LABEL)
+    @Taxonomy (rbClass=TaxonomyTypes.DNA_SHORT_LABEL, rbField=BioFields.SHORT_LABEL)  // this is value
     private String shortLabel;
 
     @NodeLabel
@@ -120,19 +120,19 @@ public class Dna {
     @Taxonomy (rbClass=TaxonomyTypes.MESSAGE, rbField=BioFields.MESSAGE)
     private String message;
 
-    @Indexed (indexName=IndexNames.SMALL_MOLECULE_FULL_NAME)
-    @Taxonomy (rbClass=TaxonomyTypes.SMALL_MOLECULE_FULL_NAME, rbField=BioFields.FULL_NAME)
+    @Indexed (indexName=IndexNames.DNA_FULL_NAME)
+    @Taxonomy (rbClass=TaxonomyTypes.DNA_FULL_NAME, rbField=BioFields.FULL_NAME)
     private String fullName;
 
-    @FullTextIndexed (indexName = IndexNames.SMALL_MOLECULE_ALIASES)
-    @Taxonomy (rbClass=TaxonomyTypes.SMALL_MOLECULE_ALIAS, rbField=BioFields.ALIASES)
+    @FullTextIndexed (indexName = IndexNames.DNA_ALIASES)
+    @Taxonomy (rbClass=TaxonomyTypes.DNA_ALIAS, rbField=BioFields.ALIASES)
     private String aliases;
 
     /**
      * In case of full text indexes, if there are multiple space separated
      * terms, we add one row per term in the Taxonomy collection in Mongo.
      */
-    @FullTextIndexed (indexName = IndexNames.SMALL_MOLECULE_INTACT_SECONDARY_REFS)
+    @FullTextIndexed (indexName = IndexNames.DNA_INTACT_SECONDARY_REFS)
     @Taxonomy (rbClass=TaxonomyTypes.INTACT_ID, rbField=BioFields.INTACT_SECONDARY_REFS)
     private String intactSecondaryRefs;
 
@@ -144,11 +144,11 @@ public class Dna {
     @Taxonomy (rbClass=TaxonomyTypes.PUBMED_ID, rbField=BioFields.PUBMED_SECONDARY_REFS)
     private String pubmedSecondaryRefs;
 
-    @Indexed (indexName = IndexNames.SMALL_MOLECULE_ORGANISM_SHORT_LABEL)
+    @Indexed (indexName = IndexNames.DNA_ORGANISM_SHORT_LABEL)
     @Taxonomy (rbClass=TaxonomyTypes.ORGANISM_SHORT_LABEL, rbField=BioFields.ORGANISM_SHORT_LABEL)
     private String organismShortLabel;
 
-    @Indexed (indexName = IndexNames.SMALL_MOLECULE_ORGANISM_FULL_NAME)
+    @Indexed (indexName = IndexNames.DNA_ORGANISM_FULL_NAME)
     @Taxonomy (rbClass=TaxonomyTypes.ORGANISM_FULL_NAME, rbField=BioFields.ORGANISM_FULL_NAME)
     private String organismFullName;
 
@@ -236,9 +236,9 @@ public class Dna {
     }
 
     /**
-     * {@link Indexed} {@link IndexNames#SMALL_MOLECULE_SHORT_LABEL}
+     * {@link Indexed} {@link IndexNames#DNA_SHORT_LABEL}
      * <p>
-     * {@link Taxonomy} {@link TaxonomyTypes#SMALL_MOLECULE_SHORT_LABEL} {@link BioFields#SHORT_LABEL}
+     * {@link Taxonomy} {@link TaxonomyTypes#DNA_SHORT_LABEL} {@link BioFields#SHORT_LABEL}
      *
      * @param shortLabel
      */
@@ -247,9 +247,9 @@ public class Dna {
     }
 
     /**
-     * {@link Indexed} {@link IndexNames#SMALL_MOLECULE_SHORT_LABEL}
+     * {@link Indexed} {@link IndexNames#DNA_SHORT_LABEL}
      * <p>
-     * {@link Taxonomy} {@link TaxonomyTypes#SMALL_MOLECULE_SHORT_LABEL} {@link BioFields#SHORT_LABEL}
+     * {@link Taxonomy} {@link TaxonomyTypes#DNA_SHORT_LABEL} {@link BioFields#SHORT_LABEL}
      *
      * @return String
      */
@@ -276,9 +276,9 @@ public class Dna {
     }
 
     /**
-     * {@link Indexed} {@link IndexNames#SMALL_MOLECULE_FULL_NAME}
+     * {@link Indexed} {@link IndexNames#DNA_FULL_NAME}
      * <p>
-     * {@link Taxonomy} {@link TaxonomyTypes#SMALL_MOLECULE_FULL_NAME} {@link BioFields#FULL_NAME}
+     * {@link Taxonomy} {@link TaxonomyTypes#DNA_FULL_NAME} {@link BioFields#FULL_NAME}
      *
      * @param fullName
      */
@@ -287,9 +287,9 @@ public class Dna {
     }
 
     /**
-     * {@link Indexed} {@link IndexNames#SMALL_MOLECULE_FULL_NAME}
+     * {@link Indexed} {@link IndexNames#DNA_FULL_NAME}
      * <p>
-     * {@link Taxonomy} {@link TaxonomyTypes#SMALL_MOLECULE_FULL_NAME} {@link BioFields#FULL_NAME}
+     * {@link Taxonomy} {@link TaxonomyTypes#DNA_FULL_NAME} {@link BioFields#FULL_NAME}
      *
      * @return String
      */
@@ -300,9 +300,9 @@ public class Dna {
     /**
      * A space separated list of aliases.
      * <p>
-     * {@link FullTextIndexed} {@link IndexNames#SMALL_MOLECULE_ALIASES}
+     * {@link FullTextIndexed} {@link IndexNames#DNA_ALIASES}
      * <p>
-     * {@link Taxonomy} {@link TaxonomyTypes#PROTEIN_ALIAS} {@link BioFields#ALIASES}
+     * {@link Taxonomy} {@link TaxonomyTypes#DNA_ALIAS} {@link BioFields#ALIASES}
      *
      * @return String
      */
@@ -313,9 +313,9 @@ public class Dna {
     /**
      * A space separated list of aliases.
      * <p>
-     * {@link FullTextIndexed} {@link IndexNames#SMALL_MOLECULE_ALIASES}
+     * {@link FullTextIndexed} {@link IndexNames#DNA_ALIASES}
      * <p>
-     * {@link Taxonomy} {@link TaxonomyTypes#SMALL_MOLECULE_ALIAS} {@link BioFields#ALIASES}
+     * {@link Taxonomy} {@link TaxonomyTypes#DNA_ALIAS} {@link BioFields#ALIASES}
      *
      * @param aliases
      */
@@ -327,7 +327,7 @@ public class Dna {
      * In case of full text indexes, if there are multiple space separated
      * terms, we add one row per term in the Taxonomy collection in Mongo.
      * <p>
-     * {@link FullTextIndexed} {@link IndexNames#SMALL_MOLECULE_INTACT_SECONDARY_REFS}
+     * {@link FullTextIndexed} {@link IndexNames#DNA_INTACT_SECONDARY_REFS}
      * <p>
      * {@link Taxonomy} {@link TaxonomyTypes#INTACT_ID} {@link BioFields#INTACT_SECONDARY_REFS}
      *
@@ -341,7 +341,7 @@ public class Dna {
      * In case of full text indexes, if there are multiple space separated
      * terms, we add one row per term in the Taxonomy collection in Mongo.
      * <p>
-     * {@link FullTextIndexed} {@link IndexNames#SMALL_MOLECULE_INTACT_SECONDARY_REFS}
+     * {@link FullTextIndexed} {@link IndexNames#DNA_INTACT_SECONDARY_REFS}
      * <p>
      * {@link Taxonomy} {@link TaxonomyTypes#INTACT_ID} {@link BioFields#INTACT_SECONDARY_REFS}
      *
@@ -390,7 +390,7 @@ public class Dna {
     }
 
     /**
-     * {@link Indexed} {@link IndexNames#SMALL_MOLECULE_ORGANISM_SHORT_LABEL}
+     * {@link Indexed} {@link IndexNames#DNA_ORGANISM_SHORT_LABEL}
      * <p>
      * {@link Taxonomy} {@link TaxonomyTypes#ORGANISM_SHORT_LABEL} {@link BioFields#ORGANISM_SHORT_LABEL}
      *
@@ -401,7 +401,7 @@ public class Dna {
     }
 
     /**
-     * {@link Indexed} {@link IndexNames#SMALL_MOLECULE_ORGANISM_SHORT_LABEL}
+     * {@link Indexed} {@link IndexNames#DNA_ORGANISM_SHORT_LABEL}
      * <p>
      * {@link Taxonomy} {@link TaxonomyTypes#ORGANISM_SHORT_LABEL} {@link BioFields#ORGANISM_SHORT_LABEL}
      *
@@ -412,7 +412,7 @@ public class Dna {
     }
 
     /**
-     * {@link Indexed} {@link IndexNames#SMALL_MOLECULE_ORGANISM_FULL_NAME)}
+     * {@link Indexed} {@link IndexNames#DNA_ORGANISM_FULL_NAME)}
      * <p>
      * {@link Taxonomy} {@link TaxonomyTypes#ORGANISM_FULL_NAME} {@link BioFields#ORGANISM_FULL_NAME}
      *
@@ -423,7 +423,7 @@ public class Dna {
     }
 
     /**
-     * {@link Indexed} {@link IndexNames#SMALL_MOLECULE_ORGANISM_FULL_NAME)}
+     * {@link Indexed} {@link IndexNames#DNA_ORGANISM_FULL_NAME)}
      * <p>
      * {@link Taxonomy} {@link TaxonomyTypes#ORGANISM_FULL_NAME} {@link BioFields#ORGANISM_FULL_NAME}
      *
