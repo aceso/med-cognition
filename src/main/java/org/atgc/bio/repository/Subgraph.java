@@ -44,7 +44,7 @@ public class Subgraph<T> {
     */
    public void add(T t) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
         Class tClass = t.getClass();
-        String bioType = tClass.getSimpleName();
+        String bioType = tClass.getSimpleName();  // For IntactGene.class, it will return "IntactGene"
 
         log.info("bioType = " + bioType);
         BioTypes bt = BioTypes.fromString(bioType);
