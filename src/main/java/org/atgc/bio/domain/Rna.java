@@ -17,15 +17,12 @@ import org.neo4j.graphdb.Direction;
  * default to. Currently not supporting NON_INDEXED.
  *
  *
- * @author redbjtanisha-eeasin
+ * @author jtanisha-ee
  */
 @BioEntity(bioType = BioTypes.RNA)
 @SuppressWarnings("javadoc")
 public class Rna {
 
-    /**
-     *
-     */
     protected static Logger log = LogManager.getLogger(Rna.class);
 
     @GraphId
@@ -74,6 +71,12 @@ public class Rna {
     public void setNodeType(String nodeType) {
         this.nodeType = nodeType;
     }
+
+    /**
+     * {@link Indexed} {@link IndexNames#NODE_TYPE
+     * @param nodeType
+     */
+    public void setNodeType(BioTypes nodeType) { this.nodeType = nodeType.toString(); }
 
     /**
      *
