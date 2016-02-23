@@ -746,7 +746,7 @@ public class GeneGraphDBImportUtil {
      * @return Gene
      * @throws Exception 
      */
-     public static Gene getGene(HashSet<Gene> geneSet, String taxId) throws Exception {
+     public static Gene getGene(HashSet<Gene> geneSet, String taxId) {
         for (Object obj : geneSet.toArray()) {
             Gene gene = (Gene)obj;
             NcbiTaxonomy ncbiTaxonomy = gene.getNcbiTaxonomy();
