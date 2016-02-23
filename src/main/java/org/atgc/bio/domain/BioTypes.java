@@ -46,6 +46,8 @@ public enum BioTypes {
     PROTEIN_SEQUENCE_FEATURE("ProteinSequenceFeature"),
 
     STRUCTURE("Structure"),
+
+    INTACT_RNA("IntactRna"),
     
     CHEMICAL_PROPERTY("ChemicalProperty"),
     
