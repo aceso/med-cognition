@@ -27,6 +27,11 @@ public enum TaxonomyTypes {
      * PDB structures (identified by structureId) have chains (identified by chainId)
      */
     CHAIN_ID("Chain Id"),
+
+    /**
+     * This is the id in the intact file that looks like "@id": "EBI-2944298",
+     */
+    EBI_ID("European Bioinformatics Institute Id"),
     
     /**
      * Drug packager's name.
@@ -64,14 +69,29 @@ public enum TaxonomyTypes {
     DNA_SHORT_LABEL("DNA Short Label"),
 
     /**
+     * Name of the rna as in Intact.
+     */
+    RNA_SHORT_LABEL("RNA Short Label"),
+
+    /**
      * Full name of the dna as in Intact
      */
     DNA_FULL_NAME("DNA Full Name"),
 
     /**
+     * Full name of the rna as in Intact.
+     */
+    RNA_FULL_NAME("RNA Full Name"),
+
+    /**
      * Alias of dna as in Intact
      */
     DNA_ALIAS("Alias of DNA"),
+
+    /**
+     * Alias of rna as in Intact
+     */
+    RNA_ALIAS("Alias of RNA"),
 
     /**
      * Gene short label as in intact.
