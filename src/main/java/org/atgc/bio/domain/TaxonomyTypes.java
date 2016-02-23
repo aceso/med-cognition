@@ -37,6 +37,16 @@ public enum TaxonomyTypes {
      * Drug manufacturer's name.
      */
     DRUG_MANUFACTURER_NAME("Drug Manufacturer Name"),
+
+    /**
+     * Full name of gene as in Intact
+     */
+    GENE_FULL_NAME("Gene Full Name"),
+
+    /**
+     * Alias for a gene in Intact
+     */
+    GENE_ALIAS("Gene Alias"),
     
     /**
      * Drug packager message
@@ -47,6 +57,26 @@ public enum TaxonomyTypes {
      * Drug manufacturer message
      */
     DRUG_MANUFACTURER_MESSAGE("Drug Manufacturer Message"),
+
+    /**
+     * Name of the dna as in intact.
+     */
+    DNA_SHORT_LABEL("DNA Short Label"),
+
+    /**
+     * Full name of the dna as in Intact
+     */
+    DNA_FULL_NAME("DNA Full Name"),
+
+    /**
+     * Alias of dna as in Intact
+     */
+    DNA_ALIAS("Alias of DNA"),
+
+    /**
+     * Gene short label as in intact.
+     */
+    GENE_SHORT_LABEL("Gene Short Label"),
     
     /**
      * Drug price description
