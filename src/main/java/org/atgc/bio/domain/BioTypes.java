@@ -57,7 +57,7 @@ public enum BioTypes {
 
     CHAIN("Chain"),
 
-    DNA("dna"),
+    DNA("Dna"),
 
     PDB_COMPOUND("PdbCompound"),
 
