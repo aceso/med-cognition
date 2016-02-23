@@ -623,6 +623,7 @@ public class IntactImport {
         //log.info("experiment = " + experiment);
         BasicDBList list = getBasicDBList(experiment, IntactFields.HOST_ORGANISM_LIST);
         //log.info("host organism list = " + list.toString());
+        if (null != list) return organismList;
         for (Object obj : list) {
             DBObject element = (DBObject) obj;
             Organism organism = new Organism();
