@@ -142,6 +142,11 @@ public enum BioTypes {
     GENE("Gene"),
 
     /**
+     * The intact interactor.
+     */
+    INTACT_GENE("Gene"),
+
+    /**
      *
      */
     ENZYME("Enzyme"),
