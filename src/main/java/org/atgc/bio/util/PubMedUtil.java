@@ -699,6 +699,8 @@ public class PubMedUtil {
                             throw new RuntimeException("Null pointer exception. PubmedId: " + pubmedId, e);
                         }
                     }
+                } else {
+                    log.error("PubMedId " + pubMedId + " could not be loaded.");
                 }
             }
         } finally {
