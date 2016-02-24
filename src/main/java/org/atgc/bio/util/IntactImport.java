@@ -500,7 +500,7 @@ public class IntactImport {
         IntactGene intactGene = new IntactGene();
         intactGene.setIntactId(getIntactId(interactor));
         intactGene.setInteractorId(getInteractorId(interactor));
-        intactGene.setNodeType(BioTypes.DNA);
+        intactGene.setNodeType(BioTypes.INTACT_GENE);
         String taxId = getNcbiTaxId(interactor);
         intactGene.setNcbiTaxId(taxId);
         NcbiTaxonomy ncbiTaxonomy = GeneGraphDBImportUtil.getNcbiTaxonomy(subgraph, taxId);
@@ -510,7 +510,9 @@ public class IntactImport {
         if (null != shortLabel) {
             String[] parts = shortLabel.split("_");
             if (null != parts && parts.length > 0) {
-                HashSet<Gene> genes = GeneGraphDBImportUtil.getGene(parts[0], subgraph);
+                String geneSymbol = parts[0];
+                intactGene.setGeneSymbol(geneSymbol);
+                HashSet<Gene> genes = GeneGraphDBImportUtil.getGene(geneSymbol, subgraph);
                 Gene gene = GeneGraphDBImportUtil.getGene(genes, taxId);
                 intactGene.setGeneRelation(gene);
             }
