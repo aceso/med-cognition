@@ -176,7 +176,8 @@ public class IntactImport {
                 if (IntactFields.SMALL_MOLECULE.equals(shortLabel)) {
                     return BioTypes.SMALL_MOLECULE;
                 } else {
-                    if (IntactFields.DNA.equals(shortLabel) || IntactFields.DS_DNA.equals(shortLabel))
+                    if (IntactFields.DNA.equals(shortLabel) || IntactFields.DS_DNA.equals(shortLabel)
+                            || IntactFields.SS_DNA.equals(shortLabel))
                         return BioTypes.DNA;
                     else if (IntactFields.GENE.equals(shortLabel))
                           return BioTypes.INTACT_GENE;
@@ -1136,6 +1137,71 @@ public class IntactImport {
   },
   "intactId": "9305837.xml",
   "interactorId": "435058"
+}
+                         */
+                        /*
+                        {
+  "_id": {
+    "$oid": "5009e00a0364add94f9cacb7"
+  },
+  "@id": "633979",
+  "names": {
+    "shortLabel": "dt90_dna",
+    "fullName": "90-mer poly-dT (dT90)"
+  },
+  "xref": {
+    "primaryRef": {
+      "@refTypeAc": "MI:0356",
+      "@refType": "identity",
+      "@id": "EBI-1535511",
+      "@dbAc": "MI:0469",
+      "@db": "intact"
+    }
+  },
+  "interactorType": {
+    "names": {
+      "shortLabel": "ss dna",
+      "fullName": "single stranded deoxyribonucleic acid",
+      "alias": {
+        "@typeAc": "MI:0303",
+        "#text": "ss DNA"
+      }
+    },
+    "xref": {
+      "primaryRef": {
+        "@refTypeAc": "MI:0356",
+        "@refType": "identity",
+        "@id": "MI:0680",
+        "@dbAc": "MI:0488",
+        "@db": "psi-mi"
+      },
+      "secondaryRef": [
+        {
+          "@refTypeAc": "MI:0356",
+          "@refType": "identity",
+          "@id": "EBI-967913",
+          "@dbAc": "MI:0469",
+          "@db": "intact"
+        },
+        {
+          "@refTypeAc": "MI:0358",
+          "@refType": "primary-reference",
+          "@id": "14755292",
+          "@dbAc": "MI:0446",
+          "@db": "pubmed"
+        }
+      ]
+    }
+  },
+  "organism": {
+    "@ncbiTaxId": "-2",
+    "names": {
+      "shortLabel": "chemical synthesis",
+      "fullName": "Chemical synthesis (Chemical synthesis)"
+    }
+  },
+  "intactId": "19303847.xml",
+  "interactorId": "633979"
 }
                          */
                         if (bioType.equals(BioTypes.DNA)) {
