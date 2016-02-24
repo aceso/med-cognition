@@ -112,7 +112,7 @@ public class IntactGene {
     @Taxonomy (rbClass=TaxonomyTypes.GENE_SHORT_LABEL, rbField=BioFields.SHORT_LABEL)  // this is value
     private String shortLabel;
 
-    @Indexed (indexName=IndexNames.GENE_SYMBOL)
+    @UniquelyIndexed (indexName=IndexNames.GENE_SYMBOL)
     @Taxonomy (rbClass=TaxonomyTypes.GENE_SYMBOL, rbField=BioFields.GENE_SYMBOL)  // this is value
     private String geneSymbol;
 
