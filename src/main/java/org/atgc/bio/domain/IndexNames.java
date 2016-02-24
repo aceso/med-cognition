@@ -43,6 +43,11 @@ public enum IndexNames {
      * This is the EBI id in intact file in the xref section. For eg. "@id": "EBI-2944298",
      */
     EBI_ID("EbiId"),
+
+    /**
+     * The gene symbol
+     */
+    GENE_SYMBOL("GeneSymbol"),
     
     /**
      * Drug patent number
