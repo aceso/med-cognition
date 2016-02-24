@@ -112,6 +112,10 @@ public class IntactGene {
     @Taxonomy (rbClass=TaxonomyTypes.GENE_SHORT_LABEL, rbField=BioFields.SHORT_LABEL)  // this is value
     private String shortLabel;
 
+    @Indexed (indexName=IndexNames.GENE_SYMBOL)
+    @Taxonomy (rbClass=TaxonomyTypes.GENE_SYMBOL, rbField=BioFields.GENE_SYMBOL)  // this is value
+    private String geneSymbol;
+
     @NodeLabel
     @Indexed (indexName=IndexNames.MESSAGE)
     @Taxonomy (rbClass=TaxonomyTypes.MESSAGE, rbField=BioFields.MESSAGE)
@@ -164,6 +168,32 @@ public class IntactGene {
 
     @RelatedTo(direction=Direction.OUTGOING, relType=BioRelTypes.GENE_RELATION, elementClass=BioRelation.class)
     private BioRelation geneRelation;
+
+    /**
+     * Name of the gene symbol.
+     * <p>
+     * {@link Indexed} {@link IndexNames#GENE_SYMBOL}
+     * <p>
+     * {@link Taxonomy} {@link TaxonomyTypes#GENE_SYMBOL} {@link BioFields#GENE_SYMBOL}
+     *
+     * @return  String
+     */
+    public String getGeneSymbol() {
+        return geneSymbol;
+    }
+
+    /**
+     * Name of the gene symbol.
+     * <p>
+     * {@link Indexed} {@link IndexNames#GENE_SYMBOL}
+     * <p>
+     * {@link Taxonomy} {@link TaxonomyTypes#GENE_SYMBOL} {@link BioFields#GENE_SYMBOL}
+     *
+     * @param geneSymbol
+     */
+    public void setGeneSymbol(String geneSymbol) {
+        this.geneSymbol = geneSymbol;
+    }
 
     /**
      * Name of the intact XML file. Use Uniprot when null.
