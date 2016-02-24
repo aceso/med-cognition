@@ -1040,6 +1040,10 @@ public class UniprotUtil {
      */
     public static CompoundKey getCompoundKey(String obj) {
         List<String> list = getName(obj);
+        if (list.size() < 3) {
+            log.error("Could not extract the author name: " + obj);
+            return null;
+        }
         return new CompoundKey(IndexNames.AUTHOR_NAME,
                 BioFields.FORE_NAME, BioFields.INITIALS, BioFields.LAST_NAME,
                 list.get(0), list.get(1), list.get(2));
