@@ -181,7 +181,8 @@ public class IntactImport {
                         return BioTypes.DNA;
                     else if (IntactFields.GENE.equals(shortLabel))
                           return BioTypes.INTACT_GENE;
-                    else if (IntactFields.RNA.equals(shortLabel) || IntactFields.M_RNA.equals(shortLabel))
+                    else if (IntactFields.RNA.equals(shortLabel) || IntactFields.M_RNA.equals(shortLabel)
+                            || IntactFields.R_RNA.equals(shortLabel))
                         return BioTypes.INTACT_RNA;
                     else
                           throw new RuntimeException("Couldn't map bioType to " + shortLabel);
@@ -1355,6 +1356,78 @@ public class IntactImport {
   },
   "intactId": "17928403.xml",
   "interactorId": "499461"
+}
+                             */
+                            /*
+                            {
+  "_id": {
+    "$oid": "5009e01e0364add94f9cc1a3"
+  },
+  "@id": "940991",
+  "names": {
+    "shortLabel": "human_28s_rrna",
+    "fullName": "28S rRNA"
+  },
+  "xref": {
+    "primaryRef": {
+      "@refTypeAc": "MI:0356",
+      "@refType": "identity",
+      "@id": "ENSG00000249773",
+      "@dbAc": "MI:0476",
+      "@db": "ensembl"
+    },
+    "secondaryRef": {
+      "@refTypeAc": "MI:0356",
+      "@refType": "identity",
+      "@id": "EBI-4411637",
+      "@dbAc": "MI:0469",
+      "@db": "intact"
+    }
+  },
+  "interactorType": {
+    "names": {
+      "shortLabel": "rrna",
+      "fullName": "ribosomal rna",
+      "alias": {
+        "@typeAc": "MI:0303",
+        "#text": "rRNA"
+      }
+    },
+    "xref": {
+      "primaryRef": {
+        "@refTypeAc": "MI:0356",
+        "@refType": "identity",
+        "@id": "MI:0608",
+        "@dbAc": "MI:0488",
+        "@db": "psi-mi"
+      },
+      "secondaryRef": [
+        {
+          "@refTypeAc": "MI:0356",
+          "@refType": "identity",
+          "@id": "EBI-933536",
+          "@dbAc": "MI:0469",
+          "@db": "intact"
+        },
+        {
+          "@refTypeAc": "MI:0358",
+          "@refType": "primary-reference",
+          "@id": "14755292",
+          "@dbAc": "MI:0446",
+          "@db": "pubmed"
+        }
+      ]
+    }
+  },
+  "organism": {
+    "@ncbiTaxId": "9606",
+    "names": {
+      "shortLabel": "human",
+      "fullName": "Homo sapiens"
+    }
+  },
+  "intactId": "21907836.xml",
+  "interactorId": "940991"
 }
                              */
                             IntactRna intactRna = getIntactRna(subgraph, interactor);
