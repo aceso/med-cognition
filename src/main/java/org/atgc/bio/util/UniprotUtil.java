@@ -1061,17 +1061,27 @@ public class UniprotUtil {
      */
     public static List<String> getName(String str) {
         List<String> list = new ArrayList<>();
+        if (null == str) return list;
         // firstname or forename
         list.add("");
         if (str != null) {
             int index = str.indexOf(".");
             //log.info("index dot =" + new Integer(index).toString());
             if (index > 0) {
-                String lname = (str.substring(0, index - 1).trim());
+                String lname = "";
+                try {
+                    lname = (str.substring(0, index - 1).trim());
+                } catch (StringIndexOutOfBoundsException e) {
+                    log.error("Could not extract last name: " + lname + " from name: " + str, e);
+                }
                 list.add(lname);
             }
-
-            String initials = (str.substring(index - 1, str.length()).trim());
+            String initials = "";
+            try {
+                initials = (str.substring(index - 1, str.length()).trim());
+            } catch (StringIndexOutOfBoundsException e) {
+                log.error("Could not extract initials: " + initials + " from name: " + str, e);
+            }
             list.add(initials);
         }
         return list;
