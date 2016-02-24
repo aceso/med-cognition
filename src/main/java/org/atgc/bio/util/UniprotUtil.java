@@ -1419,8 +1419,9 @@ public class UniprotUtil {
     public static void setPubMedRelation(String pubMedId, Protein protein, Subgraph subgraph) throws NotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, URISyntaxException, IOException, HttpException, InterruptedException {
         if (pubMedId != null) {
             PubMed pubmed = PubMedUtil.getPubmed(pubMedId, subgraph);
-            pubmed.setPubMedRelation(protein);
-            // subgraph.add(pubmed);
+            if (null != pubmed)
+               pubmed.setPubMedRelation(protein);
+            // subgraph.add(pubmed);   this is added to subgraph in the PubMedUtil, so we do not need it here
         }
     }
 
