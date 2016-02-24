@@ -109,7 +109,7 @@ public class IntactRna {
     @Taxonomy (rbClass=TaxonomyTypes.INTERACTOR_ID, rbField=BioFields.INTERACTOR_ID)
     private String interactorId;
 
-    @Indexed (indexName=IndexNames.EBI_ID)
+    @UniquelyIndexed(indexName=IndexNames.EBI_ID)
     @Taxonomy (rbClass=TaxonomyTypes.EBI_ID, rbField=BioFields.EBI_ID)
     private String ebiId;
 
