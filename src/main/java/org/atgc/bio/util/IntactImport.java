@@ -180,7 +180,7 @@ public class IntactImport {
                         return BioTypes.DNA;
                     else if (IntactFields.GENE.equals(shortLabel))
                           return BioTypes.INTACT_GENE;
-                    else if (IntactFields.RNA.equals(shortLabel))
+                    else if (IntactFields.RNA.equals(shortLabel) || IntactFields.M_RNA.equals(shortLabel))
                         return BioTypes.INTACT_RNA;
                     else
                           throw new RuntimeException("Couldn't map bioType to " + shortLabel);
@@ -1217,6 +1217,78 @@ public class IntactImport {
   },
   "intactId": "19745151.xml",
   "interactorId": "772104"
+}
+                             */
+                            /*
+                            {
+  "_id": {
+    "$oid": "5009e0060364add94f9ca816"
+  },
+  "@id": "499461",
+  "names": {
+    "shortLabel": "gastrin_human_mrna",
+    "fullName": "Human gastrin mRNA (full cds)"
+  },
+  "xref": {
+    "primaryRef": {
+      "@refTypeAc": "MI:0356",
+      "@refType": "identity",
+      "@id": "K02054",
+      "@dbAc": "MI:0475",
+      "@db": "ddbj/embl/genbank"
+    },
+    "secondaryRef": {
+      "@refTypeAc": "MI:0356",
+      "@refType": "identity",
+      "@id": "EBI-1549289",
+      "@dbAc": "MI:0469",
+      "@db": "intact"
+    }
+  },
+  "interactorType": {
+    "names": {
+      "shortLabel": "mrna",
+      "fullName": "messenger rna",
+      "alias": {
+        "@typeAc": "MI:0303",
+        "#text": "mRNA"
+      }
+    },
+    "xref": {
+      "primaryRef": {
+        "@refTypeAc": "MI:0356",
+        "@refType": "identity",
+        "@id": "MI:0324",
+        "@dbAc": "MI:0488",
+        "@db": "psi-mi"
+      },
+      "secondaryRef": [
+        {
+          "@refTypeAc": "MI:0356",
+          "@refType": "identity",
+          "@id": "EBI-619652",
+          "@dbAc": "MI:0469",
+          "@db": "intact"
+        },
+        {
+          "@refTypeAc": "MI:0358",
+          "@refType": "primary-reference",
+          "@id": "14755292",
+          "@dbAc": "MI:0446",
+          "@db": "pubmed"
+        }
+      ]
+    }
+  },
+  "organism": {
+    "@ncbiTaxId": "9606",
+    "names": {
+      "shortLabel": "human",
+      "fullName": "Homo sapiens"
+    }
+  },
+  "intactId": "17928403.xml",
+  "interactorId": "499461"
 }
                              */
                             IntactRna intactRna = getIntactRna(subgraph, interactor);
