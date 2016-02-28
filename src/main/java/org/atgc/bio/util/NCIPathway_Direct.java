@@ -6,7 +6,7 @@ package org.atgc.bio.util;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
-import org.atgc.bio.BioEntityType;
+import org.atgc.bio.MongoFields;
 import org.atgc.bio.NCIPathwayUtil;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.neo4j.NeoUtil;
@@ -155,7 +155,7 @@ public class NCIPathway_Direct {
     
     private static void setup() throws URISyntaxException {
         //graphDb = new GraphDatabaseFactory().newEmbeddedDatabase( DB_PATH );
-        graphDb = new RestGraphDatabase(BioEntityType.DB_URL.toString());
+        graphDb = new RestGraphDatabase(MongoFields.DB_URL.toString());
         
         registerShutdownHook( graphDb );
     }
@@ -199,16 +199,16 @@ public class NCIPathway_Direct {
     
     private static String getNodeType(String moleculeType) {
         
-        if (BioEntityType.RB_COMPLEX.equals(moleculeType)) {
-            return BioEntityType.RB_COMPLEX.toString();
-        } else if (BioEntityType.RB_COMPOUND.equals(moleculeType)) {
-            return BioEntityType.RB_COMPOUND.toString();
-        } else if (BioEntityType.RB_MOLECULE_TYPE.equals(moleculeType)) {
-            return BioEntityType.RB_MOLECULE_TYPE.toString();
-        } else if (BioEntityType.RB_PROTEIN.equals(moleculeType)) {
-            return BioEntityType.RB_PROTEIN.toString();
-        } else if (BioEntityType.RB_RNA.equals(moleculeType)) {
-            return BioEntityType.RB_RNA.toString();
+        if (MongoFields.RB_COMPLEX.equals(moleculeType)) {
+            return MongoFields.RB_COMPLEX.toString();
+        } else if (MongoFields.RB_COMPOUND.equals(moleculeType)) {
+            return MongoFields.RB_COMPOUND.toString();
+        } else if (MongoFields.RB_MOLECULE_TYPE.equals(moleculeType)) {
+            return MongoFields.RB_MOLECULE_TYPE.toString();
+        } else if (MongoFields.RB_PROTEIN.equals(moleculeType)) {
+            return MongoFields.RB_PROTEIN.toString();
+        } else if (MongoFields.RB_RNA.equals(moleculeType)) {
+            return MongoFields.RB_RNA.toString();
         }
         return null;
     }
@@ -822,7 +822,7 @@ public class NCIPathway_Direct {
         while (iter.hasNext()) {
             BasicDBObject molecule = (BasicDBObject)iter.next();
             String moleculeType = molecule.getString(MOLECULE_TYPE);
-            String moleculeId = molecule.getString(BioEntityType.NCI_ID.toString());
+            String moleculeId = molecule.getString(MongoFields.NCI_ID.toString());
             //Transaction tx = graphDb.beginTx();
             Node moleculeNode = null;
             try {
@@ -835,8 +835,8 @@ public class NCIPathway_Direct {
                     if (!moleculeNode.hasProperty(MOLECULE_TYPE)) {
                         moleculeNode.setProperty(MOLECULE_TYPE, moleculeType);
                     }
-                    if (!moleculeNode.hasProperty(BioEntityType.NODE_TYPE.toString())) {
-                        moleculeNode.setProperty(BioEntityType.NODE_TYPE.toString(), getNodeType(moleculeType));
+                    if (!moleculeNode.hasProperty(MongoFields.NODE_TYPE.toString())) {
+                        moleculeNode.setProperty(MongoFields.NODE_TYPE.toString(), getNodeType(moleculeType));
                     }
                 } else { // if output node does not exist
                     moleculeNode = graphDb.createNode();
@@ -844,7 +844,7 @@ public class NCIPathway_Direct {
                     moleculeIdIndex.add(moleculeNode, MOLECULE_IDREF, moleculeId); 
                     moleculeNode.setProperty(MOLECULE_TYPE, moleculeType);
                     moleculeIdIndex.add(moleculeNode, MOLECULE_TYPE, moleculeType);
-                    moleculeNode.setProperty(BioEntityType.NODE_TYPE.toString(), getNodeType(moleculeType));
+                    moleculeNode.setProperty(MongoFields.NODE_TYPE.toString(), getNodeType(moleculeType));
                 }
                 pNodeHits.close();
                 //tx.success();
@@ -1148,7 +1148,7 @@ public class NCIPathway_Direct {
             BasicDBObject interaction = (BasicDBObject)iter.next();
             //System.out.println("interaction = " + interaction.toString());
             String interactionType = interaction.getString(INTERACTION_TYPE);
-            String interactionId = interaction.getString(BioEntityType.NCI_ID.toString());
+            String interactionId = interaction.getString(MongoFields.NCI_ID.toString());
             
             BasicDBList evidenceList = ((BasicDBList)interaction.get(EVIDENCE_LIST));
             Iterator evidenceIter = evidenceList.iterator();
@@ -1261,7 +1261,7 @@ public class NCIPathway_Direct {
     // Mutating operations go here
                 pathwayNode = graphDb.createNode();
                 //System.out.println("pathwayId = " + pathwayInfo.get((Object)NCI_PATHWAY_ID));
-                pathwayNode.setProperty(PATHWAY_ID, pathwayInfo.get((Object)BioEntityType.NCI_ID.toString()) );
+                pathwayNode.setProperty(PATHWAY_ID, pathwayInfo.get((Object) MongoFields.NCI_ID.toString()) );
                 pathwayNode.setProperty(SUBNET, pathwayInfo.get((Object)SUBNET));
                 pathwayNode.setProperty(ORGANISM, pathwayInfo.get((Object)ORGANISM));
                 if (organismIndex == null) {
@@ -1270,7 +1270,7 @@ public class NCIPathway_Direct {
                 organismIndex.add(pathwayNode, ORGANISM, pathwayInfo.get((Object)ORGANISM));
                 pathwayNode.setProperty(LONG_NAME, pathwayInfo.get((Object)LONG_NAME));
                 pathwayNode.setProperty(SHORT_NAME, pathwayInfo.get((Object)SHORT_NAME));
-                String sourceId = (String)((Map)pathwayInfo.get((Object)SOURCE)).get(BioEntityType.NCI_ID.toString());
+                String sourceId = (String)((Map)pathwayInfo.get((Object)SOURCE)).get(MongoFields.NCI_ID.toString());
 
                 pathwayNode.setProperty(SOURCE_ID, sourceId);
                 String sourceText = (String)((Map)pathwayInfo.get((Object)SOURCE)).get(NCI_SOURCE_TEXT);
