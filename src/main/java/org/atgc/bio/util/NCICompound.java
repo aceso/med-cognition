@@ -24,12 +24,14 @@ import org.atgc.bio.NCICompoundUtil;
 import org.atgc.bio.NciFields;
 import org.atgc.bio.domain.*;
 import org.neo4j.graphdb.*;
+import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
 
 
 /**
  *
  * @author jtanisha-ee
  */
+@SuppressWarnings("javadoc")
 public class NCICompound {
     
     protected static Logger log = LogManager.getLogger(NCICompound.class);
@@ -37,24 +39,29 @@ public class NCICompound {
      /**
      * This method uses compound collection and adds genesymbol, importstatus 
      * and date to Druglistcollection importstatus - due is by default.
-     * @@throws UnknownHostException
+     * @throws UnknownHostException
      */
-    public void addDrugList() throws UnknownHostException {
+    /*public void addDrugList() throws UnknownHostException {
          NCICompoundUtil.addCompoundList();
-    }
+    } */
    
     public static void main(String[] args) throws java.io.IOException {
         
-        List<Map> drugList = NCICompoundUtil.getNciCompoundListDueCollection();
+        List<Map> drugList = NCICompoundUtil.getNciCompounds();
         Iterator<Map> drugIter = drugList.iterator();
        
         for (int i = 0; i < drugList.size(); i++ ) { 
             Map map = drugIter.next(); 
             //System.out.println("map =" + map.toString());           
-            String geneSymbol = (String)map.get(BioEntityType.HUGO_GENE_SYMBOL.toString());
+            String geneSymbol = (String)map.get(MongoFields.HUGO_GENE_SYMBOL.toString());
             log.info("******* geneSymbol =" + geneSymbol);
+            if (StatusUtil.idExists(BioTypes.COMPOUND, MongoFields.HUGO_GENE_SYMBOL, geneSymbol)) {
+                log.info("Compound for hugoGeneSymbol " + geneSymbol + " already imported.");
+                continue;
+            }
             try {
                 processCompound(geneSymbol);
+                StatusUtil.idInsert(BioTypes.COMPOUND, MongoFields.HUGO_GENE_SYMBOL, geneSymbol);
                 //NCICompoundUtil.updateImportStatus(geneSymbol, BioEntityType.DONE);
             } catch (Exception e) {
                 //NCICompoundUtil.updateImportStatus(geneSymbol,  BioEntityType.ERROR);
@@ -65,7 +72,8 @@ public class NCICompound {
         }
         log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
         log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
-     /*   try {
+        log.info("Completed successfully!");
+        /*   try {
              createGeneNode("PKP4");        
         } catch(Exception e) {
             throw new RuntimeException("PKP4" + e.getMessage(), e);
@@ -111,8 +119,8 @@ public class NCICompound {
        return getString(obj, NciFields.NEGATION_INDICATOR);    
    }
    
-   public static Protein getProtein(String proteinId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException, Exception {
-        Object bio = getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, proteinId);
+   public static Protein getProtein(String proteinId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException, ServiceException, HttpException, InterruptedException, IOException {
+        getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, proteinId);
         return UniprotUtil.getProtein(proteinId, subGraph);
     } 
     
@@ -120,8 +128,8 @@ public class NCICompound {
         return (BasicDBObject)drugInfo.get(NciFields.SEQUENCE_IDENTIFICATION_COLLECTION.toString());
     }
     
-    public static void setSequenceIdentificationRelation(BasicDBObject sequence, Protein protein, HashSet<Gene> geneSet, Subgraph subGraph) throws java.io.IOException, java.net.URISyntaxException {
-        String proteinId = getUniProtId(sequence);
+    public static void setSequenceIdentificationRelation(BasicDBObject sequence, Protein protein, HashSet<Gene> geneSet) throws java.io.IOException, java.net.URISyntaxException {
+        getUniProtId(sequence);
         if (sequence != null) {
             if (geneSet != null && geneSet.size() > 0) {
                 Object[] objList = geneSet.toArray();
@@ -304,11 +312,11 @@ public class NCICompound {
      * @param dbList
      * @return 
      */
-    public static List getGeneRoles(BasicDBList dbList) {
+    public static List<String> getGeneRoles(BasicDBList dbList) {
         if (dbList == null || dbList.isEmpty()) {
             return null;
         } else { 
-            List<String> roleList = new ArrayList();
+            List<String> roleList = new ArrayList<>();
             for (Object obj : dbList) {
                 if (!OntologyStrUtil.isObjectString(obj)) {
                     BasicDBObject dbObj = (BasicDBObject)obj;
@@ -382,13 +390,13 @@ public class NCICompound {
            if (OntologyStrUtil.isObjectString(dbObj, NciFields.EVIDENCE_CODE)) {
                 String code = getEvidenceCode(dbObj);
                 //log.info("getEvidenceCode() " + code);
-               List<String> codeList = new ArrayList();
+               List<String> codeList = new ArrayList<>();
                codeList.add(code);
                return codeList;    
            } else {
-               BasicDBList dbList = (BasicDBList)OntologyStrUtil.getBasicDBList(dbObj, NciFields.EVIDENCE_CODE);
+               BasicDBList dbList = OntologyStrUtil.getBasicDBList(dbObj, NciFields.EVIDENCE_CODE);
                if (dbList != null && !dbList.isEmpty()) {
-                   List<String> codeList = new ArrayList();
+                   List<String> codeList = new ArrayList<>();
                    for (Object obj : dbList) {
                         codeList.add(obj.toString());
                    }
@@ -446,7 +454,7 @@ public class NCICompound {
      * @param dbObj
      * @return {@link PubMed}
      */
-    public static PubMed getPubMed(BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException, UnknownHostException, UnsupportedEncodingException, MalformedURLException, IOException, HttpException, InterruptedException {
+    public static PubMed getPubMed(BasicDBObject dbObj, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException, IOException, HttpException, InterruptedException {
         String pubMedId = getPubMedId(dbObj);
         PubMed pubMed = (PubMed)getBioEntityFromBioType(subGraph, BioTypes.PUBMED, BioFields.PUBMED_ID, pubMedId);
         if (pubMed == null) {
@@ -511,7 +519,7 @@ public class NCICompound {
         }
     }
    
-    public static NcbiTaxonomy getNcbiTaxonomy(BasicDBObject dbObj, Subgraph subgraph) throws Exception {
+    public static NcbiTaxonomy getNcbiTaxonomy(BasicDBObject dbObj, Subgraph subgraph) throws InvocationTargetException, NoSuchFieldException, IllegalAccessException, UnknownHostException {
        String ncbiTaxId = getNcbiTaxId(dbObj);
        return GeneGraphDBImportUtil.getNcbiTaxonomy(subgraph, ncbiTaxId);
     } 
@@ -532,44 +540,42 @@ public class NCICompound {
      * @throws NotFoundException
      * @throws InvocationTargetException 
      */
-    public static void processSentence(BasicDBObject zeroObject, HashSet<Gene> geneSet, Subgraph subGraph) throws java.io.IOException, java.net.URISyntaxException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NotFoundException, InvocationTargetException, Exception {
-         BasicDBList dbList = (BasicDBList)OntologyStrUtil.getBasicDBList(zeroObject, NciFields.SENTENCE);
+    public static void processSentence(BasicDBObject zeroObject, HashSet<Gene> geneSet, Subgraph subGraph) throws java.io.IOException, java.net.URISyntaxException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NotFoundException, InvocationTargetException, HttpException, InterruptedException {
+         BasicDBList dbList = OntologyStrUtil.getBasicDBList(zeroObject, NciFields.SENTENCE);
         
          if (dbList != null) {
-            if (dbList != null) {
-                //log.info("Sentence()" + dbList.toString());
-                /**
-                 * sentenceList
-                 */
-                for (Object obj : dbList) {
-                    BasicDBObject dbObj = (BasicDBObject)obj;
-                    BasicDBObject drugData = getDrugData(dbObj);
-                    
-                    Drug drug = getDrug(drugData, subGraph);
-                    Gene gene = getGene(dbObj, geneSet);
-                   // log.info("drug " + drug.toString());
-                    NciDrugGeneRoleRelation roleRelation = getDrugGeneRoleRelation(drug, gene, dbObj);   
-                    drug.setDrugGeneRelations(roleRelation);
-                    NciDrugGeneEvidenceRelation eRelation = getDrugGeneEvidenceRelation(drug, gene, dbObj);
-                    drug.setEvidenceRelations(eRelation);
-                    
-                    PubMed pubMed = getPubMed(dbObj, subGraph);
-                    if (pubMed != null) {
-                        NciPubMedGeneDrugDiseaseRelation pubMedDrugRelation = getPubMedDrugRelation(pubMed, drug, dbObj);
-                        NciPubMedGeneDrugDiseaseRelation pubMedGeneRelation = getPubMedGeneRelation(pubMed, gene, dbObj);
-                        pubMed.setPubMedRelation(pubMedGeneRelation);
-                        pubMed.setPubMedRelation(pubMedDrugRelation);
-                    }
-                    
-                    Organism organism = getOrganism(dbObj, subGraph);
-                    setOrganismRelations(organism, gene, drug);
-                    NcbiTaxonomy ncbiTaxonomy = getNcbiTaxonomy(dbObj, subGraph);
-                    if (ncbiTaxonomy != null) {
-                       drug.setNcbiTaxonomyRelation(ncbiTaxonomy);
-                    }
-                }
-            }                
-        }   
+             //log.info("Sentence()" + dbList.toString());
+             /**
+              * sentenceList
+              */
+             for (Object obj : dbList) {
+                 BasicDBObject dbObj = (BasicDBObject)obj;
+                 BasicDBObject drugData = getDrugData(dbObj);
+
+                 Drug drug = getDrug(drugData, subGraph);
+                 Gene gene = getGene(dbObj, geneSet);
+                // log.info("drug " + drug.toString());
+                 NciDrugGeneRoleRelation roleRelation = getDrugGeneRoleRelation(drug, gene, dbObj);
+                 drug.setDrugGeneRelations(roleRelation);
+                 NciDrugGeneEvidenceRelation eRelation = getDrugGeneEvidenceRelation(drug, gene, dbObj);
+                 drug.setEvidenceRelations(eRelation);
+
+                 PubMed pubMed = getPubMed(dbObj, subGraph);
+                 if (pubMed != null) {
+                     NciPubMedGeneDrugDiseaseRelation pubMedDrugRelation = getPubMedDrugRelation(pubMed, drug, dbObj);
+                     NciPubMedGeneDrugDiseaseRelation pubMedGeneRelation = getPubMedGeneRelation(pubMed, gene, dbObj);
+                     pubMed.setPubMedRelation(pubMedGeneRelation);
+                     pubMed.setPubMedRelation(pubMedDrugRelation);
+                 }
+
+                 Organism organism = getOrganism(dbObj, subGraph);
+                 setOrganismRelations(organism, gene, drug);
+                 NcbiTaxonomy ncbiTaxonomy = getNcbiTaxonomy(dbObj, subGraph);
+                 if (ncbiTaxonomy != null) {
+                    drug.setNcbiTaxonomyRelation(ncbiTaxonomy);
+                 }
+             }
+         }
     }
     
     
@@ -598,11 +604,16 @@ public class NCICompound {
      * @throws UnknownHostException
      * @throws HttpException 
      */
-    public static void processCompound(String name) throws java.io.IOException, java.net.URISyntaxException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NotFoundException, InvocationTargetException, UnsupportedEncodingException, MalformedURLException, UnknownHostException, HttpException, Exception {
+    public static void processCompound(String name) throws java.io.IOException, java.net.URISyntaxException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NotFoundException, InvocationTargetException, UnsupportedEncodingException, MalformedURLException, UnknownHostException, HttpException, InterruptedException, ServiceException {
         
         log.info("processCompound()");
         Map map = NCICompoundUtil.getObject(name);
-        log.info("map =" + map.toString());
+        if (null != map)
+           log.info("map =" + map.toString());
+        else {
+            log.error("Did not get a compound " + name);
+            return;
+        }
         BasicDBObject zeroObject = NCICompoundUtil.getZeroObject(map);
         String geneSymbol;
         if (zeroObject == null) {
@@ -617,7 +628,7 @@ public class NCICompound {
         BasicDBObject sequence = getSequenceIdentificationObj(zeroObject);
         Protein protein = getProtein(getUniProtId(sequence),subGraph);
         if (protein != null) { 
-           setSequenceIdentificationRelation(sequence, protein, geneSet, subGraph);  
+           setSequenceIdentificationRelation(sequence, protein, geneSet);
         }
         processSentence(zeroObject, geneSet, subGraph);
         
@@ -642,15 +653,14 @@ public class NCICompound {
     */
    public static Object getBioEntityFromBioType(Subgraph subGraph, BioTypes bioType, BioFields key, String value) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException {
        //log.info("getBioEntityFromBioType()," + bioType.toString() + "," + key.toString() + "=" + value);
-       Object bioEntity = subGraph.search(bioType, key, value);
-       return bioEntity;
+       return subGraph.search(bioType, key, value);
    }
    
-    public static Gene getGene(HashSet<Gene> geneSet, String taxId) throws Exception {
+    public static Gene getGene(HashSet<Gene> geneSet, String taxId) {
         return GeneGraphDBImportUtil.getGene(geneSet, taxId);
    }
    
-   public static Gene getGene(BasicDBObject dbObj, HashSet<Gene> geneSet) throws Exception {
+   public static Gene getGene(BasicDBObject dbObj, HashSet<Gene> geneSet) {
         String organismLabel = getOrganismShortLabel(dbObj);
         if (organismLabel != null) {
             String taxId = NcbiTaxIdTypes.getNcbiTaxIdValue(organismLabel);
@@ -658,14 +668,14 @@ public class NCICompound {
                 return getGene(geneSet, taxId);
             }
         } else {
-            log.info("organism not found =" + organismLabel);
+            log.info("organism not found");
             getGene(geneSet, NcbiTaxIdTypes.HUMAN.toString());
         } 
         return null;
         
    }
    
-   public static HashSet<Gene> getGeneSet(BasicDBObject zeroObject, String geneSymbol, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException, Exception {
+   public static HashSet<Gene> getGeneSet(BasicDBObject zeroObject, String geneSymbol, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException, InterruptedException, IOException, HttpException {
         return GeneGraphDBImportUtil.getGene(geneSymbol, subGraph);   
     }
 }
