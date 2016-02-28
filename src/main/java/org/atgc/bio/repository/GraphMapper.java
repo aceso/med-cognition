@@ -4,7 +4,7 @@
  */
 package org.atgc.bio.repository;
 
-import org.atgc.bio.BioEntityType;
+import org.atgc.bio.MongoFields;
 import org.atgc.bio.domain.BioRelTypes;
 import org.atgc.bio.domain.BioTypes;
 import org.atgc.bio.meta.BioEntity;
@@ -80,8 +80,8 @@ public class GraphMapper {
      */
     public static BioTypes getBioType(Node node) throws NotFoundException {
         log.info("getBioType(node)");
-        if (node != null && node.hasProperty(BioEntityType.NODE_TYPE.toString())) {
-            String bioType = (String)node.getProperty(BioEntityType.NODE_TYPE.toString());
+        if (node != null && node.hasProperty(MongoFields.NODE_TYPE.toString())) {
+            String bioType = (String)node.getProperty(MongoFields.NODE_TYPE.toString());
             if (bioType != null) {
                 log.info("bioType =" + bioType);
                 return BioTypes.fromString(bioType);
