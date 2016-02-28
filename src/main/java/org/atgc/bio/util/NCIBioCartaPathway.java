@@ -118,7 +118,9 @@ public class NCIBioCartaPathway {
         //notFoundList = new <RelQueue>ArrayList();
         while (pathwayIter.hasNext()) {
             Map map = pathwayIter.next();
+            log.info("pathwayIter map = " + map.toString());
             String shortName = (String) map.get(getStringFromEnum(NciPathwayFields.SHORT_NAME));
+            if (null == shortName) continue;
             log.info("********** shortName " + shortName);
             try {
                 nciPathway.createPathwayNode(shortName);
@@ -131,6 +133,7 @@ public class NCIBioCartaPathway {
         }
         log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
         log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+        log.info("Completed successfully!");
     }
 
     private static BioTypes getBioType(String moleculeType) {
@@ -2455,6 +2458,11 @@ public class NCIBioCartaPathway {
     public <BioEntity> NciPathway createPathwayNode(String name) throws java.io.IOException, java.net.URISyntaxException, UnsupportedEncodingException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NoSuchMethodException, InvocationTargetException, MalformedURLException, UnknownHostException, HttpException, NoSuchFieldException {
 
         Map map = NCIPathwayUtil.getPathwayObject(name);
+        if (null == map) {
+            log.error("Pathway object for name " + name + " is null.");
+            return null;
+        }
+        log.info("map = " + map.toString());
         /**
          * provides information on PathwayComponentList
          */
