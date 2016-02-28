@@ -5,6 +5,7 @@
 package org.atgc.bio.util;
 
 import com.mongodb.*;
+import org.atgc.bio.domain.BioTypes;
 import org.atgc.bio.repository.CompoundKey;
 import org.atgc.bio.repository.PrimaryKey;
 import org.atgc.mongod.MongoCollection;
@@ -66,6 +67,18 @@ public class StatusUtil<T> {
     }
 
     /**
+     *
+     * @param bioType
+     * @param key
+     * @param id
+     * @return
+     * @throws UnknownHostException
+     */
+    public static boolean idExists(BioTypes bioType, Enum key, String id) throws UnknownHostException {
+        return idExists(bioType.toString(), key.toString(), id);
+    }
+
+    /**
      * Checking if an id exists might result in better performance.
      * But it's optional. The idInsert method does check if it is already there.
      *
@@ -115,6 +128,18 @@ public class StatusUtil<T> {
         MongoCollection collection = getCollection(coll);
         long cnt = collection.count(getObjectQuery(key, value));
         return cnt != 0;
+    }
+
+    /**
+     *
+     * @param bioType
+     * @param key
+     * @param id
+     * @return
+     * @throws UnknownHostException
+     */
+    public static WriteResult idInsert(BioTypes bioType, Enum key, String id) throws UnknownHostException {
+        return idInsert(bioType.toString(), key.toString(), id);
     }
 
     /**
