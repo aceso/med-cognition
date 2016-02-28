@@ -30,10 +30,8 @@ import java.util.HashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.rest.graphdb.RestGraphDatabase;
-import org.neo4j.rest.graphdb.index.RestIndex;
 import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
 
 /**
@@ -73,7 +71,7 @@ public class IntactImport {
     protected static Logger log = LogManager.getLogger(IntactImport.class);
 
     private static void setup() throws URISyntaxException {
-        graphDb = new RestGraphDatabase(BioEntityType.DB_URL.toString());
+        graphDb = new RestGraphDatabase(MongoFields.DB_URL.toString());
         registerShutdownHook(graphDb);
     }
 
@@ -1620,9 +1618,9 @@ public class IntactImport {
             try {
                 subgraph = processIntact((DBObject) e);
                 PersistenceTemplate.saveSubgraph(subgraph);
-                InTactUtil.updateImportStatus(intactId, BioEntityType.DONE.toString());
+                InTactUtil.updateImportStatus(intactId, MongoFields.DONE.toString());
             } catch (UnknownHostException ex) {
-                InTactUtil.updateImportStatus(intactId, BioEntityType.ERROR.toString());
+                InTactUtil.updateImportStatus(intactId, MongoFields.ERROR.toString());
                 throw ex;
             }
             log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
