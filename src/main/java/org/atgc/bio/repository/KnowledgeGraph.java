@@ -40,7 +40,10 @@ import java.util.*;
  * KnowledgeGraph - Traversal
  * @author jtanisha-ee
  *         Use BioFields to fetch BioEntities and Nodes
+ *
+ *         References:
  *  https://github.com/neo4j/neo4j/blob/2.3.2/community/embedded-examples/src/main/java/org/neo4j/examples/NewMatrix.java
+ *  http://www.informit.com/articles/article.aspx?p=2415371#articleDiscussion
  */
 @SuppressWarnings("javadoc")
 public class KnowledgeGraph {
