@@ -14,9 +14,7 @@ import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 
-import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,12 +34,32 @@ import java.util.List;
 @SuppressWarnings("javadoc")
 public class KnowledgeEntityEvaluator implements Evaluator {
 
-    List<KnowledgeInteractor> knowledgeInteractorList;
-    protected static final Logger log = LogManager.getLogger(PersistenceTemplate.class);
+    List<BioEntity> bioEntityList;
 
-    public KnowledgeEntityEvaluator(List<KnowledgeInteractor> list) {
-        knowledgeInteractorList = list;
+    protected static final Logger log = LogManager.getLogger(PersistenceTemplate.class);
+    public KnowledgeEntityEvaluator(List<BioEntity> bioList) {
+        bioEntityList = bioList;
     }
+
+    @Override
+    public Evaluation evaluate(Path path)  {
+        System.out.println("evaluate path=" + path);
+        for(BioEntity bio : bioEntityList) {
+            if (isNodeIncluded(path.endNode(), bio)) {
+                System.out.println("node exists " + path.endNode().getId() + " name " + path.endNode().getProperty("name"));
+                System.out.println("path =" + path);
+                return Evaluation.INCLUDE_AND_CONTINUE;
+            }
+        }
+        return Evaluation.EXCLUDE_AND_CONTINUE;
+    }
+
+
+    /* for future use
+      List<KnowledgeInteractor> knowledgeInteractorList;
+      public KnowledgeEntityEvaluator(List<KnowledgeInteractor> list) {
+          knowledgeInteractorList = list;
+      }
 
     @Override
     public Evaluation evaluate(Path path)  {
@@ -58,6 +76,7 @@ public class KnowledgeEntityEvaluator implements Evaluator {
         }
         return Evaluation.EXCLUDE_AND_CONTINUE;
     }
+    */
 
 
     /**
