@@ -4,28 +4,27 @@
  */
 package org.atgc.bio.repository;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import org.atgc.bio.domain.BioRelTypes;
 import org.atgc.bio.domain.BioTypes;
-import org.atgc.bio.meta.BioEntity;
-import org.atgc.init.Config;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.graphdb.traversal.BranchState;
-import org.neo4j.graphdb.traversal.Evaluators;
-import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.graphdb.traversal.*;
 import org.neo4j.graphdb.traversal.Traverser;
+import org.neo4j.io.fs.DefaultFileSystemAbstraction;
+import org.neo4j.kernel.StoreLocker;
 
+import org.neo4j.graphdb.Label;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * KnowledgeGraph - Traversal
@@ -35,170 +34,74 @@ import java.util.Map;
  *         References:
  *  https://github.com/neo4j/neo4j/blob/2.3.2/community/embedded-examples/src/main/java/org/neo4j/examples/NewMatrix.java
  *  http://www.informit.com/articles/article.aspx?p=2415371#articleDiscussion
- *
- *  copying subgraph or entire db from srcDb to destDb
- *      https://gist.github.com/kenahoo-windlogics/036639a7061877acc520
- *
- *  evaluators examples
- *  https://github.com/maxdemarzi/neo_airlines
- *
  */
 @SuppressWarnings("javadoc")
-public class KnowledgeGraph {
+public class KnowledgeGraphTest {
 
-    /* change this path while running this program */
+    protected static final Logger log = LogManager.getLogger(KnowledgeGraphTest.class);
     private static final String dbPath = "/Users/smitha/Documents/Neo4j-IE/default.graphdb";
-    private static final String destDbPath = "/Users/smitha/Documents/Neo4j-subgraph/default.graphdb";
-    private static GraphDatabaseService graphDb, destGraphDb;
-    protected static final Logger log = LogManager.getLogger(KnowledgeGraph.class);
+    private static GraphDatabaseService graphDb;
 
-
-    /**
-     * setup
-     * @throws URISyntaxException
-     */
     private static void setup() throws URISyntaxException {
-        try {
-             File dbFile = new File(Config.DB_PATH.toString());
-             File destDbFile = new File(Config.DEST_DB_PATH.toString());
-             graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(dbFile);
-             destGraphDb = new GraphDatabaseFactory().newEmbeddedDatabase(destDbFile);
-        } catch (Exception ex) {
-           log.error("Could not initialize RestGraphDatabase ", ex);
-           throw new RuntimeException("uri", ex);
-        }
+            try {
+                StoreLocker lock = new StoreLocker(new DefaultFileSystemAbstraction());
+                lock.checkLock(new File(dbPath));
+                try {
+                    lock.release();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                File dbFile = new File(dbPath);
+                graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(dbFile);
+            } catch (Exception ex) {
+              log.error("Could not initialize RestGraphDatabase ", ex);
+                throw new RuntimeException("uri", ex);
+            }
+
     }
+
 
     private static void registerShutdownHook() {
         // Registers a shutdown hook for the Neo4j instance so that it
         // shuts down nicely when the VM exits (even if you "Ctrl-C" the
         // running example before it's completed)
         Runtime.getRuntime()
-            .addShutdownHook( new Thread() {
-            @Override
-            public void run() {
-                graphDb.shutdown();
-                destGraphDb.shutdown();
-           }
-        });
-    }
-
-
-
-    public static void main(String[] args) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException {
-        setup();
-        Transaction tx = graphDb.beginTx();
-        Transaction destTx = destGraphDb.beginTx();
-        try {
-           // createGraph();
-           // getDepthFromProtein();
-           // traverseGraph();
-            // bioType, propertyName, propertyValue
-            for (int i = 0; i < 5; i++) {
-                getGraphPath(getList(), getStartNode(args[1], args[2], args[3]), i);
-            }
-            tx.success();
-            destTx.success();
-        } catch(Exception e) {
-            tx.failure(); //rollback
-            destTx.failure();
-            throw new RuntimeException("Something went wrong with access while accessing bioentity. msg=" + e.getMessage(), e);
-        } finally {
-            tx.close();
-            destTx.close();
-        }
-    }
-
-    public static Node getStartNode(String bioType, String propName, String propValue) {
-        Node node = getNode(DynamicLabel.label(bioType), propName, propValue);
-        return node;
-    }
-
-    public static List<BioEntity> getList() {
-        List<BioEntity> list = new ArrayList<>();
-        try {
-            list.add(PersistenceTemplate.getBioEntity(BioTypes.DRUG, "Lapatinib"));
-            list.add(PersistenceTemplate.getBioEntity(BioTypes.GENE_ONTOLOGY, "GO:0000002"));
-            // this enzyme deals with breast cancer
-            // 3.4.22.43
-            list.add(PersistenceTemplate.getBioEntity(BioTypes.ENZYME, "3.4.21.109"));
-        } catch(Exception e) {
-            log.error("error retrieving BioEntity protein " + e.getMessage(), e);
-        }
-        return list;
-    }
-
-    public static Node getNode(Label label, String propName, String propValue) {
-        return graphDb.findNode(label, propName, propValue);
-    }
-
-    /**
-     * getGraphPath
-     * uses PathExpander and Evaluator
-     */
-    public static void getGraphPath(List<BioEntity> list, Node node, int depth) throws UnsupportedEncodingException {
-        System.out.println("getGraphPath using PathExpander");
-        TraversalDescription td = graphDb.traversalDescription()
-            // Choose a depth-first search strategy
-            .breadthFirst()
-            .expand( new PathExpander<Object>() {
-                 @Override
-                 public Iterable<Relationship> expand(Path path, BranchState<Object> objectBranchState) {
-                      // Get the depth of this node
-                      int depth = path.length();
-                      System.out.println("depth =" + depth);
-                      return path.endNode().getRelationships();
-                 }
-                 @Override
-                 public PathExpander<Object> reverse() {
-                     return null;
-                 }
-            })
-            .evaluator( Evaluators.atDepth( depth ))
-            .evaluator(new KnowledgeEntityEvaluator(list));
-           /*     @Override
-                public Evaluation evaluate(Path path) {
-                    System.out.println("evaluate path=" + path);
-                    if (isNodeIncluded(path.endNode(), enzyme2)) {
-                        System.out.println("enzyme2 exists " + path.endNode().getProperty("name"));
-                            // return Evaluation.INCLUDE_AND_CONTINUE;
+                .addShutdownHook( new Thread()
+                {
+                    @Override
+                    public void run()
+                    {
+                        graphDb.shutdown();
                     }
-                    if (isRelationship(path.endNode(), BioRelTypes.NEGATIVELY_REGULATES)) {
-                        System.out.println("negatively regulates relationship exists, node=" +path.endNode().getProperty("name"));
-                            return Evaluation.INCLUDE_AND_CONTINUE;
-                    }
-
-                return Evaluation.EXCLUDE_AND_CONTINUE;
-                }*/
-       // });
-
-        getNewKnowledge(td, node);
-        //System.out.println("saveSubGraph");
-    }
-
-    public static void getNewKnowledge(TraversalDescription td, Node node) {
-
-        System.out.println("\n\n\t getNewKnowledge()");
-        Traverser traverser = td.traverse(node);
-        //saveSubGraph(td, node);
-    }
-
-    private static boolean isNodeIncluded(Node node, Node dNode) {
-        System.out.println("nodeId match check" + node.getId() +  "== " + dNode.getId());
-        if (node.getId() == dNode.getId() &&
-                node.getLabels().toString().equalsIgnoreCase(dNode.getLabels().toString())) {
-            return true;
-        }
-        return false;
+                } );
     }
 
 
-    // Node enzyme2 = getNode(DynamicLabel.label(BioTypes.ENZYME.toString()), "name", "Enzyme2");
-    // Node enzyme3 = getNode(DynamicLabel.label(BioTypes.ENZYME.toString()), "name", "Enzyme3");
+
     public enum Labels implements Label {
         PROTEIN,
         PUBMED,
         GENE
+    }
+
+    public static void main(String[] args) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException {
+        setup();
+        Transaction tx = graphDb.beginTx();
+        try {
+           // createGraph();
+           // getDepthFromProtein();
+           // traverseGraph();
+            getGraphPath();
+            tx.success();
+        } catch(Exception e) {
+            tx.failure(); //rollback
+            throw new RuntimeException("Something went wrong with access while accessing bioentity. msg=" + e.getMessage(), e);
+        } finally {
+            tx.finish();
+            tx.close();
+        }
+        //registerShutdownHook();
+
     }
 
     public enum RelationshipTypes implements RelationshipType {
@@ -206,17 +109,25 @@ public class KnowledgeGraph {
         REFERENCES_PUBMED;
     }
 
-    public static Relationship setPubMedRelation(Node protein, Node pubmed, int ref) {
+
+    public static Relationship setPubMedRelation(Node protein, Node pubmed, int ref)
+    {
         Relationship relationship = protein.createRelationshipTo( pubmed, RelationshipTypes.REFERENCES_PUBMED );
         relationship.setProperty( "primaryRef", ref );
         return relationship;
     }
 
 
+
+
+    // node.addLabel(DynamicLabel.label(bioType.toString()));
+
+
     /**
      * @throws IllegalAccessException
      */
-    public static void createGraphTest() throws IllegalAccessException, UnsupportedEncodingException {
+
+    public static void createGraph() throws IllegalAccessException, UnsupportedEncodingException{
         Node node = graphDb.createNode(Labels.PROTEIN);
         node.setProperty("name", "BRCA1");
         node.addLabel(Labels.PROTEIN);
@@ -240,6 +151,7 @@ public class KnowledgeGraph {
         proteinIL.addLabel(Labels.PROTEIN);
         proteinP53.addLabel(Labels.PROTEIN);
         System.out.println("completed protein");
+
 
         node.createRelationshipTo(proteinP53, RelationshipTypes.INTERACTS_WITH);
         node.createRelationshipTo(proteinIL, RelationshipTypes.INTERACTS_WITH);
@@ -357,7 +269,21 @@ public class KnowledgeGraph {
         enzyme1.createRelationshipTo(drug1,  DynamicRelationshipType.withName(BioRelTypes.NEGATIVELY_REGULATES.toString()));
         enzyme2.createRelationshipTo(drug2,  DynamicRelationshipType.withName(BioRelTypes.NEGATIVELY_REGULATES.toString()));
         enzyme3.createRelationshipTo(drug3,  DynamicRelationshipType.withName(BioRelTypes.NEGATIVELY_REGULATES.toString()));
+
     }
+
+
+
+    public static Node getNode(Label label, String propName, String propValue) {
+        Node node = graphDb.findNode(label, propName, propValue);
+
+        // BRCA1
+        // Long id = 18L;
+        //Node node = graphDb.getNodeById(id);
+        System.out.println("found =" + label.name() + ",propValue=" + node.getProperty("name") + " ,label" + node.getLabels().toString());
+        return node;
+    }
+
 
     public static void traverseGraph() {
         //Object value = "P53";
@@ -365,13 +291,13 @@ public class KnowledgeGraph {
         Node node = getNode(Labels.PROTEIN, "name", "P53");
 
         // traversal for BRCA1
-        TraversalDescription td = graphDb.traversalDescription()
+        TraversalDescription proteinArticles = graphDb.traversalDescription()
                 .breadthFirst()
                 .evaluator( Evaluators.atDepth(1));
 
 
         // returns pmid3, pmid2, pmid1
-        Traverser traverser = td
+        Traverser traverser = proteinArticles
                 .relationships(RelationshipTypes.REFERENCES_PUBMED, Direction.BOTH)
                 .traverse( node );
         System.out.println( "depth 5 traverseGraph: " );
@@ -379,7 +305,9 @@ public class KnowledgeGraph {
             System.out.println( "\t" + protein.getProperty( "name" ) );
         }
 
+
         // Returns ERBB, BRCA2, IL, P53
+
         TraversalDescription proteinTd = graphDb.traversalDescription()
                 .breadthFirst();
         Traverser proteinTraverser = proteinTd
@@ -389,9 +317,139 @@ public class KnowledgeGraph {
         for( Node protein : proteinTraverser.nodes()) {
             System.out.println( "\t" + protein.getProperty( "name" ) );
         }
+
     }
 
 
+    public static void getDepthFromProtein() throws UnsupportedEncodingException {
+       getProteinArticlesTraverser(getNode(Labels.PROTEIN, "name", "P53"));
+    }
+
+    /* getProteinArticleTraverser */
+    /* works for until depth 3 for references pubmed */
+    public static Traverser getProteinArticlesTraverser(Node node) throws UnsupportedEncodingException {
+
+        // traversal
+        TraversalDescription proteinArticles = graphDb.traversalDescription()
+               .breadthFirst()
+                //.depthFirst()
+                .evaluator( Evaluators.atDepth(4));
+
+        Traverser traverser = proteinArticles
+
+                //.relationships(DynamicRelationshipType.withName(
+                      //  URLEncoder.encode(BioRelTypes.REFERENCES_PUBMED.toString(), "UTF-8")),
+                      //  Direction.OUTGOING)
+                .traverse(node);
+
+        ResourceIterator<Path> iterator = traverser.iterator();
+        while (iterator.hasNext()) {
+            Path path = iterator.next();
+            System.out.println("path =" + path);
+            for (Node n : path.nodes()) {
+                System.out.println("path node =" + n.getProperty("name"));
+            }
+        }
+        System.out.println( "pubmed articles of " + node.getProperty("name") + " refer to: " );
+        for( Node protein : traverser.nodes() ) {
+            System.out.println( "\t" + protein.getProperty("name") );
+        }
+        return traverser;
+
+    }
+
+
+    /**
+     * getGraphPath
+     * uses PathExpander and Evaluator
+     */
+    public static void getGraphPath() throws UnsupportedEncodingException {
+
+        System.out.println("getGraphPath using PathExpander");
+
+        TraversalDescription proteinsThatReferencePubMed = graphDb.traversalDescription()
+                // Choose a depth-first search strategy
+                .breadthFirst()
+                // At depth 0 traverse the INTERACTS_WITH relationships,
+                // at a depth of 1 traverse the REFERENCES_PUBMED relationship
+                .expand( new PathExpander<Object>() {
+                    @Override
+                    public Iterable<Relationship> expand(Path path, BranchState<Object> objectBranchState) {
+                        // Get the depth of this node
+                        int depth = path.length();
+                        System.out.println("depth =" + depth);
+
+                        if (depth == 0) {
+                            // Depth of 0 means the user's node (starting node)
+                            System.out.println("interacts_with" + path.endNode().getProperty("name"));
+                            return path.endNode().getRelationships();
+                            //return path.endNode().getRelationships(
+                                 //   RelationshipTypes.REFERENCES_PUBMED );
+                          //  return path.endNode().getRelationships(
+                            //        RelationshipTypes.INTERACTS_WITH);
+                        } else {
+                            System.out.println("depth=" + depth + " path=" + path);
+                            System.out.println("depth=4, node=" + path.endNode().getProperty("name"));
+                            if (isNodeGene(path.endNode())) {
+                                System.out.println("Gene node" + path.endNode().getProperty("name"));
+                            }
+                            if (isRelationship(path.endNode(), BioRelTypes.NEGATIVELY_REGULATES)) {
+                                System.out.println("negatively regulates for enzyme on drug" + path.endNode().getProperty("name"));
+                                return path.endNode().getRelationships(
+                                        DynamicRelationshipType.withName(URLEncoder.encode(
+                                                BioRelTypes.NEGATIVELY_REGULATES.toString())));
+                            }
+                            //return path.endNode().getRelationships(
+                             //       DynamicRelationshipType.withName(URLEncoder.encode(
+                              //              BioRelTypes.NEGATIVELY_REGULATES.toString())));
+                           // return path.endNode().getRelationships(
+                             //     RelationshipTypes.REFERENCES_PUBMED );
+                            return path.endNode().getRelationships();
+                        }
+                    }
+                    @Override
+                    public PathExpander<Object> reverse() {
+                        return null;
+                    }
+                })
+
+                // Only go down to a depth of 4
+                .evaluator( Evaluators.atDepth(4))
+
+                // Only return DRUG
+                .evaluator(new Evaluator() {
+                    @Override
+                    public Evaluation evaluate(Path path) {
+                        System.out.println("evaluate path=" + path);
+                        if (isRelationship(path.endNode(), BioRelTypes.NEGATIVELY_REGULATES)) {
+                            System.out.println("negatively regulates relationship exists, node=" +path.endNode().getProperty("name"));
+                        }
+                        if (isNodeGene(path.endNode())) {
+                            System.out.println("Node is a Gene " + path.endNode().getProperty("name"));
+                        }
+                        System.out.println("evaluate() path.endNode() " + path.endNode().getProperty("name"));
+                        if( path.endNode().hasLabel(DynamicLabel.label(BioTypes.GENE.toString()))) {
+                            System.out.println("include and continue, gene" + path.endNode().getProperty("name"));
+                            return Evaluation.INCLUDE_AND_CONTINUE;
+                        }
+                        return Evaluation.EXCLUDE_AND_CONTINUE;
+                    }
+                });
+
+
+        Node node = getNode(Labels.PROTEIN, "name", "P53");
+        Traverser traverser = proteinsThatReferencePubMed.traverse(node);
+        System.out.println( "traversing the protein " + node.getProperty("name"));
+        for( Node n : traverser.nodes()) {
+            System.out.println( "\t" + n.getProperty("name"));
+        }
+    }
+
+
+    /* checks if this node is a gene */
+    private static boolean isNodeGene(Node node) {
+        return node.hasLabel(DynamicLabel.label(BioTypes.GENE.toString())) ? true : false;
+    }
 
     /**
      * checks if relationship exists
@@ -407,74 +465,6 @@ public class KnowledgeGraph {
 
     }
 
-    /* save into another db */
-    public static void saveSubGraph(TraversalDescription td, Node node) {
-        Subgraph subGraph = new Subgraph();
-        System.out.println("************* saveSubGraph()");
-
-        for (Path path : td.traverse(node)) {
-            System.out.println("path.length()" + path.length() + " path=" + path);
-            if (path.length() < 5) {
-                continue;
-            }
-            if (path.length() == 5) {
-                System.out.println("********  path.length() is 5");
-                for (Node pNode : path.nodes()) {
-                    System.out.println("node =" + pNode.getLabels().toString());
-                    Node n = graphDb.getNodeById(pNode.getId());
-                    System.out.println("node =" + n.getLabels().toString() + ", name=" + n.getProperty("name"));
-                    if (n == null) {
-                        log.error("node is null, in path.nodes()" + path);
-                        break;
-                    }
-                    Iterator<Label> iterator = n.getLabels().iterator();
-                    Label label = iterator.next();
-                    System.out.println("label=" + label.name());
-
-                    Node destNode = destGraphDb.createNode(label);
-                    destNode.addLabel(DynamicLabel.label("Innovation1"));
-                    setNodeProperties(destNode, n.getAllProperties());
-                }
-
-                System.out.println("begin relationships");
-                Iterator<Relationship> iterator = path.relationships().iterator();
-                while (iterator.hasNext()) {
-
-                    Relationship r = iterator.next();
-
-                    Node endNode = r.getEndNode();
-                    Iterator<Label> it = endNode.getLabels().iterator();
-                    Label endNodeLabel = it.next();
-
-                    Node startNode = r.getStartNode();
-                    it = startNode.getLabels().iterator();
-                    Label startNodeLabel = it.next();
-
-                    System.out.println("startNode =" + startNodeLabel);
-                    System.out.println("relation =" + r.getType().name());
-                    System.out.println("endNode =" +  endNodeLabel);
-
-                    Node destStartNode = destGraphDb.findNode(startNodeLabel, "name", startNode.getProperty("name"));
-                    Node destEndNode = destGraphDb.findNode(endNodeLabel, "name", endNode.getProperty("name"));
-
-                    if (destStartNode != null && destEndNode != null)  {
-                        setNodeProperties(destEndNode, endNode.getAllProperties());
-                        Relationship destRel = destStartNode.createRelationshipTo(destEndNode, DynamicRelationshipType.withName(r.getType().name()));
-                        Map<String, Object> properties = r.getAllProperties();
-                        properties.forEach((k, v) -> {
-                            destRel.setProperty(k, v);
-                        });
-                    }
-                }
-            }
-        }
-    }
-
-    private static void setNodeProperties(Node n, Map<String, Object> properties ) {
-        properties.forEach( (k,v) -> {
-            n.setProperty(k, v);
-        });
-    }
 
     /**
      *
