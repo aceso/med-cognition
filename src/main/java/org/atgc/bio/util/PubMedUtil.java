@@ -805,7 +805,7 @@ public class PubMedUtil {
         //PubMedUtil.getPubmed("16341006");
         //PubMedUtil.loadPubmed("20462514");
         //PubMedUtil.loadPubmed("4335861");
-        PubMedUtil.loadPubmed("14783033");
-        //PubMedUtil.loadPubmed();
+        //PubMedUtil.loadPubmed("14783033");
+        PubMedUtil.loadPubmed();
     }
 }
