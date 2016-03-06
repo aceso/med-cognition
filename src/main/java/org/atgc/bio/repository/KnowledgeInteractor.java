@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.atgc.bio.domain.BioRelTypes;
 import org.atgc.bio.domain.BioTypes;
+import org.atgc.bio.meta.BioEntity;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.traversal.*;
@@ -38,8 +39,9 @@ import java.util.Map;
 @SuppressWarnings("javadoc")
 public class KnowledgeInteractor {
 
-    String nodeType;
-    String relType;
+    BioEntity bioEntity;
+    BioTypes nodeType;
+    BioRelTypes relType;
     String propertyName;
     String propertyValue;
 }
