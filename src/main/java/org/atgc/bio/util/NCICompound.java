@@ -44,6 +44,11 @@ public class NCICompound {
     /*public void addDrugList() throws UnknownHostException {
          NCICompoundUtil.addCompoundList();
     } */
+
+     public static BasicDBObject getZeroObject(Map diseaseObject) {
+         BasicDBObject zeroObject = (BasicDBObject)diseaseObject.get(MongoFields.ZERO.toString());
+         return zeroObject;
+     }
    
     public static void main(String[] args) throws java.io.IOException {
         
@@ -51,12 +56,16 @@ public class NCICompound {
         Iterator<Map> drugIter = drugList.iterator();
        
         for (int i = 0; i < drugList.size(); i++ ) { 
-            Map map = drugIter.next(); 
-            //System.out.println("map =" + map.toString());           
-            String geneSymbol = (String)map.get(MongoFields.HUGO_GENE_SYMBOL.toString());
+            Map map = drugIter.next();
+            log.info(i + "map =" + map.toString());
+            String geneSymbol = (String)getZeroObject(map).get(MongoFields.HUGO_GENE_SYMBOL.toString());
             log.info("******* geneSymbol =" + geneSymbol);
             if (StatusUtil.idExists(BioTypes.COMPOUND, MongoFields.HUGO_GENE_SYMBOL, geneSymbol)) {
                 log.info("Compound for hugoGeneSymbol " + geneSymbol + " already imported.");
+                continue;
+            }
+            if (null == geneSymbol) {
+                log.warn("geneSymbol is null");
                 continue;
             }
             try {
@@ -607,14 +616,19 @@ public class NCICompound {
     public static void processCompound(String name) throws java.io.IOException, java.net.URISyntaxException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NotFoundException, InvocationTargetException, UnsupportedEncodingException, MalformedURLException, UnknownHostException, HttpException, InterruptedException, ServiceException {
         
         log.info("processCompound()");
+        long startTime = System.currentTimeMillis();
         Map map = NCICompoundUtil.getObject(name);
+        log.info("Time for NCICompoundUtil.getObject: " + name + " = " + (System.currentTimeMillis()-startTime));
         if (null != map)
            log.info("map =" + map.toString());
         else {
             log.error("Did not get a compound " + name);
             return;
         }
+        startTime = System.currentTimeMillis();
         BasicDBObject zeroObject = NCICompoundUtil.getZeroObject(map);
+        log.info("Time for getZeroObject: " + name + " = " + (System.currentTimeMillis()-startTime));
+        startTime = System.currentTimeMillis();
         String geneSymbol;
         if (zeroObject == null) {
             return;
@@ -622,19 +636,31 @@ public class NCICompound {
             geneSymbol = NCICompoundUtil.getHugoGeneSymbol(zeroObject);
             log.info("************  geneSymbol " + geneSymbol);
         }
+        log.info("Time for getHugoGeneSymbol: " + name + " = " + (System.currentTimeMillis()-startTime));
+        startTime = System.currentTimeMillis();
         Subgraph subGraph = new Subgraph();
         HashSet<Gene> geneSet = getGeneSet(zeroObject, geneSymbol, subGraph);
+        log.info("Time for getGeneSet: " + name + " = " + (System.currentTimeMillis()-startTime));
        // log.info("gene =" + gene.toString());
+        startTime = System.currentTimeMillis();
         BasicDBObject sequence = getSequenceIdentificationObj(zeroObject);
+        log.info("Time for getSequenceIdentificationObj: " + name + " = " + (System.currentTimeMillis()-startTime));
+        startTime = System.currentTimeMillis();
         Protein protein = getProtein(getUniProtId(sequence),subGraph);
+        log.info("Time for getProtein: " + name + " = " + (System.currentTimeMillis()-startTime));
+        startTime = System.currentTimeMillis();
         if (protein != null) { 
            setSequenceIdentificationRelation(sequence, protein, geneSet);
         }
+        log.info("Time for setSequenceIdentification: " + name + " = " + (System.currentTimeMillis()-startTime));
+        startTime = System.currentTimeMillis();
         processSentence(zeroObject, geneSet, subGraph);
-        
+        log.info("Time for processSentence: " + name + " = " + (System.currentTimeMillis()-startTime));
         //log.info("processSentence()");
-        subGraph.traverse();
+        //subGraph.traverse();
+        startTime = System.currentTimeMillis();
         PersistenceTemplate.saveSubgraph(subGraph);
+        log.info("Time for saveSubgraph: " + name + " = " + (System.currentTimeMillis()-startTime));
     }
     
    /**
