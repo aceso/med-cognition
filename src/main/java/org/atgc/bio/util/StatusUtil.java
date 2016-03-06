@@ -138,6 +138,18 @@ public class StatusUtil<T> {
      * @return
      * @throws UnknownHostException
      */
+    public static WriteResult idInsert(String bioType, Enum key, String id) throws UnknownHostException {
+        return idInsert(bioType, key.toString(), id);
+    }
+
+    /**
+     *
+     * @param bioType
+     * @param key
+     * @param id
+     * @return
+     * @throws UnknownHostException
+     */
     public static WriteResult idInsert(BioTypes bioType, Enum key, String id) throws UnknownHostException {
         return idInsert(bioType.toString(), key.toString(), id);
     }
@@ -161,7 +173,7 @@ public class StatusUtil<T> {
             //DBObject dbObject = XMLToJson.stringToBasicDBObject("{" + key + ":" + "\'"+ id + "\',"   + StatusFields.DATE + ":" + "\'" +  new Date() + "\'" + "}");
             BasicDBObject basicDBObject = new BasicDBObject(key, id);
             basicDBObject.put(StatusFields.DATE.toString(), new Date());
-            log.info("bioType = " + bioType + ", key = " + key + ", id = " + id);
+            log.info("status collection = " + coll + ", bioType = " + bioType + ", key = " + key + ", id = " + id + ", basicDBObject = " + basicDBObject.toString());
             return statusCollection.insert(basicDBObject);
         }
         return null;

@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -760,7 +761,7 @@ public class IntactImport {
         return intactInteraction;
     }
 
-    public static Participant getParticipant(DBObject part) {
+    public static Participant getParticipant(Subgraph subgraph, DBObject part) throws IllegalAccessException, NoSuchFieldException, InvocationTargetException {
         Participant participant = new Participant();
         participant.setParticipantId(getString(part, IntactFields.ID));
         String shortLabel = getShortLabel(part);
@@ -769,6 +770,13 @@ public class IntactImport {
         participant.setInteractorRef(getInteractorRef(part));
         participant.setMessage(shortLabel);  // since fullName not available
         participant.setNodeType(BioTypes.PARTICIPANT);
+        Collection<BioRelation> relations = new HashSet<>();
+        Collection<Feature> features = getFeatures(subgraph, part);
+        for (Feature feature : features) {
+            BioRelation relation = new BioRelation(participant, feature, BioRelTypes.HAS_FEATURE);
+            relations.add(relation);
+        }
+        participant.setHasFeatures(relations);
         return participant;
     }
 
@@ -1529,7 +1537,7 @@ public class IntactImport {
                 if (particip.containsField(IntactFields.PARTICIPANT.toString())) {
                     particip = getDBObject(particip, IntactFields.PARTICIPANT);
                 }
-                Participant participant = getParticipant(particip);
+                Participant participant = getParticipant(subgraph, particip);
                 subgraph.add(participant);
                 String interactorId = participant.getInteractorRef();
                 Object interactorObj = interactorHash.get(interactorId);

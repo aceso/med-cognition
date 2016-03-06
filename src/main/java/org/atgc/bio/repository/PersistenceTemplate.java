@@ -1004,7 +1004,7 @@ public class PersistenceTemplate<T> {
             save(t);
         } else {
 
-            log.info("persistGraph(), node exists" + t.toString());
+            log.info("persistGraph(), node exists " + t.toString());
 
             log.info("persistGraph(), node exists, bioType = " + bioType);
 
