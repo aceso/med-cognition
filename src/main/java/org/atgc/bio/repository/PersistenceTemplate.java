@@ -112,7 +112,7 @@ public class PersistenceTemplate<T> {
                             //log.info("Saving BioEntity " + (++cntr) + "," + obj.toString());
                             long totalTime = System.currentTimeMillis();
                             persistGraph((T) obj);
-                            System.out.println("Time for persistGraph: " + (System.currentTimeMillis()-totalTime));
+                            log.info("Time for persistGraph: " + (System.currentTimeMillis()-totalTime));
                         }
                     }
                 }
@@ -124,12 +124,12 @@ public class PersistenceTemplate<T> {
                             log.info("saveRelations for obj = " + obj.getClass().getSimpleName());
                             long totalTime = System.currentTimeMillis();
                             saveRelations(obj);
-                            System.out.println("Time for saveRelations: " + (System.currentTimeMillis()-totalTime));
+                            log.info("Time for saveRelations: " + (System.currentTimeMillis()-totalTime));
                             totalTime = System.currentTimeMillis();
                             if (!StatusUtil.idExists(obj)) {
                                 StatusUtil.idInsert(obj);
                             }
-                            System.out.println("Time for idInsert: " + (System.currentTimeMillis()-totalTime));
+                            log.info("Time for idInsert: " + (System.currentTimeMillis()-totalTime));
                             //getBioEntity((T)obj);
                         }
                     }
@@ -244,7 +244,7 @@ public class PersistenceTemplate<T> {
                                 //log.info("relation class = " + element.getClass().getSimpleName());
                                 long startTime = System.currentTimeMillis();
                                 saveRelation(direction, element);
-                                System.out.println("Time for saveRelation (VIA): " + (System.currentTimeMillis()-startTime));
+                                log.info("Time for saveRelation (VIA): " + (System.currentTimeMillis()-startTime));
                             }
                         }
                     } else if (fieldMatch(annotation, AnnotationTypes.RELATED_TO)) {
@@ -255,7 +255,7 @@ public class PersistenceTemplate<T> {
                             //log.info("field.get(t) =" + field.get(t));
                             long startTime = System.currentTimeMillis();
                             saveRelation(direction, field.get(t));
-                            System.out.println("Time for saveRelation: " + (System.currentTimeMillis()-startTime));
+                            log.info("Time for saveRelation: " + (System.currentTimeMillis()-startTime));
                         }
                     }
                 }
@@ -1015,7 +1015,7 @@ public class PersistenceTemplate<T> {
             log.info("persistGraph(), node does not exist, add() " + (++cntr) + ", bioType = " + bioType);
             long startTime = System.currentTimeMillis();
             save(t);
-            System.out.println("Time for save: " + (System.currentTimeMillis()-startTime));
+            log.info("Time for save: " + (System.currentTimeMillis()-startTime));
         } else {
 
             log.info("persistGraph(), node exists " + t.toString());
@@ -1023,7 +1023,7 @@ public class PersistenceTemplate<T> {
             log.info("persistGraph(), node exists, bioType = " + bioType);
             long startTime = System.currentTimeMillis();
             saveProperties(t, node);
-            System.out.println("Time for saveProperties: " + (System.currentTimeMillis()-startTime));
+            log.info("Time for saveProperties: " + (System.currentTimeMillis()-startTime));
         }
     }
 
