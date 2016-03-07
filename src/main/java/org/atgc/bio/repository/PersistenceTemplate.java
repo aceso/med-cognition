@@ -102,6 +102,7 @@ public class PersistenceTemplate<T> {
      */
     public static <T> void saveSubgraph(Subgraph subGraph) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException, MalformedURLException, IOException, UnknownHostException, HttpException, IllegalArgumentException, NoSuchFieldException {
         //log.info("saveSubGraph()");
+
         if (subGraph != null) {
             Map<BioTypes, List> beMap = subGraph.getBeMap();
             if (!beMap.isEmpty()) {
@@ -109,7 +110,9 @@ public class PersistenceTemplate<T> {
                     for (Object obj : list.toArray()) {
                         if (obj != null) {
                             //log.info("Saving BioEntity " + (++cntr) + "," + obj.toString());
+                            long totalTime = System.currentTimeMillis();
                             persistGraph((T) obj);
+                            System.out.println("Time for persistGraph: " + (System.currentTimeMillis()-totalTime));
                         }
                     }
                 }
@@ -119,16 +122,21 @@ public class PersistenceTemplate<T> {
                         if (obj != null) {
                             //saveRelations((T)obj);
                             log.info("saveRelations for obj = " + obj.getClass().getSimpleName());
+                            long totalTime = System.currentTimeMillis();
                             saveRelations(obj);
+                            System.out.println("Time for saveRelations: " + (System.currentTimeMillis()-totalTime));
+                            totalTime = System.currentTimeMillis();
                             if (!StatusUtil.idExists(obj)) {
                                 StatusUtil.idInsert(obj);
                             }
+                            System.out.println("Time for idInsert: " + (System.currentTimeMillis()-totalTime));
                             //getBioEntity((T)obj);
                         }
                     }
                 }
             }
         }
+
     }
 
     /**
@@ -234,7 +242,9 @@ public class PersistenceTemplate<T> {
                             for (Object element : relations) { // element is a @RelationshipEntity annotated object
                                 //log.info("RelatedToVia = " + element.toString());
                                 //log.info("relation class = " + element.getClass().getSimpleName());
+                                long startTime = System.currentTimeMillis();
                                 saveRelation(direction, element);
+                                System.out.println("Time for saveRelation (VIA): " + (System.currentTimeMillis()-startTime));
                             }
                         }
                     } else if (fieldMatch(annotation, AnnotationTypes.RELATED_TO)) {
@@ -243,7 +253,9 @@ public class PersistenceTemplate<T> {
                         //log.info("RELATED_TO()," + field.getName() + ", direction=" + direction.toString());
                         if (field.get(t) != null) {
                             //log.info("field.get(t) =" + field.get(t));
+                            long startTime = System.currentTimeMillis();
                             saveRelation(direction, field.get(t));
+                            System.out.println("Time for saveRelation: " + (System.currentTimeMillis()-startTime));
                         }
                     }
                 }
@@ -1001,14 +1013,17 @@ public class PersistenceTemplate<T> {
         String bioType = ((BioEntity) a).bioType().toString();
         if (node == null) {
             log.info("persistGraph(), node does not exist, add() " + (++cntr) + ", bioType = " + bioType);
+            long startTime = System.currentTimeMillis();
             save(t);
+            System.out.println("Time for save: " + (System.currentTimeMillis()-startTime));
         } else {
 
             log.info("persistGraph(), node exists " + t.toString());
 
             log.info("persistGraph(), node exists, bioType = " + bioType);
-
+            long startTime = System.currentTimeMillis();
             saveProperties(t, node);
+            System.out.println("Time for saveProperties: " + (System.currentTimeMillis()-startTime));
         }
     }
 
