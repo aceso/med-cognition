@@ -7,6 +7,7 @@ package org.atgc.bio.repository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.atgc.bio.BioFields;
 import org.atgc.bio.domain.BioRelTypes;
 import org.atgc.bio.domain.BioTypes;
 import org.atgc.bio.meta.BioEntity;
@@ -27,75 +28,91 @@ import java.util.List;
  *  https://github.com/neo4j/neo4j/blob/2.3.2/community/embedded-examples/src/main/java/org/neo4j/examples/NewMatrix.java
  *  http://www.informit.com/articles/article.aspx?p=2415371#articleDiscussion
  *
- *  copying subgraph or entire db from srcDb to destDb
+ *  reference example of subgraph or entire db from srcDb to destDb
  *      https://gist.github.com/kenahoo-windlogics/036639a7061877acc520
+ *
+ *  uniqueness example
+ *  http://fooo.fr/~vjeux/github/github-recommandation/db/doc/manual/text/neo4j-manual.txt
  *
  */
 @SuppressWarnings("javadoc")
 public class KnowledgeEntityEvaluator implements Evaluator {
 
-    List<BioEntity> bioEntityList;
+    List<Node> bioEntityList;
+    List<BioRelTypes> relTypes;
 
-    protected static final Logger log = LogManager.getLogger(PersistenceTemplate.class);
-    public KnowledgeEntityEvaluator(List<BioEntity> bioList) {
+    protected static final Logger log = LogManager.getLogger(KnowledgeEntityEvaluator.class);
+
+    public KnowledgeEntityEvaluator(List<Node> bioList, List<BioRelTypes> rTypes) {
         bioEntityList = bioList;
+        log.info("bioEntityList.get(0)" + bioEntityList.get(0));
+        relTypes = rTypes;
     }
 
     @Override
     public Evaluation evaluate(Path path)  {
-        System.out.println("evaluate path=" + path);
-        for(BioEntity bio : bioEntityList) {
+        log.info("evaluate(path)" + path);
+
+        int matches=0;
+        for(Node bio : bioEntityList) {
+            // include the nodes of interest in the middle of the path too
+            for (Node n : path.nodes()) {
+                if (isNodeIncluded(n, bio)) {
+                    ++matches;
+                    log.info("matched path.length =" + path.length() + ", path=" + path);
+                    return Evaluation.INCLUDE_AND_CONTINUE;
+                }
+            }
             if (isNodeIncluded(path.endNode(), bio)) {
-                System.out.println("node exists " + path.endNode().getId() + " name " + path.endNode().getProperty("name"));
-                System.out.println("path =" + path);
-                return Evaluation.INCLUDE_AND_CONTINUE;
+                for (BioRelTypes relType : relTypes) {
+                    if (isRelationship(path.endNode(), relType)) {
+                        System.out.println("relType =" + relType + " endNodetype" + path.endNode().getId());
+                        return Evaluation.INCLUDE_AND_PRUNE;
+                    }
+                }
+               //log.info("include and prune as endnode matches bio" + path.endNode().getLabels());
+               // log.info("node matches " + path.endNode().getId() + " name " + path.endNode().getLabels().toString() + path.endNode().getId());
+                log.info("nodematches " + bio.getId() + " bio type=" + bio.getLabels());
+                return Evaluation.INCLUDE_AND_PRUNE;
             }
+        }
+
+        if (matches <= bioEntityList.size() && matches > 0) {
+            System.out.println("matches <= 3, include and continue " + path);
+            return Evaluation.INCLUDE_AND_CONTINUE;
+        }
+        if (matches == bioEntityList.size()) {
+            System.out.println("include and prune " + path);
+            return Evaluation.INCLUDE_AND_PRUNE;
         }
         return Evaluation.EXCLUDE_AND_CONTINUE;
     }
 
-
-    /* for future use
-      List<KnowledgeInteractor> knowledgeInteractorList;
-      public KnowledgeEntityEvaluator(List<KnowledgeInteractor> list) {
-          knowledgeInteractorList = list;
-      }
-
-    @Override
-    public Evaluation evaluate(Path path)  {
-        System.out.println("evaluate path=" + path);
-        Iterator<KnowledgeInteractor> iterator = knowledgeInteractorList.iterator();
-        while (iterator.hasNext()) {
-            KnowledgeInteractor ki = iterator.next();
-            System.out.println("knowledge interactor =" + ki.bioEntity.bioType());
-            if (isNodeIncluded(path.endNode(), ki.bioEntity)) {
-                System.out.println("node exists " + path.endNode().getId() + " name " + path.endNode().getProperty("name"));
-                System.out.println("path =" + path);
-                return Evaluation.INCLUDE_AND_CONTINUE;
-            }
+    private static String getLabel(Node node) {
+        Object obj = node.getProperty(BioFields.MESSAGE.toString());
+        String srcLabel = null;
+        if (obj != null) {
+            srcLabel = obj.toString();
         }
-        return Evaluation.EXCLUDE_AND_CONTINUE;
+        return srcLabel;
     }
-    */
-
 
     /**
-     * isNodeIncluded - checks if this Node to be included
+     * isNodeIncluded - checks if this bioEntity to be included
      * @param node
-     * @param bioEntity
+     * @param dNode
      * @return boolean
      */
-    private static boolean isNodeIncluded(Node node, BioEntity bioEntity) {
-        Iterator<Label> iterator = node.getLabels().iterator();
-        Label label = iterator.next();
-        Node dNode = null;
-        try {
-            dNode = PersistenceTemplate.getNode(bioEntity);
-        } catch(Exception e) {
-            log.error("KnowledgeEntityEvaluator:isNodeIncluded(), exception in retrieving a node " + bioEntity.bioType() + ", error=" + e.getMessage(), e);
+    private static boolean isNodeIncluded(Node node, Node dNode) {
+        String srcLabel = getLabel(node);
+        String destLabel = getLabel(dNode);
+        if (node.getId() == 9235) {
+            log.info("dNode =" + dNode.getId());
+            log.info("srcLabel =" + srcLabel + " destLabel=" + destLabel);
         }
-        System.out.println("nodeId match check" + node.getId() +  "== " + dNode.getId());
-        return (node.getId() == dNode.getId() && node.getLabels().toString().equalsIgnoreCase(dNode.getLabels().toString())) ? true : false;
+        if (srcLabel != null && destLabel != null)
+           return (srcLabel.toString().equalsIgnoreCase(destLabel.toString()));
+        return false;
     }
 
     /**
@@ -108,24 +125,38 @@ public class KnowledgeEntityEvaluator implements Evaluator {
         return node.getProperty(ki.propertyName).toString().equals(ki.propertyValue) ? true : false;
     }
 
-    /**
-     *
-      * @param node
-     * @param dNodeType
-     * @return
-     */
-    private static boolean isNodeTypeIncluded(Node node, BioTypes dNodeType) {
-        System.out.println("nodeId match check" + node.getId() +  "== " + dNodeType);
+
+    private static boolean isSpecifiTypesIncluded(Node node) {
         Iterator<Label> iterator = node.getLabels().iterator();
         Label label = iterator.next();
-        return (label.toString().equalsIgnoreCase(dNodeType.toString())) ? true : false;
-    }
+        if (label.toString().equalsIgnoreCase(BioTypes.NCBI_TAXONOMY.toString())) {
+            return true;
+        }
+        if (label.toString().equalsIgnoreCase(BioTypes.PROTEIN.toString())) {
+            return true;
+        }
+        if (label.toString().equalsIgnoreCase(BioTypes.GENE.toString())) {
+            return true;
+        }
+        if (label.toString().equalsIgnoreCase(BioTypes.DRUG.toString())) {
+            return true;
+        }
 
+        if (label.toString().equalsIgnoreCase(BioTypes.PUBMED.toString())) {
+            return true;
+        }
+
+        if (label.toString().equalsIgnoreCase(BioTypes.INTACT_EXPERIMENT.toString())) {
+            return true;
+        }
+
+        return (label.toString().equalsIgnoreCase("")) ? true : false;
+    }
 
    /**
      * checks if relationship exists
      * @param pathEndNode
-     * @param relType
+     * @param relType:1
      * @return boolean
      */
    private static boolean isRelationship(Node pathEndNode, BioRelTypes relType) {
