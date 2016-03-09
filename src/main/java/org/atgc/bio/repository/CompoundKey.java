@@ -181,13 +181,24 @@ public class CompoundKey {
                 } else {
                     anno = f.getAnnotation(PartRelation.class);
                     if (anno != null) {
-                       // log.info("field name = " + f.getName());
-                       // log.info("this node type = " + t.getClass().getSimpleName());
+                       log.info("field name = " + f.getName());
+                       log.info("this node type = " + t.getClass().getSimpleName());
                         String val = ((PartRelation)anno).field().toString();
-                        Object endNode = ((BioRelation)f.get(t)).getEndNode();
-                        Field f1 = endNode.getClass().getDeclaredField(val);
-                        f1.setAccessible(true);
-                        val2 = (String)f1.get(endNode);
+                        if (f.get(t) == null) {
+                            log.error("field2: endNode is null. field name = " + f.getName()
+                                    + ", class name = " + t.getClass().getSimpleName() + ", indexName = " + indexName +
+                                    ", field1 = " + field1 + ", field2 = " + field2 + ", field3 = " + field3);
+                        } else {
+                            Object endNode = ((BioRelation) f.get(t)).getEndNode();
+                            if (endNode == null) {
+                                throw new RuntimeException("field2: endNode is null. field name = " + f.getName()
+                                        + ", class name = " + t.getClass().getSimpleName() + ", indexName = " + indexName +
+                                        ", field1 = " + field1 + ", field2 = " + field2 + ", field3 = " + field3);
+                            }
+                            Field f1 = endNode.getClass().getDeclaredField(val);
+                            f1.setAccessible(true);
+                            val2 = (String) f1.get(endNode);
+                        }
                     }
                 }
             }
@@ -206,6 +217,11 @@ public class CompoundKey {
                        // log.info("this node type = " + t.getClass().getSimpleName());
                         String val = ((PartRelation)anno).field().toString();
                         Object endNode = ((BioRelation)f.get(t)).getEndNode();
+                        if (endNode == null) {
+                            throw new RuntimeException("field3: endNode is null. field name = " + f.getName()
+                                    + ", class name = " + t.getClass().getSimpleName() + ", indexName = " + indexName +
+                                    ", field1 = " + field1 + ", field2 = " + field2 + ", field3 = " + field3);
+                        }
                         Field f1 = endNode.getClass().getDeclaredField(val);
                         f1.setAccessible(true);
                         val3 = (String)f1.get(endNode);

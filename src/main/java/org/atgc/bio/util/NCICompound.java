@@ -55,7 +55,8 @@ public class NCICompound {
         List<Map> drugList = NCICompoundUtil.getNciCompounds();
         Iterator<Map> drugIter = drugList.iterator();
        
-        for (int i = 0; i < drugList.size(); i++ ) { 
+        for (int i = 0; i < drugList.size(); i++ ) {
+            long beginTime = System.currentTimeMillis();
             Map map = drugIter.next();
             log.info(i + "map =" + map.toString());
             String geneSymbol = (String)getZeroObject(map).get(MongoFields.HUGO_GENE_SYMBOL.toString());
@@ -69,8 +70,12 @@ public class NCICompound {
                 continue;
             }
             try {
+                long startTime = System.currentTimeMillis();
                 processCompound(geneSymbol);
+                log.info("Time for processCompound " + geneSymbol + " = " + (System.currentTimeMillis() - startTime));
+                startTime = System.currentTimeMillis();
                 StatusUtil.idInsert(BioTypes.COMPOUND, MongoFields.HUGO_GENE_SYMBOL, geneSymbol);
+                log.info("Time for idInsert " + geneSymbol + " = " + (System.currentTimeMillis() - startTime));
                 //NCICompoundUtil.updateImportStatus(geneSymbol, BioEntityType.DONE);
             } catch (Exception e) {
                 //NCICompoundUtil.updateImportStatus(geneSymbol,  BioEntityType.ERROR);
@@ -78,6 +83,7 @@ public class NCICompound {
             }
             log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
             log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+            log.info("Time for NCICompound iteration " + geneSymbol + " = " + (System.currentTimeMillis() - beginTime));
         }
         log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
         log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
@@ -96,6 +102,7 @@ public class NCICompound {
     * @return String
     */
    private static String getUniProtId(BasicDBObject obj) {
+       log.info("Extracting uniprotId from BasicDBObject: " + obj.toString());
         return getString(obj, NciFields.UNIPROT_ID);
    }
   
