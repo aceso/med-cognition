@@ -128,8 +128,6 @@ public class Drug {
      */
     @RelatedToVia(direction=Direction.BOTH, relType=BioRelTypes.IS_OBSERVED_IN, elementClass = BioRelation.class)
     private Collection<BioRelation> organismComponents = new HashSet<BioRelation>();
-    
-    
 
     @NodeLabel
     @Indexed (indexName=IndexNames.MESSAGE)

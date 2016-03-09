@@ -295,22 +295,6 @@ public class KnowledgeGraph {
             .expand( new PathExpander<Object>() {
                  @Override
                  public Iterable<Relationship> expand(Path path, BranchState<Object> objectBranchState) {
-                      // Get the depth of this node
-                     /*
-                    int length = path.length();
-                                for (Node node : list) {
-                                    if (isNodeIncluded(path.endNode(), node)) {
-                                        for (BioRelTypes relType : excludeRelTypes) {
-                                            if (isRelationship(path.endNode(), relType)) {
-                                                System.out.println("relType =" + relType + " endNodetype" + path.endNode().getId());
-                                                //return path.endNode().getRelationships();
-
-                                                return Collections.emptyList();
-                                        }
-                                    }
-                                }
-                            }*/
-
                      return path.endNode().getRelationships();
                  }
                  @Override
@@ -330,14 +314,6 @@ public class KnowledgeGraph {
             return obj.toString();
         return null;
     }
-
-    /*
-    private static String getLabel(Node n) {
-        Iterator<Label> it = n.getLabels().iterator();
-        if (it.hasNext())
-            return it.next().toString();
-        return null;
-    }*/
 
     /**
      *
@@ -443,66 +419,8 @@ public class KnowledgeGraph {
             log.info("nodes tagged with label experiment1 in path " + cachePath.path);
             for (Node node : cachePath.path.nodes()) {
                 node.addLabel(DynamicLabel.label("Experiment1"));
-                //BioEntity bioEntity = (BioEntity) BioEntityTemplate.getBioEntity(node);
-                //Subgraph subgraph = new Subgraph();
-                //subgraph.add(bioEntity);
-                //BioEntityTemplate.saveSubgraph(subgraph);
             }
         }
-    }
-
-    /* save into another db */
-    public static void saveSubGraph2(TraversalDescription td, Node node) throws Exception {
-        Subgraph subGraph = new Subgraph();
-        log.info("************* saveSubGraph()");
-        for (Path path : td.traverse(node)) {
-            log.info("path.length()" + path.length() + " path=" + path);
-                for (Node pNode : path.nodes()) {
-                    System.out.println("node =" + pNode.getLabels().toString());
-                    Node n = graphDb.getNodeById(pNode.getId());
-                    if (n == null) {
-                        log.error("node is null, in path.nodes()" + path);
-                        break;
-                    }
-                    Iterator<Label> iterator = n.getLabels().iterator();
-                    Label label = iterator.next();
-                    log.info("label=" + label.name());
-
-                    Node destNode = destGraphDb.createNode(label);
-                    destNode.addLabel(DynamicLabel.label("Innovation1"));
-                    setNodeProperties(destNode, n.getAllProperties());
-                }
-
-                log.info("begin relationships");
-                Iterator<Relationship> iterator = path.relationships().iterator();
-                while (iterator.hasNext()) {
-                    Relationship r = iterator.next();
-                    Node endNode = r.getEndNode();
-                    Iterator<Label> it = endNode.getLabels().iterator();
-                    Label endNodeLabel = it.next();
-
-                    Node startNode = r.getStartNode();
-                    it = startNode.getLabels().iterator();
-                    Label startNodeLabel = it.next();
-
-                    log.info("startNode =" + startNodeLabel);
-                    log.info("relation =" + r.getType().name());
-                    log.info("endNode =" +  endNodeLabel);
-
-                    Node destStartNode = destGraphDb.findNode(startNodeLabel, "name", startNode.getProperty("name"));
-                    Node destEndNode = destGraphDb.findNode(endNodeLabel, "name", endNode.getProperty("name"));
-
-                    if (destStartNode != null && destEndNode != null)  {
-                        setNodeProperties(destEndNode, endNode.getAllProperties());
-                        Relationship destRel = destStartNode.createRelationshipTo(destEndNode, DynamicRelationshipType.withName(r.getType().name()));
-                        Map<String, Object> properties = r.getAllProperties();
-                        properties.forEach((k, v) -> {
-                            destRel.setProperty(k, v);
-                        });
-                    }
-                }
-            }
-        //}
     }
 
     private static void setNodeProperties(Node n, Map<String, Object> properties ) {
