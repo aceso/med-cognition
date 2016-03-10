@@ -110,8 +110,8 @@ public class KnowledgeGraph {
         Transaction destTx = destGraphDb.beginTx();
         try {
             // specify depth
-           // getIntelligentPaths(6);
-            createCaseStudy2(4);
+           // getCaseStudy1();
+            createCaseStudy3();
             tx.success();
             destTx.success();
         } catch(Exception e) {
@@ -182,8 +182,9 @@ public class KnowledgeGraph {
      * model Etanercept
      * @throws UnsupportedEncodingException
      */
-    public static void getIntelligentPaths(int depth) throws Exception {
+    public static void getCaseStudy1() throws Exception {
 
+        int depth = 4;
         Drug bioDrug = BioEntityTemplate.getBioEntity(BioTypes.DRUG, "Epoetin alfa");
         Node drug = BioEntityTemplate.getNode(bioDrug);
         if (drug != null) {
@@ -211,7 +212,9 @@ public class KnowledgeGraph {
         List<BioRelTypes> relTypes = new ArrayList<>();
         relTypes.add(BioRelTypes.DRUG_MANUFACTURED_BY);
         relTypes.add(BioRelTypes.DRUG_PACKAGED_BY);
-        relTypes.add(BioRelTypes.FOUND_EVIDENCE_IN);
+
+
+        // depth is 4
         List<Node> entityList = getEntityInteractors(protein, urokinaseDrug, ncbiTaxonomy);
          for (Node node : entityList)  {
              getGraphPath(entityList, drug, depth, relTypes);
@@ -260,6 +263,7 @@ public class KnowledgeGraph {
     // NM_004985 (RefSeqID)
     // Gene-NCBITaxon:9606-CCND1
     // CCND1 (gene), cyclin d1(gene alias), P24385 (uniprot),
+    // DrugTerm and Gene are connected by ROLE_OF_GENE
 
     //
     // compound1146.xml
@@ -322,7 +326,7 @@ public class KnowledgeGraph {
     fullName: Double-stranded oligomer corresponding to MBS4 in human cdk4 promoter
     nodeType: Dna
     */
-    public static void createCaseStudy2(int depth)  throws Exception {
+    public static void createCaseStudy2()  throws Exception {
 
         cacheListPath = new HashMap<>();
         HashMap<BioTypes, String> bioMap = new HashMap<>();
@@ -335,12 +339,15 @@ public class KnowledgeGraph {
         */
 
         /*
+            Not using this
             kras gene = [Gene]412275
             p01116, protein = [Protein]204950
             cetuximabDrug = [Drug]122
             enzyme = [Enzyme]102367
             drug = [Drug]28975
 
+        /*
+            Using this
             messages:
             ccnd1-human gene = Gene-NCBITaxon:9606-CCND1  412275
             p01116, protein = Protein-P24385-ccnd1_human  204950
@@ -367,24 +374,19 @@ public class KnowledgeGraph {
         }
 
         // HumanDiseaseOntology
+        /*
         Drug cetuBio = BioEntityTemplate.getBioEntity(BioTypes.DRUG, "Cetuximab");
         Node cetuximabDrug = BioEntityTemplate.getNode(cetuBio);
         if (cetuximabDrug!= null) {
             System.out.println("cetuximabDrug = " + getLabel(cetuximabDrug) + cetuximabDrug.getId());
         }
 
-        /*
-        Rna rnaBio = BioEntityTemplate.getBioEntity(BioTypes.RNA, "546760");
-        Node rna = BioEntityTemplate.getNode(rnaBio);
-        if (rna != null) {
-            System.out.println("rna= " + rna.getLabels().toString() + rna.getId());
-        }
-*/
+
         Enzyme enzymeBio = BioEntityTemplate.getBioEntity(BioTypes.ENZYME, "1.1.1.298");
         Node enzyme = BioEntityTemplate.getNode(enzymeBio);
         if (enzyme != null) {
             System.out.println("enzyme = " + getLabel(enzyme) + enzyme.getId());
-        }
+        } */
 
         Drug drugBio = BioEntityTemplate.getBioEntity(BioTypes.DRUG, "Erlotinib");
         Node drug= BioEntityTemplate.getNode(drugBio);
@@ -395,33 +397,99 @@ public class KnowledgeGraph {
         List<Node> list = new ArrayList<>();
         list.add(protein);
         list.add(gene);
-       // list.add(cetuximabDrug);
         list.add(drug);
 
         List<BioRelTypes> relTypes = new ArrayList<>();
         relTypes.add(BioRelTypes.DRUG_MANUFACTURED_BY);
         relTypes.add(BioRelTypes.DRUG_PACKAGED_BY);
-        getIntelligentPaths(depth, list, relTypes);
+        relTypes.add(BioRelTypes.FOUND_EVIDENCE_IN);
+        relTypes.add(BioRelTypes.HAS_A_PROTEIN);
+        relTypes.add(BioRelTypes.HAS_AUTHOR);
+        relTypes.add(BioRelTypes.REFERENCES_PUBMED);
+        getIntelligentPaths(3, list, relTypes);
     }
 
+    /**
+     * createCaseStudy3 - glucagon
+     * @throws Exception
+     */
+    public static void createCaseStudy3() throws Exception {
+
+        /*
+        A-A gene = Gene-NCBITaxon:9606-HLA-A  937823
+            Q9UQU7, protein = Protein-Q9UQU7  935777
+            glucagonDrug = Drug-glucagon   377567
+        */
+
+        cacheListPath = new HashMap<>();
+        //HLA-A
+        Node gene = getNode(BioTypes.GENE.toString(), BioFields.NCBI_GENE_ID.toString(), "3105");
+        if (gene != null) {
+            System.out.println("HLA-A gene = " + getLabel(gene) + gene.getId());
+        }
+
+        //
+        Protein proteinBio = BioEntityTemplate.getBioEntity(BioTypes.PROTEIN, "Q9UQU7");
+        Node protein = BioEntityTemplate.getNode(proteinBio);
+        if (protein != null) {
+            System.out.println("Q9UQU7, protein = " + getLabel(protein) + protein.getId());
+        }
+
+        Drug glucaGonBio = BioEntityTemplate.getBioEntity(BioTypes.DRUG, "glucagon");
+        Node glucaGonDrug = BioEntityTemplate.getNode(glucaGonBio);
+        if (glucaGonDrug != null) {
+            System.out.println("glucagonDrug = " + getLabel(glucaGonDrug) + glucaGonDrug.getId());
+        }
+
+        drug.setDrugGeneRelation(gene, "" )
+        List<Node> list = new ArrayList<>();
+        list.add(gene);
+        list.add(protein);
+        list.add(glucaGonDrug);
+
+        List<BioRelTypes> relTypes = new ArrayList<>();
+        relTypes.add(BioRelTypes.DRUG_MANUFACTURED_BY);
+        relTypes.add(BioRelTypes.DRUG_PACKAGED_BY);
+        relTypes.add(BioRelTypes.FOUND_EVIDENCE_IN);
+        relTypes.add(BioRelTypes.HAS_A_PROTEIN);
+        relTypes.add(BioRelTypes.HAS_AUTHOR);
+        relTypes.add(BioRelTypes.REFERENCES_PUBMED);
+
+        getIntelligentPaths(6, list, relTypes);
+    }
+
+
+
+
+    /**
+     * getIntelligentPaths
+     * @param depth
+     * @param list
+     * @param excludeRelTypes
+     * @throws Exception
+     */
     public static void getIntelligentPaths(int depth,
                                            List<Node> list,
                                            List<BioRelTypes> excludeRelTypes) throws Exception {
         for (Node node : list) {
             getGraphPath(list, node, depth, excludeRelTypes);
+            log.info("path size " + cacheListPath.size());
+           // break;
             if (cacheListPath.size() == list.size()) {
                 break;
             }
         }
         setRatio(list);
+        log.info("***** path size " + cacheListPath.size());
+
         for (CacheGraphPath cachePath : cacheListPath.values()) {
             log.info("cachePath =" + "path=" + cachePath.path);
             log.info("ratio = " + cachePath.ratio);
         }
         for (Node node : cacheListPath.keySet()) {
-            log.info("node =" + node.getId());
+            log.info(node.getLabels().toString() + " =" + + node.getId());
         }
-       // saveSubGraph("CaseStudy2");
+        saveSubGraph("CaseStudy3");
     }
 
 
@@ -473,7 +541,7 @@ public class KnowledgeGraph {
             //.evaluator(Evaluators.excludeStartPosition() )
             //.evaluator(Evaluators.toDepth(depth))
             .evaluator(new KnowledgeEntityEvaluator(list, excludeRelTypes));
-        getNewKnowledge(td, node, list);
+        getNewKnowledge(td, node, list, depth);
     }
 
     private static String getLabel(Node n) {
@@ -491,7 +559,7 @@ public class KnowledgeGraph {
      * @return
      */
     public static void addPath(Path path, List<Node> list, Node node) {
-        log.info("\n\n\t addPath()");
+        log.info("\n\n\t addPath(), cacheListPath.size() " + cacheListPath.size());
         for (Node n: path.nodes()) {
             int matches = 0;
             //getCount(path, list);
@@ -499,6 +567,10 @@ public class KnowledgeGraph {
                 if (isNodeIncluded(n, targetNode)) {
                     matches++;
                     log.info("addPath(), matches "  + ", targetNodeid" + targetNode.getId() + " in path=" + path);
+                    if (cacheListPath.get(targetNode) != null) {
+                        log.info("addPath(), targetNode exists" + targetNode.getId());
+                        continue;
+                    }
                     CacheGraphPath cachePath = new CacheGraphPath();
                     cachePath.path = path;
                     cachePath.startNode = node;
@@ -509,10 +581,10 @@ public class KnowledgeGraph {
         }
     }
 
-    private static void getNewKnowledge(TraversalDescription td, Node node, List<Node> list) {
+    private static void getNewKnowledge(TraversalDescription td, Node node, List<Node> list, int depth) {
         log.info("getNewKnowledge() ");
         int numNodes = 0;
-        Traverser traverser = td.evaluator(Evaluators.toDepth(6))
+        Traverser traverser = td.evaluator(Evaluators.toDepth(depth))
                 .traverse(node);
         ResourceIterator<Path> iterator = traverser.iterator();
         while (iterator.hasNext()) {
@@ -561,11 +633,11 @@ public class KnowledgeGraph {
         Iterable<String> destProps = dNode.getPropertyKeys();
         int cnt = 0;
         int dCnt = 0;
-        StringBuffer sb = new StringBuffer();
+        //StringBuffer sb = new StringBuffer();
         for (String s : propertyKeys) {
             cnt++;
-            sb.append(s);
-            sb.append(" , ");
+            //sb.append(s);
+            //sb.append(" , ");
             for (String d : destProps) {
                 if (s.equals(d)) {
                     dCnt++;
@@ -605,11 +677,25 @@ public class KnowledgeGraph {
         }
     }
 
-    private static void setNodeProperties(Node n, Map<String, Object> properties ) {
-        properties.forEach( (k,v) -> {
-            n.setProperty(k, v);
-        });
+    /**
+     *
+     * set protein and gene role relations
+     * @param drug
+     * @param protein
+     */
+    private static void setDrugProteinRelations(Drug drug, Protein protein) {
+        drug.setProteinRelation(protein);
     }
+
+    /*
+     * Drug gene role relation
+     */
+    private static void setDrugGeneRelation(Drug drug, Gene gene, List<String> geneTerms) {
+        for (String geneTerm : geneTerms ) {
+            drug.setDrugGeneRoleRelations(gene, geneTerm, null);
+        }
+    }
+
 
     /**
      *
@@ -657,5 +743,36 @@ public class KnowledgeGraph {
      isoAbbreviation:
      Clin. Exp. Immunol.
      */
+
+      /*
+        Rna rnaBio = BioEntityTemplate.getBioEntity(BioTypes.RNA, "546760");
+        Node rna = BioEntityTemplate.getNode(rnaBio);
+        if (rna != null) {
+            System.out.println("rna= " + rna.getLabels().toString() + rna.getId());
+        }
+      */
+
+    public void setDrugGeneRelation() throws Exception {
+
+        Drug glucaGonBio = BioEntityTemplate.getBioEntity(BioTypes.DRUG, "glucagon");
+        Node glucaGonDrug = BioEntityTemplate.getNode(glucaGonBio);
+        if (glucaGonDrug != null) {
+            System.out.println("glucagonDrug = " + getLabel(glucaGonDrug) + glucaGonDrug.getId());
+        }
+
+        Drug erlotinibBio = BioEntityTemplate.getBioEntity(BioTypes.DRUG, "erlotinib");
+        Node erlotinibDrug = BioEntityTemplate.getNode(erlotinibBio);
+        if (erlotinibDrug != null) {
+            System.out.println("erlotinibDrug = " + getLabel(erlotinibDrug) + erlotinibDrug.getId());
+        }
+
+        Gene ccnd1Bio = BioEntityTemplate.getBioEntity(BioTypes.GENE, "CCND1");
+        Node ccnd1Gene = BioEntityTemplate.getNode(ccnd1Bio);
+        if (ccnd1Gene != null) {
+            System.out.println("ccnd1Gene = " + getLabel(ccnd1Gene) + ccnd1Gene.getId());
+        }
+        setDrugGeneRelation(glucaGonBio, ccnd1Gene, "cyclin d1");
+
+    }
 
 }
