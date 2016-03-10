@@ -89,7 +89,7 @@ import java.util.HashSet;
  */
 @BioEntity(bioType = BioTypes.INTACT_RNA)
 public class IntactRna {
-    protected static Logger log = LogManager.getLogger(Drug.class);
+    protected static Logger log = LogManager.getLogger(IntactRna.class);
 
     @GraphId
     private Long id;

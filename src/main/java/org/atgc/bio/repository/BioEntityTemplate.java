@@ -306,7 +306,6 @@ public class BioEntityTemplate<T> {
         Node node;
 
         CompoundKey compoundKey = CompoundKey.getCompoundKey(t);
-
         if (compoundKey != null) {
             node = getUniquelyIndexedNode(compoundKey.getKey(), compoundKey.getValue(), compoundKey.getIndexName());
             if (node != null) {

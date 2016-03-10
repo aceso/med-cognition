@@ -36,7 +36,7 @@ public class NcbiTaxonomy {
     private Long id;
 
     /**
-     * 	id:  "NCBITaxon:9606",
+     * 	id:  "NCBITaxon:9606" for humans or homosapiens,
      */
     @UniquelyIndexed (indexName=IndexNames.NCBI_TAX_ID)
     @Taxonomy(rbClass=TaxonomyTypes.NCBI_TAX_ID, rbField=BioFields.NCBI_TAX_ID)

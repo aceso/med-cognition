@@ -8,10 +8,7 @@ package org.atgc.bio.repository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.atgc.bio.BioFields;
-import org.atgc.bio.domain.BioRelTypes;
-import org.atgc.bio.domain.BioTypes;
-import org.atgc.bio.domain.Drug;
-import org.atgc.bio.domain.IndexNames;
+import org.atgc.bio.domain.*;
 import org.atgc.bio.meta.AnnotationTypes;
 import org.atgc.bio.meta.BioEntity;
 import org.atgc.bio.meta.UniquelyIndexed;
@@ -113,7 +110,8 @@ public class KnowledgeGraph {
         Transaction destTx = destGraphDb.beginTx();
         try {
             // specify depth
-            getIntelligentPaths(6);
+           // getIntelligentPaths(6);
+            createCaseStudy2(4);
             tx.success();
             destTx.success();
         } catch(Exception e) {
@@ -210,24 +208,10 @@ public class KnowledgeGraph {
             System.out.println("ncbiTaxonomy=" + ncbiTaxonomy.getLabels().toString() + ncbiTaxonomy.getId());
         }
 
-        // Erlonitib
-        /*
-        Node pubmed = getNode(BioTypes.PUBMED.toString(), IndexNames.PUBMED_ID.toString(), "17041093");
-       // Node gene = getNode(BioTypes.GENE.toString(), IndexNames.GENE_ID.toString(), "9606-MAPK1");
-
-
-        if (pubmed != null) {
-            System.out.println("protein" + pubmed.getLabels().toString() + pubmed.getId());
-        }
-
-        if (gene != null) {
-            System.out.println("gene" + gene.getLabels().toString() + gene.getId());
-        }
-        */
-
         List<BioRelTypes> relTypes = new ArrayList<>();
         relTypes.add(BioRelTypes.DRUG_MANUFACTURED_BY);
         relTypes.add(BioRelTypes.DRUG_PACKAGED_BY);
+        relTypes.add(BioRelTypes.FOUND_EVIDENCE_IN);
         List<Node> entityList = getEntityInteractors(protein, urokinaseDrug, ncbiTaxonomy);
          for (Node node : entityList)  {
              getGraphPath(entityList, drug, depth, relTypes);
@@ -243,27 +227,211 @@ public class KnowledgeGraph {
         for (Node node: cacheListPath.keySet()) {
             log.info("node =" + node.getId());
         }
-        saveSubGraph();
+        saveSubGraph("CaseStudy1");
     }
 
+    // Erlonitib
+        /*
+        Node pubmed = getNode(BioTypes.PUBMED.toString(), IndexNames.PUBMED_ID.toString(), "17041093");
+       // Node gene = getNode(BioTypes.GENE.toString(), IndexNames.GENE_ID.toString(), "9606-MAPK1");
 
 
+        if (pubmed != null) {
+            System.out.println("protein" + pubmed.getLabels().toString() + pubmed.getId());
+        }
+
+        if (gene != null) {
+            System.out.println("gene" + gene.getLabels().toString() + gene.getId());
+        }
+        */
+
+
+
+    // capacetabine: compound1325.xml compound1283.xml compound1271.xml
+    //
     // cetuximab:
-    // compound104.xml, compound1146.xml
+    // compound104.xml compound1146.xml
+    // compound1146.xml:  KRAS (gene),  P01116 (uniprot)
+    // CCND1 (gene),  P24385 (uniprot),
+
 
     // erlotinib:DB00530 (drugbank),
-    // compound4176.xml, compound583.xml, compound968.xml
-    // compound974.xml, compound750.xml, compound891.xml
-    // compound583.xml, compound4716.xml, compound4093.xml
+    // KRAS (gene), 16043828 (pubmedid),   P01116 (uniprot)
+    // NM_004985 (RefSeqID)
+    // Gene-NCBITaxon:9606-CCND1
+    // CCND1 (gene), cyclin d1(gene alias), P24385 (uniprot),
+
+    //
+    // compound1146.xml
+    // compound4176.xml compound583.xml compound968.xml
+    // compound974.xml compound750.xml compound891.xml
+    // compound583.xml compound4716.xml compound4093.xml
     //
     // hugogene: MAPK1, MAPK3,
     // uniprotid: P28482
     // geneterm: erk (extracellular signal-regulated kinase), erk1
     // pubmedid: 18723475 (drugbank), 17041093, 16937104
+    // 17206887 (pubmedid)
 
     // pubmedid: 16217753 (erk1/MAPK3),15657067
     // Gene: (HugoGeneSymbol)9606-MAPK1
     //
+
+    // drug: capecitabine :  gene:  TYMS (thymidylate synthase),
+    // uniprot:   P04818
+    // RefSeqId:  NM_001071
+    //
+
+    /*
+    unique: RNA_PREFERRED_SYMBOL
+    <id>:  248358
+    message:  IntactRna--human_18s_rrna
+    interactorId: 940992
+    shortLabel:  human_18s_rrna
+    ncbiTaxId:  9606
+    intactId: 940992
+    fullName: 18S rRNA
+    nodeType: Rna
+
+    <id>: 216219
+    geneSymbol:  tp53i3
+    message:  IntactGene-tp53i3-tp53i3_human_gene
+    interactorId:558898
+    shortLabel: tp53i3_human_gene
+    ncbiTaxId:9606
+    intactId: 558898
+    fullName: Human TP53I3 gene
+    nodeType: IntactGene
+
+
+    <id>: 102367
+    message: Enzyme-1.1.1.298
+    enzymeLastChange: 2012-02-10 23:35:10
+    enzymeId: 1.1.1.298
+    nodeType: Enzyme
+
+
+    <id>:
+    210562
+    message: Dna-EBI-1648030-cdk4_human_dna
+    interactorId: 546760
+    ebiId: EBI-1648030
+    shortLabel:cdk4_human_dna
+    ncbiTaxId: 9606
+    intactId: 546760
+    fullName: Double-stranded oligomer corresponding to MBS4 in human cdk4 promoter
+    nodeType: Dna
+    */
+    public static void createCaseStudy2(int depth)  throws Exception {
+
+        cacheListPath = new HashMap<>();
+        HashMap<BioTypes, String> bioMap = new HashMap<>();
+
+        /*  These did not yield results
+        bioMap.put(BioTypes.INTACT_GENE, "tp53i3");
+       // bioMap.put(BioTypes.RNA, "546760");
+        bioMap.put(BioTypes.ENZYME, "1.1.1.298");
+        bioMap.put(BioTypes.HUMAN_DISEASE_ONTOLOGY, "0050014");
+        */
+
+        /*
+            kras gene = [Gene]412275
+            p01116, protein = [Protein]204950
+            cetuximabDrug = [Drug]122
+            enzyme = [Enzyme]102367
+            drug = [Drug]28975
+
+            messages:
+            ccnd1-human gene = Gene-NCBITaxon:9606-CCND1  412275
+            p01116, protein = Protein-P24385-ccnd1_human  204950
+            cetuximabDrug = Drug-Cetuximab  122
+            enzyme = Enzyme-1.1.1.298   102367
+            drug = Drug-Erlotinib   28975
+
+         */
+
+        // GeneSymbol  compound
+        /*
+        Gene geneBio = BioEntityTemplate.getBioEntity(BioTypes.GENE, "Gene-NCBITaxon:9606-CCND1");
+        Node gene = BioEntityTemplate.getNode(geneBio);
+        */
+        Node gene = getNode(BioTypes.GENE.toString(), BioFields.NCBI_GENE_ID.toString(), "595");
+        if (gene != null) {
+            System.out.println("ccnd1-human gene = " + getLabel(gene) + gene.getId());
+        }
+
+        Protein proteinBio = BioEntityTemplate.getBioEntity(BioTypes.PROTEIN, "P24385");
+        Node protein = BioEntityTemplate.getNode(proteinBio);
+        if (protein != null) {
+            System.out.println("p01116, protein = " + getLabel(protein) + protein.getId());
+        }
+
+        // HumanDiseaseOntology
+        Drug cetuBio = BioEntityTemplate.getBioEntity(BioTypes.DRUG, "Cetuximab");
+        Node cetuximabDrug = BioEntityTemplate.getNode(cetuBio);
+        if (cetuximabDrug!= null) {
+            System.out.println("cetuximabDrug = " + getLabel(cetuximabDrug) + cetuximabDrug.getId());
+        }
+
+        /*
+        Rna rnaBio = BioEntityTemplate.getBioEntity(BioTypes.RNA, "546760");
+        Node rna = BioEntityTemplate.getNode(rnaBio);
+        if (rna != null) {
+            System.out.println("rna= " + rna.getLabels().toString() + rna.getId());
+        }
+*/
+        Enzyme enzymeBio = BioEntityTemplate.getBioEntity(BioTypes.ENZYME, "1.1.1.298");
+        Node enzyme = BioEntityTemplate.getNode(enzymeBio);
+        if (enzyme != null) {
+            System.out.println("enzyme = " + getLabel(enzyme) + enzyme.getId());
+        }
+
+        Drug drugBio = BioEntityTemplate.getBioEntity(BioTypes.DRUG, "Erlotinib");
+        Node drug= BioEntityTemplate.getNode(drugBio);
+        if (drug != null) {
+            System.out.println("drug = " + getLabel(drug) + drug.getId());
+        }
+
+        List<Node> list = new ArrayList<>();
+        list.add(protein);
+        list.add(gene);
+       // list.add(cetuximabDrug);
+        list.add(drug);
+
+        List<BioRelTypes> relTypes = new ArrayList<>();
+        relTypes.add(BioRelTypes.DRUG_MANUFACTURED_BY);
+        relTypes.add(BioRelTypes.DRUG_PACKAGED_BY);
+        getIntelligentPaths(depth, list, relTypes);
+    }
+
+    public static void getIntelligentPaths(int depth,
+                                           List<Node> list,
+                                           List<BioRelTypes> excludeRelTypes) throws Exception {
+        for (Node node : list) {
+            getGraphPath(list, node, depth, excludeRelTypes);
+            if (cacheListPath.size() == list.size()) {
+                break;
+            }
+        }
+        setRatio(list);
+        for (CacheGraphPath cachePath : cacheListPath.values()) {
+            log.info("cachePath =" + "path=" + cachePath.path);
+            log.info("ratio = " + cachePath.ratio);
+        }
+        for (Node node : cacheListPath.keySet()) {
+            log.info("node =" + node.getId());
+        }
+       // saveSubGraph("CaseStudy2");
+    }
+
+
+    /**
+     * getInteractors
+     * @param node1
+     * @param node2
+     * @param node3
+     * @return
+     */
     public static List<Node> getEntityInteractors(Node node1, Node node2, Node node3) {
         List<Node> list = new ArrayList<>();
         try {
@@ -326,13 +494,11 @@ public class KnowledgeGraph {
         log.info("\n\n\t addPath()");
         for (Node n: path.nodes()) {
             int matches = 0;
-            getCount(path, list);
+            //getCount(path, list);
             for (Node targetNode : list) {
-                String pathNodeLabel = getLabel(n);
-                String targetLabel = getLabel(targetNode);
-                if (pathNodeLabel.equalsIgnoreCase(targetLabel)) {
+                if (isNodeIncluded(n, targetNode)) {
                     matches++;
-                    log.info("addPath(), matches " + targetLabel + ", targetNodeid" + targetNode.getId() + " in path=" + path);
+                    log.info("addPath(), matches "  + ", targetNodeid" + targetNode.getId() + " in path=" + path);
                     CacheGraphPath cachePath = new CacheGraphPath();
                     cachePath.path = path;
                     cachePath.startNode = node;
@@ -356,28 +522,30 @@ public class KnowledgeGraph {
         }
     }
 
+    /*
     private static double getCount(Path path, List<Node> list) {
         double matches = 0;
         for (Node n: path.nodes()) {
             for (Node k : list) {
                 String pathNodeLabel = getLabel(n);
                 String kLabel = getLabel(k);
-                if (pathNodeLabel.equalsIgnoreCase(kLabel)) {
-                    matches++;
+                if (kLabel != null && pathNodeLabel != null) {
+                    if (pathNodeLabel.equalsIgnoreCase(kLabel)) {
+                        matches++;
+                    }
                 }
             }
         }
         return matches;
     }
+    */
 
     private static void setRatio(List<Node> list) {
         double numMatches = 0.0;
         for (CacheGraphPath cachePath : cacheListPath.values()) {
             for (Node n: cachePath.path.nodes()) {
                 for (Node k : list) {
-                    String pathNodeLabel = getLabel(n);
-                    String kLabel = getLabel(k);
-                    if (pathNodeLabel.equalsIgnoreCase(kLabel)) {
+                    if (isNodeIncluded(n, k)) {
                         numMatches++;
                     }
                 }
@@ -387,10 +555,24 @@ public class KnowledgeGraph {
         }
     }
 
+    // As iterable is not in order
     private static boolean isNodeIncluded(Node node, Node dNode) {
-        String srcLabel = getLabel(node);
-        String destLabel = getLabel(dNode);
-        if (srcLabel.equalsIgnoreCase(destLabel))
+        Iterable<String> propertyKeys = node.getPropertyKeys();
+        Iterable<String> destProps = dNode.getPropertyKeys();
+        int cnt = 0;
+        int dCnt = 0;
+        StringBuffer sb = new StringBuffer();
+        for (String s : propertyKeys) {
+            cnt++;
+            sb.append(s);
+            sb.append(" , ");
+            for (String d : destProps) {
+                if (s.equals(d)) {
+                    dCnt++;
+                }
+            }
+        }
+        if (cnt == dCnt)
             return true;
         return false;
     }
@@ -414,11 +596,11 @@ public class KnowledgeGraph {
         return iterable.iterator().hasNext() ? true : false;
     }
 
-    public static void saveSubGraph() {
+    public static void saveSubGraph(String label) {
        for (CacheGraphPath cachePath : cacheListPath.values()) {
             log.info("nodes tagged with label experiment1 in path " + cachePath.path);
             for (Node node : cachePath.path.nodes()) {
-                node.addLabel(DynamicLabel.label("Experiment1"));
+                node.addLabel(DynamicLabel.label(label));
             }
         }
     }
@@ -460,6 +642,20 @@ public class KnowledgeGraph {
      participantId:
      942176
 
+
+
+     message:
+     Journal-0009-9104-Clinical and experimental immunology
+     title:
+     Clinical and experimental immunology
+     issn:
+     0009-9104
+     issnType:
+     Print
+     nodeType:
+     Journal
+     isoAbbreviation:
+     Clin. Exp. Immunol.
      */
 
 }

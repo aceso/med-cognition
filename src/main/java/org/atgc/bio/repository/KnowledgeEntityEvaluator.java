@@ -66,12 +66,10 @@ public class KnowledgeEntityEvaluator implements Evaluator {
             if (isNodeIncluded(path.endNode(), bio)) {
                 for (BioRelTypes relType : relTypes) {
                     if (isRelationship(path.endNode(), relType)) {
-                        System.out.println("relType =" + relType + " endNodetype" + path.endNode().getId());
+                        //System.out.println("relType =" + relType + " endNodetype" + path.endNode().getId());
                         return Evaluation.INCLUDE_AND_PRUNE;
                     }
                 }
-               //log.info("include and prune as endnode matches bio" + path.endNode().getLabels());
-               // log.info("node matches " + path.endNode().getId() + " name " + path.endNode().getLabels().toString() + path.endNode().getId());
                 log.info("nodematches " + bio.getId() + " bio type=" + bio.getLabels());
                 return Evaluation.INCLUDE_AND_PRUNE;
             }
@@ -104,15 +102,25 @@ public class KnowledgeEntityEvaluator implements Evaluator {
      * @return boolean
      */
     private static boolean isNodeIncluded(Node node, Node dNode) {
-        String srcLabel = getLabel(node);
-        String destLabel = getLabel(dNode);
-        if (node.getId() == 9235) {
-            log.info("dNode =" + dNode.getId());
-            log.info("srcLabel =" + srcLabel + " destLabel=" + destLabel);
+        Iterable<String> propertyKeys = node.getPropertyKeys();
+        Iterable<String> destProps = dNode.getPropertyKeys();
+        int cnt = 0;
+        int dCnt = 0;
+        StringBuffer sb = new StringBuffer();
+        for (String s : propertyKeys) {
+            cnt++;
+            sb.append(s);
+            sb.append(" , ");
+            for (String d : destProps) {
+                if (s.equals(d)) {
+                    dCnt++;
+                }
+            }
         }
-        if (srcLabel != null && destLabel != null)
-           return (srcLabel.toString().equalsIgnoreCase(destLabel.toString()));
+        if (cnt == dCnt)
+            return true;
         return false;
+
     }
 
     /**

@@ -88,7 +88,7 @@ import java.util.HashSet;
  */
 @BioEntity(bioType = BioTypes.INTACT_GENE)
 public class IntactGene {
-    protected static Logger log = LogManager.getLogger(Drug.class);
+    protected static Logger log = LogManager.getLogger(IntactGene.class);
 
     @GraphId
     private Long id;
