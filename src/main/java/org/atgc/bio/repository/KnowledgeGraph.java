@@ -441,7 +441,7 @@ public class KnowledgeGraph {
             System.out.println("glucagonDrug = " + getLabel(glucaGonDrug) + glucaGonDrug.getId());
         }
 
-        drug.setDrugGeneRelation(gene, "" )
+        //drug.setDrugGeneRelation(gene, "" )
         List<Node> list = new ArrayList<>();
         list.add(gene);
         list.add(protein);
@@ -771,7 +771,8 @@ public class KnowledgeGraph {
         if (ccnd1Gene != null) {
             System.out.println("ccnd1Gene = " + getLabel(ccnd1Gene) + ccnd1Gene.getId());
         }
-        setDrugGeneRelation(glucaGonBio, ccnd1Gene, "cyclin d1");
+
+        //setDrugGeneRelation(glucaGonBio, ccnd1Gene, "cyclin d1");
 
     }
 
