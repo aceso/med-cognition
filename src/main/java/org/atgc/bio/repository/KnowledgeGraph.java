@@ -5,6 +5,7 @@
 package org.atgc.bio.repository;
 
 
+import com.sun.tools.javac.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.atgc.bio.BioFields;
@@ -26,6 +27,7 @@ import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.List;
 
 /**
  * KnowledgeGraph - Traversal
@@ -111,7 +113,8 @@ public class KnowledgeGraph {
         try {
             // specify depth
            // getCaseStudy1();
-            createCaseStudy3();
+            setDrugGeneRelation();
+           // createCaseStudy3();
             tx.success();
             destTx.success();
         } catch(Exception e) {
@@ -683,17 +686,22 @@ public class KnowledgeGraph {
      * @param drug
      * @param protein
      */
-    private static void setDrugProteinRelations(Drug drug, Protein protein) {
+    private static void setDrugProteinRelation(Drug drug, Protein protein) {
         drug.setProteinRelation(protein);
+    }
+
+    private static void setGeneProteinRelation(Gene gene, Protein protein) {
+       // gene.setSequenceIdentificationRelation(protein, hgncId, );
     }
 
     /*
      * Drug gene role relation
      */
-    private static void setDrugGeneRelation(Drug drug, Gene gene, List<String> geneTerms) {
-        for (String geneTerm : geneTerms ) {
+    private static void setDrugGeneRelation(Drug drug, Gene gene, String geneTerm) {
+
+        //for (String geneTerm : geneTerms ) {
             drug.setDrugGeneRoleRelations(gene, geneTerm, null);
-        }
+        //}
     }
 
 
@@ -752,7 +760,7 @@ public class KnowledgeGraph {
         }
       */
 
-    public void setDrugGeneRelation() throws Exception {
+    public static void setDrugGeneRelation() throws Exception {
 
         Drug glucaGonBio = BioEntityTemplate.getBioEntity(BioTypes.DRUG, "glucagon");
         Node glucaGonDrug = BioEntityTemplate.getNode(glucaGonBio);
@@ -766,14 +774,95 @@ public class KnowledgeGraph {
             System.out.println("erlotinibDrug = " + getLabel(erlotinibDrug) + erlotinibDrug.getId());
         }
 
+        Drug cetuximabBio = BioEntityTemplate.getBioEntity(BioTypes.DRUG, "cetuximab");
+        Node cetuximabDrug = BioEntityTemplate.getNode(cetuximabBio);
+        if (cetuximabDrug != null) {
+            System.out.println("cetuximbaDrug = " + getLabel(cetuximabDrug) + cetuximabDrug.getId());
+        }
+
+        // CCND1 - cyclin d1
+        Node ccnd1Gene = getNode(BioTypes.GENE, BioFields.NCBI_GENE_ID.toString(), )
         Gene ccnd1Bio = BioEntityTemplate.getBioEntity(BioTypes.GENE, "CCND1");
-        Node ccnd1Gene = BioEntityTemplate.getNode(ccnd1Bio);
         if (ccnd1Gene != null) {
             System.out.println("ccnd1Gene = " + getLabel(ccnd1Gene) + ccnd1Gene.getId());
         }
+        setDrugGeneRelation(glucaGonBio, ccnd1Bio, "cyclin d1");
+        setDrugGeneRelation(erlotinibBio, ccnd1Bio, "cyclin d1");
+        setDrugGeneRelation(cetuximabBio, ccnd1Bio, "cyclin d1");
 
-        //setDrugGeneRelation(glucaGonBio, ccnd1Gene, "cyclin d1");
+        // PTGS2s
+        Gene geneBio = BioEntityTemplate.getBioEntity(BioTypes.GENE, "PTGS2");
+        Node geneNode = BioEntityTemplate.getNode(geneBio);
+        if (geneNode != null) {
+            System.out.println("ccnd1Gene = " + getLabel(geneNode) + geneNode.getId());
+        }
+        // PTGS2
+        setDrugGeneRelation(glucaGonBio, geneBio, "cox-2");
+        setDrugGeneRelation(erlotinibBio, geneBio, "cox-2");
 
+
+        //gene KRAS
+        //ki-ras
+        //Gene geneBios = BioEntityTemplate.getBioEntity(BioTypes.GENE, "3845");
+        geneNode = getNode(BioTypes.GENE.toString(), BioFields.NCBI_GENE_ID.toString(), "3845");
+        if (geneBio != null) {
+            System.out.println("KRAS = " + getLabel(geneNode) + geneNode.getId());
+        }
+
+        setDrugGeneRelation(erlotinibBio, geneBio, "kras");
+        setDrugGeneRelation(cetuximabBio, geneBio, "kras");
+
+        //ki-ra for glucagon drug
+        setDrugGeneRelation(glucaGonBio, geneBio, "ki-ras");
+
+
+        // geneTerms2.add("erk1");  //  MAPK3
+        geneBio = BioEntityTemplate.getBioEntity(BioTypes.GENE, "MAPK3");
+        geneNode = BioEntityTemplate.getNode(geneBio);
+        if (geneBio != null) {
+            System.out.println("MAPK3 = " + getLabel(geneNode) + geneNode.getId());
+        }
+        setDrugGeneRelation(glucaGonBio, geneBio, "erk1");
+        setDrugGeneRelation(erlotinibBio, geneBio, "erk1");
+        // protein
+        // P01116
+
+        // P35354 (PTGS3) cox-2
+        Protein proteinBio = BioEntityTemplate.getBioEntity(BioTypes.PROTEIN, "P35354");
+        if (proteinBio != null) {
+            Node proteinNode = BioEntityTemplate.getNode(proteinBio);
+            if (proteinBio != null) {
+                System.out.println("protein for PTGS3  = " + getLabel(proteinNode) + proteinNode.getId());
+            }
+            setDrugProteinRelation(cetuximabBio, proteinBio);
+            setDrugProteinRelation(erlotinibBio, proteinBio);
+            setDrugProteinRelation(glucaGonBio, proteinBio);
+        }
+
+        //MAPK3,  P27361 (protein)  pubmed: 15213626
+        proteinBio = BioEntityTemplate.getBioEntity(BioTypes.PROTEIN, "P27361");
+        if (proteinBio != null) {
+            Node proteinNode = BioEntityTemplate.getNode(proteinBio);
+            if (proteinBio != null) {
+                System.out.println("protein of MAPK3 = " + getLabel(proteinNode) + proteinNode.getId());
+            }
+            setDrugProteinRelation(cetuximabBio, proteinBio);
+            setDrugProteinRelation(erlotinibBio, proteinBio);
+            setDrugProteinRelation(glucaGonBio, proteinBio);
+        }
+
+
+        //KRAS,  pubmed: 16043828,  compound1146.xml
+        proteinBio = BioEntityTemplate.getBioEntity(BioTypes.PROTEIN, "P01116");
+        if (proteinBio != null) {
+            Node proteinNode = BioEntityTemplate.getNode(proteinBio);
+            if (proteinBio != null) {
+                System.out.println("protein of KRAS = " + getLabel(proteinNode) + proteinNode.getId());
+            }
+            setDrugProteinRelation(cetuximabBio, proteinBio);
+            setDrugProteinRelation(erlotinibBio, proteinBio);
+            setDrugProteinRelation(glucaGonBio, proteinBio);
+        }
     }
 
 }
