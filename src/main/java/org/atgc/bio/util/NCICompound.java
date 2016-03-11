@@ -6,6 +6,7 @@ package org.atgc.bio.util;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import org.apache.avro.generic.GenericData;
 import org.atgc.bio.*;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
@@ -49,17 +50,21 @@ public class NCICompound {
          BasicDBObject zeroObject = (BasicDBObject)diseaseObject.get(MongoFields.ZERO.toString());
          return zeroObject;
      }
-   
-    public static void main(String[] args) throws java.io.IOException {
-        
-        List<Map> drugList = NCICompoundUtil.getNciCompounds();
-        Iterator<Map> drugIter = drugList.iterator();
-       
-        for (int i = 0; i < drugList.size(); i++ ) {
+
+    public static void processSpecificGenes() throws UnknownHostException {
+        List<String> genes = new ArrayList<>();
+        genes.add("MKI67");
+        genes.add("PTGS2");
+        genes.add("FOS");
+        genes.add("TYMS");
+        for (int i = 0; i < genes.size(); i++ ) {
             long beginTime = System.currentTimeMillis();
-            Map map = drugIter.next();
-            log.info(i + "map =" + map.toString());
-            String geneSymbol = (String)getZeroObject(map).get(MongoFields.HUGO_GENE_SYMBOL.toString());
+
+            String geneSymbol;
+            //geneSymbol = "CCND1";
+            //geneSymbol = "KRAS";
+            //geneSymbol = "VEGFA";
+            geneSymbol = genes.get(i);
             log.info("******* geneSymbol =" + geneSymbol);
             if (StatusUtil.idExists(BioTypes.COMPOUND, MongoFields.HUGO_GENE_SYMBOL, geneSymbol)) {
                 log.info("Compound for hugoGeneSymbol " + geneSymbol + " already imported.");
@@ -84,10 +89,62 @@ public class NCICompound {
             log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
             log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
             log.info("Time for NCICompound iteration " + geneSymbol + " = " + (System.currentTimeMillis() - beginTime));
+            break;
         }
         log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
         log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
         log.info("Completed successfully!");
+    }
+   
+    public static void main(String[] args) throws java.io.IOException {
+
+        //processSpecificGenes();
+
+        /** UNCOMMENT THIS LATER after above method processSpecificGenes() is executed.
+         *
+         */
+        List<Map> drugList = NCICompoundUtil.getNciCompounds();
+        Iterator<Map> drugIter = drugList.iterator();
+       
+        for (int i = 0; i < drugList.size(); i++ ) {
+            long beginTime = System.currentTimeMillis();
+            Map map = drugIter.next();
+            log.info(i + "map =" + map.toString());
+            String geneSymbol = (String)getZeroObject(map).get(MongoFields.HUGO_GENE_SYMBOL.toString());
+            //geneSymbol = "CCND1";
+            //geneSymbol = "KRAS";
+            //geneSymbol = "VEGFA";
+            //geneSymbol = "MKI67";
+            log.info("******* geneSymbol =" + geneSymbol);
+            if (StatusUtil.idExists(BioTypes.COMPOUND, MongoFields.HUGO_GENE_SYMBOL, geneSymbol)) {
+                log.info("Compound for hugoGeneSymbol " + geneSymbol + " already imported.");
+                continue;
+            }
+            if (null == geneSymbol) {
+                log.warn("geneSymbol is null");
+                continue;
+            }
+            try {
+                long startTime = System.currentTimeMillis();
+                processCompound(geneSymbol);
+                log.info("Time for processCompound " + geneSymbol + " = " + (System.currentTimeMillis() - startTime));
+                startTime = System.currentTimeMillis();
+                StatusUtil.idInsert(BioTypes.COMPOUND, MongoFields.HUGO_GENE_SYMBOL, geneSymbol);
+                log.info("Time for idInsert " + geneSymbol + " = " + (System.currentTimeMillis() - startTime));
+                //NCICompoundUtil.updateImportStatus(geneSymbol, BioEntityType.DONE);
+            } catch (Exception e) {
+                //NCICompoundUtil.updateImportStatus(geneSymbol,  BioEntityType.ERROR);
+                throw new RuntimeException(e);
+            }
+            log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+            log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+            log.info("Time for NCICompound iteration " + geneSymbol + " = " + (System.currentTimeMillis() - beginTime));
+            break;
+        }
+        log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+        log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+        log.info("Completed successfully!");
+
         /*   try {
              createGeneNode("PKP4");        
         } catch(Exception e) {
