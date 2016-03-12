@@ -31,7 +31,8 @@ import java.util.*;
 import java.util.List;
 
 /**
- * KnowledgeGraph - Traversal
+ * KnowledgeGraph - Traversal and create case studies for knowledge creation, new discoveries and paths
+ *
  * @author jtanisha-ee
  *         Use BioFields to fetch BioEntities and Nodes
  *
