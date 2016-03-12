@@ -23,6 +23,8 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.io.fs.DefaultFileSystemAbstraction;
+import org.neo4j.kernel.StoreLocker;
 import org.neo4j.rest.graphdb.RestGraphDatabase;
 import org.neo4j.rest.graphdb.index.RestIndex;
 
@@ -64,7 +66,27 @@ public class BioEntityTemplate<T> {
         }
     }
 
+
     private static void setup() throws URISyntaxException {
+        try {
+            StoreLocker lock = new StoreLocker(new DefaultFileSystemAbstraction());
+            lock.checkLock(new File(Config.DB_PATH.toString()));
+            try {
+                lock.release();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            File dbFile = new File(Config.DB_PATH.toString());
+            graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(dbFile);
+        } catch (Exception ex) {
+            log.error("Could not initialize RestGraphDatabase ", ex);
+            throw new RuntimeException("uri", ex);
+        }
+
+    }
+
+
+    private static void setup1() throws URISyntaxException {
         /**
          * setup
          * @throws URISyntaxException

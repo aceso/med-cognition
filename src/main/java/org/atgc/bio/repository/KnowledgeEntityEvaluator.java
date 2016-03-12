@@ -54,35 +54,42 @@ public class KnowledgeEntityEvaluator implements Evaluator {
         log.info("evaluate(path)" + path);
 
         int matches=0;
+        //
         for(Node bio : bioEntityList) {
             // include the nodes of interest in the middle of the path too
+            // for each depth, you get a path to expand.
+            // each path can have one or more bioentities (nodes)
             for (Node n : path.nodes()) {
+                // biochemical assay nodes which are relevant in the case study
                 if (isNodeIncluded(n, bio)) {
                     ++matches;
-                    log.info("matched path.length =" + path.length() + ", path=" + path);
+                    for (BioRelTypes relType : relTypes) {
+                        if (isRelationship(path.endNode(), relType)) {
+                            return Evaluation.INCLUDE_AND_PRUNE;
+                        }
+                    }
                     return Evaluation.INCLUDE_AND_CONTINUE;
                 }
+
             }
             if (isNodeIncluded(path.endNode(), bio)) {
                 for (BioRelTypes relType : relTypes) {
                     if (isRelationship(path.endNode(), relType)) {
                         //System.out.println("relType =" + relType + " endNodetype" + path.endNode().getId());
                         return Evaluation.INCLUDE_AND_PRUNE;
+
                     }
                 }
-                log.info("nodematches " + bio.getId() + " bio type=" + bio.getLabels());
-                return Evaluation.INCLUDE_AND_PRUNE;
+                // include and prune
+                return Evaluation.INCLUDE_AND_CONTINUE;
             }
         }
 
+        //  biochemical assays matched then continue to expand the path
         if (matches <= bioEntityList.size() && matches > 0) {
-            System.out.println("matches <= 3, include and continue " + path);
             return Evaluation.INCLUDE_AND_CONTINUE;
         }
-        if (matches == bioEntityList.size()) {
-            System.out.println("include and prune " + path);
-            return Evaluation.INCLUDE_AND_PRUNE;
-        }
+
         return Evaluation.EXCLUDE_AND_CONTINUE;
     }
 
