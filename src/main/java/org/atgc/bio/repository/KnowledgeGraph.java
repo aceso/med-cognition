@@ -65,7 +65,7 @@ public class KnowledgeGraph {
         Node startNode;
         Path path;
         Double numMatches;
-        Double ratio;
+        Double confidenceRatio;
     }
 
     /**
@@ -271,10 +271,10 @@ public class KnowledgeGraph {
               //   break;
              //}
         }
-        setRatio(entityList);
+        setConfidenceRatio(entityList);
         for (CacheGraphPath cachePath : cacheListPath.values()) {
             log.info("cachePath =" + "path=" + cachePath.path);
-            log.info("ratio = " + cachePath.ratio);
+            log.info("confidenceRatio = " + cachePath.confidenceRatio);
         }
         for (Node node: cacheListPath.keySet()) {
             log.info("node =" + node.getId());
@@ -512,7 +512,7 @@ public class KnowledgeGraph {
             }
         }
 
-        setRatio(list);
+        setConfidenceRatio(list);
         saveSubGraph(label);
     }
 
@@ -623,7 +623,7 @@ public class KnowledgeGraph {
 
 
 
-    private static void setRatio(List<Node> list) {
+    private static void setConfidenceRatio(List<Node> list) {
         double numMatches = 0.0;
         for (CacheGraphPath cachePath : cacheListPath.values()) {
             for (Node n: cachePath.path.nodes()) {
@@ -632,7 +632,7 @@ public class KnowledgeGraph {
                         numMatches++;
                     }
                 }
-                cachePath.ratio = numMatches / (double)cachePath.path.length();
+                cachePath.confidenceRatio = numMatches / (double)cachePath.path.length();
                 cachePath.numMatches = numMatches;
             }
         }
