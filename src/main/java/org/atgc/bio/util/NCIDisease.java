@@ -52,8 +52,43 @@ public class NCIDisease {
     }
    
     public static void main(String[] args) throws java.io.IOException {
-        // gives diseaselist documents whose importstatus is due. 
-       DBCursor dbCursor = getCollection(ImportCollectionNames.NCI_DISEASE).findDBCursor("{}" );
+        // gives diseaselist documents whose importstatus is due.
+
+        //Q15904
+        //Q8NFZ5,  tumor
+
+        /*
+        try {
+           Subgraph subGraph  = new Subgraph();
+
+           // getBioEntityFromIndex(BioFields propName, String propValue, IndexNames indexName)Object bioEntity = PersistenceTemplate.getBioEntityFromIndex(BioFields.UNIPROT_ID, "Q8NFZ5", IndexNames.UNIPROT_ID);
+            Protein protein = (Protein)bioEntity;
+            //Object bioE = getBioEntityFromBioType(subGraph, BioTypes.DISEASE, BioFields.DISEASE_TERM, "tumor");
+            Object bioE = PersistenceTemplate.getBioEntityFromIndex(BioFields.DISEASE_TERM, "tumor", IndexNames.DISEASE_TERM);
+            Disease disease = (Disease)bioE;
+            log.info("disease =" + disease.getDiseaseTerm());
+
+
+            log.info("protein =" + protein.getUniprot());
+            disease.setProteinRelation(protein);
+            //PersistenceTemplate.save(disease);
+            BioRelation bioRel = disease.getProteinRelation();
+            Protein endObj = (Protein)bioRel.getEndNode();
+            if (endObj != null) {
+                log.info("endNode protein =" + endObj.getUniprot());
+                log.info("rel = " + bioRel.getName() + " endobjid=" + endObj.getMessage());
+                log.info("disease nodeid =" + disease.getMessage());
+
+            }
+        } catch (Exception e) {
+            throw new IOException("exception " + e.getMessage(), e);
+        }
+        System.exit(0);
+        */
+
+
+        DBCursor dbCursor = getCollection(ImportCollectionNames.NCI_DISEASE).findDBCursor("{}" );
+        int i = 0;
         try {
             // we expect only one document match
             while (dbCursor.hasNext()) {
@@ -74,6 +109,10 @@ public class NCIDisease {
                 //}
                 log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
                 log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+                if (i == 2) {
+                    break;
+                }
+                i++;
             }
         } finally {
             dbCursor.close();
@@ -125,22 +164,17 @@ public class NCIDisease {
    }
    
    public static Protein getProtein(String proteinId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException, Exception {
+        if (proteinId == null) {
+            return null;
+        }
+
         Object bio = getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, proteinId);
         Protein protein = (Protein)bio;
-        if (protein == null) { 
-           protein = UniprotUtil.getProtein(proteinId, subGraph);
-           boolean created = false;
-            if (protein == null)  {
-                protein = new Protein();
-                protein.setUniprot(proteinId);
-                created = true; 
-            }
-            if (created) {
-               subGraph.add(protein);
-            }
-        }
+        if (protein == null)
+            protein = UniprotUtil.getProtein(proteinId, subGraph);
         return protein;
-    } 
+   }
+
     
     public static BasicDBObject getSequenceIdentificationObj(BasicDBObject diseaseInfo) {
         //log.info(diseaseInfo);
@@ -508,12 +542,12 @@ public class NCIDisease {
         if (StrUtil.isNull(organismShortLabel)) {
             return null;
         } else {
-            Object bio = getBioEntityFromBioType(subGraph, BioTypes.ORGANISM, BioFields.ORGANISM, organismShortLabel);
-            Organism organism = (Organism)bio;
-            if (bio == null) {
-            organism = new Organism();
-            organism.setOrganismShortLabel(organismShortLabel);
-            subGraph.add(organism);
+                Object bio = getBioEntityFromBioType(subGraph, BioTypes.ORGANISM, BioFields.ORGANISM, organismShortLabel);
+                Organism organism = (Organism)bio;
+                if (bio == null) {
+                    organism = new Organism();
+                    organism.setOrganismShortLabel(organismShortLabel);
+                    subGraph.add(organism);
             }
             return organism;
         } 
@@ -557,7 +591,7 @@ public class NCIDisease {
      * @throws NotFoundException
      * @throws InvocationTargetException 
      */
-    public static void processSentence(BasicDBObject zeroObject, HashSet<Gene> geneSet, Subgraph subGraph) throws java.io.IOException, java.net.URISyntaxException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NotFoundException, InvocationTargetException, Exception {
+    public static void processSentence(BasicDBObject zeroObject, HashSet<Gene> geneSet, Subgraph subGraph, Protein protein) throws java.io.IOException, java.net.URISyntaxException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, NotFoundException, InvocationTargetException, Exception {
          BasicDBList dbList = (BasicDBList)OntologyStrUtil.getBasicDBList(zeroObject, NciFields.SENTENCE);
          if (dbList != null) {
             if (dbList != null) {
@@ -567,10 +601,20 @@ public class NCIDisease {
                 for (Object obj : dbList) {
                     BasicDBObject dbObj = (BasicDBObject)obj;
                     BasicDBObject diseaseData = getDiseaseData(dbObj);
-                    
                     Disease disease = getDisease(diseaseData, subGraph);
+                    if (protein != null) {
+                        if (protein.getUniprot().equals("-")) {
+                            System.out.println("proteinid =" + protein.getUniprot() + " disease=" + disease.getDiseaseTerm());
+                        } else {
+                            disease.setProteinRelation(protein);
+                            System.out.println("disease relationtype =" + disease.getProteinRelation().getRelType());
+                            System.out.println("proteinid =" + protein.getUniprot());
+                        }
+                    }
+
                     Gene gene = getGene(dbObj, geneSet);
-                    if (gene != null) { 
+                    if (gene != null) {
+                        log.info("gene = " + gene.getGeneSymbol());
                         NciDiseaseGeneRoleRelation roleRelation = getDiseaseGeneRoleRelation(disease, gene, dbObj);   
                         disease.setGeneRelations(roleRelation);
                         NciDiseaseGeneEvidenceRelation eRelation = getDiseaseGeneEvidenceRelation(disease, gene, dbObj);
@@ -614,14 +658,13 @@ public class NCIDisease {
             log.info("************  geneSymbol " + geneSymbol);
             Subgraph subGraph = new Subgraph();
             HashSet<Gene> geneSet = getGeneSet(geneSymbol, subGraph);
-            
             BasicDBObject sequence = getSequenceIdentificationObj(zeroObject);
             Protein protein = getProtein(getUniProtId(sequence),subGraph);
-            if (protein != null) { 
+            if (protein != null) {
+                System.out.println("protein =" + protein.getUniprot());
                 setSequenceIdentificationRelation(sequence, protein, geneSet, subGraph);
             }
-            processSentence(zeroObject, geneSet, subGraph);
-           
+            processSentence(zeroObject, geneSet, subGraph, protein);
             subGraph.traverse();
             PersistenceTemplate.saveSubgraph(subGraph);
         }

@@ -101,7 +101,10 @@ public class Disease {
     
     @RelatedTo(direction=Direction.BOTH, relType=BioRelTypes.IS_OBSERVED_IN_NCBI_TAXONOMY, elementClass = BioRelation.class)
     private BioRelation ncbiTaxonomyRelation;
-    
+
+    @RelatedTo(direction=Direction.BOTH, relType=BioRelTypes.PROTEIN_ASSOCIATED_WITH_DISEASE, elementClass = BioRelation.class)
+    private BioRelation proteinRelation;
+
     @NodeLabel
     @Indexed (indexName=IndexNames.MESSAGE)
     @Taxonomy (rbClass=TaxonomyTypes.MESSAGE, rbField=BioFields.MESSAGE)
@@ -194,6 +197,15 @@ public class Disease {
     public void setNcbiTaxonomyRelation(NcbiTaxonomy ncbiTaxonomy) {
         ncbiTaxonomyRelation = new BioRelation(this, ncbiTaxonomy, BioRelTypes.IS_OBSERVED_IN_NCBI_TAXONOMY);
     }
+
+    public BioRelation getProteinRelation() {
+        return proteinRelation;
+    }
+
+    public void setProteinRelation(Protein protein) {
+        proteinRelation = new BioRelation(this, protein, BioRelTypes.PROTEIN_ASSOCIATED_WITH_DISEASE);
+    }
+
     /**
      *
      * @return String
