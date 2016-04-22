@@ -227,6 +227,7 @@ public class NCIDisease {
             disease = new Disease();
             disease.setDiseaseTerm(diseaseTerm);
             disease.setDiseaseCode(OntologyStrUtil.getString(dbObj,NciFields.NCI_DISEASE_CONCEPT_CODE));
+            setHumanDiseaseOntologyRelation(subGraph, diseaseTerm, disease);
             created = true; 
         }
         if (created) {
@@ -739,6 +740,18 @@ public class NCIDisease {
             getGene(geneSet, NcbiTaxIdTypes.HUMAN.toString());
         } 
         return null;
-        
    }
+
+   public static void setHumanDiseaseOntologyRelation(Subgraph subGraph, String diseaseTerm, Disease disease) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException {
+        Object bio = PersistenceTemplate.getBioEntity(BioTypes.HUMAN_DISEASE_ONTOLOGY, BioFields.HUMAN_DISEASE_ONTOLOGY_NAME, diseaseTerm);
+        HumanDiseaseOntology hdo= (HumanDiseaseOntology) bio;
+        if (hdo != null) {
+            log.info("humanDiseaseOntology term found =" + hdo.getMessage());
+            hdo.setIsARelationship(disease, BioRelTypes.IS_A);
+        } else {
+            log.info("geneBio is null for disease term" + diseaseTerm);
+        }
+
+   }
+
 }
