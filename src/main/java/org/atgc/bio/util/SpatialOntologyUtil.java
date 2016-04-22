@@ -62,6 +62,7 @@ public class SpatialOntologyUtil {
             while (dbCursor.hasNext()) {
                 BasicDBObject result = (BasicDBObject)dbCursor.next();
                 String ontologyId = OntologyStrUtil.getString(result, SpatialOntologyFields.ID);
+                log.info("SpatialOntology: id " + ontologyId);
                 processOntologyDoc(ontologyId, result);
             }
          } finally {

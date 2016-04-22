@@ -62,7 +62,7 @@ public class RNAOntologyUtil {
      * @param result 
      */
     public static void processOntologyDoc(String id, BasicDBObject result) throws UnknownHostException {
-          if (OntologyStrUtil.isHumanDiseaseOntology(id)) { 
+          if (OntologyStrUtil.isHumanDiseaseOntology(id)) {
               if (!StatusUtil.idExists(BioTypes.RNA_ONTOLOGY.toString(), BioFields.RNA_ONTOLOGY_ID.toString(), id)) {
                     log.info("******* RNA ontology id =" + id);
                     try {
