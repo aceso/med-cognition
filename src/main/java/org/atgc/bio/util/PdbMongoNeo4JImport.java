@@ -33,7 +33,8 @@ import java.net.UnknownHostException;
 import java.util.HashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.biojava.bio.structure.StructureException;
+//import org.biojava.bio.structure.StructureException;
+import org.biojava.nbio.structure.StructureException;
 import org.neo4j.graphdb.NotFoundException;
 import uk.ac.ebi.uniprot.dataservice.client.exception.ServiceException;
 
