@@ -146,4 +146,9 @@ public class BioEntityFeatureVector {
     Double score = scoreEvolution.get(scoreEvolution.size()-1);
     scoreEvolution.set(scoreEvolution.size()-1, score+interimScore);
   }
+
+  public void normalizeScore(double networkDensity) {
+    Double score = scoreEvolution.get(scoreEvolution.size()-1);
+    scoreEvolution.set(scoreEvolution.size()-1, score*networkDensity);
+  }
 }
