@@ -1,3 +1,3 @@
 #  Knowledge Networks
 
-Knowledge cognition
+Knowledge cognition from public data.
