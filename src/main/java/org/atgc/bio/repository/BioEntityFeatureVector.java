@@ -16,6 +16,8 @@ import java.util.Map;
  */
 public class BioEntityFeatureVector {
 
+  public static final double DECAY = 0.9;
+
   /**
    * Every bioEntity has a graph nodeId that is unique.
    */
@@ -30,14 +32,14 @@ public class BioEntityFeatureVector {
    * and the intensity is not necessarily monotonic. It may increase
    * or decrease, or in other words fluctuate.
    */
-  private List<Integer> scoreEvolution;
+  private List<Double> scoreEvolution;
 
   /**
    * This is the score computed during a pass, and updated into the
    * latest score in scoreEvolution. This prevents recursive feedback
    * of scores for neighbors.
    */
-  private Integer interimScore;
+  private double interimScore;
 
   /**
    * The bioEntity type tells us if this is a Protein, Gene,
@@ -66,7 +68,7 @@ public class BioEntityFeatureVector {
    * score in the list for the most recent knowledge iteration.
    * @return the score evolution list.
    */
-  public List<Integer> getScoreEvolution() {
+  public List<Double> getScoreEvolution() {
     return scoreEvolution;
   }
 
@@ -74,7 +76,7 @@ public class BioEntityFeatureVector {
    * Set the initial score evolution. This method may not be used.
    * @param scoreEvolution the evolving score list
    */
-  public void setScoreEvolution(List<Integer> scoreEvolution) {
+  public void setScoreEvolution(List<Double> scoreEvolution) {
     this.scoreEvolution = scoreEvolution;
   }
 
@@ -103,30 +105,27 @@ public class BioEntityFeatureVector {
   public void populate(Node node) {
     setNodeId(node.getId());
     scoreEvolution = new ArrayList<>();
-    scoreEvolution.add(node.getDegree());
+    scoreEvolution.add((double) node.getDegree());
     // some more things
   }
 
   /**
    * We do depth=3 relationship cardinality traversing.
-   * @param nodeMap
+   * @param nodeMap the map of all nodes
    */
   public void computeRelationsScore(Map<Long, Node> nodeMap) {
     Node node = nodeMap.get(nodeId);
-    int score = 0;
+    interimScore = computeRelationsScore(node, DECAY);
+  }
+
+  public double computeRelationsScore(Node node, double decay) {
+    double score = 0;
     for (Relationship relationship : node.getRelationships()) {
       Node endNode = relationship.getEndNode();
-      score += endNode.getDegree();
-      for (Relationship relationship1 : endNode.getRelationships()) {
-        Node endNode1 =  relationship1.getEndNode();
-        score += endNode1.getDegree();
-        for (Relationship relationship2 : endNode1.getRelationships()) {
-          Node endNode2 = relationship2.getEndNode();
-          score += endNode2.getDegree();
-        }
-      }
-     }
-    interimScore = score;
+      score += endNode.getDegree()*decay;
+      score += computeRelationsScore(endNode, decay*decay);
+    }
+    return score;
   }
 
   /**
@@ -144,7 +143,12 @@ public class BioEntityFeatureVector {
    *
    */
   public void updateRelationsScore() {
-    Integer score = scoreEvolution.get(scoreEvolution.size()-1);
+    Double score = scoreEvolution.get(scoreEvolution.size()-1);
     scoreEvolution.set(scoreEvolution.size()-1, score+interimScore);
+  }
+
+  public void normalizeScore(double networkDensity) {
+    Double score = scoreEvolution.get(scoreEvolution.size()-1);
+    scoreEvolution.set(scoreEvolution.size()-1, score*networkDensity);
   }
 }

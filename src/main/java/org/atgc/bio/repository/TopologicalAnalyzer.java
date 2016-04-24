@@ -1,7 +1,10 @@
 package org.atgc.bio.repository;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.Relationship;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +15,8 @@ import java.util.Map;
  * @author aceso
  */
 public class TopologicalAnalyzer {
+
+  protected static final Logger log = LogManager.getLogger(TopologicalAnalyzer.class);
 
   /**
    * This is a map of nodeId which is a long and a feature vector.
@@ -79,6 +84,29 @@ public class TopologicalAnalyzer {
     }
   }
 
+  private void finalPassTopology(Topology topology, double networkDensity) {
+    for (Long nodeId : topology.getNodeIds()) {
+      BioEntityFeatureVector vector = knowledgeCache.get(nodeId);
+      vector.normalizeScore(networkDensity);
+    }
+  }
+
+  private int countRelationships(Path path) {
+    int count = 0;
+    for (Relationship relationship : path.relationships()) {
+      count++;
+    }
+    return count;
+  }
+
+  private int countNodes(Path path) {
+    int count = 0;
+    for (Node node : path.nodes()) {
+      count++;
+    }
+    return count;
+  }
+
   /**
    * For each iteration of finding new knowledge, we create
    * a new topology. This is based on the new paths found in the iteration.
@@ -86,10 +114,18 @@ public class TopologicalAnalyzer {
    */
   public void createTopology(List<Path> paths) {
     Topology topology = new Topology();
+    double networkDensity = 0;
     for (Path path : paths) {
       firstPassTopology(topology, path);
       secondPassTopology(topology);
+      int numNodes = countNodes(path);
+      int numRelations = countRelationships(path);
+      int maxRelations = numNodes*(numNodes-1)/2;
+      networkDensity += (double)numRelations/maxRelations;
+      log.info("networkDensity = " + networkDensity);
     }
+    networkDensity = networkDensity/paths.size();
+    finalPassTopology(topology, networkDensity);
     topologyEvolution.add(topology);
   }
 }
