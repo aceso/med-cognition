@@ -100,7 +100,6 @@ public class NCIDisease {
                 // if (geneSymbol.equals("CACNA1G")) {
                     try {
                         processDisease(result);
-                        //break;
                         //NCIDiseaseUtil.updateImportStatus(geneSymbol, BioEntityType.DONE);
                     } catch (Exception e) {
                         //NCIDiseaseUtil.updateImportStatus(geneSymbol,  BioEntityType.ERROR);
@@ -109,7 +108,7 @@ public class NCIDisease {
                 //}
                 log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
                 log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
-                if (i == 2) {
+                if (i == 1) {
                     break;
                 }
                 i++;
@@ -128,6 +127,7 @@ public class NCIDisease {
     * @return 
     */
    private static String getUniProtId(BasicDBObject obj) {
+       log.info("getUniProtId, protein id =" + getString(obj, NciFields.UNIPROT_ID));
         return getString(obj, NciFields.UNIPROT_ID);
    }
   
@@ -164,12 +164,14 @@ public class NCIDisease {
    }
    
    public static Protein getProtein(String proteinId, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException, Exception {
-        if (proteinId == null) {
+        if (proteinId == null || proteinId.equals("-")) {
+            log.info("proteinId = -" + proteinId);
             return null;
         }
-
+       log.info("proteinId = -" + proteinId);
         Object bio = getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, proteinId);
         Protein protein = (Protein)bio;
+       System.out.println("getBioEntityFromBioType() protein id=" + protein.getUniprot());
         if (protein == null)
             protein = UniprotUtil.getProtein(proteinId, subGraph);
         return protein;
@@ -290,9 +292,11 @@ public class NCIDisease {
     
     public static NciDiseaseGeneRoleRelation getDiseaseGeneRoleRelation(Disease disease, Gene gene, BasicDBObject dbObj) {
         String geneTerm = getMatchedGeneTerm(getGeneData(dbObj));
+        log.info("matched geneTerm " + geneTerm  + " gene= " + gene.getGeneSymbol());
         NciDiseaseGeneRoleRelation roleRelation = new NciDiseaseGeneRoleRelation(disease, gene, geneTerm);
         List<String> roleList = getGeneRoles(getGeneRolesObj(dbObj));
         if (roleList != null && !roleList.isEmpty()) {
+            log.info("setDiseaseGeneRoles()");
            setDiseaseGeneRoles(roleRelation, roleList);
         }
         return roleRelation;
@@ -394,9 +398,10 @@ public class NCIDisease {
                     BasicDBObject dbObj = (BasicDBObject)obj;
                     if (dbObj != null) {
                         roleList = getPrimaryRoleList(dbObj, roleList);
-                        //log.info("roleList of Primary Roles" + roleList.size() + " list=" + roleList.toString());
+                        log.info("roleList of Gene Primary Roles" + roleList.size() + " list=" + roleList.toString());
                         roleList = getOtherRoleList(dbObj, roleList);
                         if (roleList.isEmpty()) {
+                            log.info("roleList of Gene is empty");
                             String role = dbObj.toString();
                             if (!StrUtil.isNull(role)) {
                                 roleList.add(role);
@@ -439,6 +444,7 @@ public class NCIDisease {
     public static void setDiseaseGeneRoles(NciDiseaseGeneRoleRelation roleRelation, List<String> roleList ) {
          for (String str : roleList) {
              if (str != null) {
+                 log.info("DiseaseGeneRoles =" + str);
                  roleRelation.setRole(NciGeneDiseaseRoles.getRoleEnum(str));
              }
          }  
@@ -607,9 +613,18 @@ public class NCIDisease {
                         if (protein.getUniprot().equals("-")) {
                             System.out.println("proteinid =" + protein.getUniprot() + " disease=" + disease.getDiseaseTerm());
                         } else {
-                            disease.setProteinRelation(protein);
-                            System.out.println("disease relationtype =" + disease.getProteinRelation().getRelType());
-                            System.out.println("proteinid =" + protein.getUniprot());
+                            if (protein.getMessage() == null) {
+                                System.out.println("protein.getMessage() is null, proteinid =" + protein.getUniprot());
+                                System.out.println("disease=" + disease.getDiseaseTerm());
+                            }
+                            /*if (protein.getMessage() != null && protein.getMessage().equals("Protein--")) {
+                                System.out.println("Protein--, proteinid =" + protein.getUniprot());
+                                System.out.println("disease=" + disease.getDiseaseTerm());
+                            } else { */
+                                disease.setProteinRelation(protein);
+                                System.out.println("disease relationtype =" + disease.getProteinRelation().getRelType());
+                                System.out.println("proteinid =" + protein.getUniprot());
+                           // }
                         }
                     }
 
@@ -660,13 +675,21 @@ public class NCIDisease {
             Subgraph subGraph = new Subgraph();
             HashSet<Gene> geneSet = getGeneSet(geneSymbol, subGraph);
             BasicDBObject sequence = getSequenceIdentificationObj(zeroObject);
-            Protein protein = getProtein(getUniProtId(sequence),subGraph);
-            if (protein != null) {
-                System.out.println("protein =" + protein.getUniprot());
-                setSequenceIdentificationRelation(sequence, protein, geneSet, subGraph);
+            String proteinId = getUniProtId(sequence);
+            if (proteinId.equals("-")) {
+               System.out.println("proteinId= -");
+            }
+            Protein protein = null;
+            if (proteinId != null) {
+                protein = getProtein(proteinId, subGraph);
+                if (protein != null) {
+                    System.out.println("protein =" + protein.getUniprot());
+                    setSequenceIdentificationRelation(sequence, protein, geneSet, subGraph);
+                }
             }
             processSentence(zeroObject, geneSet, subGraph, protein);
             subGraph.traverse();
+            log.info("traverse completed");
             PersistenceTemplate.saveSubgraph(subGraph);
         }
     }
@@ -744,14 +767,14 @@ public class NCIDisease {
 
    public static void setHumanDiseaseOntologyRelation(Subgraph subGraph, String diseaseTerm, Disease disease) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, ClassNotFoundException, InstantiationException, URISyntaxException, NotFoundException, InvocationTargetException {
         Object bio = PersistenceTemplate.getBioEntity(BioTypes.HUMAN_DISEASE_ONTOLOGY, BioFields.HUMAN_DISEASE_ONTOLOGY_NAME, diseaseTerm);
-        HumanDiseaseOntology hdo= (HumanDiseaseOntology) bio;
+        HumanDiseaseOntology hdo= (HumanDiseaseOntology)bio;
         if (hdo != null) {
             log.info("humanDiseaseOntology term found =" + hdo.getMessage());
             hdo.setIsARelationship(disease, BioRelTypes.IS_A);
+            subGraph.add(hdo);
         } else {
-            log.info("geneBio is null for disease term" + diseaseTerm);
+            log.info("humanDiseaseOntology is null for disease term" + diseaseTerm);
         }
-
    }
 
 }
