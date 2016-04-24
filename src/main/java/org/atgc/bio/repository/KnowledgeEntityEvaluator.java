@@ -7,6 +7,7 @@ package org.atgc.bio.repository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.xalan.templates.ElemValueOf;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.domain.BioRelTypes;
 import org.atgc.bio.domain.BioTypes;
@@ -39,58 +40,34 @@ import java.util.List;
 public class KnowledgeEntityEvaluator implements Evaluator {
 
     List<Node> bioEntityList;
-    List<BioRelTypes> relTypes;
+    List<BioTypes> bioTypes;
 
     protected static final Logger log = LogManager.getLogger(KnowledgeEntityEvaluator.class);
 
-    public KnowledgeEntityEvaluator(List<Node> bioList, List<BioRelTypes> rTypes) {
+    public KnowledgeEntityEvaluator(List<Node> bioList, List<BioTypes> bTypes) {
         bioEntityList = bioList;
-        log.info("bioEntityList.get(0)" + bioEntityList.get(0));
-        relTypes = rTypes;
+        bioTypes = bTypes;
+        log.info("eval bioTypes " + bioTypes.get(0).name());
     }
 
+
     @Override
-    public Evaluation evaluate(Path path)  {
+    public Evaluation evaluate(Path path) {
         log.info("evaluate(path)" + path);
+        return Evaluation.INCLUDE_AND_CONTINUE;
+    }
 
-        int matches=0;
-        //
-        for(Node bio : bioEntityList) {
-            // include the nodes of interest in the middle of the path too
-            // for each depth, you get a path to expand.
-            // each path can have one or more bioentities (nodes)
-            for (Node n : path.nodes()) {
-                // biochemical assay nodes which are relevant in the case study
-                if (isNodeIncluded(n, bio)) {
-                    ++matches;
-                    for (BioRelTypes relType : relTypes) {
-                        if (isRelationship(path.endNode(), relType)) {
-                            return Evaluation.INCLUDE_AND_PRUNE;
-                        }
-                    }
-                    return Evaluation.INCLUDE_AND_CONTINUE;
-                }
 
-            }
-            if (isNodeIncluded(path.endNode(), bio)) {
-                for (BioRelTypes relType : relTypes) {
-                    if (isRelationship(path.endNode(), relType)) {
-                        //System.out.println("relType =" + relType + " endNodetype" + path.endNode().getId());
-                        return Evaluation.INCLUDE_AND_PRUNE;
-
-                    }
-                }
-                // include and prune
-                return Evaluation.INCLUDE_AND_CONTINUE;
-            }
-        }
-
-        //  biochemical assays matched then continue to expand the path
-        if (matches <= bioEntityList.size() && matches > 0) {
-            return Evaluation.INCLUDE_AND_CONTINUE;
-        }
-
-        return Evaluation.EXCLUDE_AND_CONTINUE;
+    public Evaluation test(Path path) {
+         for (Node node : path.nodes()) {
+             for (BioTypes bioType : bioTypes) {
+                  String nodeType = (String) node.getProperty(BioFields.NODE_TYPE.toString());
+                  if (nodeType.equals(bioType.toString())) {
+                     return Evaluation.INCLUDE_AND_PRUNE;
+                  }
+             }
+         }
+        return Evaluation.INCLUDE_AND_CONTINUE;
     }
 
     private static String getLabel(Node node) {
@@ -109,21 +86,26 @@ public class KnowledgeEntityEvaluator implements Evaluator {
      * @return boolean
      */
     private static boolean isNodeIncluded(Node node, Node dNode) {
+        if (node == null || dNode == null) {
+            log.info("node or dNode is null, return false");
+            return false;
+        }
         Iterable<String> propertyKeys = node.getPropertyKeys();
-        Iterable<String> destProps = dNode.getPropertyKeys();
-        int cnt = 0;
-        int dCnt = 0;
-        StringBuffer sb = new StringBuffer();
-        for (String s : propertyKeys) {
-            cnt++;
-            sb.append(s);
-            sb.append(" , ");
-            for (String d : destProps) {
-                if (s.equals(d)) {
-                    dCnt++;
+            Iterable<String> destProps = dNode.getPropertyKeys();
+            int cnt = 0;
+            int dCnt = 0;
+            StringBuffer sb = new StringBuffer();
+            for (String s : propertyKeys) {
+                cnt++;
+                sb.append(s);
+                sb.append(" , ");
+                for (String d : destProps) {
+                    if (s.equals(d)) {
+                        dCnt++;
+                    }
                 }
             }
-        }
+
         if (cnt == dCnt)
             return true;
         return false;
@@ -175,9 +157,15 @@ public class KnowledgeEntityEvaluator implements Evaluator {
      * @return boolean
      */
    private static boolean isRelationship(Node pathEndNode, BioRelTypes relType) {
+
         Iterable<Relationship> iterable = pathEndNode.getRelationships(
                 DynamicRelationshipType.withName(URLEncoder.encode(
                         relType.toString())));
+       // log.info("relType =" + relType.name());
+        if (iterable.iterator().hasNext()) {
+            Relationship rel = iterable.iterator().next();
+            log.info("node rel type" + rel.getType().name());
+        }
         return iterable.iterator().hasNext() ?  true :  false;
    }
 
