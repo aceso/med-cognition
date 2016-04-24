@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by mjoshi on 4/23/16.
+ * @author aceso
  */
 public class Topology {
   private long aggregateScore;
