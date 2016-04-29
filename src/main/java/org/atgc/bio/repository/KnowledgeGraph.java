@@ -21,6 +21,7 @@ import org.neo4j.graphdb.traversal.*;
 import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.kernel.Traversal;
 import uk.ac.ebi.uniprot.dataservices.jaxb.rest.WwwEbiAcUk_ToolsServicesRestNcbiblast;
+import uk.ac.ebi.uniprot.parser.antlr.SsLineParser;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -174,11 +175,11 @@ public class KnowledgeGraph {
         assayList.add(drug);
         assayList.add(protein);
         assayList.add(enzyme);
-        assayList.add(disease);
+       // assayList.add(disease);
 
         // evaluate these relationship, include and prune
         List<BioTypes> bioEvalTypes = getBioEvalTypes();
-        getIntelligentPaths(50, assayList, bioEvalTypes, "CaseStudy603D4-200");
+        getIntelligentPaths(20, assayList, bioEvalTypes, "CaseStudy603D4-700");
     }
 
     /**
@@ -670,7 +671,7 @@ public class KnowledgeGraph {
      * specify the depth for evaluation and retrieve the paths
      */
     private static void getNewKnowledge(TraversalDescription td, Node node, List<Node> list, int depth) {
-        log.info("getNewKnowledge()");
+        log.info("getNewKnowledge(), depth=" +  depth);
         Traverser traverser =//td.evaluator(Evaluators.fromDepth(depthFrom))
                 td.evaluator(Evaluators.toDepth(depth))
                 .traverse(node);
@@ -684,10 +685,11 @@ public class KnowledgeGraph {
                 addPath(path, list, node);
                 pathCnt++;
             }
+        } catch(NotFoundException e) {
+            log.error("NotFoundException traversor.iterator().hasNext() error " + e.getMessage(), e);
         } catch(RuntimeException e) {
             log.error("traversor.iterator().hasNext() error " + e.getMessage(), e);
         }
-
         System.out.println("total iterators =" + pathCnt);
     }
 

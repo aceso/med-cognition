@@ -19,6 +19,7 @@ import org.atgc.bio.meta.UniqueCompoundIndex;
 import org.atgc.bio.meta.UniquelyIndexed;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.atgc.bio.repository.TemplateUtils;
 import org.neo4j.graphdb.Direction;
 
 /**
@@ -269,6 +270,9 @@ public class PdbGo {
     @PartRelation (field=BioFields.GO_ID)
     @RelatedTo(direction=Direction.OUTGOING, relType=BioRelTypes.EXHIBITS_ONTOLOGY, elementClass = BioRelation.class)
     private BioRelation hasOntologyRelation;
+
+	@Indexed (indexName=IndexNames.NODE_TYPE)
+	private String nodeType = TemplateUtils.extractBioType(this).toString();
 
     /**
      *
