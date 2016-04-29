@@ -88,7 +88,6 @@ public class NCIDisease {
 
 
         DBCursor dbCursor = getCollection(ImportCollectionNames.NCI_DISEASE).findDBCursor("{}" );
-        int i = 0;
         try {
             // we expect only one document match
             while (dbCursor.hasNext()) {
@@ -108,10 +107,7 @@ public class NCIDisease {
                 //}
                 log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
                 log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
-                if (i == 1) {
-                    break;
-                }
-                i++;
+
             }
         } finally {
             dbCursor.close();
@@ -171,15 +167,12 @@ public class NCIDisease {
        log.info("proteinId = -" + proteinId);
         Object bio = getBioEntityFromBioType(subGraph, BioTypes.PROTEIN, BioFields.UNIPROT_ID, proteinId);
         Protein protein = (Protein)bio;
-       System.out.println("getBioEntityFromBioType() protein id=" + protein.getUniprot());
         if (protein == null)
             protein = UniprotUtil.getProtein(proteinId, subGraph);
-        return protein;
-   }
+       return protein;
+    }
 
-    
     public static BasicDBObject getSequenceIdentificationObj(BasicDBObject diseaseInfo) {
-        //log.info(diseaseInfo);
         return (BasicDBObject)diseaseInfo.get(NciFields.SEQUENCE_IDENTIFICATION_COLLECTION.toString());
     }
     
@@ -610,21 +603,8 @@ public class NCIDisease {
                     BasicDBObject diseaseData = getDiseaseData(dbObj);
                     Disease disease = getDisease(diseaseData, subGraph);
                     if (protein != null) {
-                        if (protein.getUniprot().equals("-")) {
-                            System.out.println("proteinid =" + protein.getUniprot() + " disease=" + disease.getDiseaseTerm());
-                        } else {
-                            if (protein.getMessage() == null) {
-                                System.out.println("protein.getMessage() is null, proteinid =" + protein.getUniprot());
-                                System.out.println("disease=" + disease.getDiseaseTerm());
-                            }
-                            /*if (protein.getMessage() != null && protein.getMessage().equals("Protein--")) {
-                                System.out.println("Protein--, proteinid =" + protein.getUniprot());
-                                System.out.println("disease=" + disease.getDiseaseTerm());
-                            } else { */
-                                disease.setProteinRelation(protein);
-                                System.out.println("disease relationtype =" + disease.getProteinRelation().getRelType());
-                                System.out.println("proteinid =" + protein.getUniprot());
-                           // }
+                        if (!protein.getUniprot().equals("-")) {
+                            disease.setProteinRelation(protein);
                         }
                     }
 
@@ -676,14 +656,10 @@ public class NCIDisease {
             HashSet<Gene> geneSet = getGeneSet(geneSymbol, subGraph);
             BasicDBObject sequence = getSequenceIdentificationObj(zeroObject);
             String proteinId = getUniProtId(sequence);
-            if (proteinId.equals("-")) {
-               System.out.println("proteinId= -");
-            }
             Protein protein = null;
             if (proteinId != null) {
                 protein = getProtein(proteinId, subGraph);
                 if (protein != null) {
-                    System.out.println("protein =" + protein.getUniprot());
                     setSequenceIdentificationRelation(sequence, protein, geneSet, subGraph);
                 }
             }
