@@ -97,7 +97,7 @@ public class ChebiOntologyImport {
      * @return 
      */
     public static String getAlternateIds(BasicDBObject dbObj) {
-        BasicDBList list = OntologyStrUtil.getList(dbObj, ChebiOntologyFields.ALT_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, ChebiOntologyFields.ALT_ID_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject)obj, ChebiOntologyFields.ALT_ID));
@@ -349,7 +349,7 @@ public class ChebiOntologyImport {
                 chebi.setName(getName(obj));
             }
 
-            if (OntologyStrUtil.objectExists(obj, ChebiOntologyFields.ALT_LIST)) { 
+            if (OntologyStrUtil.objectExists(obj, ChebiOntologyFields.ALT_ID_LIST)) {
                 chebi.setChebiAlternateIds(getAlternateIds(obj));
             }
 
