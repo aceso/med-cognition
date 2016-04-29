@@ -18,6 +18,7 @@ import org.atgc.bio.meta.UniquelyIndexed;
 import org.atgc.bio.meta.Visual;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.atgc.bio.repository.TemplateUtils;
 import org.neo4j.graphdb.Direction;
 
 /**
@@ -54,6 +55,9 @@ public class NcbiTaxonomy {
     @Indexed (indexName=IndexNames.TAXONOMY_MESSAGE)
     @Taxonomy (rbClass=TaxonomyTypes.TAXONOMY_MESSAGE, rbField=BioFields.MESSAGE)
     private String message;
+
+    @Indexed(indexName = IndexNames.NODE_TYPE)
+    private String nodeType = TemplateUtils.extractBioType(this).toString();
 
     @RelatedTo(direction=Direction.OUTGOING, relType=BioRelTypes.IS_A, elementClass = BioRelation.class)
     private BioRelation isA;

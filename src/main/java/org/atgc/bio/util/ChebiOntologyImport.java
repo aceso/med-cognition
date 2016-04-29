@@ -345,7 +345,6 @@ public class ChebiOntologyImport {
 
         if (chebi != null) {
             if (OntologyStrUtil.objectExists(obj, ChebiOntologyFields.NAME)) {
-                System.out.println("name =" + getName(obj));
                 chebi.setName(getName(obj));
             }
 
