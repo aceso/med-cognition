@@ -154,7 +154,7 @@ public class KnowledgeGraph {
 
         // evaluate these relationship, include and prune
         List<BioTypes> bioEvalTypes = getBioEvalTypes();
-        getIntelligentPaths(10, assayList, bioEvalTypes, "CaseStudy603D3-14");
+        getIntelligentPaths(50, assayList, bioEvalTypes, "CaseStudy603D3-14");
     }
 
     /**
