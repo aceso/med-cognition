@@ -97,7 +97,7 @@ public class ChebiOntologyImport {
      * @return 
      */
     public static String getAlternateIds(BasicDBObject dbObj) {
-        BasicDBList list = OntologyStrUtil.getList(dbObj, ChebiOntologyFields.ALT_LIST);
+        BasicDBList list = OntologyStrUtil.getList(dbObj, ChebiOntologyFields.ALT_ID_LIST);
         StringBuilder str = new StringBuilder();
         for (Object obj : list) {
             str.append(OntologyStrUtil.getString((BasicDBObject)obj, ChebiOntologyFields.ALT_ID));
@@ -348,7 +348,7 @@ public class ChebiOntologyImport {
                 chebi.setName(getName(obj));
             }
 
-            if (OntologyStrUtil.objectExists(obj, ChebiOntologyFields.ALT_LIST)) { 
+            if (OntologyStrUtil.objectExists(obj, ChebiOntologyFields.ALT_ID_LIST)) {
                 chebi.setChebiAlternateIds(getAlternateIds(obj));
             }
 
@@ -368,6 +368,10 @@ public class ChebiOntologyImport {
                 setSynonyms(chebi, obj);
             }
 
+            if (OntologyStrUtil.objectExists(obj, ChebiOntologyFields.XREF_LIST)) {
+                setPubMedReferences(chebi, obj, subGraph);
+            }
+
             setIsARelationship(chebi, obj, subGraph);
             processRelationshipList(chebi, obj, subGraph);
 
@@ -375,11 +379,51 @@ public class ChebiOntologyImport {
         } else {
             log.info("chebi is null");
         }
-              
     }
-      
-   
-    
+
+    /**
+     * xref: CiteXplore:16228119 "PubMed citation"
+     * @param chebi
+     * @param pubMedId
+     * @param subGraph
+     */
+    public static void setPubMedRelation(ChebiOntology chebi, String pubMedId, Subgraph subGraph) throws Exception {
+        if (pubMedId != null) {
+           PubMed pubMed = CellTypeOntologyImport.getPubMed(pubMedId, subGraph);
+           pubMed.setPubMedRelation(chebi);
+        }
+    }
+
+    /**
+     * xRefList
+     * @param:
+     */
+    private static void setPubMedReferences(ChebiOntology chebi, BasicDBObject dbObj, Subgraph subGraph) throws Exception {
+        BasicDBList list = OntologyStrUtil.getList(dbObj, ChebiOntologyFields.XREF_LIST);
+        List<String> pubMedList = getCiteExplore(list, ChebiOntologyFields.CITEXPLORE);
+        for (String pMed : pubMedList) {
+            setPubMedRelation(chebi, pMed, subGraph);
+        }
+
+    }
+
+    private static List<String> getCiteExplore(BasicDBList list, ChebiOntologyFields enumField) {
+        List<String> xRefList = new ArrayList<>();
+        for (Object obj : list) {
+            String str = OntologyStrUtil.getString((BasicDBObject) obj, ChebiOntologyFields.XREF);
+            if (str != null && str.contains(enumField.toString())) {
+                switch (enumField) {
+                    case CITEXPLORE:
+                        String sList[] = str.split(ChebiOntologyFields.PUBMED_CITATION.toString());
+                        xRefList.add(sList[0]);
+                }
+            }
+        }
+        return xRefList;
+    }
+
+
+
 }
         
 
