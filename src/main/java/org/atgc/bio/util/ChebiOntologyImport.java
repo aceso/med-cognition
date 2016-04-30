@@ -344,7 +344,7 @@ public class ChebiOntologyImport {
         ChebiOntology chebi = getChebi(id, subGraph);
 
         if (chebi != null) {
-            if (OntologyStrUtil.objectExists(obj, ChebiOntologyFields.NAME)) { 
+            if (OntologyStrUtil.objectExists(obj, ChebiOntologyFields.NAME)) {
                 chebi.setName(getName(obj));
             }
 
@@ -374,7 +374,6 @@ public class ChebiOntologyImport {
 
             setIsARelationship(chebi, obj, subGraph);
             processRelationshipList(chebi, obj, subGraph);
-
             PersistenceTemplate.saveSubgraph(subGraph);
         } else {
             log.info("chebi is null");

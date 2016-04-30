@@ -21,6 +21,7 @@ import org.atgc.bio.meta.Visual;
 import java.util.HashSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.atgc.bio.repository.TemplateUtils;
 import org.neo4j.graphdb.Direction;
 
 /**
@@ -104,6 +105,9 @@ public class PdbEntity {
 
     @RelatedToVia(direction = Direction.OUTGOING, relType = BioRelTypes.HAS_CHAIN, elementClass = BioRelation.class)
     private HashSet<BioRelation> chainRelations;
+
+    @Indexed (indexName=IndexNames.NODE_TYPE)
+    private String nodeType = TemplateUtils.extractBioType(this).toString();
 
     public Protein getProtein() {
         if (proteinRelation == null) {

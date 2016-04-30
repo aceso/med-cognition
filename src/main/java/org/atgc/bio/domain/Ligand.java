@@ -17,6 +17,7 @@ import org.atgc.bio.meta.UniquelyIndexed;
 import org.atgc.bio.meta.Visual;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.atgc.bio.repository.TemplateUtils;
 
 /**
  * The ligand information is found in the pdbligand collection
@@ -167,6 +168,9 @@ public class Ligand {
     @Indexed(indexName=IndexNames.LIGAND_INCHI)
     @Taxonomy(rbClass=TaxonomyTypes.LIGAND_INCHI, rbField=BioFields.INCHI)
     private String inChI;
+
+    @Indexed (indexName=IndexNames.NODE_TYPE)
+    private String nodeType = TemplateUtils.extractBioType(this).toString();
 
     /**
      * The IUPAC International Chemical Identifier (InChI) is a

@@ -21,6 +21,7 @@ import org.neo4j.graphdb.traversal.*;
 import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.kernel.Traversal;
 import uk.ac.ebi.uniprot.dataservices.jaxb.rest.WwwEbiAcUk_ToolsServicesRestNcbiblast;
+import uk.ac.ebi.uniprot.parser.antlr.SsLineParser;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -57,6 +58,7 @@ public class KnowledgeGraph {
     protected static final Logger log = LogManager.getLogger(KnowledgeGraph.class);
     private static HashMap<Node, CacheGraphPath> cacheListPath;
     private static List<Path> cacheAllPaths;
+    private static int pathCnt;
 
     /**
      * cacheGraphPath - used to store the paths after bioassay evaluation is met
@@ -146,15 +148,38 @@ public class KnowledgeGraph {
             System.out.println("5.3.99.4 = " + getLabel(enzyme) + enzyme.getId());
         }
 
+        // diseaseTerm = "Human breast cancer", diseaseCode = "C4872"
+        //ResourceIterator<Node> findNodes
+        //Node disease = null;
+        ResourceIterator<Node> diseases = graphDb.findNodes(DynamicLabel.label(BioTypes.DISEASE.toString()), BioFields.DISEASE_TERM.toString(), "human breast cancer");
+        Node disease = getNode(BioTypes.DISEASE.toString(), BioFields.DISEASE_TERM.toString(), "human breast cancer");
+
+        if (diseases != null) {
+            System.out.println("diseases is null");
+            if (diseases.hasNext()) {
+                disease = diseases.next();
+                String diseaseTerm = (String)disease.getProperty(BioFields.DISEASE_TERM.toString());
+                if (diseaseTerm.equals("Human breast cancer")) {
+                    System.out.println("diseaseId for human breast cancer = " + disease.getId());
+                }
+            }
+        }
+        if (disease == null) {
+            System.out.println("disease is null");
+        } else {
+            System.out.println("diseaseId for human breast cancer = " + disease.getId());
+        }
+
         // create ingredients of bioassay's
         List<Node> assayList = new ArrayList<>();
         assayList.add(drug);
         assayList.add(protein);
         assayList.add(enzyme);
+       // assayList.add(disease);
 
         // evaluate these relationship, include and prune
         List<BioTypes> bioEvalTypes = getBioEvalTypes();
-        getIntelligentPaths(10, assayList, bioEvalTypes, "CaseStudy603D3-14");
+        getIntelligentPaths(20, assayList, bioEvalTypes, "CaseStudy603D4-700");
     }
 
     /**
@@ -577,30 +602,29 @@ public class KnowledgeGraph {
              while (iterator.hasNext()) {
                  Relationship rel = iterator.next();
                  if (rel != null) {
+                     log.info("rel =" + rel.getType().toString() + ", startNode =" + rel.getStartNode().getLabels().toString() + ", endNode=" + rel.getEndNode().getLabels().toString());
                      if (rel.getEndNode() != null && rel.getStartNode() != null && rel.getType() != null) {
                          Node eNode = rel.getEndNode();
-                         String eNodeType = (String) rel.getEndNode().getProperty(BioFields.NODE_TYPE.toString());
-                         String sNodeType = (String) rel.getStartNode().getProperty(BioFields.NODE_TYPE.toString());
+
                          Node sNode = rel.getStartNode();
                          Node otherEndNode = rel.getOtherNode(eNode);
                          Node otherStartNode = rel.getOtherNode(sNode);
+
+                         /*
+                         String eNodeType = (String)rel.getEndNode().getProperty(BioFields.NODE_TYPE.toString());
+                          String sNodeType = (String)rel.getStartNode().getProperty(BioFields.NODE_TYPE.toString());
                          log.info("endNode=" + eNodeType);
                          log.info("startNode =" + sNodeType);
-
-                         if (sNodeType.equals(BioTypes.GENE_ONTOLOGY.toString())) {
-                             log.info("relationship =" + rel.getType().name() + ", startNode=" + sNode.getProperty(BioFields.GENE_ONTOLOGY_ID.toString()));
-                         }
-                         if (eNodeType.equals(BioTypes.GENE_ONTOLOGY.toString())) {
-                             log.info("endNode=" + eNode.getProperty(BioFields.GENE_ONTOLOGY_ID.toString()));
-                         }
+                         */
                          if (otherEndNode != null) {
-                             log.info("Other endNode =" + otherEndNode.getProperty(BioFields.NODE_TYPE.toString()));
+                             log.info("otherEndNode =" + otherEndNode.getLabels());
+                             //log.info("Other endNode =" + otherEndNode.getProperty(BioFields.NODE_TYPE.toString()));
                              log.info("other endNode.getId()" + otherEndNode.getId());
-
                          }
                          if (otherStartNode != null) {
-                             log.info("Other startNode =" + otherStartNode.getProperty(BioFields.NODE_TYPE.toString()));
-                             log.info("id" + otherStartNode.getId());
+                             log.info("otherStartNode =" + otherStartNode.getLabels());
+                             log.info("otherStartNode id =" + otherStartNode.getId());
+                             //log.info("Other startNode =" + otherStartNode.getProperty(BioFields.NODE_TYPE.toString()));
                          }
                          relList.add(rel);
                      }
@@ -612,11 +636,17 @@ public class KnowledgeGraph {
     }
 
     private static boolean excludeNodes(Node node, List<BioTypes> bioTypes) {
-        String nodeType = (String)node.getProperty(BioFields.NODE_TYPE.toString());
+        String nodeType = null;
+        try {
+            log.info("excludeNodes() node= " + node.getLabels());
+            nodeType = (String) node.getProperty(BioFields.NODE_TYPE.toString());
+        } catch (Exception e) {
+            log.info("exception while retrieving NODE_TYPE property " + node.getLabels() + " ,error=" + e.getMessage());
+        }
         for (BioTypes bioType : bioTypes) {
-            if (nodeType.equals(bioType)) {
+             if (nodeType.equals(bioType)) {
                 return true;
-            }
+             }
         }
         return false;
     }
@@ -641,7 +671,7 @@ public class KnowledgeGraph {
      * specify the depth for evaluation and retrieve the paths
      */
     private static void getNewKnowledge(TraversalDescription td, Node node, List<Node> list, int depth) {
-        log.info("getNewKnowledge()");
+        log.info("getNewKnowledge(), depth=" +  depth);
         Traverser traverser =//td.evaluator(Evaluators.fromDepth(depthFrom))
                 td.evaluator(Evaluators.toDepth(depth))
                 .traverse(node);
@@ -649,13 +679,18 @@ public class KnowledgeGraph {
         /* do not check for metadata in traverser, it gives wrong result */
         ResourceIterator<Path> iterator = traverser.iterator();
         try {
+            log.info("iterator.hasNext()");
             while (iterator != null && iterator.hasNext()) {
                 Path path = iterator.next();
                 addPath(path, list, node);
+                pathCnt++;
             }
+        } catch(NotFoundException e) {
+            log.error("NotFoundException traversor.iterator().hasNext() error " + e.getMessage(), e);
         } catch(RuntimeException e) {
-            log.error("iterator.hasNext() error " + e.getMessage(), e);
+            log.error("traversor.iterator().hasNext() error " + e.getMessage(), e);
         }
+        System.out.println("total iterators =" + pathCnt);
     }
 
     private static void setConfidenceRatio(List<Node> list) {

@@ -51,14 +51,15 @@ public class KnowledgeEntityEvaluator implements Evaluator {
     }
 
 
-    @Override
+    /*
     public Evaluation evaluate(Path path) {
         log.info("evaluate(path)" + path);
         return Evaluation.INCLUDE_AND_CONTINUE;
     }
+    */
 
-
-    public Evaluation test(Path path) {
+    @Override
+    public Evaluation evaluate(Path path) {
          for (Node node : path.nodes()) {
              for (BioTypes bioType : bioTypes) {
                   String nodeType = (String) node.getProperty(BioFields.NODE_TYPE.toString());
