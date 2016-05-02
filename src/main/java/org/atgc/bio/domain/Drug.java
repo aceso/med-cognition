@@ -2458,7 +2458,8 @@ public class Drug {
      *
      *
      * <pre>
-     db.drugbank.find({"drugbank-id" : "DB00015"}, {"drug-interactions" : 1}).pretty()
+     *     Lapatinib: DB01259
+     db.drugbank.find({"drugbank-id" : "DB01259"}, {"drug-interactions" : 1}).pretty()
      {
      "_id" : ObjectId("52956554300417c0cfbb1046"),
      "drug-interactions" : [

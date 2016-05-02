@@ -40,7 +40,20 @@ public class UniprotUtil {
 
     public static Protein getProtein(String id, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, ServiceException, IOException, InterruptedException, HttpException, URISyntaxException {
         if (id == null) return null;
+        System.out.println("before subGraph.search() getProtein() id =" + id);
+        if (id.equals("-")) {
+            System.out.println("id == -");
+            log.info("proteinId = --");
+            return null;
+        }
+
         Protein protein = (Protein) subGraph.search(BioTypes.PROTEIN, BioFields.UNIPROT_ID, id);
+        System.out.println("after subGraph.search() getProtein() id =" + id);
+        if (id.equals("-")) {
+            System.out.println("proteinId == -");
+            log.info("proteinId = --");
+            return null;
+        }
         if (protein == null) {
             protein = new Protein();
             protein.setUniprot(id);
@@ -1566,8 +1579,12 @@ public class UniprotUtil {
      * @throws HttpException
      * @throws URISyntaxException
      */
-    public static Protein processProtein(Protein protein, String id, Subgraph subGraph) throws ServiceException, IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException, InterruptedException, HttpException, URISyntaxException {
+    public static void processProtein(Protein protein, String id, Subgraph subGraph) throws ServiceException, IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException, InterruptedException, HttpException, URISyntaxException {
         log.info("processProtein(), id = " + id);
+        if (id.equals("-")) {
+            log.info("proteinId = -");
+            return;
+        }
         BasicDBObject obj = UniProtAccess.getProteinObj(id);
 
         if (obj != null) {
@@ -1622,7 +1639,7 @@ public class UniprotUtil {
             setEvidence(protein, obj, subGraph);
             //RedbasinTemplate.saveSubgraph(subGraph);
         }
-        return null;
+        //return null;
     }
 }
       

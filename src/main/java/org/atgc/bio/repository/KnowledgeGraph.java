@@ -20,6 +20,8 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.traversal.*;
 import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.kernel.Traversal;
+import uk.ac.ebi.uniprot.dataservices.jaxb.rest.WwwEbiAcUk_ToolsServicesRestNcbiblast;
+import uk.ac.ebi.uniprot.parser.antlr.SsLineParser;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -55,7 +57,8 @@ public class KnowledgeGraph {
     private static GraphDatabaseService graphDb;
     protected static final Logger log = LogManager.getLogger(KnowledgeGraph.class);
     private static HashMap<Node, CacheGraphPath> cacheListPath;
-    private static List<CacheGraphPath> cacheAllPaths;
+    private static List<Path> cacheAllPaths;
+    private static int pathCnt;
 
     /**
      * cacheGraphPath - used to store the paths after bioassay evaluation is met
@@ -107,7 +110,7 @@ public class KnowledgeGraph {
             // createCaseStudy3();
         } catch(Exception e) {
             tx.failure(); //rollback
-            throw new RuntimeException("Something went wrong with access while accessing bioentity. msg=" + e.getMessage(), e);
+            throw new RuntimeException("Something went wrong with access while accessing, msg=" + e.getMessage(), e);
         } finally {
             tx.close();
         }
@@ -145,22 +148,38 @@ public class KnowledgeGraph {
             System.out.println("5.3.99.4 = " + getLabel(enzyme) + enzyme.getId());
         }
 
+        // diseaseTerm = "Human breast cancer", diseaseCode = "C4872"
+        //ResourceIterator<Node> findNodes
+        //Node disease = null;
+        ResourceIterator<Node> diseases = graphDb.findNodes(DynamicLabel.label(BioTypes.DISEASE.toString()), BioFields.DISEASE_TERM.toString(), "human breast cancer");
+        Node disease = getNode(BioTypes.DISEASE.toString(), BioFields.DISEASE_TERM.toString(), "human breast cancer");
+
+        if (diseases != null) {
+            System.out.println("diseases is null");
+            if (diseases.hasNext()) {
+                disease = diseases.next();
+                String diseaseTerm = (String)disease.getProperty(BioFields.DISEASE_TERM.toString());
+                if (diseaseTerm.equals("Human breast cancer")) {
+                    System.out.println("diseaseId for human breast cancer = " + disease.getId());
+                }
+            }
+        }
+        if (disease == null) {
+            System.out.println("disease is null");
+        } else {
+            System.out.println("diseaseId for human breast cancer = " + disease.getId());
+        }
+
         // create ingredients of bioassay's
-        List<Node> list = new ArrayList<>();
-        list.add(drug);
-        list.add(protein);
-        list.add(enzyme);
+        List<Node> assayList = new ArrayList<>();
+        assayList.add(drug);
+        assayList.add(protein);
+        assayList.add(enzyme);
+       // assayList.add(disease);
 
         // evaluate these relationship, include and prune
-        List<BioRelTypes> relTypes = new ArrayList<>();
-        relTypes.add(BioRelTypes.DRUG_MANUFACTURED_BY);
-        relTypes.add(BioRelTypes.DRUG_PACKAGED_BY);
-        relTypes.add(BioRelTypes.FOUND_EVIDENCE_IN);
-        relTypes.add(BioRelTypes.HAS_AUTHOR);
-
-        // get intelligent paths
-        // depth is 20
-        getIntelligentPaths(20, list, relTypes, "CaseStudy509");
+        List<BioTypes> bioEvalTypes = getBioEvalTypes();
+        getIntelligentPaths(20, assayList, bioEvalTypes, "CaseStudy603D4-700");
     }
 
     /**
@@ -258,15 +277,12 @@ public class KnowledgeGraph {
             System.out.println("ncbiTaxonomy=" + ncbiTaxonomy.getLabels().toString() + ncbiTaxonomy.getId());
         }
 
-        List<BioRelTypes> relTypes = new ArrayList<>();
-        relTypes.add(BioRelTypes.DRUG_MANUFACTURED_BY);
-        relTypes.add(BioRelTypes.DRUG_PACKAGED_BY);
-
+        List<BioTypes> bioEvalTypes = getBioEvalTypes();
 
         // call getGraphPath with depth and bioassays
         List<Node> entityList = getEntityInteractors(protein, urokinaseDrug, ncbiTaxonomy);
          for (Node node : entityList)  {
-             getGraphPath(entityList, drug, depth, relTypes);
+             getGraphPath(entityList, drug, depth, bioEvalTypes);
             // if (cacheListPath.size() == entityList.size()) {
               //   break;
              //}
@@ -424,18 +440,13 @@ public class KnowledgeGraph {
         List<Node> list = new ArrayList<>();
         list.add(drug);
         list.add(protein);
-      //  list.add(gene);
         list.add(enzyme);
 
-
-        List<BioRelTypes> relTypes = new ArrayList<>();
-        relTypes.add(BioRelTypes.DRUG_MANUFACTURED_BY);
-        relTypes.add(BioRelTypes.DRUG_PACKAGED_BY);
-        relTypes.add(BioRelTypes.FOUND_EVIDENCE_IN);
-        //relTypes.add(BioRelTypes.HAS_A_PROTEIN);
-      //  relTypes.add(BioRelTypes.HAS_AUTHOR);
-       // relTypes.add(BioRelTypes.REFERENCES_PUBMED);
-        getIntelligentPaths(20, list, relTypes, "CaseStudy205");
+        List<BioTypes> bioTypes = new ArrayList<>();
+        bioTypes.add(BioTypes.DRUG_MANUFACTURER);
+        bioTypes.add(BioTypes.DRUG_PACKAGER);
+        bioTypes.add(BioTypes.DRUG_PRICE);
+        getIntelligentPaths(20, list, bioTypes, "CaseStudy205");
     }
 
 
@@ -480,45 +491,39 @@ public class KnowledgeGraph {
         list.add(gene);
         list.add(protein);
 
-        List<BioRelTypes> relTypes = new ArrayList<>();
-        relTypes.add(BioRelTypes.DRUG_MANUFACTURED_BY);
-        relTypes.add(BioRelTypes.DRUG_PACKAGED_BY);
-        relTypes.add(BioRelTypes.FOUND_EVIDENCE_IN);
-        relTypes.add(BioRelTypes.HAS_A_PROTEIN);
-        relTypes.add(BioRelTypes.HAS_AUTHOR);
-        relTypes.add(BioRelTypes.REFERENCES_PUBMED);
-
-        getIntelligentPaths(10, list, relTypes, "CaseStudy301");
+        List<BioTypes> bioTypes = new ArrayList<>();
+        bioTypes.add(BioTypes.DRUG_MANUFACTURER);
+        bioTypes.add(BioTypes.DRUG_PACKAGER);
+        bioTypes.add(BioTypes.DRUG_PRICE);
+        getIntelligentPaths(10, list, bioTypes, "CaseStudy301");
     }
 
 
     /**
      * getIntelligentPaths
      * @param depth
-     * @param list
-     * @param excludeRelTypes
+     * @param assayList
+     * @param excludeBioTypes
      * @throws Exception
      */
     public static void getIntelligentPaths(int depth,
-                                           List<Node> list,
-                                           List<BioRelTypes> excludeRelTypes,
+                                           List<Node> assayList,
+                                           List<BioTypes> excludeBioTypes,
                                            String label) throws Exception {
-        for (Node node : list) {
+        for (Node assayNode : assayList) {
             // get graphPath
-            getGraphPath(list, node, depth, excludeRelTypes);
+            getGraphPath(assayList, assayNode, depth, excludeBioTypes);
             log.info("path size " + cacheListPath.size());
-            if (cacheListPath.size() == list.size()) {
-                break;
-            }
         }
-
-        setConfidenceRatio(list);
-        saveSubGraph(label);
+        setConfidenceRatio(assayList);
+        saveAllGraphs(label);
+        /* for this test */
+        //saveSubGraph(label);
     }
 
 
     /**
-     * getInteractors
+     * getEntityInteractors
      * @param node1
      * @param node2
      * @param node3
@@ -545,7 +550,7 @@ public class KnowledgeGraph {
      * uses PathExpander and Evaluator
      */
     public static void getGraphPath(List<Node> list, Node node, int depth,
-                                    List<BioRelTypes> excludeRelTypes) throws UnsupportedEncodingException {
+                                    List<BioTypes> evalBioTypes) throws UnsupportedEncodingException {
         TraversalDescription td = graphDb.traversalDescription()
             // Choose a breadth-first search strategy
             .breadthFirst()
@@ -553,15 +558,30 @@ public class KnowledgeGraph {
             .expand(new PathExpander<Object>() {
                  @Override
                  public Iterable<Relationship> expand(Path path, BranchState<Object> objectBranchState) {
-                     return path.endNode().getRelationships();
+                     log.info("path.length=" + path.length());
+                     log.info("path.relationships()" + path.toString());
+                    // log.info("path.endNode().getRelationships()" + path.endNode().getRelationships().);
+                     //return path.endNode().getRelationships();
+                     return allPathNodeRelationships(path, evalBioTypes);
+                     //return path.relationships();
                  }
                  @Override
                  public PathExpander<Object> reverse() {
                      return null;
                  }
             })
-            .evaluator(new KnowledgeEntityEvaluator(list, excludeRelTypes));
+            .evaluator(new KnowledgeEntityEvaluator(list, evalBioTypes));
         getNewKnowledge(td, node, list, depth);
+    }
+
+
+    private static List<BioTypes> getBioEvalTypes() {
+        List<BioTypes> evalBioTypes = new ArrayList<>();
+        evalBioTypes.add(BioTypes.DRUG_MANUFACTURER);
+        evalBioTypes.add(BioTypes.DRUG_PACKAGER);
+        evalBioTypes.add(BioTypes.DRUG_PRICE);
+        evalBioTypes.add(BioTypes.DRUG_PATENT);
+        return evalBioTypes;
     }
 
     private static String getLabel(Node n) {
@@ -571,6 +591,66 @@ public class KnowledgeGraph {
         return null;
     }
 
+    private static Iterable<Relationship> allPathNodeRelationships(Path path, List<BioTypes> bioTypes) {
+        List<Relationship> relList = new LinkedList<>();
+        for (Node node : path.nodes()) {
+             if (excludeNodes(node, bioTypes)) {
+                 continue;
+             }
+             Iterable<Relationship> iterable = node.getRelationships();
+             Iterator<Relationship> iterator = iterable.iterator();
+             while (iterator.hasNext()) {
+                 Relationship rel = iterator.next();
+                 if (rel != null) {
+                     log.info("rel =" + rel.getType().toString() + ", startNode =" + rel.getStartNode().getLabels().toString() + ", endNode=" + rel.getEndNode().getLabels().toString());
+                     if (rel.getEndNode() != null && rel.getStartNode() != null && rel.getType() != null) {
+                         Node eNode = rel.getEndNode();
+
+                         Node sNode = rel.getStartNode();
+                         Node otherEndNode = rel.getOtherNode(eNode);
+                         Node otherStartNode = rel.getOtherNode(sNode);
+
+                         /*
+                         String eNodeType = (String)rel.getEndNode().getProperty(BioFields.NODE_TYPE.toString());
+                          String sNodeType = (String)rel.getStartNode().getProperty(BioFields.NODE_TYPE.toString());
+                         log.info("endNode=" + eNodeType);
+                         log.info("startNode =" + sNodeType);
+                         */
+                         if (otherEndNode != null) {
+                             log.info("otherEndNode =" + otherEndNode.getLabels());
+                             //log.info("Other endNode =" + otherEndNode.getProperty(BioFields.NODE_TYPE.toString()));
+                             log.info("other endNode.getId()" + otherEndNode.getId());
+                         }
+                         if (otherStartNode != null) {
+                             log.info("otherStartNode =" + otherStartNode.getLabels());
+                             log.info("otherStartNode id =" + otherStartNode.getId());
+                             //log.info("Other startNode =" + otherStartNode.getProperty(BioFields.NODE_TYPE.toString()));
+                         }
+                         relList.add(rel);
+                     }
+                 }
+             }
+        }
+        log.info("relList for path=" + relList.size());
+        return relList;
+    }
+
+    private static boolean excludeNodes(Node node, List<BioTypes> bioTypes) {
+        String nodeType = null;
+        try {
+            log.info("excludeNodes() node= " + node.getLabels());
+            nodeType = (String) node.getProperty(BioFields.NODE_TYPE.toString());
+        } catch (Exception e) {
+            log.info("exception while retrieving NODE_TYPE property " + node.getLabels() + " ,error=" + e.getMessage());
+        }
+        for (BioTypes bioType : bioTypes) {
+             if (nodeType.equals(bioType)) {
+                return true;
+             }
+        }
+        return false;
+    }
+
     /**
      *
      * This method adds the paths that meet the criteria of bio assay's
@@ -578,50 +658,40 @@ public class KnowledgeGraph {
      * These paths are saved with a label for each case study.
      * This shows new knowledge that are interconnected with labels for convenience for retrieval
      * @param path
-     * @param list
+     * @param assayList
      * @param node
      * @return
      */
-    public static void addPath(Path path, List<Node> list, Node node) {
-        log.info("addPath() invoked, path.length() " + path.length());
-        for (Node n: path.nodes()) {
-            int matches = 0;
-            //getCount(path, list);
-            for (Node targetNode : list) {
-                if (isNodeIncluded(n, targetNode)) {
-                    matches++;
-                    log.info("addPath(), matches "  + ", targetNodeid" + targetNode.getId() + " in path=" + path);
-                    CacheGraphPath cacheGraphPath = cacheListPath.get(targetNode);
-                    if (cacheGraphPath != null) {
-                        continue;
-                    }
-                    CacheGraphPath cachePath = new CacheGraphPath();
-                    cachePath.path = path;
-                    cachePath.startNode = node;
-                    cacheListPath.put(targetNode, cachePath);
-                }
-            }
-        }
+    public static void addPath(Path path, List<Node> assayList, Node node) {
+        cacheAllPaths.add(path);
+        System.out.println("path =" + path.toString());
     }
 
     /**
      * specify the depth for evaluation and retrieve the paths
      */
     private static void getNewKnowledge(TraversalDescription td, Node node, List<Node> list, int depth) {
-        log.info("getNewKnowledge()");
-        int numNodes = 0;
-        int depthFrom = 0;
+        log.info("getNewKnowledge(), depth=" +  depth);
         Traverser traverser =//td.evaluator(Evaluators.fromDepth(depthFrom))
                 td.evaluator(Evaluators.toDepth(depth))
                 .traverse(node);
+
+        /* do not check for metadata in traverser, it gives wrong result */
         ResourceIterator<Path> iterator = traverser.iterator();
-        while (iterator.hasNext()) {
-            Path path = iterator.next();
-            addPath(path, list, node);
+        try {
+            log.info("iterator.hasNext()");
+            while (iterator != null && iterator.hasNext()) {
+                Path path = iterator.next();
+                addPath(path, list, node);
+                pathCnt++;
+            }
+        } catch(NotFoundException e) {
+            log.error("NotFoundException traversor.iterator().hasNext() error " + e.getMessage(), e);
+        } catch(RuntimeException e) {
+            log.error("traversor.iterator().hasNext() error " + e.getMessage(), e);
         }
+        System.out.println("total iterators =" + pathCnt);
     }
-
-
 
     private static void setConfidenceRatio(List<Node> list) {
         double numMatches = 0.0;
@@ -644,11 +714,9 @@ public class KnowledgeGraph {
         Iterable<String> destProps = dNode.getPropertyKeys();
         int cnt = 0;
         int dCnt = 0;
-        //StringBuffer sb = new StringBuffer();
+
         for (String s : propertyKeys) {
             cnt++;
-            //sb.append(s);
-            //sb.append(" , ");
             for (String d : destProps) {
                 if (s.equals(d)) {
                     dCnt++;
@@ -679,25 +747,28 @@ public class KnowledgeGraph {
         return iterable.iterator().hasNext() ? true : false;
     }
 
-    public static void saveSubGraph(String label) {
-       for (CacheGraphPath cachePath : cacheListPath.values()) {
-           // log.info("nodes tagged with label experiment1 in path " + cachePath.path);
-            for (Node node : cachePath.path.nodes()) {
+    /**
+     * all paths are saved
+     * @param label
+     */
+    public static void saveAllGraphs(String label) {
+        for ( Path path : cacheAllPaths) {
+            log.info(label + " has path.length=" + path.length());
+            for (Node node : path.nodes()) {
                 node.addLabel(DynamicLabel.label(label));
             }
         }
+        log.info("saveAllGraphs()" + label + ", total number of paths" + cacheAllPaths.size());
     }
 
-
-    public static void saveAllGraphs(String label) {
-        for (CacheGraphPath cachePath : cacheAllPaths) {
+    public static void saveSubGraph(String label) {
+        for (CacheGraphPath cachePath : cacheListPath.values()) {
             // log.info("nodes tagged with label experiment1 in path " + cachePath.path);
             for (Node node : cachePath.path.nodes()) {
                 node.addLabel(DynamicLabel.label(label));
             }
         }
     }
-
 
     /**
      *

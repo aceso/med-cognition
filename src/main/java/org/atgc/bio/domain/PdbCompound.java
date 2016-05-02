@@ -15,6 +15,7 @@ import org.atgc.bio.meta.Taxonomy;
 import org.atgc.bio.meta.UniquelyIndexed;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.atgc.bio.repository.TemplateUtils;
 
 /**
  * <a href="http://www.rcsb.org/pdb/101/static101.do?p=education_discussion/Looking-at-Structures/bioassembly_tutorial.html">Bioassembly</a>
@@ -177,6 +178,9 @@ public class PdbCompound {
 
     @NonIndexed
     private String variant;
+
+    @Indexed (indexName=IndexNames.NODE_TYPE)
+    private String nodeType = TemplateUtils.extractBioType(this).toString();
 
     /**
      *
