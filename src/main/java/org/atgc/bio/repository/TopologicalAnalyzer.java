@@ -119,13 +119,18 @@ public class TopologicalAnalyzer {
       firstPassTopology(topology, path);
       secondPassTopology(topology);
       int numNodes = countNodes(path);
+      log.info("numNodes = " + numNodes);
       int numRelations = countRelationships(path);
+      log.info("numRelations = " + numRelations);
       int maxRelations = numNodes*(numNodes-1)/2;
-      networkDensity += (double)numRelations/maxRelations;
+      log.info("maxRelations = " + maxRelations);
+      if (maxRelations != 0)
+          networkDensity += (double)numRelations/maxRelations;
       log.info("networkDensity = " + networkDensity);
     }
     networkDensity = networkDensity/paths.size();
-    finalPassTopology(topology, networkDensity);
+    if (networkDensity != 0)
+      finalPassTopology(topology, networkDensity);
     topologyEvolution.add(topology);
   }
 }
