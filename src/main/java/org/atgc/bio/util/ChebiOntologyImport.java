@@ -2,8 +2,10 @@ package org.atgc.bio.util;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import org.atgc.bio.BioFields;
 import org.atgc.bio.ChebiOntologyFields;
+import org.atgc.bio.ImportCollectionNames;
 import org.atgc.bio.domain.*;
 import org.atgc.bio.repository.PersistenceTemplate;
 import org.atgc.bio.repository.Subgraph;
@@ -18,6 +20,8 @@ import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.http.HttpException;
+import org.atgc.mongod.MongoCollection;
+import org.atgc.mongod.MongoUtil;
 import org.neo4j.graphdb.NotFoundException;
 
 /**
@@ -28,7 +32,40 @@ import org.neo4j.graphdb.NotFoundException;
  */
 public class ChebiOntologyImport {
 
+
     private static final Logger log = LogManager.getLogger(ChebiOntologyImport.class);
+
+
+    /**
+     * @param coll
+     * @return
+     * @throws UnknownHostException
+     */
+    private static MongoCollection getCollection(ImportCollectionNames coll) throws UnknownHostException {
+        MongoUtil mongoUtil = MongoUtil.getInstance();
+        return mongoUtil.getCollection(coll.toString());
+    }
+
+    public static void main(String[] args) throws UnknownHostException {
+        // gives CellTypeOntology documents whose importstatus is due.
+
+        try (DBCursor dbCursor = getCollection(ImportCollectionNames.CHEBI_ONTOLOGY).findDBCursor("{}")) {
+            // we expect only one document match
+            while (dbCursor.hasNext()) {
+                BasicDBObject result = (BasicDBObject) dbCursor.next();
+                // CellTypeOntologyFields.ID =  "ID:"
+                String id = (String) result.get(ChebiOntologyFields.ID.toString());
+                processOntologyDoc(id, result);
+                log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+                log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+            }
+        }
+        log.info("ADDED NEW PROPERTIES: " + PersistenceTemplate.getPropertyCount() + ", SET PROPERTIES: " + PersistenceTemplate.getPropertySetCount() + ", ADDED NEW NODES: " + PersistenceTemplate.getIndexNodeCount());
+        log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
+        log.info("Completed successfully!");
+    }
+
+
     /**
      * 
      * @param id

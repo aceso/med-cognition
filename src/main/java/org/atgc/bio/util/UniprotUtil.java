@@ -40,17 +40,13 @@ public class UniprotUtil {
 
     public static Protein getProtein(String id, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, ServiceException, IOException, InterruptedException, HttpException, URISyntaxException {
         if (id == null) return null;
-        System.out.println("before subGraph.search() getProtein() id =" + id);
         if (id.equals("-")) {
-            System.out.println("id == -");
             log.info("proteinId = --");
             return null;
         }
 
         Protein protein = (Protein) subGraph.search(BioTypes.PROTEIN, BioFields.UNIPROT_ID, id);
-        System.out.println("after subGraph.search() getProtein() id =" + id);
         if (id.equals("-")) {
-            System.out.println("proteinId == -");
             log.info("proteinId = --");
             return null;
         }
