@@ -47,24 +47,15 @@ public class KnowledgeEntityEvaluator implements Evaluator {
     public KnowledgeEntityEvaluator(List<Node> bioList, List<BioTypes> bTypes) {
         bioEntityList = bioList;
         bioTypes = bTypes;
-        log.info("eval bioTypes " + bioTypes.get(0).name());
     }
-
-
-    /*
-    public Evaluation evaluate(Path path) {
-        log.info("evaluate(path)" + path);
-        return Evaluation.INCLUDE_AND_CONTINUE;
-    }
-    */
 
     @Override
     public Evaluation evaluate(Path path) {
          for (Node node : path.nodes()) {
+             String nodeType = (String) node.getProperty(BioFields.NODE_TYPE.toString());
              for (BioTypes bioType : bioTypes) {
-                  String nodeType = (String) node.getProperty(BioFields.NODE_TYPE.toString());
                   if (nodeType.equals(bioType.toString())) {
-                     return Evaluation.INCLUDE_AND_PRUNE;
+                      return Evaluation.INCLUDE_AND_PRUNE;
                   }
              }
          }
