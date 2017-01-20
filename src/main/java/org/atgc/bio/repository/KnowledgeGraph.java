@@ -9,6 +9,7 @@ import com.sun.tools.javac.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.atgc.bio.BioFields;
+import org.atgc.bio.NCIDiseaseGeneImport;
 import org.atgc.bio.Uniprot;
 import org.atgc.bio.domain.*;
 import org.atgc.bio.meta.AnnotationTypes;
@@ -104,11 +105,14 @@ public class KnowledgeGraph {
         });
     }
 
+    /*
     public static void main(String[] args) throws IllegalAccessException, URISyntaxException, UnsupportedEncodingException {
         setup();
         Transaction tx = graphDb.beginTx();
+
         try {
-            createCaseStudyLapatinib();
+            getProteins();
+            //createCaseStudyLapatinib();
             tx.success();
             // specify depth
             // getCaseStudy1();
@@ -121,7 +125,7 @@ public class KnowledgeGraph {
             tx.close();
             registerShutdownHook();
         }
-    }
+    }*/
 
 
     /**
@@ -180,7 +184,7 @@ public class KnowledgeGraph {
 
         // evaluate these relationship, include and prune
         List<BioTypes> bioEvalTypes = getBioEvalTypes();
-        getIntelligentPaths(20, assayList, bioEvalTypes, "Lapatinib-1100");
+        getIntelligentPaths(20, assayList, bioEvalTypes, "test-1200");
     }
 
     /**
@@ -1005,14 +1009,20 @@ public class KnowledgeGraph {
     }
 
     public static void getProteins() throws Exception {
-        // SOS
-        UniprotUtil.getProtein("Q9NPA3");  // MIG12/G12
-        //UniprotUtil.getProtein("P34130");  // error NTF4
-        //UniprotUtil.getProtein("O95267"); // error GRP1
-        UniprotUtil.getProtein("Q9HBH9"); // MKNK2 error
-       // UniprotUtil.getProtein("Q9BUB5");   // MKNK1 error
-       UniprotUtil.getProtein("P11831");  // error SRF
-        UniprotUtil.getProtein("Q15283");
+        // add genes to mongodb.gene collection
+       // NCIDiseaseGeneImport.addGene("9922");
+        // add protein to mongodb.uniprot collection
+        //UniprotUtil.getProtein("");
     }
 
+
+    public static void main(String args[]) throws Exception {
+
+        // to add genes and proteins into neo4j */
+       /* NCIDiseaseGeneImport.addGene("80853");
+        Subgraph subgraph = new Subgraph();
+        UniprotUtil.getProtein("Q9H0Z9", subgraph);
+        PersistenceTemplate.saveSubgraph(subgraph);
+        */
+    }
 }
