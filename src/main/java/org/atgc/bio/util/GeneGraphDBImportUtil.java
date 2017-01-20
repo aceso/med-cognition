@@ -776,9 +776,7 @@ public class GeneGraphDBImportUtil {
         }
         BasicDBObject result = (BasicDBObject) geneList.get(0);
         Gene gene = getGene(subgraph, result);
-        if (gene.getNcbiGeneId().equals("118")) {
-            log.info("ncbiGeneId=" + ncbiGeneId + " Gene=" + gene.toString());
-        }
+        log.info("ncbiGeneId=" + ncbiGeneId + " Gene=" + gene.toString());
         subgraph.add(gene);
         //CompoundKey compoundKey = CompoundKey.getCompoundKey(gene);
         //StatusUtil.idInsert(BioTypes.GENE.toString(), compoundKey.getKey(), compoundKey.getValue());
@@ -836,6 +834,7 @@ public class GeneGraphDBImportUtil {
         log.info("ADDED NEW PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertyCounts() + ", SET PROPERTIES BY INDEX: " + PersistenceTemplate.getPropertySetCounts() + ", ADDED NEW NODES BY INDEX: " + PersistenceTemplate.getIndexNodeCounts());
     }
 
+    /* to add nodes to graphdb, start neo4j */
     public static void main(String[] args) throws Exception {
         //PubMedUtil.getPubmed("16341006");
         //PubMedUtil.loadPubmed("20462514");
@@ -845,9 +844,9 @@ public class GeneGraphDBImportUtil {
 
         // Some individual loads
         Subgraph subgraph = new Subgraph();
-        GeneGraphDBImportUtil.getGeneById("814650", subgraph);
-        GeneGraphDBImportUtil.getGeneById("814630", subgraph);
-        GeneGraphDBImportUtil.getGeneById("40323", subgraph);
+        GeneGraphDBImportUtil.getGeneById("101929265", subgraph);
+       /* GeneGraphDBImportUtil.getGeneById("8233", subgraph);  */
+
         PersistenceTemplate.saveSubgraph(subgraph);
 
         log.info("Done successfully with the program!");
