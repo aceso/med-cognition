@@ -662,7 +662,7 @@ public class NCICompound {
      
     /**
      * NciCompound - drug/compound data
-     * @param name
+     * @param name - geneName
      * @throws java.io.IOException
      * @throws java.net.URISyntaxException
      * @throws NoSuchFieldException

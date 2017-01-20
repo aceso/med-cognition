@@ -39,21 +39,24 @@ public class UniprotUtil {
     }
 
     public static Protein getProtein(String id, Subgraph subGraph) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, ServiceException, IOException, InterruptedException, HttpException, URISyntaxException {
-        if (id == null) return null;
+
+        if (id == null || id == "" || id == " " )  return null;
         if (id.equals("-")) {
-            log.info("proteinId = --");
+            log.info("proteinId = -");
             return null;
         }
 
         Protein protein = (Protein) subGraph.search(BioTypes.PROTEIN, BioFields.UNIPROT_ID, id);
         if (id.equals("-")) {
-            log.info("proteinId = --");
+            log.info("proteinId = -");
             return null;
         }
         if (protein == null) {
+            log.info("getting protein from uniprot " + id);
             protein = new Protein();
             protein.setUniprot(id);
-            subGraph.add(protein);
+            // why do we add this before we find the protein, postpone adding it until we find it.
+            //subGraph.add(protein);
             processProtein(protein, id, subGraph);
         }
         return protein;
@@ -523,10 +526,6 @@ public class UniprotUtil {
             if (OntologyStrUtil.objectExists(obj, UniprotFields.NCBI_TAX_ID)) {
                 String ncbiTaxId = OntologyStrUtil.getString(obj, UniprotFields.NCBI_TAX_ID);
                 if (ncbiTaxId != null) {
-                    //log.info("ncbiTaxId " + ncbiTaxId);
-                    if (ncbiTaxId.equals("118")) {
-                        log.info("ncbiTaxId is 118");
-                    }
                     String ncbiTaxonPrefix = "NCBITaxon:";
                     NcbiTaxonomy entity = GeneGraphDBImportUtil.getNcbiTaxonomy(subGraph, ncbiTaxonPrefix + ncbiTaxId);
                     if (entity != null) {
@@ -1460,6 +1459,9 @@ public class UniprotUtil {
         String similarity = "sequence similarity";
         String inferred = "inference from background scientific knowledge";
         String assertion_long = "imported information used in automatic assertion";
+        String curated = "curated automatic assertion";
+        String author = "non-traceable author statement";
+        String literature = "curated literature reference";
 
         if (code != null) {
             code = code.trim();
@@ -1473,6 +1475,12 @@ public class UniprotUtil {
                 return BioRelTypes.INFERRED_FROM_SCIENTIFIC_KNOWLEDGE;
             } else if (code.equals(assertion_long)) {
                 return BioRelTypes.AUTOMATIC_ASSERTION;
+            } else if (code.equals(curated)) {
+                return BioRelTypes.CURATED;
+            } else if (code.equals(author)) {
+                return BioRelTypes.NON_TRACEABLE_AUTHOR_STATEMENT;
+            } else if (code.equals(literature)) {
+                return BioRelTypes.CURATED_LITERATURE_REFERENCE;
             } else {
                 //log.info("Code is not found =" + code);
                 throw new RuntimeException("EvidenceList, evidenceCode not found =" + code);
@@ -1498,9 +1506,12 @@ public class UniprotUtil {
     public static void setProteinEvidenceRelation(BasicDBObject obj, Protein protein, Subgraph subgraph) throws IllegalAccessException, InterruptedException, HttpException, ServiceException, IOException, URISyntaxException, InvocationTargetException, NoSuchFieldException {
         String attribute = OntologyStrUtil.getString(obj, UniprotFields.EVIDENCE_ATTRIBUTE);
         String code = OntologyStrUtil.getString(obj, UniprotFields.EVIDENCE_CODE);
+        log.info("code =" + code);
         if (attribute != null) {
             Protein proteinEntity = getProtein(attribute.trim(), subgraph);
-            protein.setEvidenceRelations(proteinEntity, getEvidenceCode(code));
+            if (code != null) {
+                protein.setEvidenceRelations(proteinEntity, getEvidenceCode(code));
+            }
         }
             
             /*String category = OntologyStrUtil.getString(obj, UniprotFields.EVIDENCE_CATEGORY);
@@ -1577,16 +1588,19 @@ public class UniprotUtil {
      */
     public static void processProtein(Protein protein, String id, Subgraph subGraph) throws ServiceException, IOException, IllegalAccessException, NoSuchFieldException, InvocationTargetException, InterruptedException, HttpException, URISyntaxException {
         log.info("processProtein(), id = " + id);
-        if (id.equals("-")) {
-            log.info("proteinId = -");
+        if (id.equals("-") || id == null) {
+            log.info("did not add protein as proteinId= " + id);
             return;
         }
-        BasicDBObject obj = UniProtAccess.getProteinObj(id);
 
+        BasicDBObject obj = UniProtAccess.getProteinObj(id);
         if (obj != null) {
+            log.info("found protein =" + id);
             setFullName(protein, obj);
             setShortName(protein, obj);
             setProteinNames(protein, obj);
+            // add protein now
+            subGraph.add(protein);
 
             if (OntologyStrUtil.objectExists(obj, UniprotFields.CITATIONS)) {
                 setCitationPubMedRelation(protein, obj, subGraph);
@@ -1633,6 +1647,8 @@ public class UniprotUtil {
             // evidenceList - pubMed
 
             setEvidence(protein, obj, subGraph);
+            log.info("added protein" + protein.toString());
+
             //RedbasinTemplate.saveSubgraph(subGraph);
         }
         //return null;

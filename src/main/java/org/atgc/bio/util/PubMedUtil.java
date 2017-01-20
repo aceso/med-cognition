@@ -483,16 +483,34 @@ public class PubMedUtil {
         }
         for (Object element : list) {
             BasicDBObject a = (BasicDBObject)element;
-            Author author = new Author();
-            author.setValidYN(getString(a, PubmedMongoFields.VALIDYN));
-            author.setLastName(getString(a, PubmedMongoFields.LAST_NAME));
-            author.setForeName(getString(a, PubmedMongoFields.FORE_NAME));
-            author.setInitials(getString(a, PubmedMongoFields.INITIALS));
-            CompoundKey compoundKey = CompoundKey.getCompoundKey(author);
-            if (compoundKey != null) {
-            //StatusUtil.idInsert(BioTypes.AUTHOR.toString(), compoundKey.getKey(), compoundKey.getValue());
-                authors.add(author);
-                subgraph.add(author);
+            if (a != null) {
+                int cntr = 0;
+                if (getString(a, PubmedMongoFields.LAST_NAME) != null) {
+                    cntr++;
+                }
+                if (getString(a, PubmedMongoFields.FORE_NAME) != null) {
+                    cntr++;
+                }
+                if (getString(a, PubmedMongoFields.INITIALS) != null) {
+                    cntr++;
+                }
+                // cannot create compound key with less than 2 names
+                if (cntr < 2)  {
+                    return authors;
+                }
+                Author author = new Author();
+                if (getString(a, PubmedMongoFields.VALIDYN) != null) {
+                    author.setValidYN(getString(a, PubmedMongoFields.VALIDYN));
+                }
+                author.setLastName(getString(a, PubmedMongoFields.LAST_NAME));
+                author.setInitials(getString(a, PubmedMongoFields.INITIALS));
+                author.setForeName(getString(a, PubmedMongoFields.FORE_NAME));
+                CompoundKey compoundKey = CompoundKey.getCompoundKey(author);
+                if (compoundKey != null) {
+                    //StatusUtil.idInsert(BioTypes.AUTHOR.toString(), compoundKey.getKey(), compoundKey.getValue());
+                    authors.add(author);
+                    subgraph.add(author);
+                }
             }
         }
         return authors;
