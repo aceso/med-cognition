@@ -66,6 +66,7 @@ public class ClassAnnotationsTest {
             }
         }
         sb.append(key1).append("-").append(key2).append("-").append(key3);
-        System.out.println("index key = " + sb.toString());
+        //System.out.println("index key = " + sb.toString());
+
     }
 }

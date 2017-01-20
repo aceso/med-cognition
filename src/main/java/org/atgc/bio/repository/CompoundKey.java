@@ -99,7 +99,7 @@ public class CompoundKey {
                 sbVal.append(val3);
             }
         }
-        if (valcntr > 1) { // fixed the bug
+        if (valcntr > 1) { // fixed the bug, minimum 2 non-empty values required
             log.info(key1 + "=" + val1 + "," + key2 + "=" + val2 + "," + key3 + "=" + val3);      
             throw new IllegalArgumentException("Not enough values provided. key1 = " + key1 + ", key2 = " + key2 + ", key3 = " + key3);
             
